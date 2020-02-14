@@ -292,7 +292,7 @@ async function addstufffeed(doc) {
         document.getElementById(doc.id + 'shellfeed').appendChild(a)
 
         listencomments(doc.id)
-        listenlikes(doc.id)
+        listenlikesfeed(doc.id)
         addpfp(doc.data().uid, doc.id)
 
 
@@ -512,6 +512,7 @@ function listencomments(docid) {
 function addpfp(uid, docid) {
     db.collection('users').doc(uid).collection('details').doc('pfp').get().then(function (doc) {
         document.getElementById(docid + 'pfpelurl').src = doc.data().url
+        document.getElementById(docid + 'pfpelurlfeed').src = doc.data().url
 
 
     })
@@ -521,12 +522,21 @@ function listenlikes(docid) {
         .onSnapshot(function (doc) {
             displaylikes = doc.data().likes.length - 1
             document.getElementById(docid + 'el').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
-            document.getElementById(docid + 'elfeed').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
             addWaves()
         });
 
 
 }
+
+function listenlikesfeed(docid) {
+    db.collection("posts").doc(docid)
+        .onSnapshot(function (doc) {
+            displaylikes = doc.data().likes.length - 1
+            document.getElementById(docid + 'elfeed').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
+            addWaves()
+        });
+}
+
 
 function updatechars() {
 
