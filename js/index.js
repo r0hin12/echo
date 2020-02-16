@@ -29,7 +29,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                 usernames: firebase.firestore.FieldValue.arrayUnion(theusername)
             })
             db.collection('users').doc(user.uid).collection('details').doc('username').set({
-                username: document.getElementById('user1').value
+                username: document.getElementById('user1').value,
             }).then(function () { })
         }
 
