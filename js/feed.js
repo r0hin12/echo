@@ -385,7 +385,9 @@ async function usermodal(uid) {
                                 document.getElementById('followbtn').onclick = function () {
                                     unfollow(uid, username)
                                 }
-                                console.log('Following this person');
+
+                                loaduserposts(uid)
+
                             }
                             else {
 
@@ -423,7 +425,7 @@ async function usermodal(uid) {
 
                                     }
                                     else {
-                                        console.log("not following but still load posts");
+                                        loaduserposts(uid)
                                     }
                                 })
 
@@ -449,6 +451,14 @@ async function usermodal(uid) {
         })
 
     })
+
+
+
+}
+
+function loaduserposts(uid) {
+    console.log('load posts ' + uidq);
+
 
 
 
