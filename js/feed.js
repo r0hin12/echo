@@ -67,6 +67,7 @@ function addpfpcomment(usr, id) {
 
 function loadComments(id) {
 
+
     document.getElementById('snacc').classList.remove('eonsnackbar-active')
 
     sessionStorage.setItem('viewing', id)
@@ -152,6 +153,7 @@ function load() {
     document.getElementById('snacc').classList.remove('eonsnackbar-active')
 
     $('#grid').empty()
+    $('#gridfeed').empty()
     loadposts()
 
 
@@ -220,7 +222,7 @@ async function addstuff(doc) {
         infoFunc = "info('" + doc.id + "')"
         fullFunc = "fullscreen('" + doc.id + "')"
         userFunc = "usermodal('" + doc.data().uid + "')"
-        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelel" class="animated fadeIn" style="max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p>' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurl" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'el" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentEl" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
+        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelel" class="animated fadeIn" style="max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p>' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurl" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'el" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentEl" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
 
         document.getElementById(doc.id + 'shell').appendChild(a)
 
@@ -253,6 +255,34 @@ async function addstuff(doc) {
 
 }
 
+async function addstuffuser(doc) {
+
+    var storageRef = firebase.storage().ref();
+    storageRef.child('users/' + doc.data().uid + '/' + doc.data().file).getDownloadURL().then(function (url) {
+
+        db.collection('users').doc(doc.data().uid).collection('details').doc('pfp').get().then(function (doc) {
+            pfpurl = doc.data().url
+        })
+        a = document.createElement('div')
+        likeFunc = "like('" + doc.id + "')"
+        commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + doc.id + "')"
+        infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + doc.id + "')"
+        fullFunc = "sessionStorage.setItem('skiponce3', 'true'); fullscreen('" + doc.id + "')"
+        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelelel" class="animated fadeIn" style="max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p>' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
+
+        document.getElementById(doc.id + 'shell').appendChild(a)
+
+        listencommentsuser(doc.id)
+        listenlikesuser(doc.id)
+
+    }).catch(function (error) {
+        console.log(error)
+    });
+    addWaves()
+
+
+}
+
 async function addstufffeed(doc) {
 
     var storageRef = firebase.storage().ref();
@@ -267,7 +297,7 @@ async function addstufffeed(doc) {
         infoFunc = "info('" + doc.id + "')"
         fullFunc = "fullscreen('" + doc.id + "')"
         userFunc = "usermodal('" + doc.data().uid + "')"
-        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelelfeed" class="animated fadeIn" style="max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p>' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurlfeed" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'elfeed" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentElfeed" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoElfeed" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
+        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelelfeed" class="animated fadeIn" style="max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p>' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurlfeed" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'elfeed" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentElfeed" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoElfeed" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
 
         document.getElementById(doc.id + 'shellfeed').appendChild(a)
         listencommentsfeed(doc.id)
@@ -346,6 +376,7 @@ function checkuserurl() {
 }
 
 async function usermodal(uid) {
+    $('#usergrid').empty()
     $('#userModal').modal('toggle')
     window.history.pushState('page3', 'Title', '/app.html?user=' + uid);
     db.collection('users').doc(uid).collection('details').doc('username').get().then(function (doc) {
@@ -457,17 +488,54 @@ async function usermodal(uid) {
 }
 
 function loaduserposts(uid) {
-    console.log('load posts ' + uidq);
+    array = []
+    db.collection('posts').where("uid", "==", uid).get().then(function (querysnapshop) {
+        querysnapshop.forEach(function (doc) {
+
+            array.push({ doc: doc, date: doc.data().created.toDate() })
+
+
+        })
+        array.sort(function compare(a, b) {
+            var dateA = new Date(a.date);
+            var dateB = new Date(b.date);
+            return dateA - dateB;
+        });
+
+
+        array.reverse()
+        actualuser(array)
+
+
+    }).catch(function (error) {
+        console.log(error)
+    })
+}
+
+function actualuser(array) {
+
+
+    sessionStorage.setItem('count', 1)
+
+    for (let i = 0; i < array.length; i++) {
+        doc = array[i].doc;
 
 
 
+        z = document.createElement('div')
+        z.id = doc.id + 'shell'
+
+        document.getElementById('usergrid').appendChild(z)
+        document.getElementById('usergrid').appendChild(document.createElement('br'))
+
+        addstuffuser(doc)
+
+    }
 
 }
 
 
 function info(id) {
-
-
 
     db.collection('posts').doc(id).get().then(function (doc) {
 
@@ -614,18 +682,15 @@ function listencomments(docid) {
     })
 }
 
+function listencommentsuser(docid) {
+    db.collection('posts').doc(docid).collection('comments').onSnapshot(function (querySnapshot) {
+        document.getElementById(docid + 'commentEluser').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">comment</i> ' + querySnapshot.size
+    })
+}
+
 function listencommentsfeed(docid) {
     db.collection('posts').doc(docid).collection('comments').onSnapshot(function (querySnapshot) {
         document.getElementById(docid + 'commentElfeed').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">comment</i> ' + querySnapshot.size
-        if (sessionStorage.getItem('viewing') == docid) {
-            if (sessionStorage.getItem('skiponce3') == 'true') {
-                sessionStorage.setItem('skiponce3', 'false')
-            }
-            else {
-                snackbar('This post has new comments.', 'Refresh', 'refreshcomments("' + docid + '")', '8000')
-            }
-
-        }
     })
 }
 
@@ -647,10 +712,23 @@ function addpfp(uid, docid) {
 
 
 function listenlikes(docid) {
-    db.collection("posts").doc(docid)
+    listener = db.collection("posts").doc(docid)
         .onSnapshot(function (doc) {
             displaylikes = doc.data().likes.length - 1
             document.getElementById(docid + 'el').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
+            addWaves()
+        });
+
+
+
+
+}
+
+function listenlikesuser(docid) {
+    db.collection("posts").doc(docid)
+        .onSnapshot(function (doc) {
+            displaylikes = doc.data().likes.length - 1
+            document.getElementById(docid + 'eluser').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
             addWaves()
         });
 
@@ -719,13 +797,28 @@ function updatechars() {
 }
 
 $('#commentModal').on('hidden.bs.modal', function () {
+    if (sessionStorage.getItem('currenttab') == null || sessionStorage.getItem('currenttab') == "null") {
+        window.history.pushState('page2', 'Title', '/app.html')
+    }
+    else {
+        window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+    }
 
-    window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
 });
 
 $('#userModal').on('hidden.bs.modal', function () {
+    if (sessionStorage.getItem('skiponce3') == "true") {
+        sessionStorage.setItem('skiponce3', "false")
+    }
+    else {
 
-    window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+        if (sessionStorage.getItem('currenttab') == null || sessionStorage.getItem('currenttab') == "null") {
+            window.history.pushState('page2', 'Title', '/app.html')
+        }
+        else {
+            window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+        }
+    }
 });
 
 $('#infoModal').on('hidden.bs.modal', function () {
@@ -734,7 +827,12 @@ $('#infoModal').on('hidden.bs.modal', function () {
         sessionStorage.setItem('tocomments', false)
     }
     else {
-        window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+        if (sessionStorage.getItem('currenttab') == null || sessionStorage.getItem('currenttab') == "null") {
+            window.history.pushState('page2', 'Title', '/app.html')
+        }
+        else {
+            window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+        }
     }
 
 });
@@ -754,13 +852,16 @@ function addpostslistener() {
         }
         else {
 
-            snackbar('Posts have been modified. Click to show latest.', 'Refresh', 'load()', '8500');
+            if (localStorage.getItem('currenttab') == 'explore') {
+                snackbar('Posts have been modified. Click to show latest.', 'Refresh', 'load()', '8500');
+            }
+
+
 
         }
 
     });
 }
-//  snackbar('Posts have been modified. Refresh?', 'Refresh', 'load()', '8000')
 
 
 function unfullscreen() {

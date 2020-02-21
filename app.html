@@ -106,8 +106,9 @@
 
       </b></center>
     
-    
-      </div><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">done</button></div></divid=></div></div>
+    <br>
+    <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
+      </div><div class="modal-footer"></div></divid=></div></div>
     </div>
 
 
@@ -173,8 +174,12 @@
          
         </div>
       </div></center>
+<br><br>
+
+      <div id="usergrid"></div>
+      <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
       
-        </div><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">done</button></div></divid=></div></div>
+        </div><div class="modal-footer"></div></divid=></div></div>
       </div>
 
   <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>New Post</h3></div><h5 class="modal-body">
@@ -190,8 +195,8 @@
           </div>
     </center>
 
-
-  </h5><div class="modal-footer"><button onclick="newpost()" type="button" class="waves btn-old-text" data-dismiss="modal">upload</button></div></divid=></div></div>
+    <button onclick="newpost()" style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">upload</button>
+  </h5><div class="modal-footer"></div></divid=></div></div>
 </div>
 
 <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h3>Comments</h3></div><h5 class="modal-body">
@@ -249,7 +254,9 @@
 </div>
 </center>
     
-      </h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">close</button></div></divid=></div></div>
+<br>
+<button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
+      </h5><div class="modal-footer"></div></divid=></div></div>
     </div>
 
 
@@ -337,13 +344,8 @@
     <button class="waves"><i class="material-icons-outlined">email</i>
         <span class="badge badge-danger">1</span>
     </button>
-    <button class="waves"><i class="material-icons-outlined">notifications</i>
-        <span class="badge badge-danger">4</span>
-    </button>
-    <br><br>
-    <center>
-    <button data-toggle="modal" data-target="#postModal" class="waves btn-old-primary">new POST</button>
-</center>
+    
+
 
 </div></div>
 
@@ -356,31 +358,93 @@
       <h1 style="font-weight: 700"><b>Feed</b></h1>
       <h5>Timeline of all your followed accounts</h5>
 
+      <button id="refreshbtn" onclick="sessionStorage.setItem('skiponce', 'true'); load(); document.getElementById('refreshbtn').classList.add('zoomOutUp');document.getElementById('refreshbtn').classList.remove('zoomInUp');window.setTimeout(function() {document.getElementById('refreshbtn').classList.remove('zoomOutUp');document.getElementById('refreshbtn').classList.add('zoomInUp')}, 1000)" class="animated waves btn-old-text"><i class="material-icons">refresh</i></button>
         
-        <br><br>
+
       <hr>
       
       
       <div id="gridfeed"></div>
-      
-
+      <button data-toggle="modal" data-target="#postModal"  style="background-color: #6200EE; color: white; border-radius: 2000000px; position: fixed; width: 64px; height: 64px; right: 12px; bottom: 12px;" class="btn btn-float waves waves-light my-1 animated pulse infinite" type="button"><i class="material-icons">add</i></button>
 
     </div>
     <div aria-labelledby="explore-tab" class="tab-pane fade" id="explore" role="tabpanel">
       <h1 style="font-weight: 700"><b>Explore</b></h1>
       <h5>Collection of posts from all of Eonnect</h5>
-      <br><br>
+      <br>
     
         <hr>
         
         
         <div id="grid"></div>
 
-
+        <button data-toggle="modal" data-target="#postModal"  style="background-color: #6200EE; color: white; border-radius: 2000000px; position: fixed; width: 64px; height: 64px; right: 12px; bottom: 12px;" class="btn btn-float waves waves-light my-1 animated pulse infinite" type="button"><i class="material-icons">add</i></button>
     </div>
     <div aria-labelledby="direct-tab" class="tab-pane fade" id="direct" role="tabpanel">...</div>
-    <div aria-labelledby="public-tab" class="tab-pane fade" id="public" role="tabpanel">...</div>
-    <div aria-labelledby="leaderboard-tab" class="tab-pane fade" id="leaderboard" role="tabpanel">...</div>
+    <div aria-labelledby="public-tab" class="tab-pane fade" id="public" role="tabpanel">
+
+      <h1 style="font-weight: 700"><b>Public Channels</b></h1>
+      <h5>Quick direct messaging with other users.</h5>
+      <br>
+    
+        <hr>
+        
+        <div class="row">
+
+<div class="col-sm">
+<center>
+  <div class="card" style="width: 18rem;">
+    <img style="width: 100%; border-radius: 15px 15px 0px 0px; max-height: 200px" class="card-img-top" src="https://miro.medium.com/max/1600/0*XUN3XrAs_gqw8-kY.png" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">General Chat</h5>
+      <p class="card-text">Join the general chatroom to talk about anything within reason. Make sure to read the chatroom rules!</p>
+      <a href="chatroom.html?chat=general" class="waves btn-eon-two">Join</a>
+    </div>
+  </div>
+  <br><br>
+
+</center>
+</div>
+<div class="col-sm">
+<center>
+  <div class="card" style="width: 18rem;">
+    <img style="width: 100%; border-radius: 15px 15px 0px 0px; height: 200px" class="card-img-top" src="https://blog.templatetoaster.com/wp-content/uploads/2020/01/Isometric-Illustrations-google-web-design-trends.png" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Work Chat</h5>
+      <p class="card-text">Join the general chatroom to talk about school and/or work related content. Rules are the same as the general chat.</p>
+      <a href="chatroom.html?chat=general" class="waves btn-eon-two">Join</a>
+    </div>
+  </div>
+  <br><br>
+</center>
+</div>
+
+        </div>
+      
+
+        
+
+
+
+
+    </div>
+    <div aria-labelledby="leaderboard-tab" class="tab-pane fade" id="leaderboard" role="tabpanel">
+
+
+
+      <h1 style="font-weight: 700"><b>Leaderboard</b></h1>
+      <h5>Users with the highest reputation score</h5>
+      <hr>
+
+      <div id="leadercontent">
+
+
+        <center><button onclick="leaderboard()" class="waves btn-old-text">Load Scores</button></center>
+  
+      </div>
+      
+
+    </div>
     <div aria-labelledby="account-tab" class="tab-pane fade" id="account" role="tabpanel">...</div>
   </div>
 
@@ -425,6 +489,7 @@
     <script src="js/material.min.js"></script>
     <script defer src="js/app.js"></script>
     <script defer src="js/feed.js"></script>
+    <script src="js/leaderboard.js"></script>
 
 </div>
 </body>

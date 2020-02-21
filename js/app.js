@@ -54,6 +54,9 @@ function refreshmain() {
             rep = rep + doc.data().likes.length
         })
         document.getElementById('ownrepcount').innerText = rep
+        db.collection('users').doc(user.uid).update({
+            rep: rep
+        })
     })
 
     db.collection('users').doc(user.uid).collection('follow').doc('following').get().then(function (doc) {
@@ -109,6 +112,9 @@ function refreshmain() {
     })
 
 
+
+
+
 }
 
 function finishprofile() {
@@ -127,21 +133,28 @@ function signout() {
 
 function newpost() {
     var caption = document.getElementById('captioninput').value
-    var storageRef = firebase.storage().ref();
-    var file = document.getElementById('imgInp').files[0]
-    var fileRef = storageRef.child('users/' + user.uid + '/' + file.name);
-    fileRef.put(file).then(function (snapshot) {
-        db.collection('posts').add({
-            caption: caption,
-            likes: ['first'],
-            file: file.name,
-            name: user.displayName,
-            uid: user.uid,
-            created: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(function () {
-            snackbar('Post successfully uploaded.', '', '', '2000')
-        })
-    });
+    if (caption == '' || caption == " " || caption == null) {
+        snackbar('Post was not uploaded. Try again later.', '', '', '3000')
+    }
+    else {
+        document.getElementById('captioninput').value = ''
+        var storageRef = firebase.storage().ref();
+        var file = document.getElementById('imgInp').files[0]
+        var fileRef = storageRef.child('users/' + user.uid + '/' + file.name);
+        fileRef.put(file).then(function (snapshot) {
+            db.collection('posts').add({
+                caption: caption,
+                likes: ['first'],
+                file: file.name,
+                name: user.displayName,
+                uid: user.uid,
+                created: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(function () {
+                snackbar('Post successfully uploaded.', '', '', '4000')
+            })
+        });
+    }
+
 
 
 
@@ -240,6 +253,7 @@ function tab(tab) {
 
         default:
             error('Something went wrong. Try reloading the page.')
+
             break;
     }
 
