@@ -171,9 +171,11 @@ function loadposts() {
 
         db.collection('posts').get().then(function (querysnapshop) {
             querysnapshop.forEach(function (doc) {
-
+                if (user.uid == doc.data().uid) {
+                    fearray.push({ doc: doc, date: doc.data().created.toDate() })
+                }
                 for (let i = 0; i < following.length; i++) {
-                    if (following[i] == doc.data().uid || user.uid == doc.data().uid) {
+                    if (following[i] == doc.data().uid) {
                         fearray.push({ doc: doc, date: doc.data().created.toDate() })
                     }
                 }
