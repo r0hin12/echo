@@ -38,14 +38,15 @@ function expandnotifs() {
     }, 1000)
 }
 
-function build(carray) {
+function build(array) {
     $('#notifsbam').empty()
-    document.getElementById('notifnum').innerHTML = carray.length
-    if (carray.length == 0) {
+    document.getElementById('notifnum').innerHTML = array.length
+    if (array.length == 0) {
         document.getElementById('notifnum').innerHTML = ''
+        document.getElementById('notifsbam').innerHTML = '<center><br>No notifications yet. Check back later!</center>'
     }
 
-    carray.forEach(element => {
+    array.forEach(element => {
 
         b = document.createElement('li')
         b.classList.add('list-group-item')
@@ -61,7 +62,7 @@ function build(carray) {
 
 function deny(id) {
     db.collection('users').doc(user.uid).collection('follow').doc('requested').update({
-        requested: firebase.firestore.FieldValue.carrayRemove(id)
+        requested: firebase.firestore.FieldValue.arrayRemove(id)
     }).then(function () {
         snackbar('Follow request was declined.', '', '', '4000')
         db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
@@ -72,13 +73,13 @@ function deny(id) {
 }
 function accept(id) {
     db.collection('users').doc(user.uid).collection('follow').doc('requested').update({
-        requested: firebase.firestore.FieldValue.carrayRemove(id)
+        requested: firebase.firestore.FieldValue.arrayRemove(id)
     }).then(function () {
         db.collection('users').doc(user.uid).collection('follow').doc('followers').update({
-            followers: firebase.firestore.FieldValue.carrayUnion(id)
+            followers: firebase.firestore.FieldValue.arrayUnion(id)
         }).then(function () {
             db.collection('users').doc(id).collection('follow').doc('following').update({
-                following: firebase.firestore.FieldValue.carrayUnion(user.uid)
+                following: firebase.firestore.FieldValue.arrayUnion(user.uid)
             }).then(function () {
                 snackbar('Follow request was accepted.', '', '', '4000')
                 db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
