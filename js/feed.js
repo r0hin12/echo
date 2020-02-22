@@ -552,7 +552,7 @@ function info(id) {
             loadComments(id)
         }
 
-        if (doc.data().uid = user.uid) {
+        if (doc.data().uid == user.uid) {
             document.getElementById('deletebtnfrominfo').onclick = function () {
                 db.collection('posts').doc(id).delete().then(function () {
                     sessionStorage.setItem('skiponce2', "true")
