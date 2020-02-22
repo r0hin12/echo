@@ -402,74 +402,81 @@ async function usermodal(uid) {
                     db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
                         followers = doc.data().followers.length
                         document.getElementById('userfollowing').innerHTML = following
-
-                        db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
-                            ppl = doc.data().followers
-                            isfollow = false
-                            for (const item of ppl) {
-
-                                if (item == uid) {
-                                    isfollow = true
-                                }
+                        if (user.uid == uid) {
+                            document.getElementById('ownwarning').style.display = 'block'
+                            document.getElementById('followbtn').innerHTML = 'unfollow'
+                            document.getElementById('followbtn').onclick = function () {
+                                snackbar('You can not unfollow yourself!', '', '', '4000')
                             }
-                            if (isfollow) {
+                            loaduserposts(uid)
+                        }
+                        else {
 
-                                document.getElementById('followbtn').innerHTML = 'unfollow'
-                                document.getElementById('followbtn').onclick = function () {
-                                    unfollow(uid, username)
-                                }
+                            db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
+                                ppl = doc.data().followers
+                                isfollow = false
+                                for (const item of ppl) {
 
-                                loaduserposts(uid)
-
-                            }
-                            else {
-
-                                document.getElementById('followbtn').innerHTML = 'follow'
-                                document.getElementById('followbtn').onclick = function () {
-                                    follow(uid, username)
-                                }
-
-
-                                db.collection('users').doc(uid).collection('details').doc('type').get().then(function (doc) {
-                                    if (doc.data().type == 'private') {
-                                        document.getElementById('privatewarning').style.display = 'block'
-
-                                        db.collection('users').doc(uid).collection('follow').doc('requested').get().then(function (doc) {
-                                            ppl = doc.data().requested
-                                            isrequest = false
-                                            for (const item of ppl) {
-
-                                                if (item == uid) {
-                                                    isrequest = true
-                                                }
-                                            }
-
-                                            if (isrequest == true) {
-
-                                                document.getElementById('followbtn').innerHTML = 'cancel request'
-                                                document.getElementById('followbtn').onclick = function () {
-                                                    unrequest(uid, username)
-                                                }
-
-                                            }
-
-                                        })
-
-
+                                    if (item == uid) {
+                                        isfollow = true
                                     }
-                                    else {
-                                        loaduserposts(uid)
+                                }
+                                if (isfollow) {
+
+                                    document.getElementById('followbtn').innerHTML = 'unfollow'
+                                    document.getElementById('followbtn').onclick = function () {
+                                        unfollow(uid, username)
                                     }
-                                })
+
+                                    loaduserposts(uid)
+
+                                }
+                                else {
+
+                                    document.getElementById('followbtn').innerHTML = 'follow'
+                                    document.getElementById('followbtn').onclick = function () {
+                                        follow(uid, username)
+                                    }
+
+
+                                    db.collection('users').doc(uid).collection('details').doc('type').get().then(function (doc) {
+                                        if (doc.data().type == 'private') {
+                                            document.getElementById('privatewarning').style.display = 'block'
+
+                                            db.collection('users').doc(uid).collection('follow').doc('requested').get().then(function (doc) {
+                                                ppl = doc.data().requested
+                                                isrequest = false
+                                                for (const item of ppl) {
+
+                                                    if (item == uid) {
+                                                        isrequest = true
+                                                    }
+                                                }
+
+                                                if (isrequest == true) {
+
+                                                    document.getElementById('followbtn').innerHTML = 'cancel request'
+                                                    document.getElementById('followbtn').onclick = function () {
+                                                        unrequest(uid, username)
+                                                    }
+
+                                                }
+
+                                            })
+
+
+                                        }
+                                        else {
+                                            loaduserposts(uid)
+                                        }
+                                    })
 
 
 
-                            }
-                        })
+                                }
+                            })
 
-
-
-
+                        }
 
 
 
