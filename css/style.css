@@ -164,3 +164,33 @@
         background-color: yellow !important;
         transition: all 1s;
 }
+
+#notifscard {
+
+transition: all 1s;
+height: 75px;
+width: 75px;
+
+}
+
+.notif {
+        transition: all 1s !important;
+        height: 200px !important;
+        width: 200px !important;
+}
+
+.centered {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        transition: all 1s;
+}
+
+.centeredx {
+        position: absolute;
+        left: 50%;
+        top: 5px;
+        transform: translate(-50%,0);
+        transition: all 1s;
+}
