@@ -137,22 +137,30 @@ function newpost() {
         snackbar('Post was not uploaded. Try again later.', '', '', '3000')
     }
     else {
-        document.getElementById('captioninput').value = ''
-        var storageRef = firebase.storage().ref();
-        var file = document.getElementById('imgInp').files[0]
-        var fileRef = storageRef.child('users/' + user.uid + '/' + file.name);
-        fileRef.put(file).then(function (snapshot) {
-            db.collection('posts').add({
-                caption: caption,
-                likes: ['first'],
-                file: file.name,
-                name: user.displayName,
-                uid: user.uid,
-                created: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(function () {
-                snackbar('Post successfully uploaded.', '', '', '4000')
-            })
-        });
+        if (document.getElementById('captioninput').value.length > 30) {
+            error('Too many characters in your caption. The limit is 30.')
+            $('#postModal').modal('toggle')
+        }
+        else {
+
+
+            document.getElementById('captioninput').value = ''
+            var storageRef = firebase.storage().ref();
+            var file = document.getElementById('imgInp').files[0]
+            var fileRef = storageRef.child('users/' + user.uid + '/' + file.name);
+            fileRef.put(file).then(function (snapshot) {
+                db.collection('posts').add({
+                    caption: caption,
+                    likes: ['first'],
+                    file: file.name,
+                    name: user.displayName,
+                    uid: user.uid,
+                    created: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(function () {
+                    snackbar('Post successfully uploaded.', '', '', '4000')
+                })
+            });
+        }
     }
 
 
