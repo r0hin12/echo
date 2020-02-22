@@ -26,7 +26,7 @@ function refresh() {
     pfp()
     load()
     checkuserurl()
-
+    prenotif()
     verified()
 
 }

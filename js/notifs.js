@@ -1,3 +1,10 @@
+function prenotif() {
+    db = firebase.firestore()
+    db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
+        requests = doc.data().requested
+        build(requests)
+    })
+}
 function expandnotifs() {
 
     document.getElementById('notifscard').classList.add('notif')
@@ -5,6 +12,10 @@ function expandnotifs() {
     document.getElementById('notifsbutton').classList.add('centeredx')
 
 
+    db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
+        requests = doc.data().requested
+        build(requests)
+    })
 
 
 
@@ -25,7 +36,69 @@ function expandnotifs() {
             document.getElementById('notificon').classList.remove('fadeIn')
         }
     }, 1000)
+}
 
+function build(carray) {
+    $('#notifsbam').empty()
+    document.getElementById('notifnum').innerHTML = carray.length
+    if (carray.length == 0) {
+        document.getElementById('notifnum').innerHTML = ''
+    }
+
+    carray.forEach(element => {
+
+        b = document.createElement('li')
+        b.classList.add('list-group-item')
+        b.id = element + 'requestel'
+        document.getElementById('notifsbam').appendChild(b)
+
+
+        addcontent(element)
+
+    });
+
+}
+
+function deny(id) {
+    db.collection('users').doc(user.uid).collection('follow').doc('requested').update({
+        requested: firebase.firestore.FieldValue.carrayRemove(id)
+    }).then(function () {
+        snackbar('Follow request was declined.', '', '', '4000')
+        db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
+            requests = doc.data().requested
+            build(requests)
+        })
+    })
+}
+function accept(id) {
+    db.collection('users').doc(user.uid).collection('follow').doc('requested').update({
+        requested: firebase.firestore.FieldValue.carrayRemove(id)
+    }).then(function () {
+        db.collection('users').doc(user.uid).collection('follow').doc('followers').update({
+            followers: firebase.firestore.FieldValue.carrayUnion(id)
+        }).then(function () {
+            db.collection('users').doc(id).collection('follow').doc('following').update({
+                following: firebase.firestore.FieldValue.carrayUnion(user.uid)
+            }).then(function () {
+                snackbar('Follow request was accepted.', '', '', '4000')
+                db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
+                    requests = doc.data().requested
+                    build(requests)
+                })
+            })
+        })
+    })
+
+}
+
+function addcontent(element) {
+
+    db.collection('users').doc(element).collection('details').doc('username').get().then(function (doc) {
+        denyfunc = "deny('" + element + "')"
+        acceptfunc = "accept('" + element + "')"
+        document.getElementById(element + 'requestel').innerHTML = '<b>' + doc.data().name + '</b> requested to follow you. <a onclick="' + acceptfunc + '" style="padding-left: 3px !important; padding-right: 3px !important" class="waves btn-old-text"><i style="color: green;" class="material-icons">check_circle_outline</i></a><a onclick="' + denyfunc + '" style="padding-left: 3px !important; padding-right: 3px !important" class="waves btn-old-text"><i style="color: red;" class="material-icons">delete_outline</i></a>'
+        addWaves()
+    })
 
 
 }
