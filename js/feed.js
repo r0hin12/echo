@@ -908,7 +908,7 @@ function fullscreen(id) {
     a.id = 'fullscreenel'
     a.style = "width: 100%; height: 100%; background-color: black; top: 0px; left: 0px; position: fixed; z-indeX: 40000"
     source = document.getElementById(id + 'imgelel').src
-    a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-eon-one animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">fullscreen</i></button>'
+    a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-old-primary animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">exit_to_app</i></button>'
     a.classList.add('animated')
     a.classList.add('faster')
     a.classList.add('fadeIn')
@@ -924,7 +924,7 @@ function fullscreenfeed(id) {
     a.id = 'fullscreenel'
     a.style = "width: 100%; height: 100%; background-color: black; top: 0px; left: 0px; position: fixed; z-indeX: 40000"
     source = document.getElementById(id + 'imgelelfeed').src
-    a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-eon-one animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">fullscreen</i></button>'
+    a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-old-primary animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">exit_to_app</i></button>'
     a.classList.add('animated')
     a.classList.add('faster')
     a.classList.add('fadeIn')

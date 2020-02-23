@@ -129,3 +129,17 @@ function signupemail() {
 function hasWhiteSpace(s) {
     return /\s/g.test(s);
 }
+
+function signupshow() {
+    document.getElementById('signinpanel').style.display = 'none'
+    document.getElementById('signuppanel').style.display = 'inline-block'
+
+    document.getElementById('btnsstuff').innerHTML = '<p>If you have an account:</p><button onclick="signinshow()" class="waves btn-eon-one">Sign in</button>'
+}
+
+function signinshow() {
+    document.getElementById('signinpanel').style.display = 'inline-block'
+    document.getElementById('signuppanel').style.display = 'none'
+
+    document.getElementById('btnsstuff').innerHTML = "<p>If you don't have an account:</p><button onclick='signupshow()' class='waves btn-eon-one'>Sign Up</button>"
+}

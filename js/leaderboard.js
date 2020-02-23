@@ -32,7 +32,7 @@ function buildleaderboard(array) {
         a.classList.add('card')
         iplus1 = i + 1
         userFunc = "usermodal('" + doc.data().uid + "')"
-        a.innerHTML = '<div class="card-body"><center><span style="font-size: 24px" class="badge badge-pill badge-info">' + iplus1 + '</span></center><div class="row"><div class="col-sm"><center id="' + id + 'el"></center></div><div class="col-sm"><center><h2 style="display: inline-block">' + data.rep + '</h2></h4 style="display: inline-block"> rep</h4></center></div></div><center><button onclick="' + userFunc + '" class="waves btn-old-text">view profile</button></center></div>'
+        a.innerHTML = '<div class="card-body"><div class="row"><div class="col-sm"><center id="' + id + 'el"></center></div><div class="col-sm"><center><span style="font-size: 24px" class="badge badge-pill badge-info">' + iplus1 + '</span></center></div><div class="col-sm"><center><h2 style="display: inline-block">' + data.rep + '</h2></h4 style="display: inline-block"> rep</h4></center></div></div><center><button onclick="' + userFunc + '" class="waves btn-old-text">view profile</button></center></div>'
 
         document.getElementById('leadercontent').appendChild(a)
         document.getElementById('leadercontent').appendChild(document.createElement('br'))

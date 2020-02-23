@@ -41,77 +41,62 @@
 
 
 <center><img style="width: 20em" src="assets/logo.png" alt=""></center>
-
-<center><div style="width: 80%; max-width: 1000px" class="row">
-
-    <div class="col-sm">
-
-        <div class="card">
-            <div style="padding-left: 30px; padding-right: 30px;" class="card-body">
-                <center>
-                    <h3>Welcome</h3>
-        <br>
-                    <h5>Or</h5>
-
-                    <div class="floating-label textfield-box">
-                        <label for="email1">Email</label>
-                        <input class="form-control" id="email1" placeholder="example@site.ext" type="text">
-                      </div>
+<center>
+<div id="signinpanel" style="min-width: 40%; display: inline-block" class="card">
+<div class="card-body">
+<br><center><h2>Sign In</h2></center><br>
+  <div class="floating-label textfield-box">
+    <label for="email2">Email</label>
+    <input class="form-control" id="email2" placeholder="" type="text">
+  </div>
 <br>
-                      <div class="floating-label textfield-box">
-                        <label for="user1">Username</label>
-                        <input class="form-control" id="user1" placeholder="" type="text">
-                      </div>
+  <div class="floating-label textfield-box">
+    <label for="pass2">Password</label>
+    <input class="form-control" id="pass2" placeholder="" type="password">
+  </div>
+  <br>
+  <button onclick="signinemail()" style="width: 100%" class="waves btn-old-secondary">Sign In</button>
+  
+
+
+</div>
+</div>
+
+<div id="signuppanel" style="min-width: 40%; display: none" class="card">
+  <div class="card-body">
+    <br><center><h2>Sign Up</h2></center><br>
+    <div class="floating-label textfield-box">
+      <label for="email1">Email</label>
+      <input class="form-control" id="email1" placeholder="example@site.ext" type="text">
+    </div>
 <br>
-                      <div class="floating-label textfield-box">
-                        <label for="pass1">Password</label>
-                        <input class="form-control" id="pass1" placeholder="" type="password">
-                      </div>
-                      <br>
-                      <button onclick="signupemail()" style="width: 100%" class="waves btn-old-secondary">Sign Up</button>
-                      <small>By signing up you agree to <a href="#" onclick="terms()">terms and conditions</a>.</small>
-
-    </center>
+    <div class="floating-label textfield-box">
+      <label for="user1">Username</label>
+      <input class="form-control" id="user1" placeholder="" type="text">
     </div>
+<br>
+    <div class="floating-label textfield-box">
+      <label for="pass1">Password</label>
+      <input class="form-control" id="pass1" placeholder="" type="password">
     </div>
-
-<br><br><br>
-    
-    </div>
-
-<div class="col-sm">
-
-    <div class="card">
-        <div style="padding-left: 30px; padding-right: 30px;" class="card-body">
-            <center>
-            <h3>Already got an account?</h3>
-            <br>
-                        <h5>Or</h5>
-    
-            <div class="floating-label textfield-box">
-                <label for="email2">Email</label>
-                <input class="form-control" id="email2" placeholder="" type="text">
-              </div>
     <br>
-              <div class="floating-label textfield-box">
-                <label for="pass2">Password</label>
-                <input class="form-control" id="pass2" placeholder="" type="password">
-              </div>
-              <br>
-              <button onclick="signinemail()" style="width: 100%" class="waves btn-old-secondary">Sign In</button>
-              
-    
-    
-    </center>
-    </div>
-    </div>
-<br><br>
-</div>
+    <button onclick="signupemail()" style="width: 100%" class="waves btn-old-secondary">Sign Up</button>
+    <small>By signing up you agree to <a href="#" onclick="terms()">terms and conditions</a>.</small>
 
-</div>
-
+  
+  
+  </div>
+  </div>
+<br><br><br>
+<div style="min-width: 40%; display: inline-block" class="card">
+  <div id="btnsstuff" class="card-body">
+  
+    <p>If you don't have an account:</p><button onclick="signupshow()" class="waves btn-eon-one">Sign Up</button>
+  
+  
+  </div>
+  </div>
 </center>
-
 
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
