@@ -116,7 +116,7 @@ function refreshmain() {
 
         }
         else {
-            db.collection('users'.doc(user.uid)).collection('details').doc('follow').collection('requested').doc('requested').set({
+            db.collection('users').doc(user.uid).collection('details').doc('follow').collection('requested').doc('requested').update({
                 requested: []
             })
         }
