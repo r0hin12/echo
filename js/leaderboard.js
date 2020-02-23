@@ -31,7 +31,7 @@ function buildleaderboard(array) {
         a = document.createElement('div')
         a.classList.add('card')
         iplus1 = i + 1
-        userFunc = "usermodal('" + doc.data().uid + "')"
+        userFunc = "usermodal('" + id + "')"
         a.innerHTML = '<div class="card-body"><div class="row"><div class="col-sm"><center id="' + id + 'el"></center></div><div class="col-sm"><center><span style="font-size: 24px" class="badge badge-pill badge-info">' + iplus1 + '</span></center></div><div class="col-sm"><center><h2 style="display: inline-block">' + data.rep + '</h2></h4 style="display: inline-block"> rep</h4></center></div></div><center><button onclick="' + userFunc + '" class="waves btn-old-text">view profile</button></center></div>'
 
         document.getElementById('leadercontent').appendChild(a)
@@ -51,7 +51,7 @@ function addstuffyo(id) {
         document.getElementById(id + 'el').innerHTML = '<img style="border-radius: 400px; width: 40px" src="' + doca.data().url + '"><h4 id="' + id + 'name"></h4>'
         db.collection('users').doc(id).collection('details').doc('username').get().then(function (docb) {
 
-            document.getElementById(id + 'name').innerHTML = doc.data().name
+            document.getElementById(id + 'name').innerHTML = docb.data().name
             addWaves()
 
 

@@ -809,7 +809,7 @@ function updatechars() {
 }
 
 $('#commentModal').on('hidden.bs.modal', function () {
-    if (sessionStorage.getItem('currenttab') == null || sessionStorage.getItem('currenttab') == "null") {
+    if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
         window.history.pushState('page2', 'Title', '/app.html')
     }
     else {
@@ -824,7 +824,7 @@ $('#userModal').on('hidden.bs.modal', function () {
     }
     else {
 
-        if (sessionStorage.getItem('currenttab') == null || sessionStorage.getItem('currenttab') == "null") {
+        if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
             window.history.pushState('page2', 'Title', '/app.html')
         }
         else {
@@ -839,7 +839,7 @@ $('#infoModal').on('hidden.bs.modal', function () {
         sessionStorage.setItem('tocomments', false)
     }
     else {
-        if (sessionStorage.getItem('currenttab') == null || sessionStorage.getItem('currenttab') == "null") {
+        if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
             window.history.pushState('page2', 'Title', '/app.html')
         }
         else {
@@ -864,7 +864,7 @@ function addpostslistener() {
         }
         else {
 
-            if (localStorage.getItem('currenttab') == 'explore') {
+            if (localStorage.getItem('currentab') == 'explore') {
                 snackbar('Posts have been modified. Click to show latest.', 'Refresh', 'load()', '8500');
             }
 
