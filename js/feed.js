@@ -31,6 +31,7 @@ $("#imgInp").change(function () {
     readURL(this);
     document.getElementById('blah').style.display = 'block'
     document.getElementById('captionel').style.display = 'block'
+    document.getElementById('captionelel').style.display = 'block'
 
 });
 
@@ -186,10 +187,18 @@ function loadposts() {
                         fearray.push({ doc: doc, date: doc.data().created.toDate() })
                     }
                 }
-                exarray.push({ doc: doc, date: doc.data().created.toDate() })
+
+
+                if (doc.data().type == 'true' || doc.data().type == true) {
+
+                }
+                else {
+                    exarray.push({ doc: doc, date: doc.data().created.toDate() })
+                }
 
 
             })
+
             exarray.sort(function compare(a, b) {
                 var dateA = new Date(a.date);
                 var dateB = new Date(b.date);
@@ -231,7 +240,7 @@ async function addstuff(doc) {
         infoFunc = "info('" + doc.id + "')"
         fullFunc = "fullscreen('" + doc.id + "')"
         userFunc = "usermodal('" + doc.data().uid + "')"
-        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelel" class="animated fadeIn" style="min-width: 200px; max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p style="max-width: 100%;">' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurl" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'el" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentEl" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
+        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelel" class="animated fadeIn" style="min-width: 200px; max-width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><p style="max-width: 100%;">' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurl" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'el" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentEl" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
 
         document.getElementById(doc.id + 'shell').appendChild(a)
 
@@ -277,7 +286,7 @@ async function addstuffuser(doc) {
         commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + doc.id + "')"
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + doc.id + "')"
         fullFunc = "sessionStorage.setItem('skiponce3', 'true'); fullscreen('" + doc.id + "')"
-        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelelel" class="animated fadeIn" style="max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p style="max-width: 100%;">' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
+        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelelel" class="animated fadeIn" style="max-width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><p style="max-width: 100%;">' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
 
         document.getElementById(doc.id + 'shell').appendChild(a)
 
@@ -304,15 +313,18 @@ async function addstufffeed(doc) {
         likeFunc = "like('" + doc.id + "')"
         commentFunc = "loadComments('" + doc.id + "')"
         infoFunc = "info('" + doc.id + "')"
-        fullFunc = "fullscreen('" + doc.id + "')"
+        fullFunc = "fullscreenfeed('" + doc.id + "')"
         userFunc = "usermodal('" + doc.data().uid + "')"
-        a.innerHTML = '<div class="animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; border: 1px solid grey; padding: 10px 10px 0px 10px; border-radius: 12px; "><center><img id="' + doc.id + 'imgelelfeed" class="animated fadeIn" style="min-width: 300px; max-width: 100%; height: 300px; object-fit: cover" src="' + url + '"><br><p style="max-width: 100%;">' + doc.data().caption + '</p> </center></div><br><h5 class="animated fadeInUp" style="font-weight: 600"><div style="text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurlfeed" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 0px;"><button id="' + doc.id + 'elfeed" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentElfeed" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoElfeed" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div></div> <hr>'
+        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + doc.id + 'imgelelfeed" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><p style="max-width: 100%;">' + doc.data().caption + '</p><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + doc.id + 'pfpelurlfeed" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + doc.data().name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button id="' + doc.id + 'elfeed" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + doc.id + 'commentElfeed" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + doc.id + 'infoElfeed" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div><br></div></div> <hr>'
 
         document.getElementById(doc.id + 'shellfeed').appendChild(a)
         listencommentsfeed(doc.id)
         listenlikesfeed(doc.id)
         addpfpfeed(doc.data().uid, doc.id)
+        if (sessionStorage.getItem('fullInfo') == doc.id) {
 
+            fullscreenfeed(doc.id)
+        }
 
 
     }).catch(function (error) {
@@ -329,6 +341,7 @@ function actual(array) {
 
     for (let i = 0; i < array.length; i++) {
         doc = array[i].doc;
+
 
 
 
@@ -896,6 +909,22 @@ function fullscreen(id) {
     a.id = 'fullscreenel'
     a.style = "width: 100%; height: 100%; background-color: black; top: 0px; left: 0px; position: fixed; z-indeX: 40000"
     source = document.getElementById(id + 'imgelel').src
+    a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-eon-one animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">fullscreen</i></button>'
+    a.classList.add('animated')
+    a.classList.add('faster')
+    a.classList.add('fadeIn')
+    document.getElementById('body').appendChild(a)
+    window.history.pushState('page4', 'Title', '/app.html?fullscreen=' + id);
+    addWaves()
+
+}
+
+function fullscreenfeed(id) {
+
+    a = document.createElement('div')
+    a.id = 'fullscreenel'
+    a.style = "width: 100%; height: 100%; background-color: black; top: 0px; left: 0px; position: fixed; z-indeX: 40000"
+    source = document.getElementById(id + 'imgelelfeed').src
     a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-eon-one animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">fullscreen</i></button>'
     a.classList.add('animated')
     a.classList.add('faster')

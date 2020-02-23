@@ -137,11 +137,12 @@ function newpost() {
         snackbar('Post was not uploaded. Try again later.', '', '', '3000')
     }
     else {
-        if (document.getElementById('captioninput').value.length > 30) {
-            error('Too many characters in your caption. The limit is 30.')
+        if (document.getElementById('captioninput').value.length > 50) {
+            error('Too many characters in your caption. The limit is 50.')
             $('#postModal').modal('toggle')
         }
         else {
+
 
 
             document.getElementById('captioninput').value = ''
@@ -154,10 +155,14 @@ function newpost() {
                     likes: ['first'],
                     file: file.name,
                     name: user.displayName,
+                    type: document.getElementById('privateinp').checked,
                     uid: user.uid,
                     created: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(function () {
                     snackbar('Post successfully uploaded.', '', '', '4000')
+                    document.getElementById('captionel').style.display = 'none'
+                    document.getElementById('blah').style.display = 'none'
+                    document.getElementById('captionel').style.display = 'none'
                 })
             });
         }
@@ -297,3 +302,8 @@ function sendverify() {
         window.location.reload()
     });
 }
+
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
