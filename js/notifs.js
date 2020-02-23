@@ -35,7 +35,7 @@ function expandnotifs() {
             document.getElementById('notificon').classList.remove('animated')
             document.getElementById('notificon').classList.remove('fadeIn')
         }
-    }, 1000)
+    }, 500)
 }
 
 function build(array) {
@@ -121,6 +121,6 @@ function shrinknotifs() {
             document.getElementById('notificon').classList.remove('animated')
             document.getElementById('notificon').classList.remove('fadeIn')
         }
-    }, 1000)
+    }, 500)
 
 }

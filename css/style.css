@@ -3,6 +3,7 @@
     grid-template-columns: 1;
     grid-gap: 10px;
     padding: 10px;
+    max-width: 700px;
 }
 
 #gridfeed {
@@ -16,7 +17,7 @@
 
     #usergrid {
         display: grid;
-        grid-template-columns: auto auto auto auto;
+        grid-template-columns: 1;
         grid-gap: 10px;
         padding: 10px;
     }
@@ -48,14 +49,14 @@
 
 #notifscard {
 
-transition: all 1s;
+transition: all 0.5s;
 height: 75px;
 width: 75px;
 
 }
 
 .notif {
-        transition: all 1s !important;
+        transition: all 0.5s !important;
         height: 300px !important;
         width: 400px !important;
 }
