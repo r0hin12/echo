@@ -435,12 +435,12 @@ async function usermodal(uid) {
                                 ppl = doc.data().followers
                                 isfollow = false
                                 for (const item of ppl) {
-
-                                    if (item == uid) {
+                                    if (item == user.uid) {
                                         isfollow = true
                                     }
                                 }
                                 if (isfollow) {
+
 
                                     document.getElementById('followbtn').innerHTML = 'unfollow'
                                     document.getElementById('followbtn').onclick = function () {
