@@ -17,7 +17,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         refresh()
 
     } else {
-        window.location.replace('index.html?return=' + window.location.href)
+        transfer('index.html?return=' + window.location.href)
     }
 });
 

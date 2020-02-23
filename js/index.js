@@ -7,7 +7,7 @@ function terms() {
 
 function go() {
     x = localStorage.getItem('destinationurl')
-    window.location.replace(x)
+    transfer(x)
 }
 
 firebase.auth().onAuthStateChanged(function (user) {
