@@ -1,6 +1,5 @@
 function transfer(page) {
     a = document.createElement('div')
-
     a.style = 'position: fixed; width: 100%; height: 100%; top: 0px; left: 0px; background-color: #fff; z-index: 2000000000931028490124809'
     a.classList.add('animated')
     a.classList.add('fadeInUpBig')
