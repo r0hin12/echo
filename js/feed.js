@@ -349,7 +349,6 @@ function actual(array) {
         z.id = doc.id + 'shell'
 
         document.getElementById('grid').appendChild(z)
-        document.getElementById('grid').appendChild(document.createElement('br'))
 
         addstuff(doc)
 

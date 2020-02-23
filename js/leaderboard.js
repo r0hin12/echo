@@ -11,10 +11,9 @@ function leaderboard() {
             array.push({ id: doca.id, data: doca.data() })
 
         })
-        console.log(array);
         array.sort((a, b) => (a.data.rep > a.data.rep) ? 1 : -1)
         array.slice(0, 3);
-        build(array)
+        buildleaderboard(array)
 
 
     })
@@ -23,7 +22,7 @@ function leaderboard() {
 
 }
 
-function build(array) {
+function buildleaderboard(array) {
 
     for (let i = 0; i < array.length; i++) {
         id = array[i].id
