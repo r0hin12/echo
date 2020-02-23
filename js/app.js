@@ -111,6 +111,17 @@ function refreshmain() {
         }
     })
 
+    db.collection('users').doc(user.uid).collection('details').doc('follow').collection('requested').doc('requested').get().then(function (doc) {
+        if (doc.exists) {
+
+        }
+        else {
+            db.collection('users'.doc(user.uid)).collection('details').doc('follow').collection('requested').doc('requested').set({
+                requested: []
+            })
+        }
+    })
+
 
 
 
