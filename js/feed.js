@@ -489,30 +489,14 @@ async function usermodal(uid) {
                                             loaduserposts(uid)
                                         }
                                     })
-
-
-
                                 }
                             })
-
                         }
-
-
-
                     })
-
                 })
-
-
             })
-
-
         })
-
     })
-
-
-
 }
 
 function loaduserposts(uid) {
