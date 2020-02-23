@@ -100,7 +100,15 @@ function loadComments(id) {
             a.classList.add('fadeIn')
             likeFunc = "likeComment('" + doc.id + "')"
             reportFunc = "reportComment('" + doc.id + "')"
-            a.innerHTML = '<div style="text-align: left;" class="card-body"><div class="card-header"><img style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px;"id="' + doc.id + 'pfpel" alt=""><p style="display: inline-block; line-height: 0px;"><b>' + doc.data().name + '</b></p><p style="position: absolute; right: 25px; top: 36px;">' + doc.data().created.toDate() + '</p></div><div style="padding: 8px;"><p>' + doc.data().content + '</p><button onclick="' + reportFunc + '" style="position: absolute; right: 10px; bottom: 10px;" class="waves btn-old-text"><i class="material-icons-outlined">report_problem</i></button> <div>  </div>'
+            m = doc.data().created.toDate()
+            var thetime =
+                m.getUTCFullYear() + "/" +
+                ("0" + (m.getUTCMonth() + 1)).slice(-2) + "/" +
+                ("0" + m.getUTCDate()).slice(-2) + " " +
+                ("0" + m.getUTCHours()).slice(-2) + ":" +
+                ("0" + m.getUTCMinutes()).slice(-2) + ":" +
+                ("0" + m.getUTCSeconds()).slice(-2);
+            a.innerHTML = '<div style="text-align: left;" class="card-body"><div class="card-header"><img style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px;"id="' + doc.id + 'pfpel" alt=""><p style="display: inline-block; line-height: 0px;"><b>' + doc.data().name + '</b></p><p style="position: absolute; right: 25px; top: 36px;">' + thetime + '</p></div><div style="padding: 8px;"><p>' + doc.data().content + '</p><button onclick="' + reportFunc + '" style="position: absolute; right: 10px; bottom: 10px;" class="waves btn-old-text"><i class="material-icons-outlined">report_problem</i></button> <div>  </div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
             addpfpcomment(doc.data().user, doc.id)
