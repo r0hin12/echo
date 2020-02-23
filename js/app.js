@@ -173,6 +173,7 @@ function newpost() {
 
 }
 
+
 function pfp() {
 
     db.collection('users').doc(user.uid).collection('details').doc('pfp').get().then(function (doc) {
@@ -182,10 +183,10 @@ function pfp() {
             var storageRef = storage.ref('logos');
             storageRef.child(doc.data().name + '.' + doc.data().extension).getDownloadURL().then(function (url) {
                 document.getElementById('pfp1').src = url
-                document.getElementById('loading').classList.add('fadeOut')
-                window.setTimeout(() => {
-                    document.getElementById('loading').remove()
-                }, 700);
+                setTimeout(function () {
+                    $('body').addClass('loaded');
+                }, 400);
+
             })
         }
         else {
