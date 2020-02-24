@@ -21,12 +21,12 @@
     <title>Eonnect Chatroom</title>
 </head>
 
-<body id="body" style="font-family: Assistant;" class="darken">
+<body id="body" style="color: white; font-family: Assistant;" class="darken">
 
   <!-- Modal -->
   <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">dismiss</button></div></div></div></div>
 
-  <div class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
+  <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
 
   <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Create Chatroom</h3></div><div class="modal-body">
 
@@ -55,34 +55,57 @@
   
 
 
-<div id="home">
+<div style="display: none;" id="home">
 <center>
     <br><br><br>
 <div style="display: inline-block; padding: 25px; background-color: #1d1d1d;" class="card">
 <div class="card-body">
-
     <h1 style="font-family: 'Odibee Sans'" class="animated-link">
         <a class="animated-ay" href="chatroom.html">
           Eonnect Chatroom
         </a>
       </h1>
 <br><br><br>
-
 <button onclick="createchatroom()" class="waves btn-old-primary">Create Chatroom</button> <button onclick="joinchatroom()" class="waves btn-old-secondary">Join Chatroom</button>
-
-
 </div>
 </div>
-
-
 </center>
 </div>
 
+<div style="display: none;" id="chat">
+  <center>
+chat
+  </center>
+  </div>
 
 
 
 
 
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+  https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyDyiJGiWlgFaMtJA2lerw4lUkGK76Qoxvs",
+  authDomain: "eongram-87169.firebaseapp.com",
+  databaseURL: "https://eongram-87169.firebaseio.com",
+  projectId: "eongram-87169",
+  storageBucket: "eongram-87169.appspot.com",
+  messagingSenderId: "725793838303",
+  appId: "1:725793838303:web:f23c748b3985225c5c056a"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+</script>
 
     <script src="https://rohinarya12.github.io/eonstyles/assets/eonstyles.js"></script>   
     <script type="text/javascript">
