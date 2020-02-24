@@ -10,7 +10,7 @@
     <link href="css/material.min.css" rel="stylesheet">
     <style>
 ::placeholder { 
-  color: rgb(170, 170, 170) !important;
+  color: rgb(196, 196, 196) !important;
   opacity: 1 !important; 
 }
     </style>
@@ -33,11 +33,16 @@
     <div class="textfield-box">
         <input style="color: white;" class="form-control" id="createinp" placeholder="Chatroom Name" type="text">
       </div>
+<br>
+      <div class="textfield-box">
+        <input style="color: white;" class="form-control" id="createidinp" placeholder="Custom ID (optional)" type="text">
+        <label style="color: grey;" for="">leave blank to generate random id</label>
+      </div>
 
 
   </div><div class="modal-footer">
       <button type="button" class="waves btn-old-text" data-dismiss="modal">cancel</button>
-      <button type="button" class="waves btn-old-secondary" data-dismiss="modal">create</button>
+      <button type="button" onclick="createchatroombutton()" class="waves btn-old-secondary" data-dismiss="modal">create</button>
     </div></div></div></div>
 
     
