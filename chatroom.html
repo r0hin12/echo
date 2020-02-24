@@ -6,17 +6,76 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link href="https://fonts.googleapis.com/css?family=Assistant&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Odibee+Sans&display=swap" rel="stylesheet">
     <link href="css/material.min.css" rel="stylesheet">
+    <style>
+::placeholder { 
+  color: rgb(170, 170, 170) !important;
+  opacity: 1 !important; 
+}
+    </style>
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/waves.min.css">
     <script src="js/waves.min.js"></script>
     <script src="https://kit.fontawesome.com/974fa7d414.js" crossorigin="anonymous"></script>
     <title>Eonnect Chatroom</title>
 </head>
 
-<body id="body" style="font-family: Assistant; padding: 40px;">
+<body id="body" style="font-family: Assistant;" class="darken">
 
   <!-- Modal -->
   <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">dismiss</button></div></div></div></div>
+
+
+  <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Create Chatroom</h3></div><div class="modal-body">
+
+    <div class="textfield-box">
+        <input style="color: white;" class="form-control" id="createinp" placeholder="Chatroom Name" type="text">
+      </div>
+
+
+  </div><div class="modal-footer">
+      <button type="button" class="waves btn-old-text" data-dismiss="modal">cancel</button>
+      <button type="button" class="waves btn-old-secondary" data-dismiss="modal">create</button>
+    </div></div></div></div>
+
+    
+    <div class="modal fade bd-example-modal-lg" id="joinModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h3>Join Chatroom</h3></div><div class="modal-body">
+
+    </div><div class="modal-footer">
+        <button type="button" class="waves btn-old-text" data-dismiss="modal">cancel</button>
+        <button type="button" class="waves btn-old-secondary" data-dismiss="modal">create</button>
+      </div></div></div></div>
+  
+
+
+<div id="home">
+<center>
+    <br><br><br>
+<div style="display: inline-block; padding: 25px; background-color: #1d1d1d;" class="card">
+<div class="card-body">
+
+    <h1 style="font-family: 'Odibee Sans'" class="animated-link">
+        <a class="animated-ay" href="chatroom.html">
+          Eonnect Chatroom
+        </a>
+      </h1>
+<br><br><br>
+
+<button onclick="createchatroom()" class="waves btn-old-primary">Create Chatroom</button> <button onclick="joinchatroom()" class="waves btn-old-secondary">Join Chatroom</button>
+
+
+</div>
+</div>
+
+
+</center>
+</div>
+
+
+
+
+
 
 
     <script src="https://rohinarya12.github.io/eonstyles/assets/eonstyles.js"></script>   
@@ -28,7 +87,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="js/material.min.js"></script>
 <script src="js/script.js"></script>
-<script src="js/public.js"></script>
+<script src="js/chatroom.js"></script>
 
 
 </body>
