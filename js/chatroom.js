@@ -85,18 +85,23 @@ function loadchatroom(id) {
 
 function addmessage(id) {
 
+    if (document.getElementById('messageinput1').value.length > 50) {
+        error('This message has ' + document.getElementById('messageinput1').value.length + ' characters. The limit is 50.')
+    }
+    else {
+        db.collection('chatroom').doc(id).update({
+            messages: firebase.firestore.FieldValue.arrayUnion({
+                timestamp: new Date().valueOf(),
+                senderuid: firebase.auth().currentUser.uid,
+                sendername: firebase.auth().currentUser.displayName,
+                senderpic: userprofilepicture,
+                content: document.getElementById('messageinput1').value
+            })
+        }).then(function () {
+            document.getElementById('messageinput1').value = ''
+        })
+    }
 
-
-    db.collection('chatroom').doc(id).collection('messages').add({
-        timestamp: new Date().valueOf(),
-        senderuid: firebase.auth().currentUser.uid,
-        sendername: firebase.auth().currentUser.displayName,
-        senderpic: userprofilepicture,
-        content: document.getElementById('messageinput1').value
-
-    }).then(function () {
-        document.getElementById('messageinput1').value = ''
-    })
 
 }
 
@@ -141,55 +146,122 @@ function loadmessages(id) {
         toggleloader()
     }, 1000)
 
-    db.collection('chatroom').doc(id).collection('messages').where("timestamp", ">=", d)
-        .onSnapshot(function (querySnapshot) {
+    postmessages = []
+    localStorage.setItem('first', 'true')
 
-            querySnapshot.docChanges().forEach(function (change) {
-                if (change.type === "added") {
+    db.collection('chatroom').doc(id).onSnapshot(function (doc) {
 
-                    a = document.createElement('div')
-                    a.style.position = 'relative'
-                    a.id = change.doc.id + 'el'
-                    infoFunc = "chatinfomodal('" + id + "','" + change.doc.id + "')"
-                    a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + change.doc.data().senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;">' + change.doc.data().content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+        if (localStorage.getItem('first') == 'true') {
+            localStorage.setItem('first', 'false')
 
-                    document.getElementById('messages').appendChild(a)
-                    b = document.createElement('br')
-                    b.id = change.doc.id + 'elel'
+            postmessages = doc.data().messages
 
-                    document.getElementById('messages').appendChild(b)
-                    addWaves()
+            if (postmessages == undefined) {
+                postmessages = []
+            }
 
+            for (let i = 0; i < postmessages.length; i++) {
+                var element = postmessages[i];
 
-                }
-                if (change.type === "removed") {
-                    $('#' + change.doc.id + 'el').remove()
-                    $('#' + change.doc.id + 'elel').remove()
-                }
-            });
+                a = document.createElement('div')
+                a.style.position = 'relative'
+                a.id = i + 'el'
+                infoFunc = "chatinfomodal('" + id + "','" + i + "')"
+                a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+
+                document.getElementById('messages').appendChild(a)
+                b = document.createElement('br')
+                b.id = i + 'elel'
+
+                document.getElementById('messages').appendChild(b)
+                addWaves()
+            }
+            var objDiv = document.getElementById("messages");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }
+
+        else {
+
+            console.log(doc.data().messages[postmessages.length]);
+            element = doc.data().messages[postmessages.length]
+            postmessages = doc.data().messages
+
+            idi = postmessages.length - 1
+
+            a = document.createElement('div')
+            a.style.position = 'relative'
+            a.id = idi + 'el'
+            a.classList.add('animated')
+            a.classList.add('fadeInUp')
+            infoFunc = "chatinfomodal('" + id + "','" + idi + "')"
+            a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+
+            document.getElementById('messages').appendChild(a)
+            b = document.createElement('br')
+            b.id = idi + 'elel'
+
+            document.getElementById('messages').appendChild(b)
+            addWaves()
 
             var objDiv = document.getElementById("messages");
             objDiv.scrollTop = objDiv.scrollHeight;
-        });
+
+
+        }
+
+    })
 }
 
-function chatinfomodal(id, id2) {
+
+
+function chatinfomodal(id, i) {
 
     toggleloader()
 
-    db.collection('chatroom').doc(id).collection('messages').doc(id2).get().then(function (doc) {
+    db.collection('chatroom').doc(id).get().then(function (doc) {
 
-        document.getElementById('infoa').innerHTML = doc.data().content
-        document.getElementById('infob').innerHTML = doc.data().timestamp
-        document.getElementById('infoc').innerHTML = doc.id
-        document.getElementById('infod').innerHTML = doc.data().senderuid
+        data = doc.data().messages[i]
 
-        if (doc.data().senderuid == firebase.auth().currentUser.uid) {
+        document.getElementById('infoa').innerHTML = data.content
+        document.getElementById('infob').innerHTML = data.timestamp
+        document.getElementById('infoc').innerHTML = data.id
+        document.getElementById('infod').innerHTML = data.senderuid
+
+        if (data.senderuid == firebase.auth().currentUser.uid) {
             document.getElementById('deletemessagebutton').style.display = 'block'
             document.getElementById('deletemessagebutton').onclick = function () {
-                db.collection('chatroom').doc(id).collection('messages').doc(id2).delete()
-                $('#messageinfomodal').modal('toggle')
+
+                db.collection('chatroom').doc(id).get().then(function (doc) {
+
+                    messages = doc.data().messages
+                    current = messages[i]
+
+                    console.log(current.timestamp);
+                    console.log(firebase.auth().currentUser.uid);
+                    console.log(firebase.auth().currentUser.displayName);
+                    console.log(current.senderpic);
+                    console.log(current.content);
+
+                    db.collection('chatroom').doc(id).update({
+                        messages: firebase.firestore.FieldValue.arrayRemove({
+                            timestamp: current.timestamp,
+                            senderuid: firebase.auth().currentUser.uid,
+                            sendername: firebase.auth().currentUser.displayName,
+                            senderpic: current.senderpic,
+                            content: current.content
+                        })
+                    }).then(function () {
+                        document.getElementById(i + 'el').remove()
+                        document.getElementById(i + 'elel').remove()
+                        $('#messageinfomodal').modal('toggle')
+                    })
+
+
+                })
+
+
             }
+
         }
         else {
             document.getElementById('deletemessagebutton').style.display = 'none'
@@ -198,14 +270,15 @@ function chatinfomodal(id, id2) {
         window.setTimeout(function () {
             toggleloader()
             $('#messageinfomodal').modal('toggle')
-        }, 400)
+        }, 600)
 
     })
 }
 
 function joinchatroombutton() {
     foo = document.getElementById('joininput').value
-    loadchatroom(foo)
+    window.history.pushState('page3', 'Title', '/chatroom.html?chat=' + foo);
+    window.location.reload()
 }
 
 function chatroomsinfo() {
@@ -215,3 +288,9 @@ function chatroomsinfo() {
 function chatroomrules() {
     $('#rulesModal').modal('toggle')
 }
+
+$("#messageinput1").keypress(function (event) {
+    if (event.keyCode == 13) {
+        $("#sendmessagebutton").click();
+    }
+});
