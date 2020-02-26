@@ -159,29 +159,48 @@ function newpost() {
             document.getElementById('captioninput').value = ''
             var storageRef = firebase.storage().ref();
             var file = document.getElementById('imgInp').files[0]
-            var fileRef = storageRef.child('users/' + user.uid + '/' + file.name);
-            fileRef.put(file).then(function (snapshot) {
-                db.collection('posts').add({
-                    caption: caption,
-                    likes: ['first'],
-                    file: file.name,
-                    name: user.displayName,
-                    type: document.getElementById('privateinp').checked,
-                    uid: user.uid,
-                    created: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(function () {
-                    snackbar('Post successfully uploaded.', '', '', '4000')
-                    document.getElementById('captionel').style.display = 'none'
-                    document.getElementById('blah').style.display = 'none'
-                    document.getElementById('captionel').style.display = 'none'
+            filenoext = file.name.replace(/\.[^/.]+$/, "")
+            ext = file.name.split('.').pop();
+            valuedate = new Date().valueOf()
+            filename = filenoext + valuedate + '.' + ext
+            var fileRef = storageRef.child('users/' + user.uid + '/' + filename);
+
+
+            db.collection('posts').doc('posts').get().then(function (doc) {
+                num = doc.data().latest
+                newnum = num + 1
+
+                fileRef.put(file).then(function (snapshot) {
+                    db.collection('posts').doc('posts').update({
+                        [newnum]: {
+                            name: newnum,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            data: {
+                                caption: caption,
+                                likes: ['first'],
+                                file: filename,
+                                name: user.displayName,
+                                type: document.getElementById('privateinp').checked,
+                                uid: user.uid,
+                            }
+                        },
+                        latest: newnum
+                    }).then(function () {
+                        db.collection('posts').doc('comments').update({
+                            [newnum]: [],
+                            latest: newnum
+                        }).then(function () {
+                            snackbar('Post successfully uploaded.', '', '', '4000')
+                            document.getElementById('captionel').style.display = 'none'
+                            document.getElementById('blah').style.display = 'none'
+                            document.getElementById('captionel').style.display = 'none'
+
+                        })
+                    })
                 })
-            });
+            })
         }
     }
-
-
-
-
 }
 
 
