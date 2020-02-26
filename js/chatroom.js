@@ -72,7 +72,7 @@ function loadchatroom(id) {
                 addmessage(id)
             }
 
-            db.collection('users').doc(firebase.auth().currentUser.uid).collection('details').doc('pfp').get().then(function (doc) {
+            db.collection('users').doc(firebase.auth().currentUser.uid).get().then(function (doc) {
                 userprofilepicture = doc.data().url
             })
 
@@ -167,7 +167,7 @@ function loadmessages(id) {
                 a.style.position = 'relative'
                 a.id = i + 'el'
                 infoFunc = "chatinfomodal('" + id + "','" + i + "')"
-                a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+                a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 80%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
 
                 document.getElementById('messages').appendChild(a)
                 b = document.createElement('br')
@@ -182,7 +182,7 @@ function loadmessages(id) {
 
         else {
 
-            console.log(doc.data().messages[postmessages.length]);
+
             element = doc.data().messages[postmessages.length]
             postmessages = doc.data().messages
 
@@ -236,11 +236,6 @@ function chatinfomodal(id, i) {
                     messages = doc.data().messages
                     current = messages[i]
 
-                    console.log(current.timestamp);
-                    console.log(firebase.auth().currentUser.uid);
-                    console.log(firebase.auth().currentUser.displayName);
-                    console.log(current.senderpic);
-                    console.log(current.content);
 
                     db.collection('chatroom').doc(id).update({
                         messages: firebase.firestore.FieldValue.arrayRemove({

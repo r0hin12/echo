@@ -47,15 +47,12 @@ function buildleaderboard(array) {
 
 function addstuffyo(id) {
 
-    db.collection('users').doc(id).collection('details').doc('pfp').get().then(function (doca) {
+    db.collection('users').doc(id).get().then(function (doca) {
         document.getElementById(id + 'el').innerHTML = '<img style="border-radius: 400px; width: 40px" src="' + doca.data().url + '"><h4 id="' + id + 'name"></h4>'
-        db.collection('users').doc(id).collection('details').doc('username').get().then(function (docb) {
-
-            document.getElementById(id + 'name').innerHTML = docb.data().name
-            addWaves()
+        document.getElementById(id + 'name').innerHTML = doca.data().name
+        addWaves()
 
 
-        })
 
     })
 

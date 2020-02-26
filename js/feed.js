@@ -126,88 +126,7 @@ function like(id) {
 
     sessionStorage.setItem('skiponce2', "true")
 
-    db.collection('posts').doc('posts').get().then(function (doc) {
-        likepostslist = doc.data().posts
-
-        for (let i = 0; i < likepostslist.length; i++) {
-            const element = likepostslist[i];
-            if (element.name == id) {
-
-
-                name = element.name
-                caption = element.data.caption
-                file = element.data.file
-                likes = element.data.likes
-                name2 = element.data.name
-                type = element.data.type
-                uid = element.data.uid
-
-                db.collection('posts').doc('posts').update({
-                    posts: firebase.firestore.FieldValue.arrayRemove({
-                        name: name,
-                        data: {
-                            caption: caption,
-                            file: file,
-                            likes: likes,
-                            name: name2,
-                            type: type,
-                            uid: uid,
-                        }
-                    })
-                })
-
-
-                alreadyinlol = 'false'
-                console.log(likes.length);
-                for (let i = 0; i < likes.length; i++) {
-                    console.log('here');
-                    const element = likes[i];
-                    console.log(user.uid);
-                    console.log(element);
-                    if (user.uid == element) {
-                        alreadyinlol = "true"
-                        alreadyinlolnumber = i
-                    }
-
-                }
-
-                if (alreadyinlol == "true") {
-                    alreadyinlol == "false"
-
-                    likes.splice(alreadyinlolnumber, 1);
-
-                }
-
-                else {
-                    likes.push(user.uid)
-                }
-
-                db.collection('posts').doc('posts').update({
-
-                    posts: firebase.firestore.FieldValue.arrayUnion({
-                        name: name,
-                        data: {
-                            caption: caption,
-                            file: caption,
-                            likes: likes,
-                            name: name2,
-                            type: type,
-                            uid: uid,
-
-                        }
-                    })
-
-                })
-
-
-
-            }
-
-
-        }
-
-    })
-
+    // I have no idea how im gonna pull this off ffs im sleeping now good night.
 
 }
 
@@ -698,7 +617,6 @@ function listencomments() {
 
         viewing = sessionStorage.getItem('viewing')
         if (viewing == 'stoplookinghere') {
-            console.log('not viewing anythin');
         }
         else {
             savedsession = doc.data()[parseInt(sessionStorage.getItem('viewing'), 10)].length
