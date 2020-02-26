@@ -40,106 +40,111 @@ function refreshmain() {
         document.getElementById('doprofile').style.display = 'block'
         document.getElementById('doprofile').classList.add('fadeIn')
         document.getElementById('cover').classList.add('fadeOut')
+        setTimeout(function () {
+            $('body').addClass('loaded');
+        }, 400);
     }
     else {
         db.collection('users').doc(user.uid).update({
             name: user.displayName,
             uid: user.uid
         })
-    }
 
-    document.getElementById('nameel').innerHTML = user.displayName
-    rep = 0
-    db.collection('posts').doc('posts').get().then(function (doc) {
-        for (let i = 0; i < doc.data().latest + 1; i++) {
-            if (doc.data()[i] == undefined) { } else {
-                if (doc.data()[i].data.uid == user.uid) {
-                    rep = rep + doc.data()[i].data.likes.length
+
+        document.getElementById('nameel').innerHTML = user.displayName
+        rep = 0
+        db.collection('posts').doc('posts').get().then(function (doc) {
+            for (let i = 0; i < doc.data().latest + 1; i++) {
+                if (doc.data()[i] == undefined) { } else {
+                    if (doc.data()[i].data.uid == user.uid) {
+                        rep = rep + doc.data()[i].data.likes.length
+                    }
                 }
             }
-        }
 
-        db.collection('users').doc(user.uid).collection('follow').doc('followers').get().then(function (doc) {
-            number = doc.data().followers.length
+            db.collection('users').doc(user.uid).collection('follow').doc('followers').get().then(function (doc) {
+                number = doc.data().followers.length
 
-            rep = rep + number
-
-
-            document.getElementById('ownrepcount').innerText = rep
-            db.collection('users').doc(user.uid).update({
-                rep: rep
-            })
+                rep = rep + number
 
 
-        })
-
-    })
-
-
-    db.collection('users').doc(user.uid).collection('follow').doc('following').get().then(function (doc) {
-        document.getElementById('ownfollowingcount').innerHTML = doc.data().following.length
-    })
-    db.collection('users').doc(user.uid).collection('follow').doc('followers').get().then(function (doc) {
-        document.getElementById('ownfollowerscount').innerHTML = doc.data().followers.length
-    })
-
-
-    db.collection('users').doc(user.uid).get().then(function (doc) {
-        document.getElementById('userel').innerHTML = '@' + doc.data().username
-    })
-
-    db.collection('users').doc(user.uid).collection("follow").doc('following').get().then(function (doc) {
-        if (doc.exists) { } else {
-            db.collection('users').doc(user.uid).collection('follow').doc('following').set({
-                following: []
-            })
-        }
-    })
-
-    db.collection('users').doc(user.uid).collection("follow").doc('followers').get().then(function (doc) {
-        if (doc.exists) { } else {
-            db.collection('users').doc(user.uid).collection('follow').doc('followers').set({
-                followers: []
-            })
-        }
-    })
-
-    db.collection('users').doc(user.uid).get().then(function (doc) {
-        if (doc.data().type !== undefined) {
-            if (doc.data().type == 'private') {
-
-                db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
-                    if (doc.exists) {
-
-                    }
-                    else {
-                        db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
-                            requested: []
-                        })
-                    }
+                document.getElementById('ownrepcount').innerText = rep
+                db.collection('users').doc(user.uid).update({
+                    rep: rep
                 })
 
 
+            })
+
+        })
+
+
+        db.collection('users').doc(user.uid).collection('follow').doc('following').get().then(function (doc) {
+            document.getElementById('ownfollowingcount').innerHTML = doc.data().following.length
+        })
+        db.collection('users').doc(user.uid).collection('follow').doc('followers').get().then(function (doc) {
+            document.getElementById('ownfollowerscount').innerHTML = doc.data().followers.length
+        })
+
+
+        db.collection('users').doc(user.uid).get().then(function (doc) {
+            document.getElementById('userel').innerHTML = '@' + doc.data().username
+        })
+
+        db.collection('users').doc(user.uid).collection("follow").doc('following').get().then(function (doc) {
+            if (doc.exists) { } else {
+                db.collection('users').doc(user.uid).collection('follow').doc('following').set({
+                    following: []
+                })
             }
-        } else {
-            db.collection('users').doc(user.uid).update({
-                type: 'public'
-            })
-        }
-    })
+        })
 
-    db.collection('users').doc(user.uid).collection('details').doc('follow').collection('requested').doc('requested').get().then(function (doc) {
-        if (doc.exists) {
+        db.collection('users').doc(user.uid).collection("follow").doc('followers').get().then(function (doc) {
+            if (doc.exists) { } else {
+                db.collection('users').doc(user.uid).collection('follow').doc('followers').set({
+                    followers: []
+                })
+            }
+        })
 
-        }
-        else {
-            db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
-                requested: []
-            })
-        }
-    })
+        db.collection('users').doc(user.uid).get().then(function (doc) {
+            if (doc.data().type !== undefined) {
+                if (doc.data().type == 'private') {
+
+                    db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
+                        if (doc.exists) {
+
+                        }
+                        else {
+                            db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
+                                requested: []
+                            })
+                        }
+                    })
 
 
+                }
+            } else {
+                db.collection('users').doc(user.uid).update({
+                    type: 'public'
+                })
+            }
+        })
+
+        db.collection('users').doc(user.uid).collection('details').doc('follow').collection('requested').doc('requested').get().then(function (doc) {
+            if (doc.exists) {
+
+            }
+            else {
+                db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
+                    requested: []
+                })
+            }
+        })
+
+
+
+    }
 
 
 
@@ -319,6 +324,9 @@ function verified() {
         document.getElementById('doemail').style.display = 'block'
         document.getElementById('doemail').classList.add('fadeIn')
         document.getElementById('cover').classList.add('fadeOut')
+        setTimeout(function () {
+            $('body').addClass('loaded');
+        }, 400);
 
     }
 }
