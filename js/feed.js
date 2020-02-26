@@ -70,7 +70,7 @@ function addComment(id) {
 }
 
 function addpfpcomment(usr, id) {
-    db.collection('users').doc(usr).collection('details').doc('pfp').get().then(function (doc) {
+    db.collection('users').doc(usr).get().then(function (doc) {
         document.getElementById(id + 'pfpel').src = doc.data().url
     })
 }
@@ -282,7 +282,7 @@ async function addstuff(name, data, time) {
     var storageRef = firebase.storage().ref();
     storageRef.child('users/' + data.uid + '/' + data.file).getDownloadURL().then(function (url) {
 
-        db.collection('users').doc(data.uid).collection('details').doc('pfp').get().then(function (doc) {
+        db.collection('users').doc(data.uid).get().then(function (doc) {
             pfpurl = doc.url
         })
         a = document.createElement('div')
@@ -368,7 +368,7 @@ async function addstufffeed(name, data, time) {
     var storageRef = firebase.storage().ref();
     storageRef.child('users/' + data.uid + '/' + data.file).getDownloadURL().then(function (url) {
 
-        db.collection('users').doc(data.uid).collection('details').doc('pfp').get().then(function (doc) {
+        db.collection('users').doc(data.uid).get().then(function (doc) {
             pfpurl = doc.url
         })
         a = document.createElement('div')
@@ -473,97 +473,93 @@ async function usermodal(uid) {
     $('#usergrid').empty()
     $('#userModal').modal('toggle')
     window.history.pushState('page3', 'Title', '/app.html?user=' + uid);
-    db.collection('users').doc(uid).collection('details').doc('username').get().then(function (doc) {
+    db.collection('users').doc(uid).get().then(function (doc) {
         username = doc.data().username
+        useruid = doc.data().uid
         document.getElementById('usermodaltitle').innerHTML = doc.data().name + ' <br><span style="border-radius: 12px; font-size: 18px" class="badge badge-dark">@' + doc.data().username + '</span>'
+        document.getElementById('usermodalpfp').src = doc.data().url
 
-        db.collection('users').doc(uid).collection('details').doc('pfp').get().then(function (doc) {
-            document.getElementById('usermodalpfp').src = doc.data().url
+        document.getElementById('userrep').innerHTML = doc.data().rep
 
-            rep = 0
-            db.collection('posts').where("uid", "==", uid).get().then(function (snapshot) {
-                snapshot.forEach(function (doc) {
-                    rep = rep + doc.data().likes.length
-                })
-                document.getElementById('userrep').innerHTML = rep
 
-                db.collection('users').doc(uid).collection('follow').doc('following').get().then(function (doc) {
-                    following = doc.data().following.length
-                    document.getElementById('userfollowers').innerHTML = following
+        db.collection('users').doc(uid).collection('follow').doc('following').get().then(function (doc) {
+            following = doc.data().following.length
+            document.getElementById('userfollowers').innerHTML = following
+
+
+            db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
+                followers = doc.data().followers.length
+                document.getElementById('userfollowing').innerHTML = following
+                if (user.uid == uid) {
+                    document.getElementById('ownwarning').style.display = 'block'
+                    document.getElementById('followbtn').innerHTML = 'unfollow'
+                    document.getElementById('followbtn').onclick = function () {
+                        snackbar('You can not unfollow yourself!', '', '', '4000')
+                    }
+                    loaduserposts(uid)
+                }
+                else {
 
                     db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
-                        followers = doc.data().followers.length
-                        document.getElementById('userfollowing').innerHTML = following
-                        if (user.uid == uid) {
-                            document.getElementById('ownwarning').style.display = 'block'
+                        ppl = doc.data().followers
+                        isfollow = false
+                        for (const item of ppl) {
+                            if (item == user.uid) {
+                                isfollow = true
+                            }
+                        }
+                        if (isfollow) {
+
+
                             document.getElementById('followbtn').innerHTML = 'unfollow'
                             document.getElementById('followbtn').onclick = function () {
-                                snackbar('You can not unfollow yourself!', '', '', '4000')
+                                unfollow(uid, username)
                             }
+
                             loaduserposts(uid)
+
                         }
                         else {
 
-                            db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
-                                ppl = doc.data().followers
-                                isfollow = false
-                                for (const item of ppl) {
-                                    if (item == user.uid) {
-                                        isfollow = true
-                                    }
-                                }
-                                if (isfollow) {
+                            document.getElementById('followbtn').innerHTML = 'follow'
+                            document.getElementById('followbtn').onclick = function () {
+                                follow(uid, username)
+                            }
 
 
-                                    document.getElementById('followbtn').innerHTML = 'unfollow'
-                                    document.getElementById('followbtn').onclick = function () {
-                                        unfollow(uid, username)
-                                    }
 
-                                    loaduserposts(uid)
+                            db.collection('users').doc(uid).get().then(function (doc) {
+                                if (doc.data().type == 'private') {
+                                    document.getElementById('privatewarning').style.display = 'block'
 
-                                }
-                                else {
+                                    db.collection('users').doc(uid).collection('follow').doc('requested').get().then(function (doc) {
+                                        ppl = doc.data().requested
+                                        isrequest = false
+                                        for (const item of ppl) {
 
-                                    document.getElementById('followbtn').innerHTML = 'follow'
-                                    document.getElementById('followbtn').onclick = function () {
-                                        follow(uid, username)
-                                    }
+                                            if (item == uid) {
+                                                isrequest = true
+                                            }
+                                        }
 
+                                        if (isrequest == true) {
 
-                                    db.collection('users').doc(uid).collection('details').doc('type').get().then(function (doc) {
-                                        if (doc.data().type == 'private') {
-                                            document.getElementById('privatewarning').style.display = 'block'
-
-                                            db.collection('users').doc(uid).collection('follow').doc('requested').get().then(function (doc) {
-                                                ppl = doc.data().requested
-                                                isrequest = false
-                                                for (const item of ppl) {
-
-                                                    if (item == uid) {
-                                                        isrequest = true
-                                                    }
-                                                }
-
-                                                if (isrequest == true) {
-
-                                                    document.getElementById('followbtn').innerHTML = 'cancel request'
-                                                    document.getElementById('followbtn').onclick = function () {
-                                                        unrequest(uid, username)
+                                            document.getElementById('followbtn').innerHTML = 'cancel request'
+                                            document.getElementById('followbtn').onclick = function () {
+                                                unrequest(uid, username)
 
 
 
 
-                                                    }
-                                                }
-                                            })
-                                        } else { loaduserposts(uid) }
+                                            }
+                                        }
                                     })
-                                }
+                                } else { loaduserposts(uid) }
                             })
                         }
                     })
-                })
+
+                }
             })
         })
     })
@@ -655,32 +651,7 @@ function info(id) {
 
 
 function reportComment(id) {
-    x = confirm('===== Report Comment =====\n\nAre you sure you want to report this comment?\n\nName: ' + user.displayName + '\nUID: ' + user.uid + '\nPost: ' + id + '\n\nClick Ok to confirm:')
-    if (x == true) {
-        db.collection('reports').doc(id).get().then(function (doc) {
-            if (doc.exists) {
-                db.collection('reports').doc(id).update({
-                    reporters: firebase.firestore.FieldValue.arrayUnion(user.uid)
-                }).then(function () {
-                    snackbar('Post ' + id + ' was reported', '', '', '8000')
-                })
-            }
-            else {
-
-                db.collection('reports').doc(id).set({
-                    "reporters": [user.uid]
-                }).then(function () {
-                    snackbar('Post ' + id + ' was reported', '', '', '8000')
-                })
-
-            }
-        })
-    }
-    else {
-
-        snackbar('Prompt cancelled; nothing happened', '', '', '8000')
-    }
-
+    console.log('reporting function??');
 }
 
 function refreshcomments(id) {
@@ -773,7 +744,7 @@ function listencommentsfeed() {
 }
 
 function addpfpfeed(uid, docid) {
-    db.collection('users').doc(uid).collection('details').doc('pfp').get().then(function (doc) {
+    db.collection('users').doc(uid).get().then(function (doc) {
         document.getElementById(docid + 'pfpelurlfeed').src = doc.data().url
 
 
@@ -781,7 +752,7 @@ function addpfpfeed(uid, docid) {
 }
 
 function addpfp(uid, docid) {
-    db.collection('users').doc(uid).collection('details').doc('pfp').get().then(function (doc) {
+    db.collection('users').doc(uid).get().then(function (doc) {
         document.getElementById(docid + 'pfpelurl').src = doc.data().url
 
 

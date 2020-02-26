@@ -42,22 +42,39 @@ function refreshmain() {
         document.getElementById('cover').classList.add('fadeOut')
     }
     else {
-        db.collection('users').doc(user.uid).collection('details').doc('username').update({
-            name: user.displayName
+        db.collection('users').doc(user.uid).update({
+            name: user.displayName,
+            uid: user.uid
         })
     }
 
     document.getElementById('nameel').innerHTML = user.displayName
     rep = 0
-    db.collection('posts').where("uid", "==", user.uid).get().then(function (snapshot) {
-        snapshot.forEach(function (doc) {
-            rep = rep + doc.data().likes.length
+    db.collection('posts').doc('posts').get().then(function (doc) {
+        for (let i = 0; i < doc.data().latest + 1; i++) {
+            if (doc.data()[i] == undefined) { } else {
+                if (doc.data()[i].data.uid == user.uid) {
+                    rep = rep + doc.data()[i].data.likes.length
+                }
+            }
+        }
+
+        db.collection('users').doc(user.uid).collection('follow').doc('followers').get().then(function (doc) {
+            number = doc.data().followers.length
+
+            rep = rep + number
+
+
+            document.getElementById('ownrepcount').innerText = rep
+            db.collection('users').doc(user.uid).update({
+                rep: rep
+            })
+
+
         })
-        document.getElementById('ownrepcount').innerText = rep
-        db.collection('users').doc(user.uid).update({
-            rep: rep
-        })
+
     })
+
 
     db.collection('users').doc(user.uid).collection('follow').doc('following').get().then(function (doc) {
         document.getElementById('ownfollowingcount').innerHTML = doc.data().following.length
@@ -67,8 +84,8 @@ function refreshmain() {
     })
 
 
-    db.collection('users').doc(user.uid).collection('details').doc('username').get().then(function (doc) {
-        document.getElementById('userel').innerHTML = doc.data().username
+    db.collection('users').doc(user.uid).get().then(function (doc) {
+        document.getElementById('userel').innerHTML = '@' + doc.data().username
     })
 
     db.collection('users').doc(user.uid).collection("follow").doc('following').get().then(function (doc) {
@@ -87,8 +104,8 @@ function refreshmain() {
         }
     })
 
-    db.collection('users').doc(user.uid).collection('details').doc('type').get().then(function (doc) {
-        if (doc.exists) {
+    db.collection('users').doc(user.uid).get().then(function (doc) {
+        if (doc.data().type !== undefined) {
             if (doc.data().type == 'private') {
 
                 db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
@@ -105,7 +122,7 @@ function refreshmain() {
 
             }
         } else {
-            db.collection('users').doc(user.uid).collection('details').doc("type").set({
+            db.collection('users').doc(user.uid).update({
                 type: 'public'
             })
         }
@@ -206,42 +223,30 @@ function newpost() {
 
 function pfp() {
 
-    db.collection('users').doc(user.uid).collection('details').doc('pfp').get().then(function (doc) {
-        if (doc.exists) {
+    db.collection('users').doc(user.uid).get().then(function (doc) {
+        if (doc.data().url !== undefined) {
 
             var storage = firebase.storage();
-            var storageRef = storage.ref('logos');
-            storageRef.child(doc.data().name + '.' + doc.data().extension).getDownloadURL().then(function (url) {
-                document.getElementById('pfp1').src = url
-                setTimeout(function () {
-                    $('body').addClass('loaded');
-                }, 400);
-
-            })
+            document.getElementById('pfp1').src = doc.data().url
+            setTimeout(function () {
+                $('body').addClass('loaded');
+            }, 400);
         }
         else {
             console.log('Setting to defaul pfp');
-            db.collection('users').doc(user.uid).collection('details').doc('pfp').set({
-                name: "example",
-                extension: "png",
-                uid: user.uid
-            }).then(function () {
 
-                var storage = firebase.storage();
-                var storageref = storage.ref();
+            var storage = firebase.storage();
+            var storageref = storage.ref();
 
-                db.collection('users').doc(user.uid).collection('details').doc('pfp').get().then(function (doc) {
-                    storageref.child('logos/' + doc.data().name + '.' + doc.data().extension).getDownloadURL().then(function (url) {
-
-
-                        db.collection('users').doc(user.uid).collection('details').doc('pfp').update({
-                            url: url
-                        })
-
+            db.collection('users').doc(user.uid).collection('details').doc('pfp').get().then(function (doc) {
+                storageref.child('logos/example.png').getDownloadURL().then(function (url) {
+                    db.collection('users').doc(user.uid).update({
+                        url: url
                     })
+
                 })
-                pfp()
             })
+            pfp()
         }
     })
 
