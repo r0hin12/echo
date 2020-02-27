@@ -85,8 +85,11 @@ function loadchatroom(id) {
 
 function addmessage(id) {
 
-    if (document.getElementById('messageinput1').value.length > 50) {
-        error('This message has ' + document.getElementById('messageinput1').value.length + ' characters. The limit is 50.')
+    newmessage = document.getElementById('messageinput1').value
+    document.getElementById('messageinput1').value = ''
+
+    if (newmessage.length > 50) {
+        error('This message has ' + newmessage.length + ' characters. The limit is 50.')
     }
     else {
         db.collection('chatroom').doc(id).update({
@@ -95,10 +98,29 @@ function addmessage(id) {
                 senderuid: firebase.auth().currentUser.uid,
                 sendername: firebase.auth().currentUser.displayName,
                 senderpic: userprofilepicture,
-                content: document.getElementById('messageinput1').value
+                content: newmessage
             })
         }).then(function () {
-            document.getElementById('messageinput1').value = ''
+
+
+
+            if (postmessages.length > 20) {
+                sessionStorage.setItem('skiparefresh', 'yesyes')
+                db.collection('chatroom').doc(id).update({
+                    messages: firebase.firestore.FieldValue.arrayRemove({
+                        timestamp: postmessages[0].timestamp,
+                        senderuid: postmessages[0].senderuid,
+                        sendername: postmessages[0].sendername,
+                        senderpic: postmessages[0].senderpic,
+                        content: postmessages[0].content,
+                    })
+                }).then(function () {
+                    $('#0el').remove()
+                })
+
+            }
+
+
         })
     }
 
@@ -133,7 +155,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 function signout() {
     firebase.auth().signOut()
 }
-
+sessionStorage.setItem('skiparefresh', 'nono')
 function loadmessages(id) {
 
 
@@ -151,66 +173,75 @@ function loadmessages(id) {
 
     db.collection('chatroom').doc(id).onSnapshot(function (doc) {
 
-        if (localStorage.getItem('first') == 'true') {
-            localStorage.setItem('first', 'false')
-
-            postmessages = doc.data().messages
-
-            if (postmessages == undefined) {
-                postmessages = []
-            }
-
-            for (let i = 0; i < postmessages.length; i++) {
-                var element = postmessages[i];
-
-                a = document.createElement('div')
-                a.style.position = 'relative'
-                a.id = i + 'el'
-                infoFunc = "chatinfomodal('" + id + "','" + i + "')"
-                a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 80%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
-
-                if (element.timestamp > d) {
-                    document.getElementById('messages').appendChild(a)
-                    b = document.createElement('br')
-                    b.id = i + 'elel'
-                    document.getElementById('messages').appendChild(b)
-                    addWaves()
-                }
-            }
-            var objDiv = document.getElementById("messages");
-            objDiv.scrollTop = objDiv.scrollHeight;
+        if (sessionStorage.getItem('skiparefresh') == 'yesyes') {
+            sessionStorage.setItem('skiparefresh', 'nono')
         }
-
         else {
 
 
-            element = doc.data().messages[postmessages.length]
-            postmessages = doc.data().messages
 
-            idi = postmessages.length - 1
+            if (localStorage.getItem('first') == 'true') {
+                localStorage.setItem('first', 'false')
 
-            a = document.createElement('div')
-            a.style.position = 'relative'
-            a.id = idi + 'el'
-            a.classList.add('animated')
-            a.classList.add('fadeInUp')
-            infoFunc = "chatinfomodal('" + id + "','" + idi + "')"
-            a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+                postmessages = doc.data().messages
 
-            document.getElementById('messages').appendChild(a)
-            b = document.createElement('br')
-            b.id = idi + 'elel'
+                if (postmessages == undefined) {
+                    postmessages = []
+                }
 
-            document.getElementById('messages').appendChild(b)
-            addWaves()
+                for (let i = 0; i < postmessages.length; i++) {
+                    var element = postmessages[i];
 
-            var objDiv = document.getElementById("messages");
-            objDiv.scrollTop = objDiv.scrollHeight;
+                    a = document.createElement('div')
+                    a.style.position = 'relative'
+                    a.id = i + 'el'
+                    infoFunc = "chatinfomodal('" + id + "','" + i + "')"
+                    a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 80%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+
+                    if (element.timestamp > d) {
+                        document.getElementById('messages').appendChild(a)
+                        b = document.createElement('br')
+                        b.id = i + 'elel'
+                        document.getElementById('messages').appendChild(b)
+                        addWaves()
+                    }
+                }
+                var objDiv = document.getElementById("messages");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
+
+            else {
 
 
+                element = doc.data().messages[postmessages.length]
+                postmessages = doc.data().messages
+
+                idi = postmessages.length - 1
+
+                a = document.createElement('div')
+                a.style.position = 'relative'
+                a.id = idi + 'el'
+                a.classList.add('animated')
+                a.classList.add('fadeInUp')
+                infoFunc = "chatinfomodal('" + id + "','" + idi + "')"
+                a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+
+                document.getElementById('messages').appendChild(a)
+                b = document.createElement('br')
+                b.id = idi + 'elel'
+
+                document.getElementById('messages').appendChild(b)
+                addWaves()
+
+                var objDiv = document.getElementById("messages");
+                objDiv.scrollTop = objDiv.scrollHeight;
+
+
+            }
         }
 
     })
+
 }
 
 
@@ -228,7 +259,7 @@ function chatinfomodal(id, i) {
         document.getElementById('infoc').innerHTML = data.id
         document.getElementById('infod').innerHTML = data.senderuid
 
-        if (data.senderuid == firebase.auth().currentUser.uid) {
+        if (data[i].senderuid == firebase.auth().currentUser.uid) {
             document.getElementById('deletemessagebutton').style.display = 'block'
             document.getElementById('deletemessagebutton').onclick = function () {
 
