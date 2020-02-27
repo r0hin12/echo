@@ -27,10 +27,12 @@ firebase.auth().onAuthStateChanged(function (user) {
             console.log('username: ' + theusername);
             db.collection('app').doc('details').update({
                 usernames: firebase.firestore.FieldValue.arrayUnion(theusername)
+
+            }).then(function () {
+                db.collection('users').doc(user.uid).set({
+                    username: document.getElementById('user1').value,
+                }).then(function () { })
             })
-            db.collection('users').doc(user.uid).update({
-                username: document.getElementById('user1').value,
-            }).then(function () { })
         }
 
         else {
@@ -71,7 +73,7 @@ function signinemail() {
         // ...
     });
 }
-
+sessionStorage.setItem('continue', 'true')
 function signupemail() {
     email = document.getElementById('email1').value
     pass = document.getElementById('pass1').value

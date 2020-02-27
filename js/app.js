@@ -45,12 +45,25 @@ function refreshmain() {
         }, 400);
     }
     else {
-        db.collection('users').doc(user.uid).update({
-            name: user.displayName,
-            uid: user.uid
+        db.collection('users').doc(user.uid).get().then(function (doc) {
+            if (doc.exists) {
+                db.collection('users').doc(user.uid).update({
+                    name: user.displayName,
+                    uid: user.uid
+                })
+            }
+            else {
+                db.collection('users').doc(user.uid).set({
+                    name: user.displayName,
+                    uid: user.uid
+                })
+                    .then(function () {
+                        window.location.reload()
+                    })
+
+
+            }
         })
-
-
         document.getElementById('nameel').innerHTML = user.displayName
         rep = 0
         db.collection('posts').doc('posts').get().then(function (doc) {
