@@ -196,7 +196,6 @@ function loadmessages(id) {
                 a.classList.add('animated')
                 a.classList.add('fadeInUp')
                 infoFunc = "chatinfomodal('" + id + "','" + idi + "')"
-                console.log(element);
                 a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
 
                 document.getElementById('messages').appendChild(a)
@@ -274,8 +273,6 @@ function chatinfomodal(id, i) {
     db.collection('chatroom').doc(id).get().then(function (doc) {
 
         data = doc.data().messages[i]
-        console.log(i);
-        console.log(data);
         document.getElementById('infoa').innerHTML = data.content
         document.getElementById('infob').innerHTML = data.timestamp
         document.getElementById('infod').innerHTML = data.senderuid
