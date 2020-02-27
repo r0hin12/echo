@@ -102,25 +102,6 @@ function addmessage(id) {
             })
         }).then(function () {
 
-
-
-            if (postmessages.length > 20) {
-                sessionStorage.setItem('skiparefresh', 'yesyes')
-                db.collection('chatroom').doc(id).update({
-                    messages: firebase.firestore.FieldValue.arrayRemove({
-                        timestamp: postmessages[0].timestamp,
-                        senderuid: postmessages[0].senderuid,
-                        sendername: postmessages[0].sendername,
-                        senderpic: postmessages[0].senderpic,
-                        content: postmessages[0].content,
-                    })
-                }).then(function () {
-                    $('#0el').remove()
-                })
-
-            }
-
-
         })
     }
 
@@ -158,12 +139,6 @@ function signout() {
 sessionStorage.setItem('skiparefresh', 'nono')
 function loadmessages(id) {
 
-
-    var d = new Date(); // today!
-    x = 1
-    d.setDate(d.getDate() - x);
-    d = d.valueOf()
-
     window.setTimeout(function () {
         toggleloader()
     }, 1000)
@@ -194,17 +169,16 @@ function loadmessages(id) {
 
                     a = document.createElement('div')
                     a.style.position = 'relative'
+                    a.classList.add('messageelement')
                     a.id = i + 'el'
                     infoFunc = "chatinfomodal('" + id + "','" + i + "')"
                     a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 80%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
-
-                    if (element.timestamp > d) {
-                        document.getElementById('messages').appendChild(a)
-                        b = document.createElement('br')
-                        b.id = i + 'elel'
-                        document.getElementById('messages').appendChild(b)
-                        addWaves()
-                    }
+                    document.getElementById('messages').appendChild(a)
+                    b = document.createElement('br')
+                    b.id = i + 'elel'
+                    b.classList.add('breakelement')
+                    document.getElementById('messages').appendChild(b)
+                    addWaves()
                 }
                 var objDiv = document.getElementById("messages");
                 objDiv.scrollTop = objDiv.scrollHeight;
@@ -213,17 +187,16 @@ function loadmessages(id) {
             else {
 
 
-                element = doc.data().messages[postmessages.length]
-                postmessages = doc.data().messages
-
-                idi = postmessages.length - 1
-
+                element = doc.data().messages[21]
+                idi = 20
                 a = document.createElement('div')
                 a.style.position = 'relative'
                 a.id = idi + 'el'
+
                 a.classList.add('animated')
                 a.classList.add('fadeInUp')
                 infoFunc = "chatinfomodal('" + id + "','" + idi + "')"
+                console.log(element);
                 a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
 
                 document.getElementById('messages').appendChild(a)
@@ -235,6 +208,54 @@ function loadmessages(id) {
 
                 var objDiv = document.getElementById("messages");
                 objDiv.scrollTop = objDiv.scrollHeight;
+
+
+
+
+
+
+                if (postmessages.length > 20) {
+                    sessionStorage.setItem('skiparefresh', 'yesyes')
+                    db.collection('chatroom').doc(id).update({
+                        messages: firebase.firestore.FieldValue.arrayRemove({
+                            timestamp: postmessages[0].timestamp,
+                            senderuid: postmessages[0].senderuid,
+                            sendername: postmessages[0].sendername,
+                            senderpic: postmessages[0].senderpic,
+                            content: postmessages[0].content,
+                        })
+                    }).then(function () {
+                        $('#0el').remove()
+                        $('#0elel').remove()
+
+                        msgels = document.getElementsByClassName('messageelement')
+                        var msgels = [].slice.call(msgels);
+
+                        for (let i = 0; i < msgels.length; i++) {
+                            const element = msgels[i];
+                            oldoldid = element.id
+                            oldid = element.id.split("el")[0]
+
+                            newid = parseInt(oldid) - 1
+                            i = newid
+                            id = id
+
+                            document.getElementById(oldoldid).id = newid + 'el'
+                            document.getElementById(newid + 'el').onclick = function () {
+                                chatinfomodal(id, i)
+                            }
+
+
+
+                        }
+
+
+
+                    })
+
+                }
+
+
 
 
             }
@@ -253,46 +274,12 @@ function chatinfomodal(id, i) {
     db.collection('chatroom').doc(id).get().then(function (doc) {
 
         data = doc.data().messages[i]
-
+        console.log(i);
+        console.log(data);
         document.getElementById('infoa').innerHTML = data.content
         document.getElementById('infob').innerHTML = data.timestamp
-        document.getElementById('infoc').innerHTML = data.id
         document.getElementById('infod').innerHTML = data.senderuid
 
-        if (data[i].senderuid == firebase.auth().currentUser.uid) {
-            document.getElementById('deletemessagebutton').style.display = 'block'
-            document.getElementById('deletemessagebutton').onclick = function () {
-
-                db.collection('chatroom').doc(id).get().then(function (doc) {
-
-                    messages = doc.data().messages
-                    current = messages[i]
-
-
-                    db.collection('chatroom').doc(id).update({
-                        messages: firebase.firestore.FieldValue.arrayRemove({
-                            timestamp: current.timestamp,
-                            senderuid: firebase.auth().currentUser.uid,
-                            sendername: firebase.auth().currentUser.displayName,
-                            senderpic: current.senderpic,
-                            content: current.content
-                        })
-                    }).then(function () {
-                        document.getElementById(i + 'el').remove()
-                        document.getElementById(i + 'elel').remove()
-                        $('#messageinfomodal').modal('toggle')
-                    })
-
-
-                })
-
-
-            }
-
-        }
-        else {
-            document.getElementById('deletemessagebutton').style.display = 'none'
-        }
 
         window.setTimeout(function () {
             toggleloader()
