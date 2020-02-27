@@ -328,7 +328,6 @@ async function addstufffeed(name, data, time) {
 
 function actual(array) {
 
-    console.log(array);
 
     sessionStorage.setItem('count', 0)
     sessionStorage.setItem('maxCount', array.length)
@@ -351,7 +350,13 @@ function actual(array) {
 
 function actualfeed(array) {
 
-    console.log(array);
+
+    if (array.length == 0) {
+        document.getElementById('nofeedstuff').style.display = 'inline-block'
+    }
+    else {
+        document.getElementById('nofeedstuff').style.display = 'none'
+    }
 
     sessionStorage.setItem('count2', 0)
     sessionStorage.setItem('maxCount2', array.length)
