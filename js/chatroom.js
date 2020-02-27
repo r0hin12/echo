@@ -169,12 +169,13 @@ function loadmessages(id) {
                 infoFunc = "chatinfomodal('" + id + "','" + i + "')"
                 a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 80%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
 
-                document.getElementById('messages').appendChild(a)
-                b = document.createElement('br')
-                b.id = i + 'elel'
-
-                document.getElementById('messages').appendChild(b)
-                addWaves()
+                if (element.timestamp > d) {
+                    document.getElementById('messages').appendChild(a)
+                    b = document.createElement('br')
+                    b.id = i + 'elel'
+                    document.getElementById('messages').appendChild(b)
+                    addWaves()
+                }
             }
             var objDiv = document.getElementById("messages");
             objDiv.scrollTop = objDiv.scrollHeight;
