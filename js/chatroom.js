@@ -34,7 +34,7 @@ function createchatroombutton() {
                             toggleloader()
                         }, 500)
                         window.setTimeout(function () {
-                            window.history.pushState('page3', 'Title', '/chatroom.html?chat=' + id);
+                            window.history.pushState('page3', 'Title', '/eonnect/chatroom.html?chat=' + id);
                             window.location.reload()
                         }, 1000)
                     })
@@ -50,7 +50,7 @@ function unloadchatroom() {
     document.getElementById('home').classList.add('animated')
     document.getElementById('home').classList.add('fadeIn')
 
-    window.history.pushState('page3', 'Title', '/chatroom.html');
+    window.history.pushState('page3', 'Title', '/eonnect/chatroom.html');
 
 
 }
@@ -65,7 +65,7 @@ function loadchatroom(id) {
     db.collection('chatroom').doc(id).get().then(function (doc) {
         if (doc.exists) {
             toggleloader()
-            window.history.pushState('page3', 'Title', '/chatroom.html?chat=' + id);
+            window.history.pushState('page3', 'Title', 'eonnect/chatroom.html?chat=' + id);
             document.getElementById('chatroomtitle').innerHTML = doc.data().name
             document.getElementById('chatroomid').innerHTML = '<small>#' + doc.data().id + '</small>'
             document.getElementById('sendmessagebutton').onclick = function () {
@@ -86,23 +86,30 @@ function loadchatroom(id) {
 function addmessage(id) {
 
     newmessage = document.getElementById('messageinput1').value
+    backupmessage = document.getElementById('messageinput1').value
     document.getElementById('messageinput1').value = ''
 
-    if (newmessage.length > 50) {
-        error('This message has ' + newmessage.length + ' characters. The limit is 50.')
+    if (newmessage = '') {
+        snackbar('You must include content.')
     }
-    else {
-        db.collection('chatroom').doc(id).update({
-            messages: firebase.firestore.FieldValue.arrayUnion({
-                timestamp: new Date().valueOf(),
-                senderuid: firebase.auth().currentUser.uid,
-                sendername: firebase.auth().currentUser.displayName,
-                senderpic: userprofilepicture,
-                content: newmessage
-            })
-        }).then(function () {
 
-        })
+    else {
+        if (newmessage.length > 50) {
+            error('This message has ' + newmessage.length + ' characters. The limit is 50.')
+        }
+        else {
+            db.collection('chatroom').doc(id).update({
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                    timestamp: new Date().valueOf(),
+                    senderuid: firebase.auth().currentUser.uid,
+                    sendername: firebase.auth().currentUser.displayName,
+                    senderpic: userprofilepicture,
+                    content: backupmessage
+                })
+            }).then(function () {
+
+            })
+        }
     }
 
 
@@ -153,42 +160,57 @@ function loadmessages(id) {
         }
         else {
 
-
-
             if (localStorage.getItem('first') == 'true') {
                 localStorage.setItem('first', 'false')
 
                 postmessages = doc.data().messages
 
-                if (postmessages == undefined) {
+                if (postmessages == undefined || doc.data().messages.length == 0) {
                     postmessages = []
-                }
 
-                for (let i = 0; i < postmessages.length; i++) {
-                    var element = postmessages[i];
 
-                    a = document.createElement('div')
-                    a.style.position = 'relative'
-                    a.classList.add('messageelement')
-                    a.id = i + 'el'
-                    infoFunc = "chatinfomodal('" + id + "','" + i + "')"
-                    a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 80%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
-                    document.getElementById('messages').appendChild(a)
-                    b = document.createElement('br')
-                    b.id = i + 'elel'
-                    b.classList.add('breakelement')
-                    document.getElementById('messages').appendChild(b)
-                    addWaves()
+
                 }
-                var objDiv = document.getElementById("messages");
-                objDiv.scrollTop = objDiv.scrollHeight;
+                else {
+
+
+
+                    for (let i = 0; i < postmessages.length; i++) {
+                        var element = postmessages[i];
+
+                        a = document.createElement('div')
+                        a.style.position = 'relative'
+                        a.classList.add('messageelement')
+                        a.id = i + 'el'
+                        infoFunc = "chatinfomodal('" + id + "','" + i + "')"
+                        console.log(element);
+                        a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 80%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+                        document.getElementById('messages').appendChild(a)
+                        b = document.createElement('br')
+                        b.id = i + 'elel'
+                        b.classList.add('breakelement')
+                        document.getElementById('messages').appendChild(b)
+                        addWaves()
+                    }
+                    var objDiv = document.getElementById("messages");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                }
             }
 
             else {
 
+                if (doc.data().messages.length < 20) {
 
-                element = doc.data().messages[21]
-                idi = 20
+                    element = doc.data().messages[doc.data().messages.length - 1]
+                    idi = doc.data().messages.length - 1
+
+
+                }
+
+                else {
+                    element = doc.data().messages[21]
+                    idi = 20
+                }
                 a = document.createElement('div')
                 a.style.position = 'relative'
                 a.id = idi + 'el'
@@ -196,6 +218,7 @@ function loadmessages(id) {
                 a.classList.add('animated')
                 a.classList.add('fadeInUp')
                 infoFunc = "chatinfomodal('" + id + "','" + idi + "')"
+
                 a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
 
                 document.getElementById('messages').appendChild(a)
@@ -288,7 +311,7 @@ function chatinfomodal(id, i) {
 
 function joinchatroombutton() {
     foo = document.getElementById('joininput').value
-    window.history.pushState('page3', 'Title', '/chatroom.html?chat=' + foo);
+    window.history.pushState('page3', 'Title', 'eonnect/chatroom.html?chat=' + foo);
     window.location.reload()
 }
 
