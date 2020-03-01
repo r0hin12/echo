@@ -279,42 +279,42 @@ function tab(tab) {
             $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); this.classList.add('nopurple') })
             document.getElementById('feed-tab').classList.add('navthing')
             document.getElementById('feed-tab').classList.remove('nopurple')
-            window.history.pushState('page2', 'Title', '/app.html?tab=feed');
+            history.pushState(null, '', '/eonnect/app.html?tab=feed');
             sessionStorage.setItem('currentab', tab)
             break;
         case 'explore':
             $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); this.classList.add('nopurple') })
             document.getElementById('explore-tab').classList.add('navthing')
             document.getElementById('explore-tab').classList.remove('nopurple')
-            window.history.pushState('page2', 'Title', '/app.html?tab=explore');
+            history.pushState(null, '', '/eonnect/app.html?tab=explore');
             sessionStorage.setItem('currentab', tab)
             break;
         case 'direct':
             $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); this.classList.add('nopurple') })
             document.getElementById('direct-tab').classList.add('navthing')
             document.getElementById('direct-tab').classList.remove('nopurple')
-            window.history.pushState('page2', 'Title', '/app.html?tab=direct');
+            history.pushState(null, '', '/eonnect/app.html?tab=direct');
             sessionStorage.setItem('currentab', tab)
             break;
         case 'public':
             $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); this.classList.add('nopurple') })
             document.getElementById('public-tab').classList.add('navthing')
             document.getElementById('public-tab').classList.remove('nopurple')
-            window.history.pushState('page2', 'Title', '/app.html?tab=public');
+            history.pushState(null, '', '/eonnect/app.html?tab=public');
             sessionStorage.setItem('currentab', tab)
             break;
         case 'leaderboard':
             $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); this.classList.add('nopurple') })
             document.getElementById('leaderboard-tab').classList.add('navthing')
             document.getElementById('leaderboard-tab').classList.remove('nopurple')
-            window.history.pushState('page2', 'Title', '/app.html?tab=leaderboard');
+            history.pushState(null, '', '/eonnect/app.html?tab=leaderboard');
             sessionStorage.setItem('currentab', tab)
             break;
         case 'account':
             $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); this.classList.add('nopurple') })
             document.getElementById('account-tab').classList.add('navthing')
             document.getElementById('account-tab').classList.remove('nopurple')
-            window.history.pushState('page2', 'Title', '/app.html?tab=account');
+            history.pushState(null, '', '/eonnect/app.html?tab=account');
             sessionStorage.setItem('currentab', tab)
             break;
 

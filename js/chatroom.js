@@ -34,7 +34,7 @@ function createchatroombutton() {
                             toggleloader()
                         }, 500)
                         window.setTimeout(function () {
-                            window.history.pushState('page3', 'Title', '/chatroom.html?chat=' + id);
+                            window.history.pushState('page3', 'Title', '/eonnect/chatroom.html?chat=' + id);
                             window.location.reload()
                         }, 1000)
                     })
@@ -50,7 +50,7 @@ function unloadchatroom() {
     document.getElementById('home').classList.add('animated')
     document.getElementById('home').classList.add('fadeIn')
 
-    window.history.pushState('page3', 'Title', '/chatroom.html');
+    window.history.pushState('page3', 'Title', '/eonnect/chatroom.html');
 
 
 }
@@ -65,7 +65,7 @@ function loadchatroom(id) {
     db.collection('chatroom').doc(id).get().then(function (doc) {
         if (doc.exists) {
             toggleloader()
-            window.history.pushState('page3', 'Title', 'chatroom.html?chat=' + id);
+            window.history.pushState('page3', 'Title', '/eonnect/chatroom.html?chat=' + id);
             document.getElementById('chatroomtitle').innerHTML = doc.data().name
             document.getElementById('chatroomid').innerHTML = '<small>#' + doc.data().id + '</small>'
             document.getElementById('sendmessagebutton').onclick = function () {
