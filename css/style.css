@@ -1,3 +1,13 @@
+
+html {
+  overflow-y: scroll;
+  outline: none;
+}
+
+button {
+  outline: none !important;
+}
+
 #grid {
     display: grid;
     grid-template-columns: 1;
@@ -251,4 +261,11 @@ width: 75px;
       
       .animated-link a:hover {
         background-position: 0 30px;
+      }
+
+      .notliked {
+        background-color: #fff
+      }
+      .liked {
+        color: red
       }

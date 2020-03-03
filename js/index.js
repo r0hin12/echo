@@ -18,7 +18,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         console.log('Doing auth change stuff');
 
         x = sessionStorage.getItem('gottoadd')
-        console.log(x);
 
         if (x == false || x == 'false') {
             sessionStorage.removeItem('gottoadd')
@@ -136,12 +135,14 @@ function signupshow() {
     document.getElementById('signinpanel').style.display = 'none'
     document.getElementById('signuppanel').style.display = 'inline-block'
 
-    document.getElementById('btnsstuff').innerHTML = '<p>If you have an account:</p><button onclick="signinshow()" class="waves btn-eon-one">Sign in</button>'
+    document.getElementById('btnsstuff').innerHTML = '<p>If you have an account:</p><button onclick="signinshow()" class="eon-outlined">Sign in</button>'
+    addWaves()
 }
 
 function signinshow() {
     document.getElementById('signinpanel').style.display = 'inline-block'
     document.getElementById('signuppanel').style.display = 'none'
 
-    document.getElementById('btnsstuff').innerHTML = "<p>If you don't have an account:</p><button onclick='signupshow()' class='waves btn-eon-one'>Sign Up</button>"
+    document.getElementById('btnsstuff').innerHTML = "<p>If you don't have an account:</p><button onclick='signupshow()' class='eon-outlined'>Sign Up</button>"
+    addWaves()
 }

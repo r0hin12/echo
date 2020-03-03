@@ -1,43 +1,52 @@
-<html>
-
+<!-- HTML -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <!---==== Meta ====--->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://rohinarya12.github.io/eonstyles/assets/eonstyles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Assistant&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="css/material.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/waves.min.css">
-    <script src="js/waves.min.js"></script>
-    <script src="https://kit.fontawesome.com/974fa7d414.js" crossorigin="anonymous"></script>
-    <title>Eongram - Sign in</title>
+    <title>Document</title>
+
+    <!---==== CSS ====-->
+    <!-- Animate --> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <!-- Material Icons --><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> 
+    <!-- Roboto Font--><link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i|Roboto+Mono:300,400,700|Roboto+Slab:300,400,700" rel="stylesheet">
+    <!-- Dameonite / Bootstrap--><link rel="stylesheet" href="daemonite/material.min.css">
+    <!-- Eon Styles --><link rel="stylesheet" href="https://rohinarya12.github.io/eonstyles/new/eon.css">
+    <!-- Waves --><link rel="stylesheet" href="daemonite/waves.min.css">
+
+
 </head>
+<body id="body" style="font-family: Roboto; display: none;" class="animated fadeIn">
+    <!-- Preflight Modals-->
 
-<body class="animated fadeIn" id="body" style="display: none; font-family: Assistant; ">
-  <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
-  <!-- Modal -->
-  <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">dismiss</button></div></div></div></div>
-  <div class="modal fade bd-example-modal-sm" id="termsModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Terms and Conditions</h3></div><h5 class="modal-body">We can literally do anything we want with your data and account and you can't sue or anything.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">close</button></div></div></div></div>
+    <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="eon-text" data-dismiss="modal">dismiss</button></div></div></div></div>
+    <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
+    <div class="modal fade bd-example-modal-sm" id="termsModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Terms and Conditions</h3></div><h5 class="modal-body">We can literally do anything we want with your data and account and you can't sue or anything.</h5><div class="modal-footer"><button type="button" class="eon-text" data-dismiss="modal">close</button></div></div></div></div>
 
-  <div class="modal fade" id="successmodal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Signed in</h3>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h5>Click the button below to enter the web app.</h5>
-        </div>
-        <div class="modal-footer">
-          <button onclick="go()" type="button" class="waves btn-eon-two" data-dismiss="modal">Go</button>
+
+    <div class="modal fade" id="successmodal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Signed in</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5>Click the button below to enter the web app.</h5>
+          </div>
+          <div class="modal-footer">
+            <button onclick="go()" type="button" class="eon-contained" data-dismiss="modal">Go</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
+
+<!-- ===========================--] Content [=================================== -->
+    
 
 
 <center><img style="width: 20em" src="assets/logo.png" alt=""></center>
@@ -55,7 +64,7 @@
     <input class="form-control" id="pass2" placeholder="" type="password">
   </div>
   <br>
-  <button onclick="signinemail()" style="width: 100%" class="waves btn-old-secondary">Sign In</button>
+  <button onclick="signinemail()" style="width: 100%" class="eon-contained">Sign In</button>
   
 
 
@@ -80,7 +89,7 @@
       <input class="form-control" id="pass1" placeholder="" type="password">
     </div>
     <br>
-    <button onclick="signupemail()" style="width: 100%" class="waves btn-old-secondary">Sign Up</button>
+    <button onclick="signupemail()" style="width: 100%" class="eon-outlined">Sign Up</button>
     <small>By signing up you agree to <a href="#" onclick="terms()">terms and conditions</a>.</small>
 
   
@@ -91,7 +100,7 @@
 <div style="min-width: 40%; display: inline-block" class="card">
   <div id="btnsstuff" class="card-body">
   
-    <p>If you don't have an account:</p><button onclick="signupshow()" class="waves btn-eon-one">Sign Up</button>
+    <p>If you don't have an account:</p><button onclick="signupshow()" class="eon-outlined">Sign Up</button>
   
   
   </div>
@@ -99,17 +108,20 @@
 </center>
 
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<!-- ===========================--] /Content [=================================== -->
+    <!---==== JavaScript ====--->
+    <!-- JQuery --><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <!-- Popper --><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <!-- Bootstrap --><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <!-- Eon Styles --><script src="https://rohinarya12.github.io/eonstyles/new/eon.js"></script>
+    <!-- Daemonite --><script src="daemonite/material.min.js"></script>
+    <!-- Waves --><script src="daemonite/waves.min.js"></script><script>addWaves();function addWaves(){ Waves.attach('.eon-contained', ['waves-button', 'waves-light']);Waves.attach('.eon-outlined', ['waves-button']);Waves.attach('.eon-text', ['waves-button']);var config = {duration: 250}; Waves.init(config);}</script>
 
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
     
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-
 <script>
-  // Your web app's Firebase configuration
   var firebaseConfig = {
     apiKey: "AIzaSyDyiJGiWlgFaMtJA2lerw4lUkGK76Qoxvs",
     authDomain: "eongram-87169.firebaseapp.com",
@@ -122,26 +134,10 @@
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 </script>
+<script defer src="js/index.js"></script>
+<script src="js/script.js"></script>
 
-    <script src="https://rohinarya12.github.io/eonstyles/assets/eonstyles.js"></script>
-    <script type="text/javascript">addWaves();function addWaves() {Waves.attach(".waves", ["waves-button"]), Waves.attach(".waves-float-button", ["waves-button","waves-float"]), Waves.attach(".waves-float-button-dark", ["waves-button", "waves-float"]), Waves.attach(".waves-float-button-light", ["waves-button", "waves-float", "waves-light"]), Waves.attach(".waves-box", ["waves-block"]), Waves.attach(".waves-float-box", ["waves-block", "waves-float"]),Waves.attach(".waves-image"), Waves.init();}</script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="js/material.min.js"></script>
-    <script defer src="js/index.js"></script>
-    <script src="js/script.js"></script>
 
 </body>
 </html>
-
-<!-- 
-    waves-light // Light Waves
-    waves-flat-button // Button flat
-    waves-float-button // Button float
-    waves-float-button-dark // Button float dark waves
-    waves-float-button-light // Button float dark waves
-    waves-flat-box // Box flat
-    waves-float-box // Box float
-    waves-image // Image waves  
--->
+    

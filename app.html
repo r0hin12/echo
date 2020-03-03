@@ -1,360 +1,354 @@
-<html>
+<!-- HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!---==== Meta ====--->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
-  <head>
-    <script>sessionStorage.setItem('skiponce2', "true")</script>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="https://rohinarya12.github.io/eonstyles/assets/eonstyles.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-      <link href="https://fonts.googleapis.com/css?family=Assistant:400,700&display=swap" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
-      <link href="css/material.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="css/waves.min.css">
-      <link rel="stylesheet" href="css/style.css">
-      <script src="js/waves.min.js"></script>
-      <script src="https://kit.fontawesome.com/974fa7d414.js" crossorigin="anonymous"></script>
-      <title>Eongram | Home</title>
-  </head>
-<!-- Xan is here-->
-<!-- rohin was also here-->
-  <body id="body" style="background-color: #f1f1f1; font-family: Assistant;">
-
-  
-
-    <div style='z-index: 200000000;' id="loader-wrapper">
-      <div id="loader"></div>
-      
-      <div id="left" class="loader-section section-left"></div>
-      <div id="right" class="loader-section section-right"></div>
-      
-    </div>
-      
-  <div class="animated" style="position: fixed; display: none; width: 100%; height: 100%; padding: 40px;" id="doemail">
-
-    <br><br>
-  <center><h3 id='emailtext'>Please verify your email</h3>
-  <br><br>
-  <button id="sendemailbtn" onclick="sendverify()" class="waves btn-old-primary">Send Verification Email</button>
-
-  </center>
+    <!---==== CSS ====-->
+    <!-- Eon Styles --><link rel="stylesheet" href="https://rohinarya12.github.io/eonstyles/new/eon.css">
+    <!-- Animate --> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <!-- Material Icons --><link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <!-- Roboto Font--><link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i|Roboto+Mono:300,400,700|Roboto+Slab:300,400,700" rel="stylesheet">
+    <!-- Dameonite / Bootstrap--><link rel="stylesheet" href="daemonite/material.min.css">
+    <!-- Waves --><link rel="stylesheet" href="daemonite/waves.min.css">
+    <!-- CSS --><link rel="stylesheet" href="css/style.css">
+    <!-- Snackbar --><link rel="stylesheet" type="text/css" href="daemonite/snackbar.min.css">
 
 
-  </div>
+</head>
+<body id="body" style="background-color: #f1f1f1; font-family: Roboto">
+    <!-- Preflight Modals-->
 
-  <div class="animated" style="position: fixed; background-color: #fff; display: none; width: 100%; height: 100%; padding: 40px;" id="doprofile">
-
-      <br><br>
-  <center><h3>Complete your Profile</h3>
-  <br><br>
-
-  <div style="width: 200px;" class="floating-label textfield-box">
-      <label for="fullnameinput">Display Name</label>
-      <input class="form-control" id="fullnameinput" placeholder="Use your full name" type="text">
-    </div>
-  <br>
-  <button onclick="finishprofile()" style="width: 200px" class="waves btn-eon-two">Complete</button>
-
-
-  </center>
-
-
-  </div>
-
-  <div id="cover" class="animated">
-    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves eon-text" data-dismiss="modal">dismiss</button></div></div></div></div>
     <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
-    <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">dismiss</button></div></div></div></div>
+    <script>sessionStorage.setItem('skiponce2', "true")</script>
 
-    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>Post Info</h3></div><div class="modal-body">
+<!-- ===========================--] MODALS [=================================== -->
 
-      <ul class="list-group">
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            File Name
-            <span id="infoa">ok</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-          Date
-            <span id="infob">ok</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            Image ID
-            <span id="infoc">ok</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-              Caption
-              <span id="infoe">ok</span>
-            </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-              User ID
-              <span id="infod">ok</span>
-            </li>
-        </ul>
+<!-- Loader -->    
+<div style='z-index: 200000000;' id="loader-wrapper"><div id="loader"></div>  <div id="left" class="loader-section section-left"></div><div id="right" class="loader-section section-right"></div>  </div>
 
-        <br><br>
-        <center><b>
+<!-- Verify Email -->
+<div class="animated" style="position: fixed; display: none; width: 100%; height: 100%; padding: 40px;" id="doemail"><br><br><center><h3 id='emailtext'>Please verify your email</h3><br><br><button id="sendemailbtn" onclick="sendverify()" class="waves btn-old-primary">Send Verification Email</button></center></div>
 
-          <a data-dismiss="modal" id="commentbtnfrominfo" class="waves btn-eon-one">Comments</a> 
-          <a data-dismiss="modal" id="reportbtnfrominfo" class="waves btn-eon-one">Report</a> 
-          <a data-dismiss="modal" id="deletebtnfrominfo" class="waves btn-eon-one">Delete</a> 
+<!-- Complete Profile -->
+<div class="animated" style="position: fixed; background-color: #fff; display: none; width: 100%; height: 100%; padding: 40px;" id="doprofile">
+<br><br><center><h3>Complete your Profile</h3><br><br><div style="width: 200px;" class="floating-label textfield-box"><label for="fullnameinput">Display Name</label><input class="form-control" id="fullnameinput" placeholder="Use your full name" type="text"></div><br><button onclick="finishprofile()" style="width: 200px" class="waves btn-eon-two">Complete</button></center></div>
 
-        </b></center>
-      
-      <br>
-      <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
-        </div><div class="modal-footer"></div></divid=></div></div>
-      </div>
+<div id="cover" class="animated">
+<!-- Modal -->
+<div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
+<div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves eon-text" data-dismiss="modal">dismiss</button></div></div></div></div>
 
 
-      <div class="modal fade bd-example-modal-lg" id="userModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-body">
 
-        <center><div class="card">
-          <div class="card-body">
-  <div class="row">
-
-  <div class="col-sm">
-
-    <img id="usermodalpfp" style="width: 120px; height: 120px; border-radius: 30000px; overflow: hidden;" src="assets/icon.png" alt="">
-    <br><br>
-    <h3 id="usermodaltitle">Loading... </h3>
-    <p id="usermodalbio" style="color: rgb(71, 71, 71);">bio bio bio biob iob io</p>
-
-  </div>
-  <div class="col-sm">
+<div class="modal fade" id="changedisplaynamemodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>Change Displayname</h3></div><div class="modal-body">
 
 
-    
-      <div style="display: inline-block" class="card">
-          <div class="card-body">
-      <h3 id="userrep" style="line-height: 15px;">...</h3>
-      <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6>
-
-      </div>
-      </div>
-      
-  <br><br>
-
-      <div style="display: inline-block" class="card">
-          <div class="card-body">
-      <h3 id="userfollowers" style="line-height: 15px;">...</h3>
-      <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Followers</h6>
-      
-      </div>
-      </div>
-
-      <br><br>
-          <div style="display: inline-block" class="card">
-              <div class="card-body">
-          <h3 id="userfollowing" style="line-height: 15px;">...</h3>
-          <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Following</h6>
-          
-          </div>
-          </div>
-
-
-  </div>
+  <div class="floating-label textfield-box">
+    <label for="newdisplayname">New Displayname</label>
+    <input class="form-control" id="newdisplayname" placeholder="" type="text">
   </div>
 
-  <center>
-    <button id="followbtn" class="waves btn-old-primary">Follow</button>
-    </center>
-  <br><br>
-    <div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
-      <strong>This account is private.</strong> Follow this user to see their content.
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
-      <strong>This is your account.</strong> Share it with people to gain followers!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-          
-          </div>
-        </div></center>
-  <br><br>
-
-        <div id="usergrid"></div>
-        <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
-        
-          </div><div class="modal-footer"></div></divid=></div></div>
-        </div>
-
-    <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>New Post</h3></div><h5 class="modal-body">
-
-  <button style="width: 180px" onclick="document.getElementById('imgInp').click()" class="waves btn-eon-one">Select Image</button>
-          <input accept='image/*' style="display: none;" type='file' id="imgInp" />
-  <center style="display: none; " id="captionelel">
-      <br><br>
-          <img class="shadow-sm animated fadeIn" style="border-radius: 8px; display: none; width: 80%;" id="blah" src="#" alt="your image" />
-          <div id="captionel" style="display: none;" class="textfield-box animated fadeInUp">
-              <label class="mb-2" for="captioninput">Image Preview</label>
-              <input class="form-control" id="captioninput" placeholder="Add a Caption" type="text">
-            </div>
-    <br>
-      <div class="custom-control custom-radio custom-control-inline">
-        <input type="checkbox" id="privateinp" name="customRadioInline1" class="custom-control-input">
-        <label class="custom-control-label" for="privateinp">Make Private Post</label><a tabindex="0" class="waves btn-old-text" role="button" data-toggle="popover" data-trigger="focus" title="Private Posts" data-content="Private posts will be displayed only to people who are following you."><i class="material-icons">info</i></a>
-      </div>
-      <br><br>
-    </center>
-
-      <button onclick="newpost()" style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">upload</button>
-    </h5><div class="modal-footer"></div></divid=></div></div>
+  <div class="alert alert-danger" role="alert">
+   <b>Warning: </b> Changing your displayname very frequently may result in a rate limit. It is recommended to change less than once a month.
   </div>
-
-  <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h3>Comments</h3></div><h5 class="modal-body">
-  <center>
-  <br>
-
-  <div style="width: 100%; display: inline-block"" class="floating-label textfield-box">
-      <label for="commentbox">Add a Comment</label>
-      <textarea onkeydown="updatechars()" class="form-control" id="commentbox" placeholder="..." rows="1"></textarea>
-    </div>
-    <a onclick="addComment()" id="charcount" style="width: 100%;" class="waves btn-eon-one animated">Post Comment (0/200 chars)</a>
-
-      <br><br>
-  <div style=" display: flex;flex-direction: column-reverse;" id="commentsbox">
   
-  </div>
-  </center>
-      
-  <br>
-  <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
-        </h5><div class="modal-footer"></div></divid=></div></div>
-      </div>
+
+</div><div class="modal-footer">
+  <button type="button" class="waves eon-text" data-dismiss="modal">cancel</button>
+  <button onclick="changedisplaynameconfirm()" type="button" class="waves eon-contained" data-dismiss="modal">change</button>
+
+</div></div></div>
+</div>
+
+<div class="modal fade" id="changeprofilepicmodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>Change Profile Picture</h3></div><div class="modal-body">
 
 
-  <div class="animated fadeInLeft scrollable" style="height: 100%; position: fixed; width: 25%; padding: 20px;">
-  <img src="assets/icon.png" style="width: 3em; display: inline-block;" alt=""><img src="assets/logo.png" style="width: 8em; display: inline-block;" alt=""><br><br>
-  <center><img id="pfp1" class="shadow-sm" style=" border-radius: 20000px; width: 6em" src="" alt="Loading. Please wait.">
-    <h5 style="display: none;" id="ree">ok</h5>
+ <h4>New porifle picture stuff</h4>
 
-  <br><br>
+</div><div class="modal-footer">
+  <button type="button" class="waves eon-text" data-dismiss="modal">cancel</button>
+  <button onclick="changeprofilepicconfirm()" type="button" class="waves eon-contained" data-dismiss="modal">change</button>
 
-  <h3 id="nameel" style="font-weight: 700; color: rgb(51, 51, 51);">Your Name
-      </h3>
-  <h5 id="userel" style="line-height: 0; color: rgb(100, 100, 100);">@username</h5>
-  <br>
-  <div style="width: 100%;" class="scrollable">
-
-  <div style="display: inline-block; padding: 5px; ">
-  <div class="card">
-      <div class="card-body">
-  <h3 id="ownrepcount" style="line-height: 15px;">...</h3>
-  <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6>
-
-  </div>
-  </div>
-  </div>
-  <div style="display: inline-block; padding: 5px; ">
-  <div class="card">
-      <div class="card-body">
-  <h3 id="ownfollowerscount" style="line-height: 15px;">...</h3>
-  <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Followers</h6>
-
-  </div>
-  </div>
-  </div>
-  <div style="display: inline-block; padding: 5px; ">
-      <div class="card">
-          <div class="card-body">
-      <h3 id="ownfollowingcount" style="line-height: 15px;">...</h3>
-      <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Following</h6>
-      
-      </div>
-      </div>
-      </div>
-  </div>
-  <br>
-  <br>
-
-
-
-  <div class="nav" id="justifiedTab" role="tablist">
-
-  <a onclick="tab('feed')" aria-controls="feed" aria-selected="true" data-toggle="tab" href="#feed" id="feed-tab" role="tab" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left;" class="waves btn-old-text">
-      <i class="material-icons">whatshot</i>
-      FEED</a>
-  <br><br>
-      <a onclick="tab('explore')"aria-controls="explore" aria-selected="true" data-toggle="tab" href="#explore" id="explore-tab" role="tab" class="waves btn-old-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left;">
-          <i  class="material-icons">explore</i>
-          EXPLORE</a>
-          <br><br>
-          <a onclick="tab('direct')"aria-controls="direct" aria-selected="true" data-toggle="tab" href="#direct" id="direct-tab" role="tab" class="waves btn-old-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left;">
-              <i  class="material-icons">near_me</i>
-              direct</a>
-              <br><br>
-              <a onclick="tab('public')"aria-controls="public" aria-selected="true" data-toggle="tab" href="#public" id="public-tab" role="tab" class="waves btn-old-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left;">
-                  <i  class="material-icons">public</i>
-                  public</a>
-                  <br><br>
-                  <a onclick="tab('leaderboard')"aria-controls="leaderboard" aria-selected="true" data-toggle="tab" href="#leaderboard" id="leaderboard-tab" role="tab" class="waves btn-old-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left;">
-                      <i  class="material-icons">emoji_events</i>
-                      Leaderboard</a>
-                  <br><br>
-                  <a onclick="tab('account')"aria-controls="account" aria-selected="true" data-toggle="tab" href="#account" id="account-tab" role="tab" class="waves btn-old-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left;">
-                      <i  class="material-icons">account_circle</i>
-                      ACCOUNT</a>
-
-                  </div>
-
-
-<hr>
-<div style="width: 100%; text-align: left;">
-
-  <a onclick="signout()" class="waves btn-old-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left;">
-    <i  class="material-icons">exit_to_app</i>
-    log out</a>
-
+</div></div></div>
 </div>
 
 
+<div class="modal fade" id="changebiographymodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>Change Biography</h3></div><div class="modal-body">
+
+
+  <div class="floating-label textfield-box">
+    <label for="newbiography">New Biography</label>
+    <input class="form-control" id="newbiography" placeholder="" type="text">
   </div>
-  <div style="padding: 40px; box-shadow: -9px 0px 49px -21px rgba(0,0,0,0.05);position: absolute; right: 0px; top: 0px; border-radius: 20px; width: 75%; background-color: #fff; box-shadow: black;">
+ 
+ </div><div class="modal-footer">
+   <button type="button" class="waves eon-text" data-dismiss="modal">cancel</button>
+   <button onclick="changebiographyconfirm()" type="button" class="waves eon-contained" data-dismiss="modal">change</button>
+ 
+ </div></div></div>
+ </div>
+ 
 
-  <div id="notifscard" style="position: fixed; z-index: 150; top: 20px; right: 20px;" class="card">
-  <div id="notifsbody" class="card-body">
 
-      <button id="notifsbutton" onclick="expandnotifs()" style="outline: none;" class="waves centered"><i id="notificon" class="material-icons-outlined">email</i>
-          <span id="notifnum" class="badge badge-danger"></span>
-      </button>
-      <div class="animated fadeOut" id="actualstuff">
+
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>Post Info</h3></div><div class="modal-body">
+
+  <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        File Name
+        <span id="infoa">ok</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+      Date
+        <span id="infob">ok</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Image ID
+        <span id="infoc">ok</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+          Caption
+          <span id="infoe">ok</span>
+        </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+          User ID
+          <span id="infod">ok</span>
+        </li>
+    </ul>
+
+    <br><br>
+<center>
+      <a data-dismiss="modal" id="commentbtnfrominfo" class="waves eon-text">Comments</a> 
+      <a data-dismiss="modal" id="reportbtnfrominfo" class="waves eon-text">Report</a> 
+      <a data-dismiss="modal" id="deletebtnfrominfo" class="waves eon-text">Delete</a> 
+  <br><br>
+  <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
+  </center>
+    </div></div></div>
+  </div>
+
+
+  <div class="modal fade bd-example-modal-lg" id="userModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-body">
+    <center><div class="card">
+      <div class="card-body">
+<div class="row">
+<div class="col-sm">
+<img id="usermodalpfp" style="width: 120px; height: 120px; border-radius: 30000px; overflow: hidden;" src="assets/icon.png" alt=""><br><br>
+<h3 id="usermodaltitle">Loading... </h3>
+<p id="usermodalbio" style="color: rgb(71, 71, 71);">bio bio bio biob iob io</p>
+</div>
+<div class="col-sm"><div style="display: inline-block" class="card">
+  <div class="card-body">
+  <h3 id="userrep" style="line-height: 15px;">...</h3>
+  <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6></div></div>
+<br><br>
+  <div style="display: inline-block" class="card">
+      <div class="card-body">
+  <h3 id="userfollowers" style="line-height: 15px;">...</h3>
+  <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Followers</h6>
+  </div>
+  </div>
+  <br><br>
+      <div style="display: inline-block" class="card">
+          <div class="card-body">
+      <h3 id="userfollowing" style="line-height: 15px;">...</h3>
+      <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Following</h6>
+      </div>
+    </div></div></div>
+<center>
+<button id="followbtn" class="waves btn-old-primary">Follow</button>
+</center>
+<br><br>
+<div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+  <strong>This account is private.</strong> Follow this user to see their content.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+  <strong>This is your account.</strong> Share it with people to gain followers!
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+      
+      </div>
+    </div></center>
+<br><br>
+    <div id="usergrid"></div>
+    <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves eon-contained" data-dismiss="modal">done</button></div><div class="modal-footer"></div></div></div>
+    </div>
+
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>New Post</h3></div><div class="modal-body">
+
+<button style="width: 180px" onclick="document.getElementById('imgInp').click()" class="waves btn-eon-one">Select Image</button>
+      <input accept='image/*' style="display: none;" type='file' id="imgInp" />
+<center style="display: none; " id="captionelel">
+  <br><br>
+      <img class="shadow-sm animated fadeIn" style="border-radius: 8px; display: none; width: 80%;" id="blah" src="#" alt="your image" />
+      <div id="captionel" style="display: none;" class="textfield-box animated fadeInUp">
+          <label class="mb-2" for="captioninput">Image Preview</label>
+          <input class="form-control" id="captioninput" placeholder="Add a Caption" type="text">
+        </div>
+<br>
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="checkbox" id="privateinp" name="customRadioInline1" class="custom-control-input">
+    <label class="custom-control-label" for="privateinp">Make Private Post</label><a tabindex="0" class="waves eon-text" role="button" data-toggle="popover" data-trigger="focus" title="Private Posts" data-content="Private posts will be displayed only to people who are following you."><i class="material-icons">info</i></a>
+  </div>
+  <br><br>
+<br><br><br>
+
+  <button onclick="newpost()" type="button" class="waves eon-text" data-dismiss="modal">upload</button>
+</center>
+</div><div class="modal-footer"></div></div></div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h3>Comments</h3></div><div class="modal-body">
+<center>
+<br>
+
+<div style="width: 100%; display: inline-block"" class="floating-label textfield-box">
+  <label for="commentbox">Add a Comment</label>
+  <textarea onkeydown="updatechars()" class="form-control" id="commentbox" placeholder="..." rows="1"></textarea>
+</div>
+<a onclick="addComment()" id="charcount" style="width: 100%;" class="waves eon-outlined animated">Post Comment (0/200 chars)</a>
+
+  <br><br>
+<div style=" display: flex;flex-direction: column-reverse;" id="commentsbox">
+
+</div>
+<br><br><br>
+<button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
+</center>
+</div></div></div>
+  </div>
+
+
+<div class="animated fadeInLeft scrollable" style="height: 100%; position: fixed; width: 25%; padding: 20px;">
+<img src="assets/icon.png" style="width: 3em; display: inline-block;" alt=""><img src="assets/logo.png" style="width: 8em; display: inline-block;" alt=""><br><br>
+<center><img id="pfp1" class="shadow-sm" style=" border-radius: 20000px; width: 6em" src="" alt="Loading. Please wait.">
+<h5 style="display: none;" id="ree">ok</h5>
+
 <br><br>
 
+<h3 id="nameel" style="font-weight: 700; color: rgb(51, 51, 51);">Your Name
+  </h3>
+<h5 id="userel" style="line-height: 0; color: rgb(100, 100, 100);">@username</h5>
+<br>
+<div style="width: 100%;" class="scrollable">
+
+<div style="display: inline-block; padding: 5px; ">
+<div class="card">
+  <div class="card-body">
+<h3 id="ownrepcount" style="line-height: 15px;">...</h3>
+<h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6>
+
+</div>
+</div>
+</div>
+<div style="display: inline-block; padding: 5px; ">
+<div class="card">
+  <div class="card-body">
+<h3 id="ownfollowerscount" style="line-height: 15px;">...</h3>
+<h6 style="line-height: 10px;color: rgb(126, 126, 126)">Followers</h6>
+
+</div>
+</div>
+</div>
+<div style="display: inline-block; padding: 5px; ">
+  <div class="card">
+      <div class="card-body">
+  <h3 id="ownfollowingcount" style="line-height: 15px;">...</h3>
+  <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Following</h6>
+  
+  </div>
+  </div>
+  </div>
+</div>
+<br>
+<br>
+
+
+
+
+<!-- ===========================--] /MODALS [=================================== -->
+
+<!-- ===========================--] Content [=================================== -->
+
+<div class="nav" id="justifiedTab" role="tablist">
+<a onclick="tab('feed')" aria-controls="feed" aria-selected="true" data-toggle="tab" href="#feed" id="feed-tab" role="tab" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left !important; justify-content: left !important;" class="waves eon-text">
+  <i class="material-icons">whatshot</i><p style="line-height: 2px; color: transparent">o</p>
+  FEED</a>
+<br><br>
+  <a onclick="tab('explore')"aria-controls="explore" aria-selected="true" data-toggle="tab" href="#explore" id="explore-tab" role="tab" class="waves eon-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left !important; justify-content: left !important;">
+      <i  class="material-icons">explore</i><p style="line-height: 2px; color: transparent">o</p>
+      EXPLORE</a>
+      <br><br>
+      <a onclick="tab('direct')"aria-controls="direct" aria-selected="true" data-toggle="tab" href="#direct" id="direct-tab" role="tab" class="waves eon-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left !important; justify-content: left !important;">
+          <i  class="material-icons">near_me</i> <p style="line-height: 2px; color: transparent">o</p> direct</a>
+          <br><br>
+          <a onclick="tab('public')"aria-controls="public" aria-selected="true" data-toggle="tab" href="#public" id="public-tab" role="tab" class="waves eon-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left !important; justify-content: left !important;">
+              <i  class="material-icons">public</i><p style="line-height: 2px; color: transparent">o</p>
+              public</a>
+              <br><br>
+              <a onclick="tab('leaderboard')"aria-controls="leaderboard" aria-selected="true" data-toggle="tab" href="#leaderboard" id="leaderboard-tab" role="tab" class="waves eon-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left !important; justify-content: left !important;">
+                  <i  class="material-icons">emoji_events</i><p style="line-height: 2px; color: transparent">o</p>
+                  Leaderboard</a>
+              <br><br>
+              <a onclick="tab('account')"aria-controls="account" aria-selected="true" data-toggle="tab" href="#account" id="account-tab" role="tab" class="waves eon-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left !important; justify-content: left !important;">
+                  <i  class="material-icons">account_circle</i><p style="line-height: 2px; color: transparent">o</p>
+                  ACCOUNT</a>
+              </div>
+<hr>
+<div style="width: 100%; text-align: left !important; justify-content: left !important;">
+<a onclick="signout()" class="waves eon-text nopurple" style="text-decoration: none; width: 100%; line-height: 30px; text-align: left !important; justify-content: left !important;">
+<i  class="material-icons">exit_to_app</i><p style="line-height: 2px; color: transparent">o</p>
+log out</a>
+</div>
+</div>
+
+
+
+<div style="padding: 40px; box-shadow: -9px 0px 49px -21px rgba(0,0,0,0.05);position: absolute; right: 0px; top: 0px; border-radius: 20px; width: 75%; background-color: #fff; box-shadow: black;">
+<div id="notifscard" style="position: fixed; z-index: 150; top: 20px; right: 20px;" class="card">
+<div id="notifsbody" class="card-body">
+  <button id="notifsbutton" onclick="expandnotifs()" style="outline: none;" class="waves centered"><i id="notificon" class="material-icons-outlined">email</i>
+      <span id="notifnum" class="badge badge-danger"></span>
+  </button>
+  <div class="animated fadeOut" id="actualstuff">
+<br><br>
 <ul style="padding-inline-start: 0px" id="notifsbam"></ul>
+  </div>
+</div></div>
 
 
 
+<div class="tab-content" id="justifiedTabContent">
+  <div aria-labelledby="feed-tab" class="tab-pane fade show active" id="feed" role="tabpanel">
 
 
-      </div>
+    <h1 style="font-weight: 700"><b>Feed</b></h1>
+    <h5>Timeline of all your followed accounts</h5>
 
+    <button id="refreshbtn" onclick="sessionStorage.setItem('skiponce', 'true'); load(); document.getElementById('refreshbtn').classList.add('zoomOutUp');document.getElementById('refreshbtn').classList.remove('zoomInUp');window.setTimeout(function() {document.getElementById('refreshbtn').classList.remove('zoomOutUp');document.getElementById('refreshbtn').classList.add('zoomInUp')}, 1000)" class="animated waves eon-text"><i class="material-icons">refresh</i></button>
+      
 
-  </div></div>
-
-
-
-    <div class="tab-content" id="justifiedTabContent">
-      <div aria-labelledby="feed-tab" class="tab-pane fade show active" id="feed" role="tabpanel">
-
-
-        <h1 style="font-weight: 700"><b>Feed</b></h1>
-        <h5>Timeline of all your followed accounts</h5>
-
-        <button id="refreshbtn" onclick="sessionStorage.setItem('skiponce', 'true'); load(); document.getElementById('refreshbtn').classList.add('zoomOutUp');document.getElementById('refreshbtn').classList.remove('zoomInUp');window.setTimeout(function() {document.getElementById('refreshbtn').classList.remove('zoomOutUp');document.getElementById('refreshbtn').classList.add('zoomInUp')}, 1000)" class="animated waves btn-old-text"><i class="material-icons">refresh</i></button>
-          
-
-        <hr>
-        <center>
-          <div id="nofeedstuff">
+    <hr>
+    <center>
+      <div id="nofeedstuff">
 
 <br><br><br><br>
 <center>
 
 <div class="card">
 <div style="padding: 24px;" class="card-body">
-  <i style="font-size: 48px;" class="material-icons">insert_photo</i>
+<i style="font-size: 48px;" class="material-icons">insert_photo</i>
 <br><br>
 <p><b>You have no friends.</b> <br>Start following people!</p>
 
@@ -364,148 +358,191 @@
 </center>
 <br><br><br><br>
 
-          </div>
-        <div id="gridfeed"></div>
-      </center>
-        <button data-toggle="modal" data-target="#postModal"  style="background-color: #6200EE; color: white; border-radius: 2000000px; z-index: 30; position: fixed; width: 64px; height: 64px; right: 12px; bottom: 12px;" class="btn btn-float waves waves-light my-1 animated pulse infinite" type="button"><i class="material-icons">add</i></button>
-
       </div>
-      <div aria-labelledby="explore-tab" class="tab-pane fade" id="explore" role="tabpanel">
-        <h1 style="font-weight: 700"><b>Explore</b></h1>
-        <h5>Collection of posts from all of Eonnect</h5>
-        <br>
-      
-          <hr>
-          
-          <center>
-          <div id="grid"></div>
-        </center>
-          <button data-toggle="modal" data-target="#postModal"  style="background-color: #6200EE; color: white; border-radius: 2000000px; z-index: 30; position: fixed; width: 64px; height: 64px; right: 12px; bottom: 12px;" class="btn btn-float waves waves-light my-1 animated pulse infinite" type="button"><i class="material-icons">add</i></button>
-      </div>
-      <div aria-labelledby="direct-tab" class="tab-pane fade" id="direct" role="tabpanel">...</div>
-      <div aria-labelledby="public-tab" class="tab-pane fade" id="public" role="tabpanel">
-
-        <h1 style="font-weight: 700"><b>Public Channels</b></h1>
-        <h5>Quick direct messaging with other users.</h5>
-        <br>
-      
-          <hr>
-          
-          <div class="row">
-
-  <div class="col-sm">
-  <center>
-    <div class="card" style="width: 18rem;">
-      <img style="width: 100%; border-radius: 15px 15px 0px 0px; max-height: 200px" class="card-img-top" src="https://miro.medium.com/max/1600/0*XUN3XrAs_gqw8-kY.png" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">General Chat</h5>
-        <p class="card-text">Join the general chatroom to talk about anything within reason. Make sure to read the chatroom rules!</p>
-        <a onclick="transferdark('chatroom.html?chat=general')" class="waves btn-eon-two">Join</a>
-      </div>
-    </div>
-    <br><br>
-
+    <div id="gridfeed"></div>
   </center>
+    <button data-toggle="modal" data-target="#postModal"  style="background-color: #6200EE !important; color: white !important; border-radius: 2000000px !important; z-index: 30 !important; position: fixed !important; width: 64px !important; height: 64px !important; right: 12px !important; bottom: 12px !important;" class="eon-contained my-1 animated pulse infinite" type="button"><i class="material-icons">add</i></button>
+
   </div>
-  <div class="col-sm">
-  <center>
-    <div class="card" style="width: 18rem;">
-      <img style="width: 100%; border-radius: 15px 15px 0px 0px; height: 200px" class="card-img-top" src="https://blog.templatetoaster.com/wp-content/uploads/2020/01/Isometric-Illustrations-google-web-design-trends.png" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Work Chat</h5>
-        <p class="card-text">Join the general chatroom to talk about school and/or work related content. Rules are the same as the general chat.</p>
-        <a onclick="transferdark('chatroom.html?chat=work')" class="waves btn-eon-two">Join</a>
-      </div>
-    </div>
-    <br><br>
-  </center>
+  <div aria-labelledby="explore-tab" class="tab-pane fade" id="explore" role="tabpanel">
+    <h1 style="font-weight: 700"><b>Explore</b></h1>
+    <h5>Collection of posts from all of Eonnect</h5>
+    <br>
+  
+      <hr>
+      
+      <center>
+      <div id="grid"></div>
+    </center>
+      <button data-toggle="modal" data-target="#postModal"  style="background-color: #6200EE !important; color: white !important; border-radius: 2000000px !important; z-index: 30 !important; position: fixed !important; width: 64px !important; height: 64px !important; right: 12px !important; bottom: 12px !important;" class="eon-contained waves-light my-1 animated pulse infinite" type="button"><i class="material-icons">add</i></button>
   </div>
+  <div aria-labelledby="direct-tab" class="tab-pane fade" id="direct" role="tabpanel">...</div>
+  <div aria-labelledby="public-tab" class="tab-pane fade" id="public" role="tabpanel">
 
-          </div>
-        
+    <h1 style="font-weight: 700"><b>Public Channels</b></h1>
+    <h5>Quick direct messaging with other users.</h5>
+    <br>
+  
+      <hr>
+      
+      <div class="row">
 
-          
+<div class="col-sm">
+<center>
+<div class="card" style="width: 18rem;">
+  <img style="width: 100%; border-radius: 15px 15px 0px 0px; max-height: 200px" class="card-img-top" src="https://miro.medium.com/max/1600/0*XUN3XrAs_gqw8-kY.png" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">General Chat</h5>
+    <p class="card-text">Join the general chatroom to talk about anything within reason. Make sure to read the chatroom rules!</p>
+    <a onclick="transferdark('chatroom.html?chat=general')" class="waves btn-eon-two">Join</a>
+  </div>
+</div>
+<br><br>
 
-
-
+</center>
+</div>
+<div class="col-sm">
+<center>
+<div class="card" style="width: 18rem;">
+  <img style="width: 100%; border-radius: 15px 15px 0px 0px; height: 200px" class="card-img-top" src="https://blog.templatetoaster.com/wp-content/uploads/2020/01/Isometric-Illustrations-google-web-design-trends.png" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">Work Chat</h5>
+    <p class="card-text">Join the general chatroom to talk about school and/or work related content. Rules are the same as the general chat.</p>
+    <a onclick="transferdark('chatroom.html?chat=work')" class="waves btn-eon-two">Join</a>
+  </div>
+</div>
+<br><br>
+</center>
+</div>
 
       </div>
-      <div aria-labelledby="leaderboard-tab" class="tab-pane fade" id="leaderboard" role="tabpanel">
-
-
-
-        <h1 style="font-weight: 700"><b>Leaderboard</b></h1>
-        <h5>Users with the highest reputation score</h5>
-        <hr>
-
-        <div id="leadercontent">
-
-
-          <center><button onclick="leaderboard()" class="waves btn-old-text">Load Scores</button></center>
     
+
+      
+
+
+
+
+  </div>
+  <div aria-labelledby="leaderboard-tab" class="tab-pane fade" id="leaderboard" role="tabpanel">
+
+
+
+    <h1 style="font-weight: 700"><b>Leaderboard</b></h1>
+    <h5>Users with the highest reputation score</h5>
+    <hr>
+
+    <div id="leadercontent">
+
+
+      <center><button onclick="leaderboard()" class="waves eon-text">Load Scores</button></center>
+
+    </div>
+    
+
+  </div>
+  <div aria-labelledby="account-tab" class="tab-pane fade" id="account" role="tabpanel">
+
+    <h1 style="font-weight: 700"><b>Account</b></h1>
+    <h5>Your account and settings panel</h5>
+    <hr>
+
+    <div class="row">
+<div class="col-sm">
+
+  <div class="card">
+    <div class="card-body">
+
+      <center><img class="shadow-sm" id="accountpfp" style="border-radius: 300px; width: 40%;" src="https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2Fexample.png?alt=media&token=f6d2dae3-6e02-4f4c-a45e-bcf526aa1893" alt=""></center>
+      <br><br>
+
+      <h5 id="accountname" class="card-title">Full Name</h5>
+      <p id="accountbio" class="card-text">You have not set a biography yet. Choose the edit button bellow to set one:</p>
+      <div class="dropdown">
+        <button class="eon-outlined" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          edit
+        </button>
+        <div style="text-align: left; padding: 8px;" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item waves" onclick="changedisplayname()">Display Name</a><br>
+          <a class="dropdown-item waves" onclick="changeprofilepic()">Profile Pic</a><br>
+          <a class="dropdown-item waves" onclick="changebiography()">Biography</a><br>
         </div>
-        
-
       </div>
-      <div aria-labelledby="account-tab" class="tab-pane fade" id="account" role="tabpanel">...</div>
+    </div>
+  </div>
+
+  <br><br>
+
+</div>
+<div class="col-sm">
+
+
+  <h3>App Settings</h3>
+  <h4>About</h4>
+  <p>Eonnect is a free social platform allowing people to share their images with the world.</p>
+  <button class="eon-text">credits</button> <button class="eon-text">support</button>
+<br><br>
+
+
+<h4>Theme</h4>
+<p>Themes are custom stylesheets you can apply to alter the client side appearance of Eonnect. Try it out!</p>
+      <div class="dropdown">
+        <button class="eon-contained" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          select theme
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item eon-text" href="#">option</a>
+          <a class="dropdown-item eon-text" href="#">option</a>
+          <a class="dropdown-item eon-text" href="#">option</a>
+        </div>
+      </div>
+
+  
+
+
+</div>
     </div>
 
+  
 
 
-
-
-    
-
-
-      <!-- The core Firebase JS SDK is always required and must be listed first -->
-      <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
-
-      <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
-
-  <!-- TODO: Add SDKs for Firebase products that you want to use
-      https://firebase.google.com/docs/web/setup#available-libraries -->
-
-  <script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-      apiKey: "AIzaSyDyiJGiWlgFaMtJA2lerw4lUkGK76Qoxvs",
-      authDomain: "eongram-87169.firebaseapp.com",
-      databaseURL: "https://eongram-87169.firebaseio.com",
-      projectId: "eongram-87169",
-      storageBucket: "eongram-87169.appspot.com",
-      messagingSenderId: "725793838303",
-      appId: "1:725793838303:web:f23c748b3985225c5c056a"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-  </script>
-      <script src="https://rohinarya12.github.io/eonstyles/assets/eonstyles.js"></script>   
-      <script type="text/javascript">
-      addWaves();
-      function addWaves() {Waves.attach(".waves",["waves-button"]),Waves.attach(".waves-float-button",["waves-button","waves-float"]),Waves.attach(".waves-float-button-dark",["waves-button","waves-float"]),Waves.attach(".waves-box",["waves-block"]),Waves.attach(".waves-float-box",["waves-block","waves-float"]),Waves.attach(".waves-image"),a=document.getElementsByClassName("btn-eon-two");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-three");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-four");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");Waves.init();}</script>
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-      <script src="js/material.min.js"></script>
-      <script defer src="js/app.js"></script>
-      <script defer src="js/feed.js"></script>
-      <script src="js/leaderboard.js"></script>
-      <script src="js/notifs.js"></script>
-      <script src="js/script.js"></script>
   </div>
-  </body>
+</div>
 
+
+
+
+
+<!-- ===========================--] /Content [=================================== -->
+    <!---==== JavaScript ====--->
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyDyiJGiWlgFaMtJA2lerw4lUkGK76Qoxvs",
+    authDomain: "eongram-87169.firebaseapp.com",
+    databaseURL: "https://eongram-87169.firebaseio.com",
+    projectId: "eongram-87169",
+    storageBucket: "eongram-87169.appspot.com",
+    messagingSenderId: "725793838303",
+    appId: "1:725793838303:web:f23c748b3985225c5c056a"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+    <!-- JQuery --><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <!-- Popper --><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <!-- Bootstrap --><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <!-- Eon Styles --><script src="https://rohinarya12.github.io/eonstyles/new/eon.js"></script>
+    <!-- Daemonite --><script src="daemonite/material.min.js"></script>
+    <!-- Waves --><script src="daemonite/waves.min.js"></script><script>addWaves();function addWaves(){ Waves.attach('.eon-contained', ['waves-button', 'waves-light']);Waves.attach('.eon-outlined', ['waves-button']);Waves.attach('.eon-text', ['waves-button']);var config = {duration: 250};Waves.attach(".waves",["waves-button"]),Waves.attach(".waves-float-button",["waves-button","waves-float"]),Waves.attach(".waves-float-button-dark",["waves-button","waves-float"]),Waves.attach(".waves-box",["waves-block"]),Waves.attach(".waves-float-box",["waves-block","waves-float"]),Waves.attach(".waves-image"),a=document.getElementsByClassName("btn-eon-two");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-three");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-four");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");Waves.init(config);}</script>
+    <!-- Snackbar --><script src="daemonite/snackbar.min.js"></script><style>.snackbar-container {padding-top: 8px !important;padding-bottom: 8px !important;border-radius: 8px !important;max-width: 8723789253786352614975678392738649502976483528059748327952px;}</style>
+    <script defer src="js/app.js"></script>
+    <script defer src="js/feed.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/notifs.js"></script>
+    <script src="js/script.js"></script>
+</body>
 </html>
-
-<!-- 
-    waves-light // Light Waves
-    waves-flat-button // Button flat
-    waves-float-button // Button float
-    waves-float-button-dark // Button float dark waves
-    waves-float-button-light // Button float dark waves
-    waves-flat-box // Box flat
-    waves-float-box // Box float
-    waves-image // Image waves  
--->

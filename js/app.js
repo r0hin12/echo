@@ -65,6 +65,7 @@ function refreshmain() {
             }
         })
         document.getElementById('nameel').innerHTML = user.displayName
+        document.getElementById('accountname').innerHTML = user.displayName
         rep = 0
         db.collection('posts').doc('posts').get().then(function (doc) {
             for (let i = 0; i < doc.data().latest + 1; i++) {
@@ -180,7 +181,7 @@ function signout() {
 function newpost() {
     var caption = document.getElementById('captioninput').value
     if (caption == '' || caption == " " || caption == null) {
-        snackbar('Post was not uploaded. Try again later.', '', '', '3000')
+        Snackbar.show({ text: 'An error occured. Try again later.', onActionClick: function (element) { $(element).css('opacity', 0); window.location.reload() }, actionText: 'Reload Page' })
     }
     else {
         if (document.getElementById('captioninput').value.length > 50) {
@@ -225,10 +226,16 @@ function newpost() {
                             [newnum]: [],
                             latest: newnum
                         }).then(function () {
-                            snackbar('Post successfully uploaded.', '', '', '4000')
-                            document.getElementById('captionel').style.display = 'none'
-                            document.getElementById('blah').style.display = 'none'
-                            document.getElementById('captionel').style.display = 'none'
+
+                            db.collection('posts').doc('likes').update({
+                                [newnum]: [],
+                                latest: newnum
+                            }).then(function () {
+                                Snackbar.show({ text: 'Post uploaded.', onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: 'refresh' })
+                                document.getElementById('captionel').style.display = 'none'
+                                document.getElementById('blah').style.display = 'none'
+                                document.getElementById('captionel').style.display = 'none'
+                            })
 
                         })
                     })
@@ -246,6 +253,7 @@ function pfp() {
 
             var storage = firebase.storage();
             document.getElementById('pfp1').src = doc.data().url
+            document.getElementById('accountpfp').src = doc.data().url
             setTimeout(function () {
                 $('body').addClass('loaded');
             }, 400);
@@ -364,3 +372,37 @@ function sendverify() {
 $(function () {
     $('[data-toggle="popover"]').popover()
 })
+
+function changedisplayname() {
+
+
+    $('#changedisplaynamemodal').modal('toggle')
+
+}
+
+function changedisplaynameconfirm() {
+    console.log('something');
+}
+
+function changeprofilepic() {
+
+    $('#changeprofilepicmodal').modal('toggle')
+
+}
+
+function changeprofilepicconfirm() {
+
+    console.log('something');
+
+}
+
+function changebiography() {
+
+    $('#changebiographymodal').modal('toggle')
+
+}
+function changebiographyconfirm() {
+
+    console.log('something');
+
+}

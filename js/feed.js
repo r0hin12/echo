@@ -39,7 +39,7 @@ $("#imgInp").change(function () {
 function addComment(id) {
     text = document.getElementById('commentbox').value
     if (text == "" || text == " " || text == "  ") {
-        snackbar('You must include content', '', '', '4000')
+        Snackbar.show({ text: 'You must include content.' })
     }
     else {
         if (document.getElementById('commentbox').value.length > 200) {
@@ -58,7 +58,7 @@ function addComment(id) {
             }).then(function () {
                 document.getElementById('charcount').innerHTML = 'Post Comment (0/200 chars)'
                 x = parseInt(sessionStorage.getItem('viewing'), 10)
-                snackbar('New comments have been added.', 'View', 'refreshcomments("' + x + '")', '5000')
+                Snackbar.show({ text: 'New comments have been added.', onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: 'Refresh' })
 
 
             })
@@ -76,9 +76,6 @@ function addpfpcomment(usr, id) {
 }
 
 function loadComments(id) {
-
-
-    document.getElementById('snacc').classList.remove('eonsnackbar-active')
 
     sessionStorage.setItem('viewing', id)
     $('#commentsbox').empty()
@@ -102,7 +99,7 @@ function loadComments(id) {
             a.classList.add('animated')
             a.classList.add('fadeIn')
             reportFunc = "reportComment('" + doc.id + "')"
-            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves btn-old-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
+            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
             addpfpcomment(element.user, i)
@@ -111,7 +108,7 @@ function loadComments(id) {
         }
 
     })
-    history.pushState({ page: 1 }, "title 1", "?post=" + id)
+    history.pushState(null, "", "?post=" + id)
 
 
 
@@ -126,16 +123,34 @@ function like(id) {
 
     sessionStorage.setItem('skiponce2', "true")
 
-    // I have no idea how im gonna pull this off ffs im sleeping now good night.
+    db.collection('posts').doc('likes').get().then(function (doc) {
+        alreadyliked = false
+        for (let i = 0; i < doc.data()[id].length; i++) { const element = doc.data()[id][i]; if (element == user.uid) { var alreadyliked = true } }
+
+        if (alreadyliked == true) {
+
+            db.collection('posts').doc('likes').update({
+                [id]: firebase.firestore.FieldValue.arrayRemove(user.uid)
+            })
+
+        }
+        else {
+            db.collection('posts').doc('likes').update({
+                [id]: firebase.firestore.FieldValue.arrayUnion(user.uid)
+            })
+
+
+        }
+
+    })
 
 }
 
 
 
 function load() {
-
-    document.getElementById('snacc').classList.remove('eonsnackbar-active')
-
+    yeetpostslistener()
+    addpostslistener()
     $('#grid').empty()
     $('#gridfeed').empty()
     loadposts()
@@ -210,7 +225,7 @@ async function addstuff(name, data, time) {
         infoFunc = "info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + name + 'pfpelurl" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button id="' + name + 'el" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div><br></div></div> <hr>'
+        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + name + 'pfpelurl" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button id="' + name + 'el" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i>0</button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div><br></div></div> <hr>'
 
         document.getElementById(name + 'shell').appendChild(a)
         addpfp(data.uid, name)
@@ -238,8 +253,8 @@ async function addstuff(name, data, time) {
 
         if (sessionStorage.getItem('count') == sessionStorage.getItem('maxCount')) {
             addWaves()
-            listen()
             listencomments()
+            listenlikes()
 
         }
 
@@ -264,11 +279,11 @@ async function addstuffuser(name, data, time) {
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
 
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.data.caption + '</p><center><button id="' + name + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></div><br></center<button><br></div> <hr>'
+        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.data.caption + '</p><center><button id="' + name + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></div><br></center<button><br></div> <hr>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
-            document.getElementById(name + "commentEluser").innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">comment</i> ' + bambam
+            document.getElementById(name + "commentEluser").innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + bambam
         })
         addWaves()
 
@@ -296,7 +311,7 @@ async function addstufffeed(name, data, time) {
         infoFunc = "info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelelfeed" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + name + 'pfpelurlfeed" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button id="' + name + 'elfeed" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves btn-old-text heart"><i style="display: inline-block; color: #000" class="material-icons">favorite_border</i>0</button><button id="' + name + 'commentElfeed" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons">comment</i>0</button><button id="' + name + 'infoElfeed" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves btn-old-text"><i style="display: inline-block; color: #000" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves btn-old-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div><br></div></div> <hr>'
+        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelelfeed" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + name + 'pfpelurlfeed" style="width: 35px; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button id="' + name + 'elfeed" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i>0</button><button id="' + name + 'commentElfeed" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i>0</button><button id="' + name + 'infoElfeed" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons-outlined">info</i></button><button style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div><br></div></div> <hr>'
 
         document.getElementById(name + 'feedshell').appendChild(a)
         addpfpfeed(data.uid, name)
@@ -312,7 +327,7 @@ async function addstufffeed(name, data, time) {
 
         if (sessionStorage.getItem('count2') == sessionStorage.getItem('maxCount2')) {
             addWaves()
-            listenfeed()
+            listenlikesfeed()
             listencommentsfeed()
 
         }
@@ -396,7 +411,7 @@ function checkuserurl() {
 async function usermodal(uid) {
     $('#usergrid').empty()
     $('#userModal').modal('toggle')
-    window.history.pushState('page3', 'Title', '/app.html?user=' + uid);
+    window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
     db.collection('users').doc(uid).get().then(function (doc) {
         username = doc.data().username
         useruid = doc.data().uid
@@ -418,7 +433,7 @@ async function usermodal(uid) {
                     document.getElementById('ownwarning').style.display = 'block'
                     document.getElementById('followbtn').innerHTML = 'unfollow'
                     document.getElementById('followbtn').onclick = function () {
-                        snackbar('You can not unfollow yourself!', '', '', '4000')
+                        Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
                     }
                     loaduserposts(uid)
                 }
@@ -552,7 +567,18 @@ function info(id) {
 
         if (doc.data()[id].data.uid == user.uid) {
             document.getElementById('deletebtnfrominfo').onclick = function () {
-                console.log('Supposed delete function');
+                db.collection('posts').doc('posts').update({
+                    [id]: firebase.firestore.FieldValue.delete()
+                }).then(function () {
+                    db.collection('posts').doc('comments').update({
+                        [id]: firebase.firestore.FieldValue.delete()
+                    }).then(function () {
+                        db.collection('posts').doc('likes').update({
+                            [id]: firebase.firestore.FieldValue.delete()
+                        })
+                    })
+                })
+
             }
             document.getElementById('deletebtnfrominfo').style.display = 'inline-block'
         }
@@ -567,7 +593,7 @@ function info(id) {
 
         $('#infoModal').modal('toggle')
 
-        window.history.pushState('page3', 'Title', '/app.html?info=' + id);
+        window.history.pushState(null, '', '/eonnect/app.html?info=' + id);
 
     })
 
@@ -580,8 +606,6 @@ function reportComment(id) {
 
 function refreshcomments(id) {
 
-
-    document.getElementById('snacc').classList.remove('eonsnackbar-active')
     sessionStorage.setItem('viewing', id)
     $('#commentsbox').empty()
     document.getElementById('charcount').onclick = function () {
@@ -604,7 +628,7 @@ function refreshcomments(id) {
             a.classList.add('animated')
             a.classList.add('fadeIn')
             reportFunc = "reportComment('" + doc.id + "')"
-            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves btn-old-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
+            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
             addpfpcomment(element.user, i)
@@ -629,7 +653,7 @@ function listencomments() {
             }
             else {
                 x = parseInt(sessionStorage.getItem('viewing'), 10)
-                snackbar('New comments have been added.', 'View', 'refreshcomments("' + x + '")', '5000')
+                Snackbar.show({ pos: 'bottom-left', text: "New comments are added.", onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: "refresh" })
             }
         }
 
@@ -639,7 +663,7 @@ function listencomments() {
 
             }
             else {
-                document.getElementById(i + 'commentEl').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">comment</i> ' + doc.data()[i].length
+                document.getElementById(i + 'commentEl').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + doc.data()[i].length
                 addWaves()
             }
         }
@@ -658,7 +682,7 @@ function listencommentsfeed() {
             }
             else {
 
-                document.getElementById(i + 'commentElfeed').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">comment</i> ' + doc.data()[i].length
+                document.getElementById(i + 'commentElfeed').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + doc.data()[i].length
                 addWaves()
             }
         }
@@ -683,59 +707,66 @@ function addpfp(uid, docid) {
 }
 
 
-function listen() {
-    listener = db.collection("posts").doc('posts')
-        .onSnapshot(function (doc) {
-            limit = doc.data().latest
 
-            for (let i = 0; i < limit + 1; i++) {
-                content = doc.data()[i]
-                if (content == undefined) {
+function listenlikes() {
+    db.collection("posts").doc('likes').onSnapshot(function (doc) {
+
+        for (let i = 0; i < doc.data().latest + 1; i++) {
+            if (doc.data()[i] == undefined) {
+            }
+            else {
+                isliked = false
+                for (let newi = 0; newi < doc.data()[i].length; newi++) {
+                    const element = doc.data()[i][newi];
+                    if (element == user.uid) {
+                        isliked = true
+                    }
+
+                }
+
+                if (isliked) {
+
+                    document.getElementById(i + 'el').innerHTML = '<i style="display: inline-block; color: red; padding: 3px;" class="material-icons animated jello">favorite</i> ' + doc.data()[i].length
                 }
                 else {
-                    displaylikes = doc.data()[i].data.likes.length - 1
-                    document.getElementById(doc.data()[i].name + 'el').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
-                    addWaves()
+
+                    document.getElementById(i + 'el').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons animated rubberBand">favorite_border</i> ' + doc.data()[i].length
+                }
+                addWaves()
+            }
+        }
+
+    });
+}
+
+function listenlikesfeed() {
+    db.collection("posts").doc('likes').onSnapshot(function (doc) {
+
+        for (let i = 0; i < doc.data().latest + 1; i++) {
+            if (doc.data()[i] == undefined) {
+            }
+            else {
+                isliked = false
+                for (let newi = 0; newi < doc.data()[i].length; newi++) {
+                    const element = doc.data()[i][newi];
+                    if (element == user.uid) {
+                        isliked = true
+                    }
 
                 }
 
-            }
+                if (isliked) {
 
-        })
-
-}
-
-
-function listenfeed() {
-    listener = db.collection("posts").doc('posts')
-        .onSnapshot(function (doc) {
-            limit = doc.data().latest
-
-            for (let i = 0; i < limit + 1; i++) {
-                content = doc.data()[i]
-                if (content == undefined) {
+                    document.getElementById(i + 'elfeed').innerHTML = '<i style="display: inline-block; color: red; padding: 3px;" class="material-icons animated jello">favorite</i> ' + doc.data()[i].length
                 }
                 else {
-                    displaylikes = doc.data()[i].data.likes.length - 1
-                    document.getElementById(doc.data()[i].name + 'elfeed').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
-                    addWaves()
 
+                    document.getElementById(i + 'elfeed').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons animated rubberBand">favorite_border</i> ' + doc.data()[i].length
                 }
-
+                addWaves()
             }
-
-        })
-
-}
-
-
-function listenlikesfeed(docid) {
-    db.collection("posts").doc(docid)
-        .onSnapshot(function (doc) {
-            displaylikes = doc.data().likes.length - 1
-            document.getElementById(docid + 'elfeed').innerHTML = '<i style="display: inline-block; color: #000" class="material-icons">favorite_border</i> ' + displaylikes + ''
-            addWaves()
-        });
+        }
+    });
 }
 
 
@@ -792,10 +823,10 @@ function updatechars() {
 
 $('#commentModal').on('hidden.bs.modal', function () {
     if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
-        window.history.pushState('page2', 'Title', '/app.html')
+        window.history.pushState(null, '', '/eonnect/app.html')
     }
     else {
-        window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+        window.history.pushState(null, '', '/eonnect/app.html?tab=' + sessionStorage.getItem('currentab'));
     }
 
 });
@@ -807,10 +838,10 @@ $('#userModal').on('hidden.bs.modal', function () {
     else {
 
         if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
-            window.history.pushState('page2', 'Title', '/app.html')
+            window.history.pushState(null, '', '/eonnect/app.html')
         }
         else {
-            window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+            window.history.pushState(null, '', '/eonnect/app.html?tab=' + sessionStorage.getItem('currentab'));
         }
     }
 });
@@ -822,10 +853,10 @@ $('#infoModal').on('hidden.bs.modal', function () {
     }
     else {
         if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
-            window.history.pushState('page2', 'Title', '/app.html')
+            window.history.pushState(null, '', '/eonnect/app.html')
         }
         else {
-            window.history.pushState('page2', 'Title', '/app.html?tab=' + sessionStorage.getItem('currentab'));
+            window.history.pushState(null, '', '/eonnect/app.html?tab=' + sessionStorage.getItem('currentab'));
         }
     }
 
@@ -839,7 +870,7 @@ $(function () {
 
 addpostslistener()
 function addpostslistener() {
-    db.collection("posts").onSnapshot(function (querySnapshot) {
+    yeetpostslistener = db.collection("posts").onSnapshot(function (querySnapshot) {
 
         if (sessionStorage.getItem('skiponce2') == "true") {
             sessionStorage.setItem('skiponce2', "false")
@@ -847,7 +878,7 @@ function addpostslistener() {
         else {
 
             if (localStorage.getItem('currentab') == 'explore') {
-                snackbar('Posts have been modified. Click to show latest.', 'Refresh', 'load()', '8500');
+                Snackbar.show({ pos: 'bottom-left', text: "Posts have been modified.", onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: "refresh" })
             }
 
 
@@ -864,7 +895,7 @@ function unfullscreen() {
     document.getElementById('fullscreenel').classList.add('fadeOut')
     window.setTimeout(() => {
         $('#fullscreenel').remove()
-        window.history.pushState('page2', 'Title', '/app.html');
+        window.history.pushState(null, '', '/eonnect/app.html');
     }, 700);
 
 }
@@ -884,7 +915,7 @@ function fullscreen(id) {
         a.classList.add('faster')
         a.classList.add('fadeIn')
         document.getElementById('body').appendChild(a)
-        window.history.pushState('page4', 'Title', '/app.html?fullscreen=' + id);
+        window.history.pushState(null, '', '/eonnect/app.html?fullscreen=' + id);
         addWaves()
 
         sessionStorage.setItem('fullscreenon', 'yes')
@@ -908,7 +939,7 @@ function fullscreenfeed(id) {
         a.classList.add('faster')
         a.classList.add('fadeIn')
         document.getElementById('body').appendChild(a)
-        window.history.pushState('page4', 'Title', '/app.html?fullscreen=' + id);
+        window.history.pushState(null, '', '/eonnect/app.html?fullscreen=' + id);
         addWaves()
 
         sessionStorage.setItem('fullscreenon', 'yes')
@@ -925,7 +956,7 @@ function follow(uid, name) {
             db.collection('users').doc(uid).collection('follow').doc('requested').update({
                 requested: firebase.firestore.FieldValue.arrayUnion(user.uid)
             }).then(function () {
-                snackbar('Requested to follow ' + name, 'cancel', 'unfollow("' + uid + '", "' + name + '")', '4000')
+                Snackbar.show({ text: 'Requested to follow ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'cancel' })
                 document.getElementById('followbtn').innerHTML = 'cancel request'
                 document.getElementById('followbtn').onclick = function () {
                     unrequest(uid, username)
@@ -939,7 +970,8 @@ function follow(uid, name) {
                 db.collection('users').doc(uid).collection('follow').doc('followers').update({
                     followers: firebase.firestore.FieldValue.arrayUnion(user.uid)
                 }).then(function () {
-                    snackbar('Started following ' + name, 'unfollow', 'unfollow("' + uid + '", "' + name + '")', '4000')
+                    Snackbar.show({ text: 'Started following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'Unfollow' })
+
                     document.getElementById('followbtn').innerHTML = 'unfollow'
                     document.getElementById('followbtn').onclick = function () {
                         unfollow(uid, username)
@@ -960,7 +992,7 @@ function unfollow(uid, name) {
         db.collection('users').doc(uid).collection('follow').doc('followers').update({
             followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
         }).then(function () {
-            snackbar('Stopped following ' + name, 'follow', 'follow("' + uid + '", "' + name + '")', '4000')
+            Snackbar.show({ text: 'Stopped following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
             document.getElementById('followbtn').innerHTML = 'follow'
             document.getElementById('followbtn').onclick = function () {
                 follow(uid, username)
@@ -974,7 +1006,7 @@ function unrequest(uid, name) {
     db.collection('users').doc(uid).collection('follow').doc('requested').update({
         followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
     }).then(function () {
-        snackbar('Cancelled follow request for ' + name, 'follow', 'follow("' + uid + '", "' + name + '")', '4000')
+        Snackbar.show({ text: 'Cancelled follow request for ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
         document.getElementById('followbtn').innerHTML = 'request'
         document.getElementById('followbtn').onclick = function () {
             follow(uid, username)
