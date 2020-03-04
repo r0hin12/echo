@@ -120,7 +120,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 
     if (user) {
         user = firebase.auth().currentUser;
-
+        particles()
         var urlParams = new URLSearchParams(window.location.search);
         var myParam = urlParams.get('chat');
 
@@ -328,3 +328,31 @@ $("#messageinput1").keypress(function (event) {
         $("#sendmessagebutton").click();
     }
 });
+
+function particles() {
+    db.collection('users').doc(firebase.auth().currentUser.uid).get().then(function (doc) {
+        if (doc.data().particles == true) {
+
+            document.addEventListener('mousemove', function (e) {
+                let body = document.querySelector('body');
+                let circle = document.createElement('span');
+                circle.classList.add('span')
+                let x = e.pageX;
+                let y = e.pageY;
+                circle.style.left = x + "px";
+                circle.style.top = y + "px";
+                let size = Math.random() * 10;
+                circle.style.width = 10 + size + "px";
+                circle.style.height = 10 + size + "px";
+                body.appendChild(circle);
+                setTimeout(function () {
+                    circle.remove();
+                }, 1600);
+            });
+
+        }
+        else {
+
+        }
+    })
+}

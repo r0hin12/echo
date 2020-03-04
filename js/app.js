@@ -28,6 +28,7 @@ function refresh() {
     checkuserurl()
     prenotif()
     verified()
+    checkparticles()
 
 }
 

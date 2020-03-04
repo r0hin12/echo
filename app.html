@@ -16,7 +16,7 @@
     <!-- Waves --><link rel="stylesheet" href="daemonite/waves.min.css">
     <!-- CSS --><link rel="stylesheet" href="css/style.css">
     <!-- Snackbar --><link rel="stylesheet" type="text/css" href="daemonite/snackbar.min.css">
-
+    <!-- Switches --><link rel="stylesheet" href="css/switches.css">
 
 </head>
 <body id="body" style="background-color: #f1f1f1; font-family: Roboto">
@@ -37,7 +37,7 @@
 
 <!-- Complete Profile -->
 <div class="animated" style="position: fixed; background-color: #fff; display: none; width: 100%; height: 100%; padding: 40px;" id="doprofile">
-<br><br><center><h3>Complete your Profile</h3><br><br><div style="width: 200px;" class="floating-label textfield-box"><label for="fullnameinput">Display Name</label><input class="form-control" id="fullnameinput" placeholder="Use your full name" type="text"></div><br><button onclick="finishprofile()" style="width: 200px" class="waves btn-eon-two">Complete</button></center></div>
+<br><br><center><h3>Complete your Profile</h3><br><br><div style="width: 200px;" class="floating-label textfield-box"><label for="fullnameinput">Display Name</label><input class="form-control" id="fullnameinput" placeholder="Use your full name" type="text"></div><br><button onclick="finishprofile()" style="width: 200px" class="waves eon-contained">Complete</button></center></div>
 
 <div id="cover" class="animated">
 <!-- Modal -->
@@ -386,7 +386,7 @@ log out</a>
   <div class="card-body">
     <h5 class="card-title">General Chat</h5>
     <p class="card-text">Join the general chatroom to talk about anything within reason. Make sure to read the chatroom rules!</p>
-    <a onclick="transferdark('chatroom.html?chat=general')" class="waves btn-eon-two">Join</a>
+    <a onclick="transferdark('chatroom.html?chat=general')" class="waves eon-contained">Join</a>
   </div>
 </div>
 <br><br>
@@ -400,12 +400,27 @@ log out</a>
   <div class="card-body">
     <h5 class="card-title">Work Chat</h5>
     <p class="card-text">Join the general chatroom to talk about school and/or work related content. Rules are the same as the general chat.</p>
-    <a onclick="transferdark('chatroom.html?chat=work')" class="waves btn-eon-two">Join</a>
+    <a onclick="transferdark('chatroom.html?chat=work')" class="waves eon-contained">Join</a>
   </div>
 </div>
 <br><br>
 </center>
 </div>
+
+<div class="col-sm">
+  <center>
+  <div class="card" style="width: 18rem;">
+    <img style="width: 100%; border-radius: 15px 15px 0px 0px; max-height: 200px" class="card-img-top" src="https://cdn.dribbble.com/users/1356973/screenshots/5883481/lb_dribble_janpaydrt_20180111_1200x900_1.png" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">Custom Chatroom</h5>
+      <p class="card-text">Create your own chatrooms with a custom URL as to only allow your friends or people who know the ID.</p>
+      <a onclick="transferdark('chatroom.html')" class="waves eon-contained">Join</a>
+    </div>
+  </div>
+  <br><br>
+  
+  </center>
+  </div>
 
       </div>
     
@@ -488,9 +503,13 @@ log out</a>
           <a class="dropdown-item eon-text" href="#">option</a>
         </div>
       </div>
-
-  
-
+<br><br>
+<h4>Particles</h4>
+<p>Enable chatroom particles that follow your cursor</p>
+<div id="particlesdiv" class="flip-switch flip-switch-text animated">
+  <input checked type="checkbox" id="c3">
+  <label for="c3"></label>
+</div>
 
 </div>
     </div>
@@ -529,12 +548,13 @@ log out</a>
     <!-- Bootstrap --><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <!-- Eon Styles --><script src="https://rohinarya12.github.io/eonstyles/new/eon.js"></script>
     <!-- Daemonite --><script src="daemonite/material.min.js"></script>
-    <!-- Waves --><script src="daemonite/waves.min.js"></script><script>addWaves();function addWaves(){ Waves.attach('.eon-contained', ['waves-button', 'waves-light']);Waves.attach('.eon-outlined', ['waves-button']);Waves.attach('.eon-text', ['waves-button']);var config = {duration: 250};Waves.attach(".waves",["waves-button"]),Waves.attach(".waves-float-button",["waves-button","waves-float"]),Waves.attach(".waves-float-button-dark",["waves-button","waves-float"]),Waves.attach(".waves-box",["waves-block"]),Waves.attach(".waves-float-box",["waves-block","waves-float"]),Waves.attach(".waves-image"),a=document.getElementsByClassName("btn-eon-two");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-three");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-four");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");Waves.init(config);}</script>
+    <!-- Waves --><script src="daemonite/waves.min.js"></script><script>addWaves();function addWaves(){ Waves.attach('.eon-contained', ['waves-button', 'waves-light']);Waves.attach('.eon-outlined', ['waves-button']);Waves.attach('.eon-text', ['waves-button']);var config = {duration: 250};Waves.attach(".waves",["waves-button"]),Waves.attach(".waves-float-button",["waves-button","waves-float"]),Waves.attach(".waves-float-button-dark",["waves-button","waves-float"]),Waves.attach(".waves-box",["waves-block"]),Waves.attach(".waves-float-box",["waves-block","waves-float"]),Waves.attach(".waves-image"),a=document.getElementsByClassName("eon-contained");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-three");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-four");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");Waves.init(config);}</script>
     <!-- Snackbar --><script src="daemonite/snackbar.min.js"></script><style>.snackbar-container {padding-top: 8px !important;padding-bottom: 8px !important;border-radius: 8px !important;max-width: 8723789253786352614975678392738649502976483528059748327952px;}</style>
     <script defer src="js/app.js"></script>
     <script defer src="js/feed.js"></script>
     <script src="js/leaderboard.js"></script>
     <script src="js/notifs.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/settings.js"></script>
 </body>
 </html>
