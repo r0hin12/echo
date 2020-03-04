@@ -677,7 +677,6 @@ function listencomments() {
     })
 }
 
-
 function listencommentsfeed() {
     db.collection('posts').doc('comments').onSnapshot(function (doc) {
 
