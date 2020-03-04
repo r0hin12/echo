@@ -67,13 +67,13 @@
 
 <div class="modal fade" id="changeprofilepicmodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h3>Change Profile Picture</h3></div><div class="modal-body">
 
+<p>Profile Picture will update on selection</p>
+  <button onclick="document.getElementById('actualclickbuttonyeet').click()" class="eon-outlined">Select Image</button>
+  <input style="display: none;" onchange="changeprofilepicconfirm()" type="file" accept="image/png, image/jpeg"  id="actualclickbuttonyeet" alt="">
 
- <h4>New porifle picture stuff</h4>
 
 </div><div class="modal-footer">
   <button type="button" class="waves eon-text" data-dismiss="modal">cancel</button>
-  <button onclick="changeprofilepicconfirm()" type="button" class="waves eon-contained" data-dismiss="modal">change</button>
-
 </div></div></div>
 </div>
 
@@ -139,9 +139,9 @@
       <div class="card-body">
 <div class="row">
 <div class="col-sm">
-<img id="usermodalpfp" style="width: 120px; height: 120px; border-radius: 30000px; overflow: hidden;" src="assets/icon.png" alt=""><br><br>
+<img id="usermodalpfp" style="width: 120px; height: 120px; border-radius: 30000px; object-fit: cover;" src="assets/icon.png" alt=""><br><br>
 <h3 id="usermodaltitle">Loading... </h3>
-<p id="usermodalbio" style="color: rgb(71, 71, 71);">bio bio bio biob iob io</p>
+<p id="usermodalbio" style="color: rgb(71, 71, 71);"></p>
 </div>
 <div class="col-sm"><div style="display: inline-block" class="card">
   <div class="card-body">
@@ -232,7 +232,7 @@
 
 <div class="animated fadeInLeft scrollable" style="height: 100%; position: fixed; width: 25%; padding: 20px;">
 <img src="assets/icon.png" style="width: 3em; display: inline-block;" alt=""><img src="assets/logo.png" style="width: 8em; display: inline-block;" alt=""><br><br>
-<center><img id="pfp1" class="shadow-sm" style=" border-radius: 20000px; width: 6em" src="" alt="Loading. Please wait.">
+<center><img id="pfp1" class="shadow-sm" style=" border-radius: 20000px; width: 6em; height: 6em; object-fit: cover;" src="" alt="Loading. Please wait.">
 <h5 style="display: none;" id="ree">ok</h5>
 
 <br><br>
@@ -453,7 +453,7 @@ log out</a>
   <div class="card">
     <div class="card-body">
 
-      <center><img class="shadow-sm" id="accountpfp" style="border-radius: 300px; width: 40%;" src="https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2Fexample.png?alt=media&token=f6d2dae3-6e02-4f4c-a45e-bcf526aa1893" alt=""></center>
+      <center><img class="shadow-sm" id="accountpfp" style="border-radius: 300px; width: 120px; height: 120px; object-fit: cover;" src="https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2Fexample.png?alt=media&token=f6d2dae3-6e02-4f4c-a45e-bcf526aa1893" alt=""></center>
       <br><br>
 
       <h5 id="accountname" class="card-title">Full Name</h5>
