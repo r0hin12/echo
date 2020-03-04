@@ -1,0 +1,261 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://rohinarya12.github.io/eonstyles/assets/eonstyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Assistant&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Odibee+Sans&display=swap" rel="stylesheet">
+    <link href="css/material.min.css" rel="stylesheet">
+    <style>
+::placeholder { 
+  color: rgb(196, 196, 196) !important;
+}
+    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/waves.min.css">
+    <script src="js/waves.min.js"></script>
+    <script src="https://kit.fontawesome.com/974fa7d414.js" crossorigin="anonymous"></script>
+    <title>Eonnect Chatroom</title>
+</head>
+
+<body id="body" style="color: white; font-family: Assistant;" class="darken">
+
+  <!-- Modal -->
+  <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div style="background-color:#252525;" class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">dismiss</button></div></div></div></div>
+
+  <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
+
+  <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Create Chatroom</h3></div><div class="modal-body">
+
+    <div class="textfield-box">
+        <input style="color: white;" class="form-control" id="createinp" placeholder="Chatroom Name" type="text">
+      </div>
+<br>
+      <div class="textfield-box">
+        <input style="color: white;" class="form-control" id="createidinp" placeholder="Custom ID (optional)" type="text">
+        <label style="color: grey;" for="">leave blank to generate random id</label>
+      </div>
+
+
+  </div><div class="modal-footer">
+      <button type="button" class="waves btn-old-text" data-dismiss="modal">cancel</button>
+      <button type="button" onclick="createchatroombutton()" class="waves btn-old-secondary" data-dismiss="modal">create</button>
+    </div></div></div></div>
+
+    <div class="modal fade" id="rulesModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Chatroom Rules</h3></div><div class="modal-body">
+
+  <h5>You must follow these rules:</h5>
+  <ul>
+<li>1. No Spam. </li>
+<li>2. No NSFW. (Would you show your grandma this?)</li>
+<li>3. No exploiting the rules and finding loopholes. Admins can act if they don't like what you're doing.</li>
+<li>4. No advertising of any kind! That may include your youtube, twitch, twitter, etc.</li>
+<li>5. Use the right channel for what you are saying. </li> 
+<li>6. Being toxic towards others such as bullying, racism, sexism, etc is not allowed in this server.</li> 
+  </li>
+  </ul>
+
+    </div><div class="modal-footer">
+        <button type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
+      </div></div></div></div>
+
+
+      <div class="modal fade" id="chatroomsinfoModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Eonnect Chatrooms Info</h3></div><div class="modal-body">
+
+        
+  
+
+      </div><div class="modal-footer">
+          <button type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
+        </div></div></div></div>
+
+
+
+
+    <div class="modal fade" id="messageinfomodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Message Info</h3></div><div class="modal-body">
+
+      
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Message Content
+          <span id="infoa">ok</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+        Date
+          <span id="infob">ok</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            User ID
+            <span id="infod">ok</span>
+          </li>
+      </ul>
+  
+    </div><div class="modal-footer">
+        <button type="button" class="waves btn-old-secondary" data-dismiss="modal">done</button>
+      </div></div></div></div>
+    
+
+    
+    <div class="modal fade bd-example-modal-lg" id="joinModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Join Chatroom</h3></div><div class="modal-body">
+
+      <div class="floating-label textfield-box">
+        <label style="color: white;" for="joininput">Chatroom ID</label>
+        <input style="color: white;" class="form-control" id="joininput" placeholder="Type here" type="text">
+      </div>
+
+    </div><div class="modal-footer">
+        <button onclick="joinchatroombutton()" type="button" class="waves btn-old-secondary" data-dismiss="modal">join</button>
+      </div></div></div></div>
+  
+
+
+<div style="display: none;" id="home">
+<center>
+    <br><br><br>
+<div style="display: inline-block; padding: 25px; background-color: #1d1d1d;" class="card">
+<div class="card-body">
+    <h1 style="font-family: 'Odibee Sans'" class="animated-link">
+        <a class="animated-ay" href="chatroom.html">
+          Eonnect Chatroom
+        </a>
+      </h1>
+      <br><br><br>
+      <button onclick="createchatroom()" class="waves btn-old-primary">Create Chatroom</button> <button onclick="joinchatroom()" class="waves btn-old-secondary">Join Chatroom</button>
+      <br><br><br>
+      <button onclick="transferdark('app.html?tab=public')" class="waves btn-eon-two">Return to App</button>
+    </div>
+  </div>
+</center>
+</div>
+
+<div style="display: none;" id="chat">
+
+<div style="width: 100%; margin: 0px;" class="row">
+  <div class="col-sm">
+<center>
+  <br><br><br><br>
+    <div style="background-color: #303030;" class="card">
+      <div class="card-body">
+    
+    <h2 id="chatroomtitle">Loading... Please wait.</h2>
+    <h5 id="chatroomid"><small>Gathering Information</small></h5>
+    
+    <hr style="background-color: grey;">
+    <br>
+
+        <button onclick="chatroomsinfo()" class="waves btn-eon-one">Chatrooms Info</button>
+        <button onclick="chatroomrules()" class="waves btn-eon-one">Room Rules</button>
+<br><br>
+<br><br>
+
+<button onclick="unloadchatroom()" class="waves btn-eon-three waves-light">Exit Room</button>
+      </div>
+    </div>
+    <br><br><br>
+
+  </center>
+  </div>
+  <div class="col-sm">
+
+
+    <center>
+      <br><br>
+    
+    
+    <br><br>
+    <div style="background-color: #303030;" class="card">
+      <div style="text-align: left;" class="card-body">
+        <div style="position: relative;">
+    <div class="centeredy" style="position: absolute;">
+      <h2>Messages</h2>
+    </div>
+    <br><br><br>
+    </div>
+    <hr style="background-color: grey;">
+
+    <div style="overflow: scroll; max-height: 400px" id="messages">
+
+    </div>
+<center>
+
+  <div style="display: inline-block; width: 70%" class="floating-label">
+    <label style="color: white;" for="messageinput1">Send a message</label>
+    <input style="color: white;" class="form-control" id="messageinput1" placeholder="Type your message" type="text">
+  </div>
+  <button id="sendmessagebutton" onclick="addmessage()" class="waves btn-old-primary">send</button>
+
+</center>
+      </div>
+    </div>
+    </div>
+    
+    </center>
+    
+
+  </div>
+</div>
+
+
+
+
+
+
+
+  </div>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+  https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyDyiJGiWlgFaMtJA2lerw4lUkGK76Qoxvs",
+  authDomain: "eongram-87169.firebaseapp.com",
+  databaseURL: "https://eongram-87169.firebaseio.com",
+  projectId: "eongram-87169",
+  storageBucket: "eongram-87169.appspot.com",
+  messagingSenderId: "725793838303",
+  appId: "1:725793838303:web:f23c748b3985225c5c056a"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+</script>
+
+    <script src="https://rohinarya12.github.io/eonstyles/assets/eonstyles.js"></script>   
+    <script type="text/javascript">
+    addWaves();
+    function addWaves() {Waves.attach(".waves",["waves-button"]),Waves.attach(".waves-float-button",["waves-button","waves-float"]),Waves.attach(".waves-float-button-dark",["waves-button","waves-float"]),Waves.attach(".waves-box",["waves-block"]),Waves.attach(".waves-float-box",["waves-block","waves-float"]),Waves.attach(".waves-image"),a=document.getElementsByClassName("btn-eon-two");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-three");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");a=document.getElementsByClassName("btn-eon-four");for(let t=0;t<a.length;t++)a[t].classList.add("waves-light");Waves.init();}</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="js/material.min.js"></script>
+<script src="js/script.js"></script>
+<script src="js/chatroom.js"></script>
+
+
+</body>
+
+</html>
+
+
+
+
+<!-- 
+    waves-light // Light Waves
+    waves-flat-button // Button flat
+    waves-float-button // Button float
+    waves-float-button-dark // Button float dark waves
+    waves-float-button-light // Button float dark waves
+    waves-flat-box // Box flat
+    waves-float-box // Box float
+    waves-image // Image waves  
+-->
