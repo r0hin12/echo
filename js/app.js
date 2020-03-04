@@ -267,7 +267,9 @@ function pfp() {
             db.collection('users').doc(user.uid).collection('details').doc('pfp').get().then(function (doc) {
                 storageref.child('logos/example.png').getDownloadURL().then(function (url) {
                     db.collection('users').doc(user.uid).update({
-                        url: url
+                        url: url,
+                        filename: 'example',
+                        filetype: 'png',
                     })
 
                 })
@@ -378,10 +380,30 @@ function changedisplayname() {
 
     $('#changedisplaynamemodal').modal('toggle')
 
+
 }
 
 function changedisplaynameconfirm() {
-    console.log('something');
+    newdisplayname = document.getElementById('newdisplayname').value
+
+    if (newdisplayname == '' || newdisplayname == ' ' || newdisplayname == null || newdisplayname == undefined) {
+        error('Something went wrong. Please try again later.')
+    }
+    else {
+
+
+
+        user.updateProfile({
+            displayName: newdisplayname
+        }).then(function () {
+            Snackbar.show({ text: 'Display name changed. Reloading...' })
+            window.setTimeout(function () {
+                window.location.reload()
+            }, 1800)
+        }).catch(function (error) {
+            error(error)
+        });
+    }
 }
 
 function changeprofilepic() {
@@ -391,8 +413,61 @@ function changeprofilepic() {
 }
 
 function changeprofilepicconfirm() {
+    $('#changeprofilepicmodal').modal('toggle')
+    file = document.getElementById('actualclickbuttonyeet').files[0]
+    console.log(file);
 
-    console.log('something');
+    db.collection('users').doc(user.uid).get().then(function (doc) {
+        if (doc.data().filename == 'example') {
+
+            var storageRef = firebase.storage().ref();
+            logosRef = storageRef.child('logos/' + file.name);
+            logosRef.put(file).then(function () {
+                storageRef.child('logos/' + file.name).getDownloadURL().then(function (url) {
+                    db.collection('users').doc(user.uid).update({
+                        url: url,
+                        filetype: file.name.split('.').pop(),
+                        filename: file.name.split('.').slice(0, -1).join('.')
+                    }).then(function () {
+                        Snackbar.show({ text: 'Profile picture was successfully replaced' })
+                        console.log(url);
+                        document.getElementById('accountpfp').src = url
+                        document.getElementById('pfp1').src = url
+                    })
+                })
+            })
+
+        }
+        else {
+
+            db.collection('users').doc(user.uid).get().then(function (doc) {
+
+                var storageRef = firebase.storage().ref();
+                logoRef = storageRef.child('logos/' + doc.data().filename + '.' + doc.data().filetype)
+                logoref.delete().then(function () {
+                    var storageRef = firebase.storage().ref();
+                    logosRef = storageRef.child('logos/' + file.name);
+                    logosRef.put(file).then(function () {
+                        storageRef.child('logos/' + file.name).getDownloadURL().then(function (url) {
+                            db.collection('users').doc(user.uid).update({
+                                url: url,
+                                filetype: file.name.split('.').pop(),
+                                filename: file.name.split('.').slice(0, -1).join('.')
+                            }).then(function () {
+                                Snackbar.show({ text: 'Profile picture was successfully replaced' })
+                                console.log(url);
+                                document.getElementById('accountpfp').src = url
+                                document.getElementById('pfp1').src = url
+                            })
+                        })
+                    })
+                })
+
+            })
+
+
+        }
+    })
 
 }
 
@@ -403,6 +478,28 @@ function changebiography() {
 }
 function changebiographyconfirm() {
 
-    console.log('something');
+    newbiography = document.getElementById('newbiography').value
+
+    if (newbiography == '' || newbiography == ' ' || newbiography == null || newbiography == undefined) {
+        error('Something went wrong. Please try again later.')
+    }
+    else {
+
+
+        db.collection('users').doc(user.uid).update({
+            bio: newbiography
+        })
+
+            .then(function () {
+                Snackbar.show({ text: 'Biography changed.' })
+                window.setTimeout(function () {
+                    document.getElementById('accountbio').innerHTML = newbiography
+                    document.getElementsByClassName('newbiography').value = ''
+                }, 500)
+            }).catch(function (error) {
+                error(error)
+            });
+    }
 
 }
+

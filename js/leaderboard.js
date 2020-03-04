@@ -5,7 +5,7 @@ function leaderboard() {
     $('#leadercontent').empty()
 
 
-    db.collection('users').where("rep", ">", 1).get().then(function (querysnapshop) {
+    db.collection('users').where("rep", ">", 2).get().then(function (querysnapshop) {
         querysnapshop.forEach(function (doca) {
 
             array.push({ id: doca.id, data: doca.data() })
