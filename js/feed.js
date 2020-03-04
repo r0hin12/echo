@@ -585,6 +585,13 @@ function info(id) {
                     }).then(function () {
                         db.collection('posts').doc('likes').update({
                             [id]: firebase.firestore.FieldValue.delete()
+                        }).then(function () {
+                            db.collection('posts').doc('reported').update({
+                                [id]: firebase.firestore.FieldValue.delete()
+                            }).then(function () {
+                                Snackbar.show({ text: 'Your post was deleted.' })
+                            })
+
                         })
                     })
                 })
@@ -597,7 +604,28 @@ function info(id) {
         }
 
         document.getElementById('reportbtnfrominfo').onclick = function () {
-            console.log('Supposed report function');
+
+            x = confirm('Are you sure you would like to report this post?')
+            if (x) {
+
+                db.collection('posts').doc('posts').get().then(function (doc) {
+                    content = doc.data()[id]
+
+                    db.collection('posts').doc('reported').update({
+                        [id]: { name: id, timestamp: content.timestamp, data: { caption: content.data.caption, file: content.data.file, name: content.data.name, type: content.data.type, uid: content.data.uid } }
+                    }).then(function () {
+                        Snackbar.show({ text: 'Post was reported' })
+                    })
+
+                })
+            }
+            else {
+                window.setTimeout(function () {
+                    info(id)
+                }, 500)
+            }
+
+
 
         }
 

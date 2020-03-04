@@ -16,6 +16,18 @@ firebase.auth().onAuthStateChanged(function (user) {
         var user = firebase.auth().currentUser;
         refresh()
 
+
+        db.collection('app').doc('details').get().then(function (doc) {
+            for (let i = 0; i < doc.data().banned.length; i++) {
+                const element = doc.data().banned[i];
+                if (doc.data().banned[i] == firebase.auth().currentUser.uid) {
+                    transfer('banned.html')
+                }
+            }
+
+        })
+
+
     } else {
         transfer('index.html?return=' + window.location.href)
     }
@@ -48,6 +60,7 @@ function refreshmain() {
     else {
         db.collection('users').doc(user.uid).get().then(function (doc) {
             if (doc.exists) {
+                document.getElementById('accountbio').innerHTML = doc.data().bio
                 db.collection('users').doc(user.uid).update({
                     name: user.displayName,
                     uid: user.uid
@@ -176,7 +189,10 @@ function finishprofile() {
 }
 
 function signout() {
-    firebase.auth().signOut()
+    Snackbar.show({ text: 'Signing out...' })
+    window.setTimeout(function () {
+        firebase.auth().signOut()
+    }, 2000)
 }
 
 function newpost() {
@@ -232,10 +248,14 @@ function newpost() {
                                 [newnum]: [],
                                 latest: newnum
                             }).then(function () {
-                                Snackbar.show({ text: 'Post uploaded.', onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: 'refresh' })
-                                document.getElementById('captionel').style.display = 'none'
-                                document.getElementById('blah').style.display = 'none'
-                                document.getElementById('captionel').style.display = 'none'
+                                db.collection('posts').doc('reported').update({
+                                    latest: newnum
+                                }).then(function () {
+                                    Snackbar.show({ text: 'Post uploaded.', onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: 'refresh' })
+                                    document.getElementById('captionel').style.display = 'none'
+                                    document.getElementById('blah').style.display = 'none'
+                                    document.getElementById('captionel').style.display = 'none'
+                                })
                             })
 
                         })
@@ -504,3 +524,8 @@ function changebiographyconfirm() {
 
 }
 
+
+function loadcredits() {
+    $('#creditsmodal').modal('toggle')
+    document.getElementById('namegoeshereyourwelcome').innerHTML = 'Thanks to you, ' + user.displayName + ', for using Eonnect!'
+}
