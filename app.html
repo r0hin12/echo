@@ -25,6 +25,7 @@
     <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves eon-text" data-dismiss="modal">dismiss</button></div></div></div></div>
     <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
     <script>sessionStorage.setItem('skiponce2', "true")</script>
+    <style>.modal {overflow-y:auto;}</style>
 
 <!-- ===========================--] MODALS [=================================== -->
 
@@ -125,6 +126,7 @@
     <br><br>
 <center>
       <a data-dismiss="modal" id="commentbtnfrominfo" class="waves eon-text">Comments</a> 
+      <a data-dismiss="modal" id="userbtnfrominfo" class="waves eon-text">User</a>
       <a data-dismiss="modal" id="reportbtnfrominfo" class="waves eon-text">Report</a> 
       <a data-dismiss="modal" id="deletebtnfrominfo" class="waves eon-text">Delete</a> 
   <br><br>
@@ -240,38 +242,28 @@
 <h3 id="nameel" style="font-weight: 700; color: rgb(51, 51, 51);">Your Name
   </h3>
 <h5 id="userel" style="line-height: 0; color: rgb(100, 100, 100);">@username</h5>
-<br>
-<div style="width: 100%;" class="scrollable">
+<br><br><br>
 
-<div style="display: inline-block; padding: 5px; ">
-<div class="card">
-  <div class="card-body">
-<h3 id="ownrepcount" style="line-height: 15px;">...</h3>
-<h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6>
+<div class="row">
+
+<div class="col-sm">
+
+  <h3 id="ownrepcount" style="line-height: 15px;">...</h3>
+  <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6>  
 
 </div>
-</div>
-</div>
-<div style="display: inline-block; padding: 5px; ">
-<div class="card">
-  <div class="card-body">
-<h3 id="ownfollowerscount" style="line-height: 15px;">...</h3>
+<div class="col-sm">
+
+  <h3 id="ownfollowerscount" style="line-height: 15px;">...</h3>
 <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Followers</h6>
 
 </div>
-</div>
-</div>
-<div style="display: inline-block; padding: 5px; ">
-  <div class="card">
-      <div class="card-body">
-  <h3 id="ownfollowingcount" style="line-height: 15px;">...</h3>
+<div class="col-sm">
+<h3 id="ownfollowingcount" style="line-height: 15px;">...</h3>
   <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Following</h6>
-  
-  </div>
-  </div>
-  </div>
 </div>
-<br>
+</div>
+
 <br>
 
 

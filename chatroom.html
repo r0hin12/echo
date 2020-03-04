@@ -17,13 +17,14 @@
     <!-- Dameonite / Bootstrap--><link rel="stylesheet" href="daemonite/material.min.css">
     <!-- Waves --><link rel="stylesheet" href="daemonite/waves.min.css">
     <!-- Snackbar --><link rel="stylesheet" href="daemonite/snackbar.min.css">
+    <!-- Style --><link rel="stylesheet" href="css/style.css">
 
 
 </head>
 <body class="darken" id="body" style="color: white; font-family: Roboto">
     <!-- Preflight Modals-->
 
-    <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">dismiss</button></div></div></div></div>
+    <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves eon-text" data-dismiss="modal">dismiss</button></div></div></div></div>
     <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
 
 <!-- ===========================--] Content [=================================== -->
@@ -44,8 +45,8 @@
 
 
 </div><div class="modal-footer">
-    <button type="button" class="waves btn-old-text" data-dismiss="modal">cancel</button>
-    <button type="button" onclick="createchatroombutton()" class="waves btn-old-secondary" data-dismiss="modal">create</button>
+    <button type="button" class="waves eon-text" data-dismiss="modal">cancel</button>
+    <button type="button" onclick="createchatroombutton()" class="waves eon-contained" data-dismiss="modal">create</button>
   </div></div></div></div>
 
   <div class="modal fade" id="rulesModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div style="background-color: #252525; color: white;" class="modal-content"><div class="modal-header"><h3>Chatroom Rules</h3></div><div class="modal-body">
@@ -62,7 +63,7 @@
 </ul>
 
   </div><div class="modal-footer">
-      <button type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
+      <button type="button" class="waves eon-text" data-dismiss="modal">done</button>
     </div></div></div></div>
 
 
@@ -72,7 +73,7 @@
 
 
     </div><div class="modal-footer">
-        <button type="button" class="waves btn-old-text" data-dismiss="modal">done</button>
+        <button type="button" class="waves eon-text" data-dismiss="modal">done</button>
       </div></div></div></div>
 
 
@@ -97,7 +98,7 @@
     </ul>
 
   </div><div class="modal-footer">
-      <button type="button" class="waves btn-old-secondary" data-dismiss="modal">done</button>
+      <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
     </div></div></div></div>
   
 
@@ -110,7 +111,7 @@
     </div>
 
   </div><div class="modal-footer">
-      <button onclick="joinchatroombutton()" type="button" class="waves btn-old-secondary" data-dismiss="modal">join</button>
+      <button onclick="joinchatroombutton()" type="button" class="waves eon-contained" data-dismiss="modal">join</button>
     </div></div></div></div>
 
 
@@ -126,9 +127,9 @@
       </a>
     </h1>
     <br><br><br>
-    <button onclick="createchatroom()" class="waves btn-old-primary">Create Chatroom</button> <button onclick="joinchatroom()" class="waves btn-old-secondary">Join Chatroom</button>
+    <button onclick="createchatroom()" class="waves eon-contained">Create Chatroom</button> <button onclick="joinchatroom()" class="waves eon-contained">Join Chatroom</button>
     <br><br><br>
-    <button onclick="transferdark('app.html?tab=public')" class="waves btn-eon-two">Return to App</button>
+    <button onclick="transferdark('app.html?tab=public')" class="waves eon-outlined">Return to App</button>
   </div>
 </div>
 </center>
@@ -149,12 +150,12 @@
   <hr style="background-color: grey;">
   <br>
 
-      <button onclick="chatroomsinfo()" class="waves btn-eon-one">Chatrooms Info</button>
-      <button onclick="chatroomrules()" class="waves btn-eon-one">Room Rules</button>
+      <button onclick="chatroomsinfo()" class="waves eon-text">Chatrooms Info</button>
+      <button onclick="chatroomrules()" class="waves eon-text">Room Rules</button>
 <br><br>
 <br><br>
 
-<button onclick="unloadchatroom()" class="waves btn-eon-three waves-light">Exit Room</button>
+<button onclick="unloadchatroom()" class="waves eon-outlined waves-light">Exit Room</button>
     </div>
   </div>
   <br><br><br>
@@ -179,7 +180,7 @@
   </div>
   <hr style="background-color: grey;">
 
-  <div style="overflow: scroll; max-height: 400px" id="messages">
+  <div style="overflow: auto; height: 400px" id="messages">
 
   </div>
 <center>
@@ -188,7 +189,7 @@
   <label style="color: white;" for="messageinput1">Send a message</label>
   <input style="color: white;" class="form-control" id="messageinput1" placeholder="Type your message" type="text">
 </div>
-<button id="sendmessagebutton" onclick="addmessage()" class="waves btn-old-primary">send</button>
+<button id="sendmessagebutton" onclick="addmessage()" class="waves eon-contained">send</button>
 
 </center>
     </div>

@@ -1,9 +1,3 @@
-
-html {
-  overflow-y: scroll;
-  outline: none;
-}
-
 button {
   outline: none !important;
 }
