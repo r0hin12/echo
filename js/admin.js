@@ -63,6 +63,14 @@ function adminactual(array) {
     }
 }
 
+function unreport(id) {
+    db.collection('posts').doc('reported').update({
+        [id]: firebase.firestore.FieldValue.delete()
+    }).then(function () {
+        Snackbar.show({ text: 'The post was unreported.' })
+    })
+}
+
 function deletepost(id) {
 
 
@@ -78,7 +86,7 @@ function deletepost(id) {
                 db.collection('posts').doc('reported').update({
                     [id]: firebase.firestore.FieldValue.delete()
                 }).then(function () {
-                    Snackbar.show({ text: 'Your post was deleted.' })
+                    Snackbar.show({ text: 'The post was deleted.' })
                 })
 
             })
@@ -108,7 +116,8 @@ async function addstuff(name, data, time) {
         a = document.createElement('div')
         var deletepost = "deletepost('" + name + "')"
         var banuser = "ban('" + data.uid + "')"
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" class="waves eon-outlined"><img id="' + name + 'pfpelurl" style="width: 35px; height: 35px; object-fit: cover; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button onclick="' + banuser + '" class="waves eon-text">ban</button><button onclick="' + deletepost + '" class="waves eon-text">delete</button><br></div></h5></div><br></div></div> <hr>'
+        var unreport = "unreport('" + name + "')"
+        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" class="waves eon-outlined"><img id="' + name + 'pfpelurl" style="width: 35px; height: 35px; object-fit: cover; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button onclick="' + banuser + '" class="waves eon-text">ban</button><button onclick="' + deletepost + '" class="waves eon-text">delete</button><button onclick="' + unreport + '" class="waves eon-text">unreport</button><br></div></h5></div><br></div></div> <hr>'
 
         document.getElementById(name + 'shell').appendChild(a)
         addpfp(data.uid, name)

@@ -41,6 +41,7 @@ function refresh() {
     prenotif()
     verified()
     checkparticles()
+    loaddms()
 
 }
 

@@ -407,107 +407,122 @@ function checkuserurl() {
 
 
 }
-
+sessionStorage.setItem('currentlyviewinguser', 'uwu')
 async function usermodal(uid) {
-    $('#usergrid').empty()
-    $('#userModal').modal('toggle')
-    window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
-    db.collection('users').doc(uid).get().then(function (doc) {
-        username = doc.data().username
-        useruid = doc.data().uid
-        document.getElementById('usermodaltitle').innerHTML = doc.data().name + ' <br><span style="border-radius: 12px; font-size: 18px" class="badge badge-dark">@' + doc.data().username + '</span>'
-        document.getElementById('usermodalpfp').src = doc.data().url
-        if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") {
+    previousview = sessionStorage.getItem("currentlyviewinguser")
+    if (previousview == uid) {
+        $('#userModal').modal('toggle')
+        window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
+    }
+    else {
+        toggleloader()
+        sessionStorage.setItem('currentlyviewinguser', uid)
 
-        }
-        else {
-            document.getElementById('usermodalbio').innerHTML = doc.data().bio
-        }
+        window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
+        db.collection('users').doc(uid).get().then(function (doc) {
+            username = doc.data().username
+            useruid = doc.data().uid
+            document.getElementById('usermodaltitle').innerHTML = doc.data().name + ' <br><span style="border-radius: 12px; font-size: 18px" class="badge badge-dark">@' + doc.data().username + '</span>'
+            document.getElementById('usermodalpfp').src = doc.data().url
+            if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") {
 
-        document.getElementById('userrep').innerHTML = doc.data().rep
+            }
+            else {
+                document.getElementById('usermodalbio').innerHTML = doc.data().bio
+            }
+
+            document.getElementById('userrep').innerHTML = doc.data().rep
 
 
-        db.collection('users').doc(uid).collection('follow').doc('following').get().then(function (doc) {
-            following = doc.data().following.length
-            document.getElementById('userfollowers').innerHTML = following
+            db.collection('users').doc(uid).collection('follow').doc('following').get().then(function (doc) {
+                following = doc.data().following.length
+                document.getElementById('userfollowers').innerHTML = following
 
 
-            db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
-                followers = doc.data().followers.length
-                document.getElementById('userfollowing').innerHTML = following
-                if (user.uid == uid) {
-                    document.getElementById('ownwarning').style.display = 'block'
-                    document.getElementById('followbtn').innerHTML = 'unfollow'
-                    document.getElementById('followbtn').onclick = function () {
-                        Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
+                db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
+                    followers = doc.data().followers.length
+                    document.getElementById('userfollowing').innerHTML = following
+                    $('#usergrid').empty()
+                    $('#userModal').modal('toggle')
+                    if (user.uid == uid) {
+                        document.getElementById('ownwarning').style.display = 'block'
+                        document.getElementById('followbtn').innerHTML = 'unfollow'
+                        document.getElementById('followbtn').onclick = function () {
+                            Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
+                        }
+                        loaduserposts(uid)
                     }
-                    loaduserposts(uid)
-                }
-                else {
+                    else {
 
-                    db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
-                        ppl = doc.data().followers
-                        isfollow = false
-                        for (const item of ppl) {
-                            if (item == user.uid) {
-                                isfollow = true
+                        db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
+                            ppl = doc.data().followers
+                            isfollow = false
+                            for (const item of ppl) {
+                                if (item == user.uid) {
+                                    isfollow = true
+                                }
                             }
-                        }
-                        if (isfollow) {
+                            if (isfollow) {
 
 
-                            document.getElementById('followbtn').innerHTML = 'unfollow'
-                            document.getElementById('followbtn').onclick = function () {
-                                unfollow(uid, username)
+                                document.getElementById('followbtn').innerHTML = 'unfollow'
+                                document.getElementById('followbtn').onclick = function () {
+                                    unfollow(uid, username)
+                                }
+
+                                loaduserposts(uid)
+
                             }
+                            else {
 
-                            loaduserposts(uid)
-
-                        }
-                        else {
-
-                            document.getElementById('followbtn').innerHTML = 'follow'
-                            document.getElementById('followbtn').onclick = function () {
-                                follow(uid, username)
-                            }
+                                document.getElementById('followbtn').innerHTML = 'follow'
+                                document.getElementById('followbtn').onclick = function () {
+                                    follow(uid, username)
+                                }
 
 
 
-                            db.collection('users').doc(uid).get().then(function (doc) {
-                                if (doc.data().type == 'private') {
-                                    document.getElementById('privatewarning').style.display = 'block'
+                                db.collection('users').doc(uid).get().then(function (doc) {
+                                    if (doc.data().type == 'private') {
+                                        document.getElementById('privatewarning').style.display = 'block'
 
-                                    db.collection('users').doc(uid).collection('follow').doc('requested').get().then(function (doc) {
-                                        ppl = doc.data().requested
-                                        isrequest = false
-                                        for (const item of ppl) {
+                                        db.collection('users').doc(uid).collection('follow').doc('requested').get().then(function (doc) {
+                                            ppl = doc.data().requested
+                                            isrequest = false
+                                            for (const item of ppl) {
 
-                                            if (item == uid) {
-                                                isrequest = true
+                                                if (item == uid) {
+                                                    isrequest = true
+                                                }
                                             }
-                                        }
 
-                                        if (isrequest == true) {
+                                            if (isrequest == true) {
 
-                                            document.getElementById('followbtn').innerHTML = 'cancel request'
-                                            document.getElementById('followbtn').onclick = function () {
-                                                unrequest(uid, username)
-
+                                                document.getElementById('followbtn').innerHTML = 'cancel request'
+                                                document.getElementById('followbtn').onclick = function () {
+                                                    unrequest(uid, username)
 
 
 
+
+                                                }
                                             }
-                                        }
-                                    })
-                                } else { loaduserposts(uid) }
-                            })
-                        }
-                    })
+                                        })
+                                    } else { loaduserposts(uid) }
+                                })
+                            }
+                        })
 
-                }
+                    }
+                })
             })
         })
-    })
+
+        window.setTimeout(function () {
+            toggleloader()
+        }, 1000)
+    }
+
 }
 
 function loaduserposts(uid) {
@@ -995,7 +1010,7 @@ function fullscreenfeed(id) {
 function follow(uid, name) {
 
 
-    db.collection('users').doc(uid).collection('details').doc('type').get().then(function (doc) {
+    db.collection('users').doc(uid).get().then(function (doc) {
         if (doc.data().type == 'private') {
 
             db.collection('users').doc(uid).collection('follow').doc('requested').update({
