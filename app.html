@@ -60,7 +60,7 @@
 <div class="modal fade bd-example-modal-sm" id="newdmmodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>New DM</h3></div><div class="modal-body">
 
   <div class="floating-label textfield-box">
-    <label for="newdmel">User ID</label>
+    <label for="newdmel">Enter Username</label>
     <input class="form-control" id="newdmel" type="text">
   </div>
   
@@ -410,14 +410,23 @@ log out</a>
 
 <br><br>
 
-<div class="card scrollable" style="width: 100%; max-height: 480px"><div class="card-body">
+<div id="messagescontainer" class="card scrollable animated fadeInUp" style="display: none; width: 100%; max-height: 480px; border-radius: 15px 15px 0px 0px !important">
 
 <div id="messages"></div>
 
 <br><br><br>
-<div style="position: absolute; bottom: 8px;">bottom</div>
+<center>
+<div style="position: relative; height: 80px; width: 100%; bottom: 0px;">
 
-</div></div>
+  <div style="left: 12px; width: 75%; bottom: 12px; position: absolute;" class="floating-label textfield-box">
+    <label for="directnewmessage">New Message</label>
+    <input class="form-control" id="directnewmessage" type="text">
+  </div>
+  <button class="eon-text" style="position: absolute !important; bottom: 12px; right: 12px; width: 20%; height: 40px;" id="directmessagesendbutton">send</button>
+
+</div></center>
+
+</div>
 
       
 

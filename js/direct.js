@@ -43,18 +43,43 @@ function loaddms() {
             a = document.createElement('button')
             a.classList.add('eon-text')
             a.id = dms[i]
-            document.getElementById('messageslist').appendChild('a')
-            addpfpdirect(dms[i])
-            
+            a.onclick = function () {
 
-            
+
+                document.getElementById('messagescontainer').style.display = 'block'
+                $('#messages').empty()
+                document.getElementById('directmessagesendbutton').onclick = function () {
+                    newdirect(dms[i])
+                }
+
+
+
+            }
+            document.getElementById('messageslist').appendChild(a)
+            addpfpdirect(dms[i])
+
+
+
         }
 
     })
 }
 
+$("#directnewmessage").keypress(function (event) {
+    if (event.keyCode == 13) {
+        $("#directmessagesendbutton").click();
+    }
+});
+
 function addpfpdirect(id) {
-    db.collection('users').doc(id).get().then(function(doc) {
+    db.collection('users').doc(id).get().then(function (doc) {
         document.getElementById(id).innerHTML = '<img class="shadow-sm" style="border-radius: 300px; width: 40px; height: 40px; object-fit: cover;" src="' + doc.data().url + '" alt="">'
     })
+}
+
+function newdirect(id) {
+    console.log(id);
+
+    db.collection('direct').doc(user.uid)
+
 }
