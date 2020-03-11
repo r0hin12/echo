@@ -192,7 +192,7 @@ function loadmessages(id) {
                         document.getElementById('messages').appendChild(b)
                         addWaves()
                     }
-                    var objDiv = document.getElementById("messages");
+                    var objDiv = document.getElementById("messagescontainer");
                     objDiv.scrollTop = objDiv.scrollHeight;
                 }
             }
@@ -228,7 +228,7 @@ function loadmessages(id) {
                 document.getElementById('messages').appendChild(b)
                 addWaves()
 
-                var objDiv = document.getElementById("messages");
+                var objDiv = document.getElementById("messagescontainer");
                 objDiv.scrollTop = objDiv.scrollHeight;
 
 

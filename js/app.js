@@ -10,6 +10,11 @@ if (post == null || post == "") { } else {
     }
 }
 
+var isSafari = window.safari !== undefined;
+if (isSafari) {
+    error('You seem to be using Safari. Many features will not work. As such, we recommend you switch to a more compatible browser such as Google Chrome or Firefox. <br><br><br><b>Safari Bugs:<br></b>Console errors, image latency, text fields do not work. Scrolling is buggy. Additional steps required following Eonnect documentation. Reputation may be (not purposefully) lowered.')
+}
+
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -61,7 +66,13 @@ function refreshmain() {
     else {
         db.collection('users').doc(user.uid).get().then(function (doc) {
             if (doc.exists) {
-                document.getElementById('accountbio').innerHTML = doc.data().bio
+                if (doc.data().bio == undefined) {
+
+                }
+                else {
+                    document.getElementById('accountbio').innerHTML = doc.data().bio
+                }
+
                 db.collection('users').doc(user.uid).update({
                     name: user.displayName,
                     uid: user.uid
@@ -464,8 +475,8 @@ function changeprofilepicconfirm() {
 
             db.collection('users').doc(user.uid).get().then(function (doc) {
 
-                var storageRef = firebase.storage().ref();
-                logoRef = storageRef.child('logos/' + doc.data().filename + '.' + doc.data().filetype)
+                storageRef = firebase.storage().ref();
+                logoref = storageRef.child('logos/' + doc.data().filename + '.' + doc.data().filetype)
                 logoref.delete().then(function () {
                     var storageRef = firebase.storage().ref();
                     logosRef = storageRef.child('logos/' + file.name);
