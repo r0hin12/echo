@@ -99,7 +99,8 @@ function loadComments(id) {
             a.classList.add('animated')
             a.classList.add('fadeIn')
             reportFunc = "reportComment('" + doc.id + "')"
-            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
+            userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
+            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><a class="userlinkoncomment" onclick="' + userFunc33 + '" >' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
             addpfpcomment(element.user, i)
@@ -874,11 +875,17 @@ function updatechars() {
 }
 
 $('#commentModal').on('hidden.bs.modal', function () {
-    if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
-        window.history.pushState(null, '', '/eonnect/app.html')
+    if (sessionStorage.getItem('skiponce123') == "true") {
+        sessionStorage.setItem('skiponce123', "false")
     }
     else {
-        window.history.pushState(null, '', '/eonnect/app.html?tab=' + sessionStorage.getItem('currentab'));
+
+        if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
+            window.history.pushState(null, '', '/eonnect/app.html')
+        }
+        else {
+            window.history.pushState(null, '', '/eonnect/app.html?tab=' + sessionStorage.getItem('currentab'));
+        }
     }
 
 });

@@ -27,10 +27,11 @@ function newdm() {
                 db.collection('direct').doc(uwu).set({
                     [user.uid]: [],
                     [uwuunread2]: []
-                }).then(function () {
+                }).then(function (doc) {
                     Snackbar.show({ text: 'Private DM created.' })
                     $('#messageslist').empty()
                     loaddms()
+
                 })
             })
 
@@ -38,7 +39,7 @@ function newdm() {
         }
     })
 }
-
+sessionStorage.setItem('initial', 'true')
 function loaddms() {
     db.collection('direct').doc(user.uid).get().then(function (doc) {
 
@@ -71,17 +72,72 @@ function loaddms() {
                             newdirect(dms[i])
                         }
                         $('#messages').empty()
+                        sessionStorage.setItem("currentviewingdm", dms[i])
                         loadmessages(dms[i])
 
-
+                        unreadtext = dms[i] + 'unread'
+                        db.collection('direct').doc(user.uid).update({
+                            [unreadtext]: firebase.firestore.FieldValue.arrayRemove(user.uid),
+                        })
 
                     }
                     document.getElementById('messageslist').appendChild(a)
                     addpfpdirect(dms[i])
+                    updatenotifs()
 
                 }
 
             }
+
+            loadmessages(dms[0])
+
+            if (dms.length > 50) {
+
+
+                db.collection('chatroom').doc(id).update({
+                    messages: firebase.firestore.FieldValue.arrayRemove({
+                        content: dms[0].content,
+                        sender: dms[0].sender,
+                        uniqueid: dms[0].uniqueid,
+                    })
+                }).then(function () {
+                    $('#0el').remove()
+                    $('#0elel').remove()
+
+
+                    /* 
+                    
+                    CHANGE ALL EXISTING IDS
+    
+                        msgels = document.getElementsByClassName('messageelement')
+                        var msgels = [].slice.call(msgels);
+    
+                        for (let i = 0; i < msgels.length; i++) {
+                            const element = msgels[i];
+                            oldoldid = element.id
+                            oldid = element.id.split("el")[0]
+    
+                            newid = parseInt(oldid) - 1
+                            i = newid
+                            id = id
+    
+                            document.getElementById(oldoldid).id = newid + 'el'
+                            document.getElementById(newid + 'el').onclick = function () {
+                                chatinfomodal(id, i)
+                            }
+    
+    
+    
+                        }
+                        */
+
+
+
+                })
+
+
+            }
+
 
         }
         else {
@@ -102,7 +158,7 @@ $("#directnewmessage").keypress(function (event) {
 function addpfpdirect(id) {
     db.collection('users').doc(id).get().then(function (doc) {
         url = doc.data().url
-        document.getElementById(id).innerHTML = '<img class="shadow-sm" style="border-radius: 300px; width: 40px; height: 40px; object-fit: cover;" src="' + url + '" alt="">'
+        document.getElementById(id).innerHTML = '<img class="shadow-sm" style="border-radius: 300px; width: 40px; height: 40px; object-fit: cover;" src="' + url + '" alt=""><div class="animated" style="position: absolute;" id="' + id + 'unreadcount' + '"></div>'
     })
 }
 
@@ -117,7 +173,10 @@ function newdirect(id) {
             uniqueid: messages.length,
         })
     }).then(function () {
-
+        unreadtext = user.uid + 'unread'
+        db.collection('direct').doc(id).update({
+            [unreadtext]: firebase.firestore.FieldValue.arrayUnion(id),
+        })
         db.collection('direct').doc(id).update({
             [user.uid]: firebase.firestore.FieldValue.arrayUnion({
                 sender: user.uid,
@@ -125,7 +184,7 @@ function newdirect(id) {
                 uniqueid: messages.length
             })
         }).then(function () {
-            var objDiv = document.getElementById("messages");
+            var objDiv = document.getElementById("messagescontainer");
             objDiv.scrollTop = objDiv.scrollHeight;
         })
 
@@ -135,28 +194,41 @@ function newdirect(id) {
 
 sessionStorage.setItem('firsttime112', 'true')
 
-function loadmessages(id) {
-    db.collection('direct').doc(user.uid).onSnapshot(function (doc) {
 
+
+
+
+function loadmessages(id) {
+    try {
+        yeet()
+    } catch (error) {
+        // First time
+    }
+    yeet = db.collection('direct').doc(user.uid).onSnapshot(function (doc) {
         if (sessionStorage.getItem('firsttime112') == 'true') {
             // FIRST TIME
             sessionStorage.setItem('firsttime112', 'false')
             oldmessages = doc.data()[id]
+            messages = doc.data()[id]
 
             for (let i = 0; i < oldmessages.length; i++) {
                 const element = oldmessages[i];
                 b = document.createElement('div')
                 b.style.padding = '38px'
+                b.id = doc.data()[id].uniqueid + 'el'
+                b.classList.add('animated')
+                b.classList.add('fadeInUp')
                 b.innerHTML = element.sender + ' says ' + element.content
                 document.getElementById('messages').appendChild(b)
 
 
             }
-            var objDiv = document.getElementById("messages");
-            objDiv.scrollTop = objDiv.scrollHeight;
 
+            var objDiv = document.getElementById("messagescontainer");
+            objDiv.scrollTop = objDiv.scrollHeight;
         }
         else {
+
             // NOT FIRST TIME
             messages = doc.data()[id]
 
@@ -166,25 +238,102 @@ function loadmessages(id) {
 
             if (messages.length == oldmessages.length) {
 
-                console.log('different channel');
+                updatenotifs()
                 oldmessages = doc.data()[id]
 
             }
 
             else {
 
-                element = messages[messages.length - 1]
-                b = document.createElement('div')
-                b.style.padding = '38px'
-                b.innerHTML = element.sender + ' says ' + element.content
-                document.getElementById('messages').appendChild(b)
+                if (sessionStorage.getItem('currentviewingdm') == id) {
 
+
+                    unreadtext = id + 'unread'
+                    db.collection('direct').doc(user.uid).update({
+                        [unreadtext]: firebase.firestore.FieldValue.arrayRemove(id),
+                    })
+
+
+                    element = messages[messages.length - 1]
+                    b = document.createElement('div')
+                    b.style.padding = '38px'
+                    b.classList.add('animated')
+                    b.classList.add('fadeInUp')
+                    b.id = doc.data().uniqueid + 'el'
+                    b.innerHTML = element.sender + ' says ' + element.content
+                    document.getElementById('messages').appendChild(b)
+                    var objDiv = document.getElementById("messagescontainer");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                }
+                else {
+                    element = messages[messages.length - 1]
+                    b = document.createElement('div')
+                    b.style.padding = '38px'
+                    b.classList.add('animated')
+                    b.classList.add('fadeInUp')
+                    b.id = doc.data().uniqueid + 'el'
+                    b.innerHTML = element.sender + ' says ' + element.content
+                    document.getElementById('messages').appendChild(b)
+                    var objDiv = document.getElementById("messagescontainer");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                }
             }
-
-
-
 
         }
 
+        if (sessionStorage.getItem('initial') == 'true') {
+            console.log('Initial Direct Messages SETUP.');
+            unshowdm()
+            sessionStorage.setItem('initial', 'false')
+        }
+        else {
+            document.getElementById(id + 'unreadcount').classList.add('fadeOut')
+        }
+
     })
+}
+
+function unshowdm() { document.getElementById('messagescontainer').style.display = 'none'; sessionStorage.setItem('currentviewingdm', 'none') }
+
+function updatenotifs() {
+
+    db.collection('direct').doc(user.uid).get().then(function (doc) {
+
+        dms = Object.keys(doc.data())
+
+        for (let i = 0; i < dms.length; i++) {
+            if (dms[i].endsWith("unread")) {
+
+                array = doc.data()[dms[i]]
+                dmsi = dms[i].replace('unread', '')
+                if (array.length > 0) {
+
+                    if (document.getElementById(dmsi + 'unreadcount').innerHTML == '') {
+
+                    }
+                    else {
+                        document.getElementById(dmsi + 'unreadcount').classList.add('shake')
+                        window.setTimeout(function () {
+                            document.getElementById(dmsi + 'unreadcount').classList.remove('shake')
+                        }, 500)
+                    }
+
+                    document.getElementById(dmsi + 'unreadcount').classList.add('fadeIn')
+                    document.getElementById(dmsi + 'unreadcount').classList.remove('fadeOut')
+                    document.getElementById(dmsi + 'unreadcount').innerHTML = '<span class="badge badge-danger">·</span>'
+                }
+                else {
+                    document.getElementById(dmsi + 'unreadcount').classList.remove('fadeIn')
+                    document.getElementById(dmsi + 'unreadcount').innerHTML = ''
+                }
+
+
+            }
+            else {
+
+            }
+        }
+
+    })
+
 }

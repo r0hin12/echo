@@ -315,7 +315,8 @@ function pfp() {
 
 
 function tab(tab) {
-
+    sessionStorage.setItem("currentviewingdm", 'not')
+    unshowdm()
     switch (tab) {
         case 'feed':
 

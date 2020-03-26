@@ -263,3 +263,15 @@ width: 75px;
       .liked {
         color: red
       }
+
+      .userlinkoncomment {
+        cursor:pointer;
+        color: #000 !important;
+        transition: all 0.2s
+      }
+
+      .userlinkoncomment:hover {
+        cursor:pointer;
+        color: #6200ee !important;
+        transition: all 0.2s
+      }
