@@ -219,7 +219,7 @@ function loadmessages(id) {
                 a.classList.add('fadeInUp')
                 infoFunc = "chatinfomodal('" + id + "','" + idi + "')"
 
-                a.innerHTML = '<img style="border-radius: 1200px; width: 32px; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
+                a.innerHTML = '<img style="border-radius: 1200px; width: 32px; height: 32px; object-fit: cover; display: inline-block;" src="' + element.senderpic + '"class="centeredy"> <div style="padding-left: 24px; width: 100%; display: inline-block;"><center><div style="text-align: left; max-width: 90%; padding: 12px; border-radius: 12px; background-color: #404040"><p style="max-width: 90%;"><b>' + element.sendername + ' » </b>' + element.content + '</p> <div style="right: 52px" class="centeredy"><button onclick="' + infoFunc + '" class="waves"><i class="material-icons">info</i></button></div></div></center></div>'
 
                 document.getElementById('messages').appendChild(a)
                 b = document.createElement('br')
@@ -228,7 +228,7 @@ function loadmessages(id) {
                 document.getElementById('messages').appendChild(b)
                 addWaves()
 
-                var objDiv = document.getElementById("messagescontainer");
+                var objDiv = document.getElementById("messages");
                 objDiv.scrollTop = objDiv.scrollHeight;
 
 
