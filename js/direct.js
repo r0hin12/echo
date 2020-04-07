@@ -63,6 +63,11 @@ function loaddms() {
                     a.id = dms[i]
                     a.onclick = function () {
 
+                        dummy = this.id
+                        document.getElementById(this.id).style.pointerEvents = 'none';
+                        window.setTimeout(function () {
+                            document.getElementById(dummy).style.pointerEvents = 'auto';
+                        }, 3456)
 
                         sessionStorage.setItem('firsttime112', 'true')
 
@@ -337,3 +342,4 @@ function updatenotifs() {
     })
 
 }
+

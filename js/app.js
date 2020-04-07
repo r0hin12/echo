@@ -1,4 +1,5 @@
 db = firebase.firestore()
+perf = firebase.performance();
 
 var urlParams = new URLSearchParams(window.location.search);
 var post = urlParams.get('tab');
