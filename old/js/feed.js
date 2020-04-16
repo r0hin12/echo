@@ -11,7 +11,9 @@ var urlParams = new URLSearchParams(window.location.search);
 var post = urlParams.get('fullscreen');
 sessionStorage.setItem('fullInfo', post)
 
-user = firebase.auth().currentUser
+
+db = firebase.firestore()
+
 
 function readURL(input) {
     if (input.files && input.files[0]) {
