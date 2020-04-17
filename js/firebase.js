@@ -14,12 +14,12 @@ storage = firebase.storage();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
 
-        user = firebase.auth().currentUser
+        window.user = firebase.auth().currentUser
         console.log("User is signed in: " + user.displayName);
 
     } else {
-
         transferdark('index.html')
 
     }
 });
+
