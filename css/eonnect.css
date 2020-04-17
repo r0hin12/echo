@@ -1,4 +1,4 @@
- :root {
+:root {
     --bg-primary: #282A34;
     --bg-secondary: #3C3F51;
     --eon-primary: #E2336B;
@@ -13,4 +13,3 @@ body {
     color: var(--content-primary);
     font-family: 'Baloo Paaji 2', cursive
 }
-

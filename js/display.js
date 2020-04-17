@@ -26,3 +26,6 @@ function check(width) {
 
 // Search Box
 document.addEventListener("touchstart", function () { }, true);
+
+//Console Error
+console.error('Please do not try to troubleshoot. If you want our support team, you may contact us using various platforms. Choose account -> support for more options.')

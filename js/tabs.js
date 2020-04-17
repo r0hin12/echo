@@ -49,7 +49,5 @@ function tabe(tab) {
             default:
                 break;
         }
-
     }
-
 }

@@ -341,8 +341,6 @@ async function addstufffeed(name, data, time) {
 }
 
 function actual(array) {
-
-
     sessionStorage.setItem('count', 0)
     sessionStorage.setItem('maxCount', array.length)
 
@@ -363,7 +361,6 @@ function actual(array) {
 
 
 function actualfeed(array) {
-
 
     if (array.length == 0) {
         document.getElementById('nofeedstuff').style.display = 'inline-block'
@@ -403,7 +400,6 @@ function checkuserurl() {
     else {
         usermodal(post)
     }
-
 
 }
 sessionStorage.setItem('currentlyviewinguser', 'uwu')
@@ -989,7 +985,6 @@ function fullscreen(id) {
 }
 
 function fullscreenfeed(id) {
-
     if (sessionStorage.getItem('fullscreenon') == 'yes') {
         sessionStorage.setItem('fullscreenon', 'no')
         console.log('duplicate fullscreen avoided');
@@ -1009,11 +1004,9 @@ function fullscreenfeed(id) {
 
         sessionStorage.setItem('fullscreenon', 'yes')
     }
-
 }
 
 function follow(uid, name) {
-
 
     db.collection('users').doc(uid).get().then(function (doc) {
         if (doc.data().type == 'private') {
@@ -1045,8 +1038,6 @@ function follow(uid, name) {
             })
         }
     })
-
-
 }
 
 function unfollow(uid, name) {
