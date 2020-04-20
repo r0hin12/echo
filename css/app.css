@@ -1,3 +1,23 @@
+button {
+    outline: none !important;
+}
+a {
+    outline: none !important;
+}
+input {
+    color: var(--content-primary) !important;
+}
+::placeholder {
+    color: var(--content-secondary) !important;
+}
+
+.form-control {
+    border-bottom: 1px solid white !important;
+}
+custom-control-label::before {
+    background-color: darkorange;
+}
+
 .eonnect-main-unexpanded {
     top: 0px;
     right: 0px;
@@ -180,12 +200,12 @@ width: 90%;
 .btn-hover.color-4 {
     background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
     box-shadow: 0 4px 15px 0 rgba(252, 104, 110, 0.75);
-    transition: box-shadow 0.5s
+    transition: all 2s
 }
 
 .btn-hover.color-4:hover {
-    box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.75);
-    transition: box-shadow 0.5s
+    box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.30);
+    transition: all 2s;
 }
 
 .createbtnicon {
@@ -221,7 +241,182 @@ width: 90%;
 }
 
 .grid {
-    display: inline-grid;
-    grid-template-columns: auto auto auto;
-    padding: 10px;
+
+    display: grid;
+    grid-gap: 0px;
+    grid-template-columns: repeat(auto-fill, minmax(350px,1fr));
+    grid-auto-rows: 40px;
+
+
+}
+
+.postshell {
+    position: relative;
+    padding-left: 32px;
+    padding-right: 32px;
+    width: 400px;
+}
+
+.shell {
+    position: relative;
+    padding-left: 32px;
+    padding-right: 32px;
+    width: 400px;
+}
+
+.postimage {
+    border-radius: 18px; width: 100%; max-height: 800px; object-fit: cover
+}
+
+.navbar {
+    padding: 0px;
+}
+
+.postpfp {
+    width: 35px;
+    height: 35px; 
+    object-fit: cover; 
+    padding: 2px; 
+    border-radius: 35px;
+    background-image: linear-gradient(white, white), linear-gradient(45deg, var(--eon-primary), var(--eon-secondary));
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    object-fit: cover;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    cursor: pointer;  
+    transition: all 1s; 
+}
+
+.postpfp:hover {
+    border-radius: 0px;
+    transition: all 1s;
+}
+
+.postname {
+    left: 43px;
+    color: var(--content-primary)
+}
+
+.postbuttons {
+
+    background-color: transparent;
+    border: 0px;
+    color: var(--content-primary);
+}
+
+.posticon {
+    display: inline-block; 
+    color: var(--content-primary);
+    cursor: pointer;
+}
+
+.postinfo {
+    position: absolute;
+    z-index: 10;
+    left: 38px;
+    top: 8px;
+    height: 25px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    color: grey;
+    background: rgb(0, 0, 0, 0.1);
+    border-radius: 18px !important;
+    border: 0px;
+    outline: none;
+    transition: all 0.1s;
+}
+
+.postfullscreen {
+    position: absolute;
+    z-index: 10;
+    right: 38px;
+    top: 8px;
+    color: rgb(255, 255, 255);
+    background: rgb(0, 0, 0, 0.1);
+    border-radius: 18px !important;
+    border: 0px;
+    outline: none;
+    transition: all 0.1s;
+}
+
+.postfullscreen:focus {
+    outline: none;
+}
+
+.postfullscreen:active {
+    background: rgb(0, 0, 0, 0.2);
+    transition: all 0.1s;
+}
+
+.fullscreenelement {
+    width: 100%; 
+    height: 100%; 
+    backdrop-filter: blur(5px);
+    top: 0px; 
+    left: 0px; 
+    position: fixed; 
+    z-index: 40000
+}
+
+.fullscreenimageelement {
+    max-width:100%; 
+    max-height:100%; 
+}
+
+.fullscreenbutton {
+    top: 24px;
+    padding-top: 4px;
+    color: grey;
+    font-size: 18px;
+    background: rgb(0, 0, 0, 0.3);
+    border-radius: 18px !important;
+    border: 0px;
+    z-index: 40001;
+    outline: none;
+    transition: all 0.1s;
+    
+}
+
+.fullscreenbutton:focus {
+    outline: none;
+}
+
+.verified {
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    padding: 6px;
+    font-size: 24px;
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;   
+}
+
+.modal-content {
+    background-color: var(--bg-tertiary);
+    color: var(--content-primary);
+    border-radius: 24px;
+}
+
+.uploadpreview {
+    border-radius: 8px; 
+    display: none; 
+    width: 80%;
+}
+
+.imagepreviewtext {
+    color: var(--content-secondary)
+}
+
+.popover {
+    background-color: var(--bg-quaternary);
+    color: var(--content-primary);
+    border-radius: 12px;
+}
+
+.smallicon {
+    font-size: 24px;
+    color: var(--content-secondary);
+    cursor: pointer;
 }

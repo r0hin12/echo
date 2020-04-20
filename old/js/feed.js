@@ -32,7 +32,6 @@ $("#imgInp").change(function () {
     document.getElementById('blah').style.display = 'block'
     document.getElementById('captionel').style.display = 'block'
     document.getElementById('captionelel').style.display = 'block'
-
 });
 
 

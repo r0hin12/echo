@@ -8,30 +8,17 @@ interval = window.setInterval(function () {
 function showall() {
     document.getElementById('dropdownMenuButton1').innerHTML = 'Showing All Posts <i class="material-icons">keyboard_arrow_down</i>'
 
-    document.getElementById('gridrelevant').classList.add('fadeOut')
-    document.getElementById('gridrelevant').classList.remove('fadeIn')
-    window.setTimeout(function () {
-        document.getElementById('gridrelevant').classList.remove('fadeOut')
-        document.getElementById('gridrelevant').classList.add('fadeIn')
-        document.getElementById('gridrelevant').style.display = 'none'
-    }, 500)
-
-    document.getElementById('grid').style.display = 'block'
+    document.getElementById('gridrelevant').style.display = 'none'
+    document.getElementById('grid').style.display = 'grid'
+    resizeAllGridItemsAll()
 }
 
 function dontshowall() {
     document.getElementById('dropdownMenuButton1').innerHTML = 'Showing Relevant Posts <i class="material-icons">keyboard_arrow_down</i>'
-    document.getElementById('gridrelevant').style.display = 'block'
 
-
-    document.getElementById('grid').classList.add('fadeOut')
-    document.getElementById('grid').classList.remove('fadeIn')
-    window.setTimeout(function () {
-        document.getElementById('grid').classList.remove('fadeOut')
-        document.getElementById('grid').classList.add('fadeIn')
-        document.getElementById('grid').style.display = 'none'
-    }, 500)
-
+    document.getElementById('gridrelevant').style.display = 'grid'
+    document.getElementById('grid').style.display = 'none'
+    resizeAllGridItems()
 }
 
 
@@ -44,7 +31,7 @@ sessionStorage.setItem('viewing', 'stoplookinghere')
 sessionStorage.setItem('currentlyviewinguser', 'uwu')
 
 function load() {
-    dontshowall()
+    i = 0
     yeetpostslistener()
     addpostslistener()
     $('#grid').empty()
@@ -53,41 +40,47 @@ function load() {
     exarray = []
     fearray = []
 
-    db.collection('users').doc(firebase.auth().currentUser.uid).collection('follow').doc("following").get().then(function (followdoc) {
-        following = followdoc.data().following
-        db.collection('posts').doc('posts').get().then(function (doc) {
-            limit = doc.data().latest
-            for (let i = 0; i < limit + 1; i++) {
-                content = doc.data()[i]
-                if (content == undefined) {
-                }
-                else {
-                    const elementid = content.name;
-                    const elementdata = content.data
-                    const elementtime = content.timestamp
-                    if (user.uid == elementdata.uid) {
-                        fearray.push({ name: elementid, data: elementdata, time: elementtime })
-                    }
-                    for (let i = 0; i < following.length; i++) {
-                        if (following[i] == elementdata.uid) {
-                            fearray.push({ name: elementid, data: elementdata, time: elementtime })
-                        }
-                    }
-                    if (elementdata.type == 'true' || elementdata.type == true) {
+    db.collection('app').doc('verified').get().then(function (verifieddoc) {
 
+        window.verified = verifieddoc.data().verified
+
+        db.collection('users').doc(firebase.auth().currentUser.uid).collection('follow').doc("following").get().then(function (followdoc) {
+            following = followdoc.data().following
+            db.collection('posts').doc('posts').get().then(function (doc) {
+                limit = doc.data().latest
+                for (let i = 0; i < limit + 1; i++) {
+                    content = doc.data()[i]
+                    if (content == undefined) {
                     }
                     else {
-                        exarray.push({ name: elementid, data: elementdata, time: elementtime })
+                        const elementid = content.name;
+                        const elementdata = content.data
+                        const elementtime = content.timestamp
+                        if (user.uid == elementdata.uid) {
+                            fearray.push({ name: elementid, data: elementdata, time: elementtime })
+                        }
+                        for (let i = 0; i < following.length; i++) {
+                            if (following[i] == elementdata.uid) {
+                                fearray.push({ name: elementid, data: elementdata, time: elementtime })
+                            }
+                        }
+                        if (elementdata.type == 'true' || elementdata.type == true) {
+
+                        }
+                        else {
+                            exarray.push({ name: elementid, data: elementdata, time: elementtime })
+                        }
                     }
                 }
-            }
 
-            exarray.reverse()
-            fearray.reverse()
-            build(exarray)
-            buildrelevant(fearray)
+                exarray.reverse()
+                fearray.reverse()
+                build(exarray)
+                buildrelevant(fearray)
 
+            })
         })
+
     })
 }
 
@@ -101,6 +94,7 @@ function build(array) {
         time = array[i].time;
 
         z = document.createElement('div')
+        z.classList.add('shell')
         z.id = name + 'shell'
 
         document.getElementById('grid').appendChild(z)
@@ -126,6 +120,7 @@ function buildrelevant(array) {
         time = array[i].time;
 
         z = document.createElement('div')
+        z.classList.add('postshell')
         z.id = name + 'relevantshell'
 
         document.getElementById('gridrelevant').appendChild(z)
@@ -143,14 +138,31 @@ async function addcontent(name, data, time) {
         })
 
         a = document.createElement('div')
+        a.classList.add('content')
         likeFunc = "like('" + name + "')"
         commentFunc = "loadComments('" + name + "')"
         infoFunc = "info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + name + 'pfpelurl" style="width: 35px; height: 35px; object-fit: cover; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button id="' + name + 'el" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" style="; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i>0</button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons-outlined">info</i></button><button style="; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div><br></div></div> <hr>'
+        isVerified = false
+        for (let i = 0; i < verified.length; i++) {
+            if (verified[i] == data.uid) {
+                isVerified = true
+            }
+        }
+        if (isVerified) {
+            usersname = data.name + '<i id="' + name + 'verifiedelement" data-toggle="tooltip" data-placement="top" title="Verified User" class="material-icons verified">verified_user</i>'
+        }
+        else {
+            usersname = data.name
+        }
 
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button>'
         document.getElementById(name + 'shell').appendChild(a)
+        window.setTimeout(function () {
+            $('#' + name + 'verifiedelement').tooltip()
+        }, 500)
+
         addpfp(data.uid, name)
 
         if (sessionStorage.getItem('viewPost') == name) {
@@ -166,15 +178,28 @@ async function addcontent(name, data, time) {
         if (sessionStorage.getItem('fullInfo') == name) {
             fullscreen(name)
         }
-
         x = parseInt(sessionStorage.getItem('count'), 10);
         sessionStorage.setItem('count', x + 1)
 
         if (sessionStorage.getItem('count') == sessionStorage.getItem('maxCount')) {
             addWaves()
             listencomments()
+            $('#' + 'shell').imagesLoaded(function () {
+                window.setTimeout(function () {
+                    resizeAllGridItemsAll()
+                }, 1000)
+            });
             listenlikes()
             checkUrls()
+            window.setTimeout(function () {
+                document.getElementById('loading').classList.add('fadeOut')
+            }, 800)
+            window.setTimeout(function () {
+                dontshowall()
+                window.setTimeout(function () {
+                    document.getElementById('loading').style.display = 'none'
+                })
+            }, 1000)
         }
     }).catch(function (error) {
         console.log(error)
@@ -191,14 +216,32 @@ async function addcontentrelevant(name, data, time) {
         })
 
         a = document.createElement('div')
+        a.classList.add('content')
         likeFunc = "like('" + name + "')"
         commentFunc = "loadComments('" + name + "')"
         infoFunc = "info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; "><img id="' + name + 'imgelelrelevant" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.caption + '</p></center><h5 class="animated fadeInUp" style="padding: 12px; font-weight: 600"><div style="width: 100%; text-align: left; display: inline-block;"><button style="padding: 2px 12px !important" onclick="' + userFunc + '" class="waves btn-old-secondary"><img id="' + name + 'pfpelurlrelevant" style="width: 35px; height: 35px; object-fit: cover; padding: 2px; border-radius: 3000px"> ' + data.name + '</button></div> <div style="display: inline-block; width: 100%; position: absolute; top: 50%; transform: translate(0,-50%);text-align: right; right: 12px;"><button id="' + name + 'elrelevant" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i>0</button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" style="; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons-outlined">info</i></button><button style="padding; 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></h5></div><br></div></div> <hr>'
+        isVerified = false
+        for (let i = 0; i < verified.length; i++) {
+            if (verified[i] == data.uid) {
+                isVerified = true
+            }
+        }
+        if (isVerified) {
+            usersname = data.name + '<i id="' + name + 'verifiedelementrelevant" data-toggle="tooltip" data-placement="top" title="Verified User" class="material-icons verified">verified_user</i>'
+        }
+        else {
+            usersname = data.name
+        }
 
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button>'
         document.getElementById(name + 'relevantshell').appendChild(a)
+        window.setTimeout(function () {
+            $('#' + name + 'verifiedelementrelevant').tooltip()
+        }, 500)
+
+
         addpfprelevant(data.uid, name)
 
         if (sessionStorage.getItem('fullInfo') == name) {
@@ -210,6 +253,11 @@ async function addcontentrelevant(name, data, time) {
 
         if (sessionStorage.getItem('count2') == sessionStorage.getItem('maxCount2')) {
             addWaves()
+            $('#' + 'postshell').imagesLoaded(function () {
+                window.setTimeout(function () {
+                    resizeAllGridItems()
+                }, 1000)
+            });
             listenlikesrelevant()
             listencommentsrelevant()
         }
@@ -232,8 +280,8 @@ function checkUrls() {
 
 function unfullscreen() {
     sessionStorage.setItem('fullscreenon', 'no')
-    document.getElementById('fullscreenel').classList.remove('fadeIn')
-    document.getElementById('fullscreenel').classList.add('fadeOut')
+    document.getElementById('fullscreenel').classList.remove('fadeInUp')
+    document.getElementById('fullscreenel').classList.add('fadeOutDown')
     window.setTimeout(() => {
         $('#fullscreenel').remove()
         window.history.pushState(null, '', '/eonnect/app.html');
@@ -247,12 +295,11 @@ function fullscreen(id) {
     else {
         a = document.createElement('div')
         a.id = 'fullscreenel'
-        a.style = "width: 100%; height: 100%; background-color: black; top: 0px; left: 0px; position: fixed; z-indeX: 40000"
-        source = document.getElementById(id + 'imgelel').src
-        a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-old-primary animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">exit_to_app</i></button>'
+        a.classList.add('fullscreenelement')
         a.classList.add('animated')
-        a.classList.add('faster')
-        a.classList.add('fadeIn')
+        a.classList.add('fadeInUp')
+        source = document.getElementById(id + 'imgelel').src
+        a.innerHTML = '<img class="fullscreenimageelement centered" src="' + source + '"> <button onclick="unfullscreen()" class="fullscreenbutton centeredx "><i class="material-icons">fullscreen_exit</i></button>'
         document.getElementById('body').appendChild(a)
         window.history.pushState(null, '', '/eonnect/app.html?fullscreen=' + id);
         addWaves()
@@ -269,7 +316,7 @@ function fullscreenrelevant(id) {
         a.id = 'fullscreenel'
         a.style = "width: 100%; height: 100%; background-color: black; top: 0px; left: 0px; position: fixed; z-indeX: 40000"
         source = document.getElementById(id + 'imgelelrelevant').src
-        a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-old-primary animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons-outlined">exit_to_app</i></button>'
+        a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-old-primary animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons">exit_to_app</i></button>'
         a.classList.add('animated')
         a.classList.add('faster')
         a.classList.add('fadeIn')
@@ -305,7 +352,7 @@ function loadComments(id) {
             a.classList.add('fadeIn')
             reportFunc = "reportComment('" + doc.id + "')"
             userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
-            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><a class="userlinkoncomment" onclick="' + userFunc33 + '" >' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
+            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><a class="userlinkoncomment" onclick="' + userFunc33 + '" >' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button></div></div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
             addpfpcomment(element.user, i)
@@ -318,6 +365,9 @@ function loadComments(id) {
 }
 
 function like(id) {
+
+
+
     sessionStorage.setItem('skiponce2', "true")
     db.collection('posts').doc('likes').get().then(function (doc) {
         alreadyliked = false
@@ -329,15 +379,65 @@ function like(id) {
             }
         }
 
-        if (alreadyliked == true) {
-            db.collection('posts').doc('likes').update({
-                [id]: firebase.firestore.FieldValue.arrayRemove(user.uid)
-            })
+        if (doc.data()[id][0] == user.uid) {
+            Snackbar.show({ text: 'You cannot remove like on your own post.' })
         }
+
         else {
-            db.collection('posts').doc('likes').update({
-                [id]: firebase.firestore.FieldValue.arrayUnion(user.uid)
-            })
+
+            if (alreadyliked == true) {
+                db.collection('posts').doc('likes').update({
+                    [id]: firebase.firestore.FieldValue.arrayRemove(user.uid)
+                })
+                try {
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'elicon').classList.add('rubberBand')
+                    }, 500)
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'elicon').classList.remove('rubberBand')
+                    }, 1300)
+                } catch {
+
+                }
+                try {
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eliconrelevant').classList.add('rubberBand')
+                    }, 500)
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eliconrelevant').classList.remove('rubberBand')
+                    }, 1300)
+                } catch {
+
+                }
+            }
+            else {
+                db.collection('posts').doc('likes').update({
+                    [id]: firebase.firestore.FieldValue.arrayUnion(user.uid)
+                })
+                try {
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'elicon').classList.add('jello')
+                    }, 500)
+
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'elicon').classList.remove('jello')
+                    }, 1300)
+                } catch {
+                }
+
+                try {
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eliconrelevant').classList.add('jello')
+                    }, 500)
+
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eliconrelevant').classList.remove('jello')
+                    }, 1300)
+                } catch {
+
+                }
+
+            }
         }
     })
 }
@@ -385,11 +485,11 @@ async function addstuffuser(name, data, time) {
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
 
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; padding-bottom: 12px;"><img id="' + name + 'imgelelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.data.caption + '</p><center><button id="' + name + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons-outlined">info</i></button><button style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons-outlined">fullscreen</i></button><br></div></div><br></center><br></div> <hr>'
+        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; padding-bottom: 12px;"><img id="' + name + 'imgelelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.data.caption + '</p><center><button id="' + name + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">info</i></button><button style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons">fullscreen</i></button><br></div></div><br></center><br></div> <hr>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
-            document.getElementById(name + "commentEluser").innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + bambam
+            document.getElementById(name + "commentEluser").innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + bambam
         })
         addWaves()
 
@@ -637,7 +737,7 @@ function refreshcomments(id) {
             a.classList.add('animated')
             a.classList.add('fadeIn')
             reportFunc = "reportComment('" + doc.id + "')"
-            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons-outlined">report_problem</i></button></div></div>'
+            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button></div></div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
             addpfpcomment(element.user, i)
@@ -672,7 +772,12 @@ function listencomments() {
 
             }
             else {
-                document.getElementById(i + 'commentEl').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + doc.data()[i].length
+                try {
+                    document.getElementById(i + 'commentEl').innerHTML = '<i class="material-icons posticon">chat_bubble_outline</i> ' + doc.data()[i].length
+                }
+                catch {
+
+                }
                 addWaves()
             }
         }
@@ -690,7 +795,7 @@ function listencommentsrelevant() {
             }
             else {
 
-                document.getElementById(i + 'commentElrelevant').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">comment</i> ' + doc.data()[i].length
+                document.getElementById(i + 'commentElrelevant').innerHTML = '<i class="material-icons posticon">chat_bubble_outline</i> ' + doc.data()[i].length
                 addWaves()
             }
         }
@@ -716,7 +821,6 @@ function addpfp(uid, docid) {
 
 function listenlikes() {
     db.collection("posts").doc('likes').onSnapshot(function (doc) {
-
         for (let i = 0; i < doc.data().latest + 1; i++) {
             if (doc.data()[i] == undefined) {
             }
@@ -731,12 +835,25 @@ function listenlikes() {
                 }
 
                 if (isliked) {
+                    try {
+                        document.getElementById(i + 'el').innerHTML = '<i id="' + i + 'elicon" style="color: red;" class="material-icons posticon animated">favorite</i> ' + doc.data()[i].length
+                    } catch {
 
-                    document.getElementById(i + 'el').innerHTML = '<i style="display: inline-block; color: red; padding: 3px;" class="material-icons animated jello">favorite</i> ' + doc.data()[i].length
+                    }
+
                 }
                 else {
+                    try {
+                        if (doc.data()[i].length == 0) {
+                            document.getElementById(i + 'el').innerHTML = '<i id="' + i + 'elicon" class="material-icons posticon animated">favorite_border</i> '
+                        }
+                        else {
+                            document.getElementById(i + 'el').innerHTML = '<i id="' + i + 'elicon" class="material-icons posticon animated">favorite_border</i> ' + doc.data()[i].length
+                        }
 
-                    document.getElementById(i + 'el').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons animated rubberBand">favorite_border</i> ' + doc.data()[i].length
+                    } catch {
+                    }
+
                 }
                 addWaves()
             }
@@ -763,11 +880,17 @@ function listenlikesrelevant() {
 
                 if (isliked) {
 
-                    document.getElementById(i + 'elrelevant').innerHTML = '<i style="display: inline-block; color: red; padding: 3px;" class="material-icons animated jello">favorite</i> ' + doc.data()[i].length
+                    document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" style=" color: red;" class="material-icons posticon animated">favorite</i> ' + doc.data()[i].length
+
                 }
                 else {
+                    if (doc.data()[i].length == 0) {
+                        document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> '
+                    }
+                    else {
+                        document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> ' + doc.data()[i].length
+                    }
 
-                    document.getElementById(i + 'elrelevant').innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons animated rubberBand">favorite_border</i> ' + doc.data()[i].length
                 }
                 addWaves()
             }
@@ -895,7 +1018,7 @@ function addpostslistener() {
         }
         else {
             if (localStorage.getItem('currentab') == 'explore') {
-                Snackbar.show({ pos: 'bottom-left', text: "Posts have been modified.", onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: "refresh" })
+                Snackbar.show({ pos: 'bottom-left', text: "Posts have been modified.", onActionClick: function (element) { $(element).css('opacity', 0); refreshhome() }, actionText: "refresh" })
             };
         };
     });
@@ -966,4 +1089,110 @@ function unrequest(uid, name) {
             follow(uid, username)
         }
     })
+}
+
+$("#imgInp").change(function () {
+    input = this
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#blah').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    document.getElementById('blah').style.display = 'block'
+    document.getElementById('captionel').style.display = 'block'
+    document.getElementById('captionelel').style.display = 'block'
+});
+
+function newpost() {
+    var caption = document.getElementById('captioninput').value
+    if (caption == '' || caption == " " || caption == null) {
+        error('You must include a caption.')
+        $('#uploadmodal').modal('toggle')
+    }
+    else {
+        if (document.getElementById('captioninput').value.length > 50) {
+            error('Caption contains more than 50 characters.')
+            $('#uploadmodal').modal('toggle')
+        }
+        else {
+
+            document.getElementById('captioninput').value = ''
+
+            var storageRef = firebase.storage().ref();
+            var file = document.getElementById('imgInp').files[0]
+
+            filenoext = file.name.replace(/\.[^/.]+$/, "")
+            ext = file.name.split('.').pop();
+            valuedate = new Date().valueOf()
+            filename = filenoext + valuedate + '.' + ext
+
+            var fileRef = storageRef.child('users/' + user.uid + '/' + filename);
+
+            db.collection('posts').doc('posts').get().then(function (doc) {
+                num = doc.data().latest
+                newnum = num + 1
+
+                fileRef.put(file).then(function (snapshot) {
+                    db.collection('posts').doc('posts').update({
+                        [newnum]: {
+                            name: newnum,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            data: {
+                                caption: caption,
+                                likes: ['first'],
+                                file: filename,
+                                name: user.displayName,
+                                type: document.getElementById('privateinp').checked,
+                                uid: user.uid,
+                            }
+                        },
+                        latest: newnum
+                    })
+                    db.collection('posts').doc('comments').update({
+                        [newnum]: [],
+                        latest: newnum
+                    })
+                    db.collection('posts').doc('likes').update({
+                        [newnum]: firebase.firestore.FieldValue.arrayUnion(user.uid),
+                        latest: newnum
+                    })
+                    db.collection('posts').doc('reported').update({
+                        latest: newnum
+                    }).then(function () {
+                        Snackbar.show({ text: 'Your photo was uploaded.' })
+                        document.getElementById('captionel').style.display = 'none'
+                        document.getElementById('blah').style.display = 'none'
+                        document.getElementById('captionel').style.display = 'none'
+
+                        refreshhome()
+
+
+
+                    });
+                });
+            })
+        };
+    };
+}
+
+function refreshhome() {
+    document.getElementById('grid').classList.remove('fadeIn')
+    document.getElementById('gridrelevant').classList.remove('fadeIn')
+    document.getElementById('grid').classList.add('fadeOut')
+    document.getElementById('gridrelevant').classList.add('fadeOut')
+    window.setTimeout(function () {
+        document.getElementById('gridrelevant').style.display = 'none'
+        document.getElementById('grid').style.display = 'block'
+        load()
+    }, 1000)
+    window.setTimeout(resizeAllGridItems(), 1500)
+    window.setTimeout(function () {
+        document.getElementById('grid').classList.add('fadeIn')
+        document.getElementById('gridrelevant').classList.add('fadeIn')
+        document.getElementById('grid').classList.remove('fadeOut')
+        document.getElementById('gridrelevant').classList.remove('fadeOut')
+    }, 1000)
+
 }

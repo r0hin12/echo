@@ -542,3 +542,5 @@ function loadcredits() {
     $('#creditsmodal').modal('toggle')
     document.getElementById('namegoeshereyourwelcome').innerHTML = 'Thanks to you, ' + user.displayName + ', for using Eonnect!'
 }
+
+

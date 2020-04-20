@@ -11,7 +11,7 @@
         <!---==== CSS ====-->
         <!-- Eon Styles --><link rel="stylesheet" href="https://rohinarya12.github.io/eonstyles/new/eon.css">
         <!-- Animate --> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-        <!-- Material Icons --><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> 
+        <!-- Material Icons --><link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
         <!-- Baloo Paaji 2 Font--><link href="https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400;500;600&display=swap" rel="stylesheet">
         <!-- Dameonite / Bootstrap--><link rel="stylesheet" href="daemonite/material.min.css">
         <!-- Waves --><link rel="stylesheet" href="daemonite/waves.min.css">
@@ -20,85 +20,97 @@
         <!-- Eonnect Base --> <link rel="stylesheet" href="css/eonnect.css">
         <!-- App --> <link rel="stylesheet" href="css/app.css">
         <!-- Search --> <link rel="stylesheet" href="css/search.css">
+        <!-- Spinner --> <link rel="stylesheet" href="css/spinner.css">
+        <!-- Form --> <link rel="stylesheet" href="css/form.css">
 
 
     </head>
-    
     <body id="body">
         <!-- Preflight Modals-->
 
-        <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="waves btn-old-text" data-dismiss="modal">dismiss</button></div></div></div></div>
+        <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header"><h3>Error</h3></div><h5 id="erorrModalMsg" class="modal-body">Unable to complete process.</h5><div class="modal-footer"><button type="button" class="eon-text" data-dismiss="modal">dismiss</button></div></div></div></div>
         <div style="z-index: 20000049108509173268563785623467823478623478278997819871982498714;" class="modal fade bd-example-modal-sm" id="eonloaderelement" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-sm modal-dialog-centered" role="document"><div style="display: inline-block; border-radius: 400px; width: 150px" class="modal-content centered"><div class="modal-body"><center><div class="progress-circular"><div class="progress-circular-wrapper"><div class="progress-circular-inner"><div class="progress-circular-left"><div class="progress-circular-spinner"></div></div><div class="progress-circular-gap"></div><div class="progress-circular-right"><div class="progress-circular-spinner"></div></div></div></div></div></center></div></div></div></div>
+        <!-- Button trigger modal -->
+  
+        <!-- Modal -->
+        <div class="modal fade bd-example-modal-lg" id="uploadmodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content">
+            <div class="modal-body">
+                <center><h2>Oh, another photo huh?</h2>
+                <br><br>
+                <button onclick="document.getElementById('imgInp').click()" class="waves eon-outlined">Select Image</button>
+                </center>
+
+                <input accept='image/*' style="display: none;" type='file' id="imgInp" />
+                
+                <center style="display: none; " id="captionelel">
+                <br><br>
+                <img class="shadow-sm animated fadeIn uploadpreview" id="blah" src="#" alt="your image" />
+                <div id="captionel" style="display: none;" class="textfield-box animated fadeInUp">
+                    <label class="mb-2 imagepreviewtext" for="captioninput">Image Preview</label>
+                    <input class="form-control" id="captioninput" placeholder="Add a Caption" type="text">
+                </div>
+                <br>
+               
+                <input class="checkbox" type="checkbox" id="privateinp" style="display: none;">
+                <label for="privateinp" class="check">
+                  <svg width="18px" height="18px" viewBox="0 0 18 18">
+                    <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z"></path>
+                    <polyline points="1 9 7 14 15 4"></polyline>
+                  </svg>
+                </label>
+                <p class="checklabel">Private Post <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Private Post" data-content="Private posts are only visible to your followers. Turn on follow requests in your account settings."><i class="material-icons smallicon">info</i></a></p>
+            
+                <br><br>
+
+                <button onclick="newpost()" type="button" class="waves eon-text" data-dismiss="modal">upload</button>
+
+            </div>
+        </div></div></div>
+
+
 
     <!-- ===========================--] Content [=================================== -->
         
     <div class="main">
     <div id="sidebar">
-
-        <center><img src="assets/logo.png" id="mainLogo" alt=""><h3 id="logoSupportingText">Eonnect</h3></center>
-
-    <br><br><br><br>
-
+    <center><img src="assets/logo.png" id="mainLogo" alt=""><h3 id="logoSupportingText">Eonnect</h3></center><br><br><br><br>
     <center>
-        <img class="avatar main-avatar" src="https://ir.ebaystatic.com/pictures/ca/covid/DOORWAY-1.jpg">
-    <br><br>
+
+    <img class="avatar main-avatar" src="https://ir.ebaystatic.com/pictures/ca/covid/DOORWAY-1.jpg"><br><br>
     <h4 id="sidebarname">Rohin Arya</h4>
     <h5 id="sidebarusername">@eon</h5>
     <br><br>
-
     <div class="scrollable">
-
-    <div class="vertical-content" style="padding: 10px; display: inline-block;">
-
-    <p class="stats-primary">2M</p>
-    <h6 class="stats-secondary">Posts</h6>
-
-
-    </div>
-
-    <div class="vertical-divider"></div>
-
-    <div class="vertical-content" style="padding: 10px; display: inline-block;">
-        <p class="stats-primary">200k</p>
-        <h6 class="stats-secondary">Followers</h6>
+        <div class="vertical-content" style="padding: 10px; display: inline-block;">
+            <p class="stats-primary">2M</p>
+            <h6 class="stats-secondary">Posts</h6>
         </div>
-
-    <div class="vertical-divider"></div>
-
-    <div class="vertical-content" style="padding: 10px; display: inline-block;">
-        <p class="stats-primary">25M</p>
-        <h6 class="stats-secondary">Following</h6>
+        <div class="vertical-divider"></div>
+        <div class="vertical-content" style="padding: 10px; display: inline-block;">
+            <p class="stats-primary">200k</p>
+            <h6 class="stats-secondary">Followers</h6>
+        </div>
+        <div class="vertical-divider"></div>
+        <div class="vertical-content" style="padding: 10px; display: inline-block;">
+            <p class="stats-primary">25M</p>
+            <h6 class="stats-secondary">Following</h6>
+        </div>
     </div>
 
-    </div>
     </center>
 
     <div style="padding: 12px;" class="nav" id="justifiedTab" role="tablist">
-
         <a onclick="tabe('home')" aria-controls="home" aria-selected="true" data-toggle="tab" href="#home" id="home-tab" role="tab" class="waves-effect waves-button navbarbutton">
         <i id="home-icon" class="material-icons centeredy iconinactive">whatshot</i> <h4 id="home-text" class="navbarbuttontext">Home</h4>
         </a>
-        <br>
-
-        
-
-
-
     </div>             
 
-
-
-
     </div>
-
 
     <div id="expand" class="eonnect-main-unexpanded">
         <div class="tab-content" id="justifiedTabContent">
             <div aria-labelledby="home-tab" class="tab-pane fade" id="home" role="tabpanel">
-
-
                 <nav class="navbar navbar-expand-sm">  
-
                     <form class="search-container">
                         <input id="search-box" type="text" class="search-box" name="q" />
                         <label for="search-box"><i class="search-icon material-icons">search</i></label>
@@ -107,11 +119,8 @@
 
                     <ul class="navbar-nav mr-auto">
                     </ul>
-                    <button class="btn-hover color-4">
-                        <i class="material-icons">add</i>
-                        Add Photo</button>
+                    <button data-toggle="modal" data-target="#uploadmodal" class="btn-hover color-4"><i class="material-icons">add</i>Add Photo</button>
                 </nav>
-
 
     <hr class="hr">
 
@@ -124,22 +133,28 @@
         </div>
     </div>
 
-    <div id="grid"></div>
   <br><br>
 
-<div class="grid animated fadeIn" id="gridrelevant"></div>
+<div style="display: none;" class="grid animated fadeIn" id="gridrelevant"></div>
 
 <div style="display: none" id="norelevantstuff">
-
-nothing exists
-
-</div>
-<div class="grid animated fadeIn" id="grid">
-
+    nothing exists
 </div>
 
+<div style="display: none;" class="grid animated fadeIn" id="grid">
+
+</div>
+
+<div class="animated faster" id="loading"><center><div class="spinner"></div><br><br></center></div>
 
             </div>
+
+         
+            
+
+
+
+            
         </div>
     </div>
 </div>
@@ -159,6 +174,7 @@ nothing exists
         <!-- Daemonite --><script src="daemonite/material.min.js"></script>
         <!-- Waves --><script src="daemonite/waves.min.js"></script><script>addWaves();function addWaves(){ Waves.attach('.eon-contained', ['waves-button', 'waves-light']);Waves.attach('.eon-outlined', ['waves-button']);Waves.attach('.eon-text', ['waves-button']);var config = {duration: 250}; Waves.init(config);}</script>
         <!-- Snackbar --><script src="daemonite/snackbar.min.js"></script><style>.snackbar-container {padding-top: 8px !important;padding-bottom: 8px !important;border-radius: 8px !important;max-width: 8723789253786352614975678392738649502976483528059748327952px;}</style>
+        <!-- Images Loaded--><script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
         <!-- Firebase Variables --> <script src="js/firebase.js"></script>
         <!-- Display --> <script src="js/display.js"></script>

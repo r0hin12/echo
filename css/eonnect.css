@@ -1,8 +1,10 @@
 :root {
     --bg-primary: #282A34;
     --bg-secondary: #3C3F51;
+    --bg-tertiary: #191a22;
+    --bg-quaternary: #17181f;
     --eon-primary: #E2336B;
-    --eon-secondary: #FCAC46;
+    --eon-secondary: #fcad45;
     --content-primary: #fff;
     --content-secondary: #c8c8c8;
     --contrast-primary: #000;
