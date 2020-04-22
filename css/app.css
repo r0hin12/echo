@@ -25,6 +25,7 @@ custom-control-label::before {
     background-color: var(--bg-secondary);
     color: var(--content-primary);
     border-radius: 15px 0px 0px 15px;
+
 }
 
 .eonnect-main-expanded {
@@ -42,6 +43,7 @@ custom-control-label::before {
     width: 275px;
     padding-top: 16px;
     position: fixed;
+    border-radius: 0px 12px 12px 0px;
 }
 
 .avatar {
@@ -142,6 +144,8 @@ width: 90%;
     padding: 6px;
     padding-left: 12px;
     text-align: left;
+    z-index: auto;
+
 }
 .navbarbutton:hover {
     width: 100%;
@@ -243,6 +247,7 @@ width: 90%;
 .grid {
 
     display: grid;
+    justify-items: center;
     grid-gap: 0px;
     grid-template-columns: repeat(auto-fill, minmax(350px,1fr));
     grid-auto-rows: 40px;
@@ -265,7 +270,10 @@ width: 90%;
 }
 
 .postimage {
-    border-radius: 18px; width: 100%; max-height: 800px; object-fit: cover
+    border-radius: 18px; 
+    width: 100%; 
+    max-height: 800px; 
+    object-fit: cover
 }
 
 .navbar {
@@ -330,6 +338,7 @@ width: 90%;
 .postfullscreen {
     position: absolute;
     z-index: 10;
+    cursor: pointer;
     right: 38px;
     top: 8px;
     color: rgb(255, 255, 255);
@@ -352,7 +361,7 @@ width: 90%;
 .fullscreenelement {
     width: 100%; 
     height: 100%; 
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(30px);
     top: 0px; 
     left: 0px; 
     position: fixed; 
@@ -367,8 +376,9 @@ width: 90%;
 .fullscreenbutton {
     top: 24px;
     padding-top: 4px;
-    color: grey;
+    color: rgb(255, 255, 255);
     font-size: 18px;
+    cursor: pointer;
     background: rgb(0, 0, 0, 0.3);
     border-radius: 18px !important;
     border: 0px;
@@ -386,6 +396,7 @@ width: 90%;
     background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
     padding: 6px;
     font-size: 24px;
+    margin-top: -15px;
     
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; 
@@ -419,4 +430,49 @@ width: 90%;
     font-size: 24px;
     color: var(--content-secondary);
     cursor: pointer;
+}
+
+.list-group-item {
+    background-color: var(--bg-secondary);
+    color: var(--content-primary);
+}
+
+.list-group-item:hover {
+    background-color: var(--bg-secondary);
+    color: var(--content-primary);
+}
+
+.expand-btn {
+    left: 8px; 
+    z-index: 2000;
+    position: absolute;
+
+    border-radius: 12px;
+    border: 0px;
+    color: white;
+    padding-top: 6px;
+    background-image: linear-gradient(135deg, var(--eon-primary), var(--eon-secondary));
+}
+
+.collapse-btn {
+    left: 277px; 
+    z-index: 2000;
+    position: absolute;
+
+    border-radius: 12px;
+    border: 0px;
+    color: white;
+    padding-top: 6px;
+    background-image: linear-gradient(135deg, var(--eon-primary), var(--eon-secondary));
+}
+
+.buttonunexpanded {
+    width: 0px;
+}
+
+.buttonexpanded {
+    width: 300px !important;
+    z-index: 400;
+    background-color: var(--bg-primary);
+    height: 100%;
 }

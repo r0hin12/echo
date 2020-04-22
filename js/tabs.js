@@ -12,6 +12,12 @@ $(window).ready(function () {
     tab = urlParams.get('tab')
 
     if (tab == null || tab == undefined) {
+
+        urlParams = new URLSearchParams(window.location.search);
+        sessionStorage.setItem('viewPost', urlParams.get('post'))
+        sessionStorage.setItem('viewInfo', urlParams.get('info'))
+        sessionStorage.setItem('fullInfo', urlParams.get('fullscreen'))
+        checkUrls()
         tabe("home")
     }
     else {
@@ -24,6 +30,8 @@ $(window).ready(function () {
 function tabe(tab) {
     //sessionStorage.setItem("currentviewingdm", 'not')
     //unshowdm()
+
+    sessionStorage.setItem("currentab", tab)
     $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })
     $('#justifiedTab').children('i').each(function () { this.classList.remove('iconactive'); })
     $('#justifiedTab').children('h4').each(function () { this.classList.remove('navbarbuttontextactive'); })

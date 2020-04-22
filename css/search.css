@@ -2,6 +2,7 @@
   -webkit-transition: width 0.6s, border-radius 0.6s, background 0.6s, box-shadow 0.6s;
   transition: width 0.6s, border-radius 0.6s, background 0.6s, box-shadow 0.6s;
   width: 40px;
+  color: var(--contrast-primary) !important;
   height: 40px;
   border-radius: 20px;
   background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
@@ -11,7 +12,7 @@
   background: var(--content-primary);
 }
 .search-box + label .search-icon {
-  color: var(--contrast-primary);
+  color: var(--contrast-primary) !important;
 }
 .search-box:hover {
   color: var(--content-primary);

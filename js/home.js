@@ -9,24 +9,20 @@ function showall() {
     document.getElementById('dropdownMenuButton1').innerHTML = 'Showing All Posts <i class="material-icons">keyboard_arrow_down</i>'
 
     document.getElementById('gridrelevant').style.display = 'none'
-    document.getElementById('grid').style.display = 'grid'
+    document.getElementById('grid').style.removeProperty('display');
     resizeAllGridItemsAll()
 }
 
 function dontshowall() {
     document.getElementById('dropdownMenuButton1').innerHTML = 'Showing Relevant Posts <i class="material-icons">keyboard_arrow_down</i>'
 
-    document.getElementById('gridrelevant').style.display = 'grid'
+    document.getElementById('gridrelevant').style.removeProperty('display');
     document.getElementById('grid').style.display = 'none'
     resizeAllGridItems()
 }
-
-
 urlParams = new URLSearchParams(window.location.search);
-sessionStorage.setItem('viewPost', urlParams.get('post'))
-sessionStorage.setItem('viewInfo', urlParams.get('info'))
-sessionStorage.setItem('fullInfo', urlParams.get('fullscreen'))
 addpostslistener()
+sessionStorage.setItem('fullscreenon', 'no')
 sessionStorage.setItem('viewing', 'stoplookinghere')
 sessionStorage.setItem('currentlyviewinguser', 'uwu')
 
@@ -175,9 +171,6 @@ async function addcontent(name, data, time) {
             info(name)
         }
 
-        if (sessionStorage.getItem('fullInfo') == name) {
-            fullscreen(name)
-        }
         x = parseInt(sessionStorage.getItem('count'), 10);
         sessionStorage.setItem('count', x + 1)
 
@@ -190,7 +183,6 @@ async function addcontent(name, data, time) {
                 }, 1000)
             });
             listenlikes()
-            checkUrls()
             window.setTimeout(function () {
                 document.getElementById('loading').classList.add('fadeOut')
             }, 800)
@@ -220,7 +212,7 @@ async function addcontentrelevant(name, data, time) {
         likeFunc = "like('" + name + "')"
         commentFunc = "loadComments('" + name + "')"
         infoFunc = "info('" + name + "')"
-        fullFunc = "fullscreen('" + name + "')"
+        fullFunc = "fullscreenrelevant('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
         isVerified = false
         for (let i = 0; i < verified.length; i++) {
@@ -244,10 +236,6 @@ async function addcontentrelevant(name, data, time) {
 
         addpfprelevant(data.uid, name)
 
-        if (sessionStorage.getItem('fullInfo') == name) {
-            fullscreen(name)
-        }
-
         x = parseInt(sessionStorage.getItem('count2'), 10);
         sessionStorage.setItem('count2', x + 1)
 
@@ -268,17 +256,53 @@ async function addcontentrelevant(name, data, time) {
 }
 
 function checkUrls() {
-    var post = urlParams.get('user');
-
-    if (post == null || post == " " || post == "") {
-
+    var post = sessionStorage.getItem('viewPost')
+    if (post == "null" || post == " " || post == "") {
     }
     else {
         usermodal(post)
     }
+
+    var fullscreen = sessionStorage.getItem('fullInfo')
+    if (fullscreen == "null" || fullscreen == " " || fullscreen == "") {
+
+    }
+    else {
+        dbfullscreen(fullscreen)
+    }
+    var viewInfo = sessionStorage.getItem('viewInfo')
+    if (viewInfo == 'null' || fullscreen == " " || fullscreen == "") {
+
+    }
+    else {
+        info(viewInfo)
+    }
+
+}
+
+function dbfullscreen(id) {
+    $('body').css('overflow', 'hidden');
+
+    db.collection('posts').doc('posts').get().then(function (doc) {
+
+        a = document.createElement('div')
+        a.id = 'fullscreenel'
+        a.classList.add('fullscreenelement')
+        a.classList.add('animated')
+        a.classList.add('fadeInUp')
+        source = doc.data()[id].data.url
+        a.innerHTML = '<img class="fullscreenimageelement centered" src="' + source + '"> <button onclick="unfullscreen()" class="fullscreenbutton centeredx "><i class="material-icons">fullscreen_exit</i></button>'
+        document.getElementById('body').appendChild(a)
+        window.history.pushState(null, '', '/eonnect/app.html?fullscreen=' + id);
+        addWaves()
+        sessionStorage.setItem('fullscreenon', 'yes')
+
+    })
 }
 
 function unfullscreen() {
+    $('body').css('overflow', 'auto');
+
     sessionStorage.setItem('fullscreenon', 'no')
     document.getElementById('fullscreenel').classList.remove('fadeInUp')
     document.getElementById('fullscreenel').classList.add('fadeOutDown')
@@ -288,6 +312,27 @@ function unfullscreen() {
     }, 700);
 }
 function fullscreen(id) {
+    $('body').css('overflow', 'hidden');
+
+    if (sessionStorage.getItem('fullscreenon') == 'yes') {
+        sessionStorage.setItem('fullscreenon', 'no')
+        console.log('duplicate fullscreen avoided');
+    }
+
+    a = document.createElement('div')
+    a.id = 'fullscreenel'
+    a.classList.add('fullscreenelement')
+    a.classList.add('animated')
+    a.classList.add('fadeInUp')
+    source = document.getElementById(id + 'imgelel').src
+    a.innerHTML = '<img class="fullscreenimageelement centered" src="' + source + '"> <button onclick="unfullscreen()" class="fullscreenbutton centeredx "><i class="material-icons">fullscreen_exit</i></button>'
+    document.getElementById('body').appendChild(a)
+    window.history.pushState(null, '', '/eonnect/app.html?fullscreen=' + id);
+    addWaves()
+    sessionStorage.setItem('fullscreenon', 'yes')
+}
+function fullscreenrelevant(id) {
+    $('body').css('overflow', 'hidden');
     if (sessionStorage.getItem('fullscreenon') == 'yes') {
         sessionStorage.setItem('fullscreenon', 'no')
         console.log('duplicate fullscreen avoided');
@@ -298,28 +343,8 @@ function fullscreen(id) {
         a.classList.add('fullscreenelement')
         a.classList.add('animated')
         a.classList.add('fadeInUp')
-        source = document.getElementById(id + 'imgelel').src
-        a.innerHTML = '<img class="fullscreenimageelement centered" src="' + source + '"> <button onclick="unfullscreen()" class="fullscreenbutton centeredx "><i class="material-icons">fullscreen_exit</i></button>'
-        document.getElementById('body').appendChild(a)
-        window.history.pushState(null, '', '/eonnect/app.html?fullscreen=' + id);
-        addWaves()
-        sessionStorage.setItem('fullscreenon', 'yes')
-    }
-}
-function fullscreenrelevant(id) {
-    if (sessionStorage.getItem('fullscreenon') == 'yes') {
-        sessionStorage.setItem('fullscreenon', 'no')
-        console.log('duplicate fullscreen avoided');
-    }
-    else {
-        a = document.createElement('div')
-        a.id = 'fullscreenel'
-        a.style = "width: 100%; height: 100%; background-color: black; top: 0px; left: 0px; position: fixed; z-indeX: 40000"
         source = document.getElementById(id + 'imgelelrelevant').src
-        a.innerHTML = '<img src="' + source + '" style="max-width:100%; max-height:100%; position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);"> <button onclick="unfullscreen()" class="waves btn-old-primary animated pulse infinite faster" style="position: absolute; top: 5px; left: 5px"><i class="material-icons">exit_to_app</i></button>'
-        a.classList.add('animated')
-        a.classList.add('faster')
-        a.classList.add('fadeIn')
+        a.innerHTML = '<img class="fullscreenimageelement centered" src="' + source + '"> <button onclick="unfullscreen()" class="fullscreenbutton centeredx "><i class="material-icons">fullscreen_exit</i></button>'
         document.getElementById('body').appendChild(a)
         window.history.pushState(null, '', '/eonnect/app.html?fullscreen=' + id);
         addWaves()
@@ -351,7 +376,7 @@ function loadComments(id) {
             a.classList.add('animated')
             a.classList.add('fadeIn')
             reportFunc = "reportComment('" + doc.id + "')"
-            userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
+            userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#postmodal').modal('toggle')"
             a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><a class="userlinkoncomment" onclick="' + userFunc33 + '" >' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button></div></div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
@@ -361,7 +386,7 @@ function loadComments(id) {
     })
 
     history.pushState(null, "", "?post=" + id)
-    $('#commentModal').modal('toggle')
+    $('#postmodal').modal('toggle')
 }
 
 function like(id) {
@@ -449,7 +474,7 @@ function addComment(id) {
     }
     else {
         if (document.getElementById('commentbox').value.length > 200) {
-            $('#commentModal').modal('toggle')
+            $('#postmodal').modal('toggle')
             error('Too many characters. The limit is 200.')
         }
         else {
@@ -950,7 +975,7 @@ function updatechars() {
 
 }
 
-$('#commentModal').on('hidden.bs.modal', function () {
+$('#postmodal').on('hidden.bs.modal', function () {
     if (sessionStorage.getItem('skiponce123') == "true") {
         sessionStorage.setItem('skiponce123', "false")
     }
@@ -1112,8 +1137,8 @@ function newpost() {
         $('#uploadmodal').modal('toggle')
     }
     else {
-        if (document.getElementById('captioninput').value.length > 50) {
-            error('Caption contains more than 50 characters.')
+        if (document.getElementById('captioninput').value.length > 100) {
+            error('Caption contains more than 100 characters.')
             $('#uploadmodal').modal('toggle')
         }
         else {
@@ -1135,21 +1160,26 @@ function newpost() {
                 newnum = num + 1
 
                 fileRef.put(file).then(function (snapshot) {
-                    db.collection('posts').doc('posts').update({
-                        [newnum]: {
-                            name: newnum,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                            data: {
-                                caption: caption,
-                                likes: ['first'],
-                                file: filename,
-                                name: user.displayName,
-                                type: document.getElementById('privateinp').checked,
-                                uid: user.uid,
-                            }
-                        },
-                        latest: newnum
+
+                    fileRef.getDownloadURL().then(function (url) {
+                        db.collection('posts').doc('posts').update({
+                            [newnum]: {
+                                name: newnum,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                data: {
+                                    caption: caption,
+                                    likes: ['first'],
+                                    url: url,
+                                    file: filename,
+                                    name: user.displayName,
+                                    type: document.getElementById('privateinp').checked,
+                                    uid: user.uid,
+                                }
+                            },
+                            latest: newnum
+                        })
                     })
+
                     db.collection('posts').doc('comments').update({
                         [newnum]: [],
                         latest: newnum
@@ -1162,6 +1192,7 @@ function newpost() {
                         latest: newnum
                     }).then(function () {
                         Snackbar.show({ text: 'Your photo was uploaded.' })
+                        $('#uploadmodal').modal('toggle')
                         document.getElementById('captionel').style.display = 'none'
                         document.getElementById('blah').style.display = 'none'
                         document.getElementById('captionel').style.display = 'none'
