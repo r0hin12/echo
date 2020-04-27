@@ -134,7 +134,7 @@ function toggle() {
 
 
 function disablegrid() {
-    document.getElementById('togglegrid').innerHTML = '.grid {display: block; width: 80%} .postshell {width: 100% !important;} .shell {width: 100% !important;} .postimage {max-height: 2400px !important;}'
+    document.getElementById('togglegrid').innerHTML = '.grid {display: block !important; width: 80% !important} .postshell {width: 100% !important;} .shell {width: 100% !important;} .postimage {max-height: 2400px !important;}'
     document.getElementById('containerhometab').classList.add('animated')
     document.getElementById('containerhometab').classList.add('fadeIn')
     document.getElementById('gridbtn').onclick = function () {

@@ -49,8 +49,11 @@ function load() {
 
         window.verified = verifieddoc.data().verified
 
-        db.collection('users').doc(firebase.auth().currentUser.uid).collection('follow').doc("following").get().then(function (followdoc) {
+        db.collection('users').doc(firebase.auth().currentUser.uid).get().then(function (followdoc) {
             following = followdoc.data().following
+            if (following == undefined) {
+                following = []
+            }
             db.collection('posts').doc('posts').get().then(function (doc) {
                 limit = doc.data().latest
                 for (let i = 0; i < limit + 1; i++) {
@@ -162,7 +165,7 @@ async function addcontent(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button>'
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button><hr>'
         document.getElementById(name + 'shell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelement').tooltip()
@@ -174,10 +177,6 @@ async function addcontent(name, data, time) {
             sessionStorage.setItem('skiponce', 'true')
             sessionStorage.setItem('skiponce3', 'true')
             loadComments(name)
-        }
-
-        if (sessionStorage.getItem('viewInfo') == name) {
-            info(name)
         }
 
         x = parseInt(sessionStorage.getItem('count'), 10);
@@ -269,7 +268,7 @@ function checkUrls() {
     if (post == "null" || post == " " || post == "") {
     }
     else {
-        usermodal(post)
+        //comments(post)
     }
 
     var fullscreen = sessionStorage.getItem('fullInfo')
@@ -285,6 +284,15 @@ function checkUrls() {
     }
     else {
         info(viewInfo)
+    }
+    var viewUser = sessionStorage.getItem('viewUser')
+    if (viewUser == 'null' || viewUser == " " || viewUser == "") {
+
+    }
+    else {
+        window.setTimeout(function() {
+            usermodal(viewUser)
+        }, 1000)
     }
 
 }
@@ -519,7 +527,7 @@ async function addstuffuser(name, data, time) {
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
 
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; padding-bottom: 12px;"><img id="' + name + 'imgelelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.data.caption + '</p><center><button id="' + name + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">info</i></button><button style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons">fullscreen</i></button><br></div></div><br></center><br></div> <hr>'
+        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; padding-bottom: 12px;"><img id="' + name + 'imgelelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.data.caption + '</p><center><button id="' + name + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">info</i></button><button style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons">fullscreen</i></button><br></div></div><br></center><br></div>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
@@ -535,6 +543,7 @@ async function addstuffuser(name, data, time) {
 }
 
 async function usermodal(uid) {
+    console.log(uid);
     previousview = sessionStorage.getItem("currentlyviewinguser")
 
     if (previousview == uid) {
@@ -544,6 +553,7 @@ async function usermodal(uid) {
 
     else {
         toggleloader()
+        console.log(uid);
         sessionStorage.setItem('currentlyviewinguser', uid)
         window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
         $('#usergrid').empty()
@@ -560,16 +570,59 @@ async function usermodal(uid) {
             if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") { }
             else { document.getElementById('usermodalbio').innerHTML = doc.data().bio }
             document.getElementById('userrep').innerHTML = doc.data().rep
-        })
 
-        db.collection('users').doc(uid).collection('follow').doc('following').get().then(function (doc) {
-            following = doc.data().following.length
-            document.getElementById('userfollowers').innerHTML = following
-        })
-
-        db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
-            followers = doc.data().followers.length
+            following = doc.data().following
+            if (following == undefined) {
+                following = []
+            }
             document.getElementById('userfollowing').innerHTML = following
+
+            followers = doc.data().followers
+            if (followers == undefined) {
+                followers = []
+            }
+            document.getElementById('userfollowers').innerHTML = followers
+            
+            isfollow = false
+            for (const item of followers) {
+                if (item == user.uid) {
+                        isfollow = true
+                }
+            }
+            if (isfollow) {
+                document.getElementById('followbtn').innerHTML = 'unfollow'
+                document.getElementById('followbtn').onclick = function () {
+                    unfollow(uid, username)
+                }
+                loaduserposts(uid)
+            }
+            else {
+                document.getElementById('followbtn').innerHTML = 'follow'
+                document.getElementById('followbtn').onclick = function () {
+                    follow(uid, username)
+                }
+
+                if (userdoc.data().type == 'private') {
+                    document.getElementById('privatewarning').style.display = 'block'
+                    requested = userdoc.data().requested
+                    isrequest = false
+                    for (const item of ppl) {
+                        if (item == uid) {
+                            isrequest = true
+                        }
+                    }
+
+                    if (isrequest == true) {
+                        document.getElementById('followbtn').innerHTML = 'cancel request'
+                        document.getElementById('followbtn').onclick = function () {
+                            unrequest(uid, username)
+                        }
+                    }
+                }
+        }
+
+
+
         })
 
         if (user.uid == uid) {
@@ -580,53 +633,6 @@ async function usermodal(uid) {
             }
 
             loaduserposts(uid)
-        }
-        else {
-            db.collection('users').doc(uid).collection('follow').doc('followers').get().then(function (doc) {
-                ppl = doc.data().followers
-                isfollow = false
-                for (const item of ppl) {
-                    if (item == user.uid) {
-                        isfollow = true
-                    }
-                }
-                if (isfollow) {
-                    document.getElementById('followbtn').innerHTML = 'unfollow'
-                    document.getElementById('followbtn').onclick = function () {
-                        unfollow(uid, username)
-                    }
-                    loaduserposts(uid)
-                }
-                else {
-                    document.getElementById('followbtn').innerHTML = 'follow'
-                    document.getElementById('followbtn').onclick = function () {
-                        follow(uid, username)
-                    }
-
-                    if (userdoc.data().type == 'private') {
-                        document.getElementById('privatewarning').style.display = 'block'
-                        db.collection('users').doc(uid).collection('follow').doc('requested').get().then(function (doc) {
-                            ppl = doc.data().requested
-                            isrequest = false
-                            for (const item of ppl) {
-                                if (item == uid) {
-                                    isrequest = true
-                                }
-                            }
-
-                            if (isrequest == true) {
-                                document.getElementById('followbtn').innerHTML = 'cancel request'
-                                document.getElementById('followbtn').onclick = function () {
-                                    unrequest(uid, username)
-                                }
-                            }
-                            else {
-                                loaduserposts(uid)
-                            }
-                        })
-                    }
-                }
-            })
         }
     }
 }

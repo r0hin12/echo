@@ -156,6 +156,58 @@
             </div>
         </div></div></div>
 
+        <div class="modal fade bd-example-modal-lg" id="userModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-body">
+            <center><div class="card">
+              <div class="card-body">
+        <div class="row">
+        <div class="col-sm">
+        <img id="usermodalpfp" style="width: 120px; height: 120px; border-radius: 30000px; object-fit: cover;" src="assets/icon.png" alt=""><br><br>
+        <h3 id="usermodaltitle">Loading... </h3>
+        <p id="usermodalbio" style="color: rgb(71, 71, 71);"></p>
+        </div>
+        <div class="col-sm"><div style="display: inline-block" class="card">
+          <div class="card-body">
+          <h3 id="userrep" style="line-height: 15px;">...</h3>
+          <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6></div></div>
+        <br><br>
+          <div style="display: inline-block" class="card">
+              <div class="card-body">
+          <h3 id="userfollowers" style="line-height: 15px;">...</h3>
+          <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Followers</h6>
+          </div>
+          </div>
+          <br><br>
+              <div style="display: inline-block" class="card">
+                  <div class="card-body">
+              <h3 id="userfollowing" style="line-height: 15px;">...</h3>
+              <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Following</h6>
+              </div>
+            </div></div></div>
+        <center>
+        <button id="followbtn" class="waves btn-old-primary">Follow</button>
+        </center>
+        <br><br>
+        <div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+          <strong>This account is private.</strong> Follow this user to see their content.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+          <strong>This is your account.</strong> Share it with people to gain followers!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+              
+              </div>
+            </div></center>
+        <br><br>
+            <div id="usergrid"></div>
+            <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves eon-contained" data-dismiss="modal">done</button></div><div class="modal-footer"></div></div></div>
+            </div>
+        
+
 
     <!-- ===========================--] Content [=================================== -->
         
@@ -213,7 +265,7 @@
     <center>
 
     <img class="avatar main-avatar" src="https://ir.ebaystatic.com/pictures/ca/covid/DOORWAY-1.jpg"><br><br>
-    <h4 id="sidebarname">Rohin Arya</h4>
+    <h3 id="sidebarname">Rohin Arya</h3>
     <h5 id="sidebarusername">@eon</h5>
     <br><br>
     <div class="scrollable">

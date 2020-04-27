@@ -73,59 +73,14 @@ function profilesetup2() {
 
                 // THIS PART MADE SENSE BEFORE - I HAVE NO IDEA WHAT IT DOES BUT ITS PROBABLY IMPORTANT
                 // - rohin
-                db.collection('users').doc(user.uid).collection("follow").doc('following').get().then(function (doc) {
-                    if (doc.exists) { } else {
-                        db.collection('users').doc(user.uid).collection('follow').doc('following').set({
-                            following: []
-                        })
-                    }
-                })
-
-                db.collection('users').doc(user.uid).collection("follow").doc('followers').get().then(function (doc) {
-                    if (doc.exists) { } else {
-                        db.collection('users').doc(user.uid).collection('follow').doc('followers').set({
-                            followers: []
-                        })
-                    }
-                })
 
                 db.collection('users').doc(user.uid).get().then(function (doc) {
-                    if (doc.data().type !== undefined) {
-                        if (doc.data().type == 'private') {
-
-                            db.collection('users').doc(user.uid).collection('follow').doc('requested').get().then(function (doc) {
-                                if (doc.exists) {
-
-                                }
-                                else {
-                                    db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
-                                        requested: []
-                                    })
-                                }
-                            })
-
-
-                        }
-                    } else {
+                    if (doc.data().type == undefined) {
                         db.collection('users').doc(user.uid).update({
                             type: 'public'
                         })
                     }
                 })
-
-                db.collection('users').doc(user.uid).collection('details').doc('follow').collection('requested').doc('requested').get().then(function (doc) {
-                    if (doc.exists) {
-
-                    }
-                    else {
-                        db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
-                            requested: []
-                        })
-                    }
-                })
-
-
-
             }
         })
     }

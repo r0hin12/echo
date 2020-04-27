@@ -17,8 +17,10 @@ $(window).ready(function () {
         sessionStorage.setItem('viewPost', urlParams.get('post'))
         sessionStorage.setItem('viewInfo', urlParams.get('info'))
         sessionStorage.setItem('fullInfo', urlParams.get('fullscreen'))
-        checkUrls()
+        sessionStorage.setItem('viewUser', urlParams.get('user'))
         tabe("home")
+        checkUrls()
+        
     }
     else {
         console.log("Going to tab: " + tab);
