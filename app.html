@@ -1,7 +1,6 @@
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
-    
     <head>
         <!---==== Meta ====--->
         <meta charset="UTF-8">
@@ -160,6 +159,45 @@
 
     <!-- ===========================--] Content [=================================== -->
         
+
+<div style="display: none;" class="doprofile animated fadeIn" id="doprofile">
+
+    <div class="centered animated fadeIn" id="profilesetup1">
+<div class="card">
+    <div style="color: black;" class="card-body">
+        <h3>Complete your Profile</h3>
+        <br>
+        <div class="floating-label textfield-box">
+            <label for="usernamefield">Username</label>
+            <input style="color: black !important;" class="form-control" placeholder="" id="usernamefield" type="text">
+          </div>
+          <div style="display: none;" id="usernametaken" class="alert alert-danger animated zoomIn" role="alert">
+            This username is taken!
+          </div>
+          <br>
+          <center><button onclick="profilesetup1()" class="eon-text">next</button></center>
+    </div>
+</div>
+    </div>
+
+    <div class="centered animated fadeIn" style="display: none;" id="profilesetup2">
+        <div class="card">
+            <div style="color: black;" class="card-body">
+                <h3>Complete your Profile</h3>
+                <br>
+                <div class="floating-label textfield-box">
+                    <label for="namefield">Your Name</label>
+                    <input style="color: black !important;" class="form-control" placeholder="" id="namefield" type="text">
+                  </div>
+                  <br>
+                  <center><button onclick="profilesetup2()" class="eon-text">save</button></center>
+            </div>
+        </div>
+            </div>
+    
+
+</div>
+
     <div class="main">
 
 <button id="expandbtn" onclick="expand()" style="display: none; padding: 5px !important;min-width: 0px !important; position: fixed !important;" class="expand-btn centeredy waves-effect shadow-sm animated">
@@ -222,31 +260,54 @@
 
     <hr class="hr">
 
-    <h2 class="leader">Home</h2> 
-    <div class="dropdown">
-        <button aria-expanded="false" aria-haspopup="true" class="eon-text btn235ws dropdown" data-toggle="dropdown" id="dropdownMenuButton1" type="button">Showing Relevant Posts </button>
-        <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu">
-        <a onclick="dontshowall()" class="dropdown-item waves-effect waves-button" href="#">Relevant Posts</a>
-        <a onclick="showall()" class="dropdown-item waves-effect waves-button" href="#">All Posts</a>
-        </div>
-    </div>
-    <button onclick="disablegrid()" id="gridbtn" class="grid-list without-text">
-        <div class="icon">
-            <div class="dots">
-                <i></i><i></i><i></i><i></i>
-            </div>
-            <div class="lines">
-                <i></i><i></i><i></i><i></i>
+    <nav class="navbar">  
+        <h2 class="leader">Home</h2> 
+        <div class="dropdown">
+            <button aria-expanded="false" aria-haspopup="true" class="eon-text btn235ws dropdown" data-toggle="dropdown" id="dropdownMenuButton1" type="button">Showing Relevant Posts </button>
+            <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu">
+            <a onclick="dontshowall()" class="dropdown-item waves-effect waves-button" href="#">Relevant Posts</a>
+            <a onclick="showall()" class="dropdown-item waves-effect waves-button" href="#">All Posts</a>
             </div>
         </div>
-    </button>
+
+
+        <ul class="navbar-nav mr-auto">
+        </ul>
+        <button onclick="disablegrid()" id="gridbtn" class="grid-list without-text">
+            <div class="icon">
+                <div class="dots">
+                    <i></i><i></i><i></i><i></i>
+                </div>
+                <div class="lines">
+                    <i></i><i></i><i></i><i></i>
+                </div>
+            </div>
+        </button>
+    </nav>
+
+    
+    
     
   <br><br>
 <center id="containerhometab">
 <div style="display: none;" class="grid animated fadeIn" id="gridrelevant"></div>
 
 <div style="display: none" id="norelevantstuff">
-    nothing exists
+<br><br>
+
+<div class="card noitems animated zoomIn">
+    <div class="card-body">
+
+<i class="material-icons iconactive noitemsicon">perm_media</i>
+<br><br>
+<h4>You have no friends 💔</h4>
+<p>Follow people to build your feed.</p>
+
+
+    </div>
+</div>
+
+<br><br>
 </div>
 
 <div style="display: none;" class="grid animated fadeIn" id="grid">
@@ -289,6 +350,7 @@
         <!-- Display --> <script src="js/display.js"></script>
         <!-- Tabs --> <script src="js/tabs.js"></script>
         <!-- Home Tab --> <script src="js/home.js"></script>
+        <!-- APP --> <script src="js/app.js"></script>
         
 
 

@@ -10,7 +10,9 @@ function showall() {
 
     document.getElementById('gridrelevant').style.display = 'none'
     document.getElementById('grid').style.removeProperty('display');
+    document.getElementById('norelevantstuff').style.display = 'none'
     resizeAllGridItemsAll()
+
 }
 
 function dontshowall() {
@@ -18,6 +20,13 @@ function dontshowall() {
 
     document.getElementById('gridrelevant').style.removeProperty('display');
     document.getElementById('grid').style.display = 'none'
+
+    if( $('#gridrelevant').is(':empty') ) {
+        document.getElementById('norelevantstuff').style.display = 'block'
+    }
+
+
+
     resizeAllGridItems()
 }
 urlParams = new URLSearchParams(window.location.search);

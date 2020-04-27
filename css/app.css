@@ -11,6 +11,10 @@ input {
     color: var(--content-secondary) !important;
 }
 
+h4 {
+    margin: 0px !important;
+}
+
 .form-control {
     border-bottom: 1px solid white !important;
 }
@@ -118,8 +122,8 @@ width: 90%;
 .navbarbuttontextactive {
     display: inline-block;
     font-weight: 500;
-    padding-left: 52px;
     color: var(--content-primary);
+    padding-left: 52px;
     margin: 0;
 }
 
@@ -227,21 +231,25 @@ width: 90%;
 .dropdown {
     display: inline-block;
     padding-left: 24px;
+    color: var(--content-primary);
 }
 
 .btn235ws {
     color: var(--content-primary) !important;
     outline: none !important;
+    
 }
 
 
 
 .dropdown-item{ 
-    background-color: var(--bg-primary)
+    background-color: var(--bg-primary);
+    color: var(--content-primary);
 }
 
 .dropdown-menu:before {
-    background-color: var(--bg-primary)
+    background-color: var(--bg-primary);
+    color: var(--content-primary);
 }
 
 .grid {
@@ -475,4 +483,25 @@ width: 90%;
     z-index: 400;
     background-color: var(--bg-primary);
     height: 100%;
+}
+
+.doprofile {
+    width: 100%; 
+    height: 100%; 
+    backdrop-filter: blur(20px);
+    top: 0px; 
+    left: 0px; 
+    position: fixed; 
+    z-index: 400000;
+
+}
+
+.noitems {
+    background-color: var(--bg-tertiary);
+    color: var(--content-primary);
+    display: inline-block;
+}
+
+.noitemsicon {
+    font-size: 48px;
 }

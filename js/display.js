@@ -132,8 +132,9 @@ function toggle() {
     newElem.addEventListener('click', toggle);
 }
 
+
 function disablegrid() {
-    document.getElementById('togglegrid').innerHTML = '.grid {display: block; width: 80%} .postshell {width: auto !important;} .shell {width: auto !important;} .postimage {max-height: 2400px !important;}'
+    document.getElementById('togglegrid').innerHTML = '.grid {display: block; width: 80%} .postshell {width: 100% !important;} .shell {width: 100% !important;} .postimage {max-height: 2400px !important;}'
     document.getElementById('containerhometab').classList.add('animated')
     document.getElementById('containerhometab').classList.add('fadeIn')
     document.getElementById('gridbtn').onclick = function () {
@@ -150,14 +151,14 @@ function disablegrid() {
 
 function enablegrid() {
     document.getElementById('togglegrid').innerHTML = ''
-    document.getElementById('home').classList.add('animated')
-    document.getElementById('home').classList.add('fadeIn')
+    document.getElementById('containerhometab').classList.add('animated')
+    document.getElementById('containerhometab').classList.add('fadeIn')
     document.getElementById('gridbtn').onclick = function () {
 
     }
     window.setTimeout(function () {
-        document.getElementById('home').classList.remove('animated')
-        document.getElementById('home').classList.remove('fadeIn')
+        document.getElementById('containerhometab').classList.remove('animated')
+        document.getElementById('containerhometab').classList.remove('fadeIn')
         document.getElementById('gridbtn').onclick = function () {
             disablegrid()
         }

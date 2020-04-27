@@ -16,6 +16,8 @@
       <!-- Eon Styles --><link rel="stylesheet" href="https://rohinarya12.github.io/eonstyles/new/eon.css">
       <!-- Waves --><link rel="stylesheet" href="daemonite/waves.min.css">
 
+      <!-- Index CSS --><link rel="stylesheet" href="css/index.css">
+
 
   </head>
 
@@ -29,19 +31,21 @@
 
       <div class="modal fade" id="successmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3>Signed in</h3>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
+          <div style="border-radius: 15px;" class="modal-content">
             <div class="modal-body">
-              <h5>Click the button below to enter the web app.</h5>
+              <center>
+
+                <center><h3>Signed In</h3></center>
+
+
+                  <span id="pfp" class="chip animated fadeInUp"></span>
+<br><br>
+                    <button onclick="go()" type="button" style="animation-delay: 0.5s;" class="eon-outlined animated zoomIn" id="zoomBtn" data-dismiss="modal">go</button>
+                  </center>
+                  </div>
+                
             </div>
-            <div class="modal-footer">
-              <button onclick="go()" type="button" class="eon-contained" data-dismiss="modal">Go</button>
-            </div>
+
           </div>
         </div>
       </div>
@@ -50,69 +54,77 @@
   <!-- ===========================--] Content [=================================== -->
       
 
+  <br><br><br>
+  <center><img style="width: 4em" src="assets/logo.png" alt=""></center>
+<br><br><br>
 
-  <center><img style="width: 20em" src="assets/logo.png" alt=""></center>
-  <center>
-  <div id="signinpanel" style="min-width: 40%; display: inline-block" class="card">
-  <div class="card-body">
-  <br><center><h2>Sign In</h2></center><br>
-    <div class="floating-label textfield-box">
-      <label for="email2">Email</label>
-      <input class="form-control" id="email2" placeholder="" type="text">
+  <div class="container">
+    <div class="card">
+      <h1 class="title">Login</h1>
+      <center><div style="width: 90%;">
+        <div class="floating-label textfield-box">
+          <label for="email2">Email</label>
+          <input class="form-control" id="email2" placeholder="" type="email">
+        </div>
+      <br>
+        <div class="floating-label textfield-box">
+          <label for="pass2">Password</label>
+          <input class="form-control" id="pass2" placeholder="" type="password">
+        </div>
+        <br>
+        <button onclick="signinemail()" style="width: 100%" class="eon-contained">Sign In</button>
+        <center><small>- or - </small></center>
+        <button onclick="signupemail()" style="width: 100%" class="eon-contained">Sign Up</button>
+      </div>
+    </center>
     </div>
-  <br>
-    <div class="floating-label textfield-box">
-      <label for="pass2">Password</label>
-      <input class="form-control" id="pass2" placeholder="" type="password">
-    </div>
+  </div>
+
+
+
+
+  <!-- 
+
+        <div class="floating-label textfield-box">
+         <label for="email1">Email</label>
+         <input class="form-control" id="email1" placeholder="example@site.ext" type="text">
+       </div>
+   <br>
+       <div class="floating-label textfield-box">
+         <label for="user1">Username</label>
+         <input class="form-control" id="user1" placeholder="" type="text">
+       </div>
+   <br>
+       <div class="floating-label textfield-box">
+         <label for="pass1">Password</label>
+         <input class="form-control" id="pass1" placeholder="" type="password">
+       </div>
+       <br>
+       <button onclick="signupemail()" style="width: 100%" class="eon-outlined">Sign Up</button>
+       <small>By signing up you agree to <a href="#" onclick="terms()">terms and conditions</a>.</small>
+ 
+ <div class="floating-label textfield-box">
+        <label for="email2">Email</label>
+        <input class="form-control" id="email2" placeholder="" type="email">
+      </div>
     <br>
-    <button onclick="signinemail()" style="width: 100%" class="eon-contained">Sign In</button>
-    
-
-
-  </div>
-  </div>
-
-  <div id="signuppanel" style="min-width: 40%; display: none" class="card">
-    <div class="card-body">
-      <br><center><h2>Sign Up</h2></center><br>
       <div class="floating-label textfield-box">
-        <label for="email1">Email</label>
-        <input class="form-control" id="email1" placeholder="example@site.ext" type="text">
-      </div>
-  <br>
-      <div class="floating-label textfield-box">
-        <label for="user1">Username</label>
-        <input class="form-control" id="user1" placeholder="" type="text">
-      </div>
-  <br>
-      <div class="floating-label textfield-box">
-        <label for="pass1">Password</label>
-        <input class="form-control" id="pass1" placeholder="" type="password">
+        <label for="pass2">Password</label>
+        <input class="form-control" id="pass2" placeholder="" type="password">
       </div>
       <br>
-      <button onclick="signupemail()" style="width: 100%" class="eon-outlined">Sign Up</button>
-      <small>By signing up you agree to <a href="#" onclick="terms()">terms and conditions</a>.</small>
+      <button onclick="signinemail()" style="width: 100%" class="eon-contained">Sign In</button>
+      
+ 
+       <a href="" class="pass-forgot">Forgot your password?</a>
 
-    
-    
-    </div>
-  </div>
-  <br><br><br>
-  <div style="min-width: 40%; display: inline-block" class="card">
-    <div id="btnsstuff" class="card-body">
-    
-      <p>If you don't have an account:</p><button onclick="signupshow()" class="eon-outlined">Sign Up</button>
-    
-    
-    </div>
-    </div>
-  </center>
+       
 
+  -->
 
   <!-- ===========================--] /Content [=================================== -->
       <!---==== JavaScript ====--->
-      <!-- JQuery --><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+      <!-- JQuery --><script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
       <!-- Popper --><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
       <!-- Bootstrap --><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
       <!-- Eon Styles --><script src="https://rohinarya12.github.io/eonstyles/new/eon.js"></script>
@@ -137,7 +149,6 @@
     firebase.initializeApp(firebaseConfig);
   </script>
   <script defer src="js/index.js"></script>
-  <script src="js/script.js"></script>
 
 
   </body>
