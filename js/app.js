@@ -6,8 +6,29 @@ function checkfirsttime() {
     if (user.displayName == null) {
         document.getElementById('doprofile').style.display = 'block'
     }
+    if (!user.emailVerified) {
+        document.getElementById('doemail').style.display = 'block'
+        document.getElementById('doprofile').style.display = 'none'
+    }
 }
 
+
+function verifyemail() {
+    user.sendEmailVerification().then(function() {
+        document.getElementById('verifybutton').remove()
+        document.getElementById('status').style.display = 'block'
+        document.getElementById('verifyresponse').innerHTML = "We've sent " + user.email + " an email containing a verification link. <b>After verifying</b>, click the button below."
+    }).catch(function(error) {
+        document.getElementById('verifyresponse').innerHTML = error
+    });
+}
+
+function checkverification() {
+        document.getElementById('verifyresponse').innerHTML = 'Checking...'
+        window.setTimeout(function() {
+            window.location.reload()
+        }, 1000)
+}
 
 function profilesetup1() {
     username = document.getElementById('usernamefield').value
@@ -106,7 +127,7 @@ function addappcontent() {
         document.getElementsByClassName('main-avatar')[0].src = doc.data().url
         document.getElementsByClassName('main-avatar')[0].style.display = 'block'
 
-        document.getElementById('sidebarname').innerHTML = user.displayName + '<span class="badge badge-dark userbadge centeredy">@' + doc.data().username + '</span><span style="visibility: hidden;" class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
+        document.getElementById('sidebarname').innerHTML = user.displayName + '<br><span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
 
         // REPUTATION
 

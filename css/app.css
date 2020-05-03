@@ -508,7 +508,16 @@ width: 90%;
     left: 0px; 
     position: fixed; 
     z-index: 400000;
+}
 
+.doemail {
+    width: 100%; 
+    height: 100%; 
+    backdrop-filter: blur(20px);
+    top: 0px; 
+    left: 0px; 
+    position: fixed; 
+    z-index: 400001;
 }
 
 .noitems {

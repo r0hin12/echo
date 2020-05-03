@@ -153,3 +153,11 @@ function signinshow() {
     document.getElementById('btnsstuff').innerHTML = "<p>Don't have an account?</p><button onclick='signupshow()' class='eon-outlined'>Sign Up</button>"
     addWaves()
 }
+
+var input = document.getElementById("pass2");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    signinemail()
+  }
+});

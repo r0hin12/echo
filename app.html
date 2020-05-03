@@ -226,25 +226,25 @@
         
 
 <div style="display: none;" class="doprofile animated fadeIn" id="doprofile">
-
     <div class="centered animated fadeIn" id="profilesetup1">
-<div class="card">
-    <div style="color: black;" class="card-body">
-        <h3>Complete your Profile</h3>
-        <br>
-        <div class="floating-label textfield-box">
-            <label for="usernamefield">Username</label>
-            <input style="color: black !important;" class="form-control" placeholder="" id="usernamefield" type="text">
-          </div>
-          <div style="display: none;" id="usernametaken" class="alert alert-danger animated zoomIn" role="alert">
-            This username is taken!
-          </div>
-          <br>
-          <center><button onclick="profilesetup1()" class="eon-text">next</button></center>
+        <div class="card">
+            <div style="color: black;" class="card-body">
+                <h3>Complete your Profile</h3>
+                <br>
+                <div class="floating-label textfield-box">
+                    <label for="usernamefield">Username</label>
+                    <input style="color: black !important;" class="form-control" placeholder="" id="usernamefield" type="text">
+                </div>
+                <div style="display: none;" id="usernametaken" class="alert alert-danger animated zoomIn" role="alert">
+                This username is taken!
+                </div>
+                <br>
+                <center>
+                    <button onclick="profilesetup1()" class="eon-text">next</button>
+                </center>
+            </div>
+        </div>
     </div>
-</div>
-    </div>
-
     <div class="centered animated fadeIn" style="display: none;" id="profilesetup2">
         <div class="card">
             <div style="color: black;" class="card-body">
@@ -255,12 +255,46 @@
                     <input style="color: black !important;" class="form-control" placeholder="" id="namefield" type="text">
                   </div>
                   <br>
-                  <center><button onclick="profilesetup2()" class="eon-text">save</button></center>
+                  <center>
+                      <button onclick="profilesetup2()" class="eon-text">save</button>
+                </center>
             </div>
         </div>
-            </div>
-    
+    </div>
+</div>
 
+<div style="display: none;" class="doemail animated fadeIn" id="doemail">
+    <div class="centered animated fadeIn" id="profilesetup1">
+        <div class="card">
+            <div style="color: black;" class="card-body">
+                <h3>Verify your Email</h3>
+                <br>
+                <center>
+                    <button id="verifybutton" onclick="verifyemail()" class="eon-text">do</button>
+                    <div style="display: none;" class="animated fadeIn" id="status">
+                    <p id="verifyresponse"></p>
+                    <button onclick="checkverification()" class="eon-text">Check Verification</button>
+                    </div>
+                </center>
+            </div>
+        </div>
+    </div>
+    <div class="centered animated fadeIn" style="display: none;" id="profilesetup2">
+        <div class="card">
+            <div style="color: black;" class="card-body">
+                <h3>Complete your Profile</h3>
+                <br>
+                <div class="floating-label textfield-box">
+                    <label for="namefield">Your Name</label>
+                    <input style="color: black !important;" class="form-control" placeholder="" id="namefield" type="text">
+                  </div>
+                  <br>
+                  <center>
+                      <button onclick="profilesetup2()" class="eon-text">save</button>
+                </center>
+            </div>
+        </div>
+    </div>
 </div>
 
     <div class="main">
