@@ -8,8 +8,8 @@ firebase.initializeApp({
     appId: "1:725793838303:web:f23c748b3985225c5c056a"
 });
 
-db = firebase.firestore()
-storage = firebase.storage();
+window.db = firebase.firestore()
+window.storage = firebase.storage();
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -17,9 +17,11 @@ firebase.auth().onAuthStateChanged(function (user) {
         window.user = firebase.auth().currentUser
         console.log("User is signed in: " + user.displayName);
         checkfirsttime()
+        addappcontent()
+        preesearch()
 
     } else {
-        transferdark('index.html')
+        transfer('index.html?return=' + window.location.href)
 
     }
 });

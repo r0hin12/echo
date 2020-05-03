@@ -159,7 +159,7 @@ async function addcontent(name, data, time) {
             }
         }
         if (isVerified) {
-            usersname = data.name + '<i id="' + name + 'verifiedelement" data-toggle="tooltip" data-placement="top" title="Verified User" class="material-icons verified">verified_user</i>'
+            usersname = data.name + '<i id="' + name + 'verifiedelement" data-toggle="tooltip" data-placement="top" title="Verified" class="material-icons verified">verified_user</i>'
         }
         else {
             usersname = data.name
@@ -229,7 +229,7 @@ async function addcontentrelevant(name, data, time) {
             }
         }
         if (isVerified) {
-            usersname = data.name + '<i id="' + name + 'verifiedelementrelevant" data-toggle="tooltip" data-placement="top" title="Verified User" class="material-icons verified">verified_user</i>'
+            usersname = data.name + '<i id="' + name + 'verifiedelementrelevant" data-toggle="tooltip" data-placement="top" title="Verified" class="material-icons verified">verified_user</i>'
         }
         else {
             usersname = data.name
@@ -517,11 +517,12 @@ function addpfpcomment(usr, id) {
     })
 }
 
-async function addstuffuser(name, data, time) {
+async function addstuffuser(name, data, time, last) {
     var storageRef = firebase.storage().ref();
     storageRef.child('users/' + data.data.uid + '/' + data.data.file).getDownloadURL().then(function (url) {
 
         a = document.createElement('div')
+        a.classList.add('content')
         likeFunc = "like('" + name + "')"
         commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "')"
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
@@ -533,13 +534,18 @@ async function addstuffuser(name, data, time) {
             bambam = docee.data()[name].length
             document.getElementById(name + "commentEluser").innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + bambam
         })
-        addWaves()
 
+
+        if (last) {
+            addWaves()
+            window.setTimeout(function() {
+                resizeAllGridItemsUser()
+            }, 500)
+        }
 
     }).catch(function (error) {
         console.log(error)
     });
-    addWaves()
 }
 
 async function usermodal(uid) {
@@ -564,8 +570,7 @@ async function usermodal(uid) {
             doc = userdoc
             username = doc.data().username
             useruid = doc.data().uid
-
-            document.getElementById('usermodaltitle').innerHTML = doc.data().name + ' <br><span style="border-radius: 12px; font-size: 18px" class="badge badge-dark">@' + doc.data().username + '</span>'
+            document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge centeredy">@' + doc.data().username + '</span><span style="visibility: hidden;" class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
             document.getElementById('usermodalpfp').src = doc.data().url
             if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") { }
             else { document.getElementById('usermodalbio').innerHTML = doc.data().bio }
@@ -575,13 +580,13 @@ async function usermodal(uid) {
             if (following == undefined) {
                 following = []
             }
-            document.getElementById('userfollowing').innerHTML = following
+            document.getElementById('userfollowing').innerHTML = nFormatter(following.length, 1)
 
             followers = doc.data().followers
             if (followers == undefined) {
                 followers = []
             }
-            document.getElementById('userfollowers').innerHTML = followers
+            document.getElementById('userfollowers').innerHTML = nFormatter(followers.length, 1)
             
             isfollow = false
             for (const item of followers) {
@@ -621,6 +626,9 @@ async function usermodal(uid) {
                 }
         }
 
+        window.setTimeout(function() {
+            toggleloader()
+        }, 500)
 
 
         })
@@ -631,7 +639,7 @@ async function usermodal(uid) {
             document.getElementById('followbtn').onclick = function () {
                 Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
             }
-
+            
             loaduserposts(uid)
         }
     }
@@ -639,19 +647,21 @@ async function usermodal(uid) {
 
 function loaduserposts(uid) {
     array = []
+    
     db.collection('posts').doc('posts').get().then(function (doc) {
-
+        userpostcount = 0
         latest = doc.data().latest
         for (let i = 0; i < doc.data().latest + 1; i++) {
             if (doc.data()[i] == undefined) {
             }
             else {
-
+                userpostcount++
                 if (doc.data()[i].data.uid == user.uid) {
                     array.push({ name: i, data: doc.data()[i], time: doc.data()[i].timestamp })
                 }
             }
         }
+        userpostcount = userpostcount - 1
 
         array.reverse()
         actualuser(array)
@@ -670,11 +680,17 @@ function actualuser(array) {
 
         z = document.createElement('div')
         z.id = name + 'usersshell'
+        z.classList.add('usershell')
 
         document.getElementById('usergrid').appendChild(z)
-        document.getElementById('usergrid').appendChild(document.createElement('br'))
 
-        addstuffuser(name, data, time)
+        if (i == userpostcount) {
+            addstuffuser(name, data, time, true)
+        }
+        else {
+            addstuffuser(name, data, time, false)
+        }
+        
     }
 }
 

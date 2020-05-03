@@ -263,8 +263,15 @@ width: 90%;
     grid-gap: 0px;
     grid-template-columns: repeat(auto-fill, minmax(350px,1fr));
     grid-auto-rows: 40px;
+}
 
+#usergrid {
 
+    display: grid;
+    justify-items: center;
+    grid-gap: 0px;
+    grid-template-columns: repeat(auto-fill, minmax(350px,1fr));
+    grid-auto-rows: 40px;
 }
 
 .postshell {
@@ -416,6 +423,10 @@ width: 90%;
     -moz-text-fill-color: transparent;   
 }
 
+.usermodal-dialog {
+    min-width: 90%;
+}
+
 .modal-content {
     background-color: var(--bg-tertiary);
     color: var(--content-primary);
@@ -508,4 +519,49 @@ width: 90%;
 
 .noitemsicon {
     font-size: 48px;
+}
+
+.userstats {
+    background-color: var(--bg-primary)
+}
+
+.usermodalcolumn:first-child {
+    border-right: 1px solid grey;
+}
+.usermodalcolumn:last-child {
+    border-left: 1px solid grey;
+}
+
+#userrep {
+    display: inline-block;
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    margin: 0px;
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+.inline {
+    display: inline-block;
+    line-height: 0px;
+}
+
+.modal { overflow: auto !important; }
+
+.usermodalpfp {
+    width: 160px;
+    height: 160px;
+    border-radius: 150px;
+    object-fit: cover;
+}
+.usershell {
+    width: 440px;
+}
+
+.userbadge {
+    border-radius: 12px; 
+    font-size: 18px;
+    margin-left: 12px;
 }

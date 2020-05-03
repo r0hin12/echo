@@ -6,8 +6,17 @@ function terms() {
 
 
 function go() {
+    sessionStorage.removeItem('gottoadd')
     x = localStorage.getItem('destinationurl')
-    transfer(x)
+
+    if (x == null || x == undefined) {
+        transfer('app.html')
+    }
+    else {
+        transfer(x)
+    }
+
+    
 }
 
 firebase.auth().onAuthStateChanged(function (user) {
@@ -15,7 +24,15 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 
         db.collection("users").doc(user.uid).get().then(function (doc) {
-            document.getElementById('pfp').innerHTML = '<img alt="..." style="object-fit: cover; height: 32px; width: 32px;" class="chip-img" src="' + doc.data().url + '">' + user.displayName
+
+            if (user.displayName == null) {
+                document.getElementById('pfp').innerHTML = '<img alt="..." style="object-fit: cover; height: 32px; width: 32px;" class="chip-img" src="' + doc.data().url + '">' + user.email
+            }
+            else {
+                document.getElementById('pfp').innerHTML = '<img alt="..." style="object-fit: cover; height: 32px; width: 32px;" class="chip-img" src="' + doc.data().url + '">' + user.displayName
+            }
+
+            
             document.getElementById('pfp').style.display = 'inline-block'
             document.getElementById('zoomBtn').style.display = 'block'
         })
@@ -26,14 +43,26 @@ firebase.auth().onAuthStateChanged(function (user) {
         var myParam = urlParams.get('return');
         console.log('Doing auth change stuff');
 
-        x = sessionStorage.getItem('gottoadd')
+        x = sessionStorage.getItem('emptything')
 
-        if (x == false || x == 'false') {
-            sessionStorage.removeItem('gottoadd')
-            transfer('app.html')
+        if (x == 'false') {
+            go()
         }
 
         else {
+
+            db.collection("users").doc(user.uid).set({
+                uid: user.uid,
+                type: 'public',
+                filename: 'example',
+                created: firebase.firestore.FieldValue.serverTimestamp(),
+                repcheck: firebase.firestore.FieldValue.serverTimestamp(),
+                following: [],
+                followers: [],
+                filetype: 'png',
+                url: 'https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2Fexample.png?alt=media&token=2f3c4769-b40e-4f76-a9ec-f43d934353a6',
+                rep: 0,
+            })
 
         }
 
@@ -41,12 +70,17 @@ firebase.auth().onAuthStateChanged(function (user) {
         if (myParam == null) {
 
 
-            $('#successmodal').modal('toggle')
+            window.setTimeout(function() {
+                $('#successmodal').modal('toggle')
+            }, 1000)
             localStorage.setItem('destinationurl', 'app.html')
 
         }
         else {
-            $('#successmodal').modal('toggle')
+            window.setTimeout(function() {
+                $('#successmodal').modal('toggle')
+            }, 1000)
+        
             localStorage.setItem('destinationurl', urlParams.get('return'))
         }
 
@@ -61,13 +95,14 @@ firebase.auth().onAuthStateChanged(function (user) {
 function signinemail() {
     email = document.getElementById('email2').value
     password = document.getElementById('pass2').value
-
+    sessionStorage.setItem('emptything', "false")
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
 
         document.getElementById('erorrModalMsg').innerHTML = errorMessage
         $('#errorModal').modal('toggle')
+        
         // ...
     });
 }
@@ -87,7 +122,7 @@ function signupemail() {
         }
         else {
 
-            sessionStorage.setItem('gottoadd', false)
+            sessionStorage.setItem('emptything', "true")
             firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function (error) {
                 var errorMessage = error.message;
                 document.getElementById('erorrModalMsg').innerHTML = errorMessage

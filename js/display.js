@@ -35,10 +35,10 @@ function check(width) {
 }
 
 function expand() {
-    document.getElementById('expandbtn').classList.add('zoomOut')
+    document.getElementById('expandbtn').classList.add('fadeOutLeft')
     window.setTimeout(function () {
         document.getElementById('expandbtn').style.display = 'none'
-        document.getElementById('expandbtn').classList.remove('zoomOut')
+        document.getElementById('expandbtn').classList.remove('fadeOutLeft')
     }, 800)
 
     document.getElementById('collapsebtn').style.display = 'block'
@@ -54,10 +54,10 @@ function expand() {
 }
 
 function collapse() {
-    document.getElementById('collapsebtn').classList.add('zoomOut')
+    document.getElementById('collapsebtn').classList.add('fadeOutLeft')
     window.setTimeout(function () {
         document.getElementById('collapsebtn').style.display = 'none'
-        document.getElementById('collapsebtn').classList.remove('zoomOut')
+        document.getElementById('collapsebtn').classList.remove('fadeOutLeft')
     }, 800)
 
     document.getElementById('expandbtn').style.display = 'block'
@@ -74,8 +74,6 @@ function collapse() {
 }
 
 
-// Search Box
-document.addEventListener("touchstart", function () { }, true);
 
 //Console Error
 console.error('Please do not try to troubleshoot. If you want our support team, you may contact us using various platforms. Choose account -> support for more options.')
@@ -115,6 +113,21 @@ function resizeAllGridItemsAll() {
 }
 function resizeGridItemAll(item) {
     grid = document.getElementsByClassName("grid")[1];
+    rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+    rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+    rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+    item.style.gridRowEnd = "span " + rowSpan;
+}
+
+
+function resizeAllGridItemsUser() {
+    allItems = document.getElementsByClassName("usershell");
+    for (x = 0; x < allItems.length; x++) {
+        resizeGridItemUser(allItems[x]);
+    }
+}
+function resizeGridItemUser(item) {
+    grid = document.getElementById("usergrid");
     rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
     rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
     rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
@@ -194,3 +207,112 @@ document.querySelectorAll('.rocket-button').forEach(elem => {
     });
 
 });
+
+// AUTOCOMPLETE
+
+function autocomplete(inp, arr) {
+    var currentFocus;
+
+    inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+        closeAllLists();
+        if (!val) { return false;}
+        currentFocus = -1;
+
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items animated fadeIn fast");
+
+        this.parentNode.appendChild(a);
+        for (i = 0; i < arr.length; i++) {
+
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+
+            b = document.createElement("DIV");
+            b.value = arr[i]
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+
+            b.addEventListener("click", function(e) {
+                document.getElementById('search-box').value = ''
+                db.collection('users').where("username", "==", this.value).get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        usermodal(doc.data().uid)
+                    })
+                })
+
+                
+
+                closeAllLists();
+            });
+            a.appendChild(b);
+          }
+        }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function(e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+          /*If the arrow DOWN key is pressed,
+          increase the currentFocus variable:*/
+          currentFocus++;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 38) { //up
+          /*If the arrow UP key is pressed,
+          decrease the currentFocus variable:*/
+          currentFocus--;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 13) {
+          /*If the ENTER key is pressed, prevent the form from being submitted,*/
+          e.preventDefault();
+          if (currentFocus > -1) {
+            /*and simulate a click on the "active" item:*/
+            if (x) x[currentFocus].click();
+          }
+        }
+    });
+    function addActive(x) {
+      /*a function to classify an item as "active":*/
+      if (!x) return false;
+      /*start by removing the "active" class on all items:*/
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      /*add class "autocomplete-active":*/
+      x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+      /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = 0; i < x.length; i++) {
+        x[i].classList.remove("autocomplete-active");
+      }
+    }
+    function closeAllLists(elmnt) {
+      /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+      var x = document.getElementsByClassName("autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
+          x[i].classList.add('fadeOut')
+          x[i].classList.remove('fadeIn')
+      }
+    }
+    /*execute a function when someone clicks in the document:*/
+    $("#search-box").focusout(function(e){
+        closeAllLists(e.target);
+      });
+  }
+  
+
+
+function preesearch() {
+    window.presearch = false
+    db.collection('app').doc('details').get().then(function(doc) {
+        window.usersearch = doc.data().usernames
+        autocomplete(document.getElementById("search-box"), usersearch);
+    })
+}

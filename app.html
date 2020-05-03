@@ -145,67 +145,80 @@
 
         <div class="modal fade bd-example-modal-lg" id="postmodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content">
             <div class="modal-body">
-                <center><h2>View Post</h2></center>
-             
-                      <center>
+                <center>
+                    <h2>View Post</h2>
                     <br><br>
                     <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
-                    </center>
-
-
+                </center>
             </div>
         </div></div></div>
 
-        <div class="modal fade bd-example-modal-lg" id="userModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-body">
-            <center><div class="card">
-              <div class="card-body">
-        <div class="row">
-        <div class="col-sm">
-        <img id="usermodalpfp" style="width: 120px; height: 120px; border-radius: 30000px; object-fit: cover;" src="assets/icon.png" alt=""><br><br>
-        <h3 id="usermodaltitle">Loading... </h3>
-        <p id="usermodalbio" style="color: rgb(71, 71, 71);"></p>
-        </div>
-        <div class="col-sm"><div style="display: inline-block" class="card">
-          <div class="card-body">
-          <h3 id="userrep" style="line-height: 15px;">...</h3>
-          <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Reputation</h6></div></div>
-        <br><br>
-          <div style="display: inline-block" class="card">
-              <div class="card-body">
-          <h3 id="userfollowers" style="line-height: 15px;">...</h3>
-          <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Followers</h6>
-          </div>
-          </div>
-          <br><br>
-              <div style="display: inline-block" class="card">
-                  <div class="card-body">
-              <h3 id="userfollowing" style="line-height: 15px;">...</h3>
-              <h6 style="line-height: 10px;color: rgb(126, 126, 126)">Following</h6>
-              </div>
-            </div></div></div>
-        <center>
-        <button id="followbtn" class="waves btn-old-primary">Follow</button>
-        </center>
-        <br><br>
-        <div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
-          <strong>This account is private.</strong> Follow this user to see their content.
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
-          <strong>This is your account.</strong> Share it with people to gain followers!
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-              
-              </div>
-            </div></center>
-        <br><br>
-            <div id="usergrid"></div>
-            <button style=" bottom: 12px; position: fixed;  left: 50%;     transform: translate(-50%, 0);" type="button" class="waves eon-contained" data-dismiss="modal">done</button></div><div class="modal-footer"></div></div></div>
+        <div class="modal fade bd-example-modal-lg" id="userModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered usermodal-dialog" role="document"><div class="modal-content"><div class="modal-body">
+            <div class="row">
+                <div class="col-sm">
+                    <center>
+                        <div class="row">
+                            <div class="col-sm">
+                                <img id="usermodalpfp" class="usermodalpfp" alt="Error loading image.">
+                            </div>
+                            <div class="col-sm">
+                                <div style="position: relative;">
+                                <h2 id="usermodaltitle">User Name</h2>
+                            </div>
+                        <p id="usermodalbio">BIO</p>
+
+                        <button id="followbtn" class="eon-contained">Follow</button>
+                        <br><br>
+                            </div>
+                        </div>
+                    </center>
+                </div>
+                <div class="col-sm">
+                    <div class="card userstats">
+                        <div class="card-body">
+                            <center>
+                                <div class="row">
+                                    <div class="col-sm usermodalcolumn">
+                                        <h2 id="userfollowers">...</h2>
+                                        <p class="inline">Followers</p><br>
+                                        <button class="eon-text">view</button>
+                                    </div>
+                                    <div class="col-sm usermodalcolumn">
+                                        <h2 id="userfollowing">...</h2>
+                                        <p class="inline">Following</p><br>
+                                        <button class="eon-text">view</button>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <br>
+            <div><center><h2 id="userrep">#</h2><br><h3 class="inline"><small>Reputation</small></h3></center></div>
+            <br>
+            <div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+                <strong>This account is private.</strong> Follow this user to see their content.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+                <strong>This is your account.</strong> Share it with people to gain followers!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <br>
+        <center><button type="button" class="waves eon-contained" data-dismiss="modal">close</button></center>
+        <br>
+        <hr>
+        <br>
+
+        <div id="usergrid"></div>
+
+        </div><div class="modal-footer"></div></div></div>
+        </div>
         
 
 
@@ -264,23 +277,24 @@
     
     <center>
 
-    <img class="avatar main-avatar" src="https://ir.ebaystatic.com/pictures/ca/covid/DOORWAY-1.jpg"><br><br>
-    <h3 id="sidebarname">Rohin Arya</h3>
-    <h5 id="sidebarusername">@eon</h5>
+    <img style="display: none;" class="avatar main-avatar animated zoomIn" src="https://ir.ebaystatic.com/pictures/ca/covid/DOORWAY-1.jpg"><br><br>
+    <div style="position: relative">
+        <h2 id="sidebarname"></h2>
+    </div>
     <br><br>
     <div class="scrollable">
         <div class="vertical-content" style="padding: 10px; display: inline-block;">
-            <p class="stats-primary">2M</p>
-            <h6 class="stats-secondary">Posts</h6>
+            <p id="rep1" class="stats-primary">...</p>
+            <h6 class="stats-secondary">Reputation</h6>
         </div>
         <div class="vertical-divider"></div>
         <div class="vertical-content" style="padding: 10px; display: inline-block;">
-            <p class="stats-primary">200k</p>
+            <p id="followers1" class="stats-primary">...</p>
             <h6 class="stats-secondary">Followers</h6>
         </div>
         <div class="vertical-divider"></div>
         <div class="vertical-content" style="padding: 10px; display: inline-block;">
-            <p class="stats-primary">25M</p>
+            <p id="following1" class="stats-primary">...</p>
             <h6 class="stats-secondary">Following</h6>
         </div>
     </div>
@@ -299,12 +313,13 @@
         <div class="tab-content" id="justifiedTabContent">
             <div aria-labelledby="home-tab" class="tab-pane fade" id="home" role="tabpanel">
                 <nav class="navbar navbar-expand-sm">  
+                    <div style="display: inline-block">
                     <form class="search-container">
-                        <input id="search-box" type="text" class="search-box" name="q" />
+                        <input autocomplete="off" id="search-box" type="text" class="search-box" name="q" />
                         <label for="search-box"><i class="search-icon material-icons">search</i></label>
                         <input type="submit" id="search-submit" />
                     </form>
-
+                </div>
                     <ul class="navbar-nav mr-auto">
                     </ul>
                     <button data-toggle="modal" data-target="#uploadmodal" class="btn-hover color-4"><i class="material-icons">add</i>Add Photo</button>
