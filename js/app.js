@@ -127,6 +127,12 @@ function addappcontent() {
         document.getElementsByClassName('main-avatar')[0].src = doc.data().url
         document.getElementsByClassName('main-avatar')[0].style.display = 'block'
 
+        if (doc.data().name == null || doc.data().name == undefined) {
+            db.collection('users').doc(user.uid).update({
+                name: user.displayName
+            })
+        }
+
         document.getElementById('sidebarname').innerHTML = user.displayName + '<br><span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
 
         // REPUTATION
@@ -164,8 +170,8 @@ function addappcontent() {
         }
 
 
-        document.getElementById('following1').innerHTML = '~' + nFormatter(doc.data().following, 1)
-        document.getElementById('followers1').innerHTML = '~' + nFormatter(doc.data().followers, 1)
+        document.getElementById('following1').innerHTML = nFormatter(doc.data().following.length, 1)
+        document.getElementById('followers1').innerHTML = nFormatter(doc.data().followers.length, 1)
 
 
     })

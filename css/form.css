@@ -66,6 +66,7 @@
   padding-left: 4px;
 }
 .rocket-button {
+  cursor: pointer;
   --background: #262730;
   --text: #fff;
   --check: #5c86ff;

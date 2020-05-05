@@ -8,7 +8,7 @@ interval = window.setInterval(function () {
 function showall() {
     document.getElementById('dropdownMenuButton1').innerHTML = 'Showing All Posts <i class="material-icons">keyboard_arrow_down</i>'
 
-    document.getElementById('gridrelevant').style.display = 'none'
+    document.getElementById('gridrelevant').setAttribute('style', 'display:none !important');
     document.getElementById('grid').style.removeProperty('display');
     document.getElementById('norelevantstuff').style.display = 'none'
     resizeAllGridItemsAll()
@@ -19,7 +19,7 @@ function dontshowall() {
     document.getElementById('dropdownMenuButton1').innerHTML = 'Showing Relevant Posts <i class="material-icons">keyboard_arrow_down</i>'
 
     document.getElementById('gridrelevant').style.removeProperty('display');
-    document.getElementById('grid').style.display = 'none'
+    document.getElementById('grid').setAttribute('style', 'display:none !important');
 
     if( $('#gridrelevant').is(':empty') ) {
         document.getElementById('norelevantstuff').style.display = 'block'
@@ -333,7 +333,6 @@ function fullscreen(id) {
 
     if (sessionStorage.getItem('fullscreenon') == 'yes') {
         sessionStorage.setItem('fullscreenon', 'no')
-        console.log('duplicate fullscreen avoided');
     }
 
     a = document.createElement('div')
@@ -352,7 +351,6 @@ function fullscreenrelevant(id) {
     $('body').css('overflow', 'hidden');
     if (sessionStorage.getItem('fullscreenon') == 'yes') {
         sessionStorage.setItem('fullscreenon', 'no')
-        console.log('duplicate fullscreen avoided');
     }
     else {
         a = document.createElement('div')
@@ -476,7 +474,6 @@ function like(id) {
                         document.getElementById(id + 'eliconrelevant').classList.remove('jello')
                     }, 1300)
                 } catch {
-
                 }
 
             }
@@ -535,7 +532,6 @@ async function addstuffuser(name, data, time, last) {
             document.getElementById(name + "commentEluser").innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + bambam
         })
 
-
         if (last) {
             addWaves()
             window.setTimeout(function() {
@@ -549,8 +545,8 @@ async function addstuffuser(name, data, time, last) {
 }
 
 async function usermodal(uid) {
-    console.log(uid);
     previousview = sessionStorage.getItem("currentlyviewinguser")
+    document.getElementById('usermodalfollowtext').style.visibility = 'hidden'
 
     if (previousview == uid) {
         $('#userModal').modal('toggle')
@@ -559,7 +555,6 @@ async function usermodal(uid) {
 
     else {
         toggleloader()
-        console.log(uid);
         sessionStorage.setItem('currentlyviewinguser', uid)
         window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
         $('#usergrid').empty()
@@ -570,7 +565,7 @@ async function usermodal(uid) {
             doc = userdoc
             username = doc.data().username
             useruid = doc.data().uid
-            document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge centeredy">@' + doc.data().username + '</span><span style="visibility: hidden;" class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
+            document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
             document.getElementById('usermodalpfp').src = doc.data().url
             if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") { }
             else { document.getElementById('usermodalbio').innerHTML = doc.data().bio }
@@ -595,41 +590,82 @@ async function usermodal(uid) {
                 }
             }
             if (isfollow) {
+                if (user.uid !== uid) {
+
+                
                 document.getElementById('followbtn').innerHTML = 'unfollow'
+
+                document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
+                document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
+                window.setTimeout(function() {
+                    document.getElementById('usermodalfollowtext').classList.add('fadeInUp')
+                    document.getElementById('usermodalfollowtext').style.visibility = 'visible'; document.getElementById('usermodalfollowtext').style.display = 'block'
+                }, 500)
+                
+
                 document.getElementById('followbtn').onclick = function () {
                     unfollow(uid, username)
                 }
                 loaduserposts(uid)
+
+                }
             }
             else {
-                document.getElementById('followbtn').innerHTML = 'follow'
-                document.getElementById('followbtn').onclick = function () {
-                    follow(uid, username)
-                }
+                if (user.uid !== uid) {
 
-                if (userdoc.data().type == 'private') {
-                    document.getElementById('privatewarning').style.display = 'block'
-                    requested = userdoc.data().requested
-                    isrequest = false
-                    for (const item of ppl) {
-                        if (item == uid) {
-                            isrequest = true
-                        }
+                    document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
+                    document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
+                    window.setTimeout(function() {
+                        document.getElementById('usermodalfollowtext').style.visibility = 'hidden'
+                    }, 500)
+
+                    document.getElementById('followbtn').innerHTML = 'follow'
+                    document.getElementById('followbtn').onclick = function () {
+                        follow(uid, username)
                     }
 
-                    if (isrequest == true) {
-                        document.getElementById('followbtn').innerHTML = 'cancel request'
-                        document.getElementById('followbtn').onclick = function () {
-                            unrequest(uid, username)
+                    if (userdoc.data().type == 'private') {
+                        document.getElementById('privatewarning').style.display = 'block'
+                        requested = userdoc.data().requested
+                        isrequest = false
+                        for (const item of requested) {
+                            if (item == uid) {
+                                isrequest = true
+                            }
+                        }
+
+                        if (isrequest == true) {
+                            document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
+                            document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
+                            window.setTimeout(function() {
+                                document.getElementById('usermodalfollowtext').classList.add('fadeInUp')
+                                document.getElementById('usermodalfollowtext').style.visibility = 'visible'; document.getElementById('usermodalfollowtext').style.display = 'block'
+                                document.getElementById('usermodalfollowtext').innerHTML = '<i class="material-icons" id="followicon">access_time</i> Requested'
+                            }, 500)
+
+                            document.getElementById('followbtn').innerHTML = 'cancel request'
+                            document.getElementById('followbtn').onclick = function () {
+                                unrequest(uid, username)
+                            }
+                        }
+                        else {
+                            document.getElementById('followbtn').innerHTML = 'request'
+                            document.getElementById('followbtn').onclick = function () {
+                                request(uid, username)
+                            } 
+                        }
+                    }
+                    else {
+                        if (user.uid !== uid) {
+                            loaduserposts(uid)
                         }
                     }
                 }
-        }
-
-        window.setTimeout(function() {
-            toggleloader()
-        }, 500)
-
+            }
+        
+            window.setTimeout(function() {
+                toggleloader()
+            }, 500)
 
         })
 
@@ -639,7 +675,6 @@ async function usermodal(uid) {
             document.getElementById('followbtn').onclick = function () {
                 Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
             }
-            
             loaduserposts(uid)
         }
     }
@@ -647,7 +682,6 @@ async function usermodal(uid) {
 
 function loaduserposts(uid) {
     array = []
-    
     db.collection('posts').doc('posts').get().then(function (doc) {
         userpostcount = 0
         latest = doc.data().latest
@@ -655,13 +689,11 @@ function loaduserposts(uid) {
             if (doc.data()[i] == undefined) {
             }
             else {
-                userpostcount++
-                if (doc.data()[i].data.uid == user.uid) {
+                if (doc.data()[i].data.uid == uid) {
                     array.push({ name: i, data: doc.data()[i], time: doc.data()[i].timestamp })
                 }
             }
         }
-        userpostcount = userpostcount - 1
 
         array.reverse()
         actualuser(array)
@@ -684,13 +716,14 @@ function actualuser(array) {
 
         document.getElementById('usergrid').appendChild(z)
 
-        if (i == userpostcount) {
-            addstuffuser(name, data, time, true)
+        arraylengthminusone = array.length - 1
+        if (i == arraylengthminusone) {
+                addstuffuser(name, data, time, true)
         }
         else {
             addstuffuser(name, data, time, false)
         }
-        
+
     }
 }
 
@@ -714,26 +747,19 @@ function info(id) {
 
         if (doc.data()[id].data.uid == user.uid) {
             document.getElementById('deletebtnfrominfo').onclick = function () {
-                db.collection('posts').doc('posts').update({
-                    [id]: firebase.firestore.FieldValue.delete()
-                })
-                db.collection('posts').doc('comments').update({
-                    [id]: firebase.firestore.FieldValue.delete()
-                })
-                db.collection('posts').doc('likes').update({
-                    [id]: firebase.firestore.FieldValue.delete()
-                })
-                db.collection('posts').doc('reported').update({
-                    [id]: firebase.firestore.FieldValue.delete()
-                }).then(function () {
-                    Snackbar.show({ text: 'Your post was deleted.' })
-                })
+
+                document.getElementById('deletebtnfrominfo').innerHTML = '<i class="material-icons gradicon">delete_forever</i> confirm';
+                document.getElementById('deletebtnfrominfo').classList.add('deletebtnexpanded')
+                document.getElementById('deletebtnfrominfo').classList.add('fadeIn')
+                document.getElementById('deletebtnfrominfo').onclick = function() {
+                    deletepost(id, doc.data()[id].data.uid)
+                }
             }
 
             document.getElementById('deletebtnfrominfo').style.display = 'inline-block'
         }
         else {
-            document.getElementById('deletebtnfrominfo').style.display = 'none'
+            document.getElementById('deletebtnfrominfo').setAttribute('style', 'display:none !important');
         }
 
         document.getElementById('reportbtnfrominfo').onclick = function () {
@@ -765,8 +791,108 @@ function info(id) {
 
 }
 
+function deletepost(id, credentials) {
+
+    if (credentials !== user.uid) {
+        error('Suspicious activity detected. Your account has been flagged.')
+        reportUser(user.uid)
+
+
+    }
+    else {
+
+    document.getElementById('deletebtnfrominfo').classList.remove('fadeIn')
+    document.getElementById('deletebtnfrominfo').innerHTML = '<i class="material-icons gradicon">restore_from_trash</i> deleting...';
+    document.getElementById('deletebtnfrominfo').classList.add('deletebtnexpandeddone')
+    document.getElementById('deletebtnfrominfo').classList.add('fadeOutUp')
+
+    db.collection('posts').doc('posts').update({
+        [id]: firebase.firestore.FieldValue.delete()
+    })
+    db.collection('posts').doc('comments').update({
+        [id]: firebase.firestore.FieldValue.delete()
+    })
+    db.collection('posts').doc('likes').update({
+        [id]: firebase.firestore.FieldValue.delete()
+    })
+    db.collection('posts').doc('reported').update({
+        [id]: firebase.firestore.FieldValue.delete()
+    }).then(function () {
+        $('#infomodallist').children().each(function(i, el) {
+            randomnum = Math.floor(Math.random() * 3)
+            if (randomnum == 0 || randomnum == 1) {
+                el.classList.add('animated')
+                el.classList.add('hinge')
+                el.classList.add('slower')
+                bam = Math.floor(Math.random() * 3)
+                el.style.animationDelay = bam + 's'
+            }
+        })
+        $('#infobtngroup').children().each(function(i, el) {
+            randomnum = Math.floor(Math.random() * 3)
+            if (randomnum == 0 || randomnum == 1) {
+                el.classList.add('animated')
+                el.classList.add('hinge')
+                el.classList.add('slower')
+                bam = Math.floor(Math.random() * 3)
+                el.style.animationDelay = bam + 's'
+            }
+        })
+
+
+        window.setTimeout(function() {
+            $('#infobtngroup').children().each(function(index) {
+                this.classList.remove('animated')
+                this.classList.remove('hinge')
+                this.classList.remove('slower')
+            })
+
+
+            $('#infomodallist').children().each(function(index) {
+                this.classList.remove('animated')
+                this.classList.remove('hinge')
+                this.classList.remove('slower')
+            })
+        }, 5000)
+
+        window.setTimeout(function() {
+            $('#infoModal').modal('hide')
+            Snackbar.show({ text: 'Your post was deleted.' })
+
+            document.getElementById(id + "relevantshell").classList.add('animated')
+            document.getElementById(id + "relevantshell").classList.add('zoomOut')
+            window.setTimeout(function() {document.getElementById(id + "relevantshell").remove()}, 500)
+
+            document.getElementById(id + "shell").classList.add('animated')
+            document.getElementById(id + "shell").classList.add('zoomOut')
+            window.setTimeout(function() {document.getElementById(id + "shell").remove()}, 500)
+
+            localStorage.removeItem('currentlyviewinguser')
+
+            document.getElementById('deletebtnfrominfo').onclick = function () {
+
+                document.getElementById('deletebtnfrominfo').innerHTML = '<i class="material-icons gradicon">delete_forever</i> confirm';
+                document.getElementById('deletebtnfrominfo').classList.add('deletebtnexpanded')
+                document.getElementById('deletebtnfrominfo').classList.add('fadeIn')
+                document.getElementById('deletebtnfrominfo').onclick = function() {
+                    deletepost(id, doc.data()[id].data.uid)
+                }
+            }
+            document.getElementById('deletebtnfrominfo').innerHTML = '<i class="material-icons gradicon">delete</i>'
+            document.getElementById('deletebtnfrominfo').classList.remove('deletebtnexpanded')
+            document.getElementById('deletebtnfrominfo').classList.remove('deletebtnexpandeddone')
+
+        }, 4000)
+    })
+}
+}
+
 function reportComment(id) {
     console.log('reporting function??');
+}
+
+function reportUser(id) {
+    console.log('report user function??');
 }
 
 function refreshcomments(id) {
@@ -850,8 +976,11 @@ function listencommentsrelevant() {
 
             }
             else {
-
-                document.getElementById(i + 'commentElrelevant').innerHTML = '<i class="material-icons posticon">chat_bubble_outline</i> ' + doc.data()[i].length
+                try {
+                    document.getElementById(i + 'commentElrelevant').innerHTML = '<i class="material-icons posticon">chat_bubble_outline</i> ' + doc.data()[i].length   
+                } catch (error) {
+                
+                }
                 addWaves()
             }
         }
@@ -933,18 +1062,28 @@ function listenlikesrelevant() {
                     }
 
                 }
-
                 if (isliked) {
-
-                    document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" style=" color: red;" class="material-icons posticon animated">favorite</i> ' + doc.data()[i].length
+                    try {
+                        document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" style=" color: red;" class="material-icons posticon animated">favorite</i> ' + doc.data()[i].length
+                    } catch (error) {
+                        
+                    }
 
                 }
                 else {
                     if (doc.data()[i].length == 0) {
-                        document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> '
+                        try {
+                            document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> '    
+                        } catch (error) {
+                        }
                     }
                     else {
-                        document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> ' + doc.data()[i].length
+                        try {
+                            document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> ' + doc.data()[i].length    
+                        } catch (error) {
+
+                        }
+                        
                     }
 
                 }
@@ -1086,7 +1225,7 @@ function follow(uid, name) {
     db.collection('users').doc(uid).get().then(function (doc) {
         if (doc.data().type == 'private') {
 
-            db.collection('users').doc(uid).collection('follow').doc('requested').update({
+            db.collection('users').doc(uid).update({
                 requested: firebase.firestore.FieldValue.arrayUnion(user.uid)
             }).then(function () {
                 Snackbar.show({ text: 'Requested to follow ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'cancel' })
@@ -1094,21 +1233,39 @@ function follow(uid, name) {
                 document.getElementById('followbtn').onclick = function () {
                     unrequest(uid, username)
                 }
+
+                document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
+                document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
+                document.getElementById('usermodalfollowtext').style.visibility = 'hidden'
+                window.setTimeout(function() {
+                    document.getElementById('usermodalfollowtext').style.visibility = 'visible'; document.getElementById('usermodalfollowtext').style.display = 'block'
+                    document.getElementById('usermodalfollowtext').classList.add('fadeInUp')
+                    document.getElementById('usermodalfollowtext').innerHTML = '<i class="material-icons" id="followicon">access_time</i> Requested'
+                }, 500)
+
             })
         }
         else {
-            db.collection('users').doc(user.uid).collection('follow').doc('following').update({
+            db.collection('users').doc(user.uid).update({
                 following: firebase.firestore.FieldValue.arrayUnion(uid)
             }).then(function () {
-                db.collection('users').doc(uid).collection('follow').doc('followers').update({
+                db.collection('users').doc(uid).update({
                     followers: firebase.firestore.FieldValue.arrayUnion(user.uid)
                 }).then(function () {
                     Snackbar.show({ text: 'Started following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'Unfollow' })
-
                     document.getElementById('followbtn').innerHTML = 'unfollow'
                     document.getElementById('followbtn').onclick = function () {
                         unfollow(uid, username)
                     }
+                    document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
+                    document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
+                    document.getElementById('usermodalfollowtext').style.visibility = 'hidden'
+                    window.setTimeout(function() {
+                        document.getElementById('usermodalfollowtext').classList.add('fadeInUp')
+                        document.getElementById('usermodalfollowtext').style.visibility = 'visible'; document.getElementById('usermodalfollowtext').style.display = 'block'
+                        document.getElementById('usermodalfollowtext').innerHTML = '<i class="material-icons" id="followicon">done</i> Following'
+                    }, 500)
+
                 })
             })
         }
@@ -1119,10 +1276,10 @@ function follow(uid, name) {
 
 function unfollow(uid, name) {
 
-    db.collection('users').doc(user.uid).collection('follow').doc('following').update({
+    db.collection('users').doc(user.uid).update({
         following: firebase.firestore.FieldValue.arrayRemove(uid)
     }).then(function () {
-        db.collection('users').doc(uid).collection('follow').doc('followers').update({
+        db.collection('users').doc(uid).update({
             followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
         }).then(function () {
             Snackbar.show({ text: 'Stopped following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
@@ -1130,13 +1287,20 @@ function unfollow(uid, name) {
             document.getElementById('followbtn').onclick = function () {
                 follow(uid, username)
             }
+            
+            document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
+            document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
+            window.setTimeout(function() {
+                document.getElementById('usermodalfollowtext').classList.add('fadeOutDown')
+                document.getElementById('usermodalfollowtext').style.visibility = 'visible'; document.getElementById('usermodalfollowtext').style.display = 'block'
+            }, 500)
         })
     })
 }
 
 function unrequest(uid, name) {
 
-    db.collection('users').doc(uid).collection('follow').doc('requested').update({
+    db.collection('users').doc(uid).update({
         followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
     }).then(function () {
         Snackbar.show({ text: 'Cancelled follow request for ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
@@ -1144,6 +1308,14 @@ function unrequest(uid, name) {
         document.getElementById('followbtn').onclick = function () {
             follow(uid, username)
         }
+
+        document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
+        document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
+        window.setTimeout(function() {
+            document.getElementById('usermodalfollowtext').classList.add('fadeOutDown')
+            document.getElementById('usermodalfollowtext').style.visibility = 'visible'; document.getElementById('usermodalfollowtext').style.display = 'block'
+        }, 500)
+
     })
 }
 

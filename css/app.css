@@ -33,6 +33,7 @@ custom-control-label::before {
     background-color: var(--bg-secondary);
     color: var(--content-primary);
     border-radius: 15px 0px 0px 15px;
+    min-height: 100%;
 
 }
 
@@ -45,10 +46,12 @@ custom-control-label::before {
     border-radius: 0px 0px 0px 0px;
     width: 100%;
     transition: all 0.5s;
+    min-height: 100%;
 }
 
 #sidebar {
-    width: 275px;
+    width: 300px;
+    padding-right: 25px;
     padding-top: 16px;
     position: fixed;
     border-radius: 0px 12px 12px 0px;
@@ -143,8 +146,17 @@ width: 90%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent; 
     -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;   
+}
+
+.gradicon {
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    padding: 6px;
     
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;   
 }
 
 .navbarbutton {
@@ -456,12 +468,12 @@ width: 90%;
 }
 
 .list-group-item {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     color: var(--content-primary);
 }
 
 .list-group-item:hover {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
     color: var(--content-primary);
 }
 
@@ -552,6 +564,17 @@ width: 90%;
     -moz-text-fill-color: transparent;
 }
 
+#followicon {
+    display: inline-block;
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    padding: 8px;
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
 .inline {
     display: inline-block;
     line-height: 0px;
@@ -573,4 +596,29 @@ width: 90%;
     border-radius: 12px; 
     font-size: 18px;
     margin-left: 12px;
+    position: relative; 
+    top: -3px;
+}
+
+.list-group-item:first-child {
+    border-radius: 12px 12px 0px 0px;
+}
+
+.list-group-item:last-child {
+    border-radius: 0px 0px 12px 12px;
+}
+
+.deletebtnunexpanded {
+    width: 0px !important;
+}
+
+.deletebtnexpanded {
+    width: 120px !important;
+    background-color: rgb(238, 123, 0, 0.1) !important;
+    transition: all 1s !important;
+    justify-content: left !important;
+}
+
+.deletebtnexpandeddone {
+    width: 140px !important;
 }

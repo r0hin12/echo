@@ -35,7 +35,9 @@ function tabe(tab) {
 
     sessionStorage.setItem("currentab", tab)
     $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })
-    $('#justifiedTab').children('i').each(function () { this.classList.remove('iconactive'); })
+    $('.iconactive').each(function(i, obj) {
+        obj.classList.remove('iconactive')
+    })
     $('#justifiedTab').children('h4').each(function () { this.classList.remove('navbarbuttontextactive'); })
     document.getElementById(tab + '-tab').classList.add('navthing')
     document.getElementById(tab + '-icon').classList.add('iconactive')

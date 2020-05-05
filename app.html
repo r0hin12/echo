@@ -102,11 +102,11 @@
             </div>
         </div></div></div>
 
-        <div class="modal fade bd-example-modal-lg" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content">
+        <div class="modal fade bd-example-modal-lg" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div id="infomodal-content" class="modal-content">
             <div class="modal-body">
                 <center><h2>Post Info</h2></center>
              
-                    <ul class="list-group">
+                    <ul id="infomodallist" class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                           File Name
                           <span id="infoa">ok</span>
@@ -129,12 +129,14 @@
                           </li>
                       </ul>
 
-                      <center>
+                      <center id="infobtngroup">
                           <br>
-                        <a data-dismiss="modal" id="commentbtnfrominfo" class="waves eon-text">Comments</a> 
-                        <a data-dismiss="modal" id="userbtnfrominfo" class="waves eon-text">User</a>
-                        <a data-dismiss="modal" id="reportbtnfrominfo" class="waves eon-text">Report</a> 
-                        <a data-dismiss="modal" id="deletebtnfrominfo" class="waves eon-text">Delete</a> 
+                        <a data-dismiss="modal" id="commentbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">comment</i></a> 
+                        <a data-dismiss="modal" id="userbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">person</i></a>
+                        <a data-dismiss="modal" id="reportbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">report</i></a> 
+                        <a id="deletebtnfrominfo" class="waves eon-text animated deletebtnunexpanded"><i class="material-icons gradicon">delete</i></a> 
+
+
                     <br><br>
                     <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
                     </center>
@@ -160,6 +162,8 @@
                         <div class="row">
                             <div class="col-sm">
                                 <img id="usermodalpfp" class="usermodalpfp" alt="Error loading image.">
+                                <br><br>
+                                <h4 style="display: none;" id="usermodalfollowtext" class="animated"><i class="material-icons" id="followicon">done</i> Following</h4>
                             </div>
                             <div class="col-sm">
                                 <div style="position: relative;">
@@ -194,16 +198,15 @@
                     </div>
                 </div>
             </div>
-            <br>
             <div><center><h2 id="userrep">#</h2><br><h3 class="inline"><small>Reputation</small></h3></center></div>
             <br>
-            <div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+            <div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-primary alert-dismissible fade show" role="alert">
                 <strong>This account is private.</strong> Follow this user to see their content.
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-info alert-dismissible fade show" role="alert">
+            <div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-primary alert-dismissible fade show" role="alert">
                 <strong>This is your account.</strong> Share it with people to gain followers!
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -264,7 +267,7 @@
 </div>
 
 <div style="display: none;" class="doemail animated fadeIn" id="doemail">
-    <div class="centered animated fadeIn" id="profilesetup1">
+    <div class="centered animated fadeIn" id="emailsetup1">
         <div class="card">
             <div style="color: black;" class="card-body">
                 <h3>Verify your Email</h3>
@@ -275,22 +278,6 @@
                     <p id="verifyresponse"></p>
                     <button onclick="checkverification()" class="eon-text">Check Verification</button>
                     </div>
-                </center>
-            </div>
-        </div>
-    </div>
-    <div class="centered animated fadeIn" style="display: none;" id="profilesetup2">
-        <div class="card">
-            <div style="color: black;" class="card-body">
-                <h3>Complete your Profile</h3>
-                <br>
-                <div class="floating-label textfield-box">
-                    <label for="namefield">Your Name</label>
-                    <input style="color: black !important;" class="form-control" placeholder="" id="namefield" type="text">
-                  </div>
-                  <br>
-                  <center>
-                      <button onclick="profilesetup2()" class="eon-text">save</button>
                 </center>
             </div>
         </div>
@@ -339,6 +326,10 @@
         <a onclick="tabe('home')" aria-controls="home" aria-selected="true" data-toggle="tab" href="#home" id="home-tab" role="tab" class="waves-effect waves-button navbarbutton">
         <i id="home-icon" class="material-icons centeredy iconinactive">whatshot</i> <h4 id="home-text" class="navbarbuttontext">Home</h4>
         </a>
+
+        <a onclick="tabe('notifications')" aria-controls="notifications" aria-selected="true" data-toggle="tab" href="#notifications" id="notifications-tab" role="tab" class="waves-effect waves-button navbarbutton">
+            <i id="notifications-icon" class="material-icons centeredy iconinactive">notifications</i> <h4 id="notifications-text" class="navbarbuttontext">Notifications</h4>
+            </a>
     </div>             
 
     </div>
@@ -419,9 +410,11 @@
 
             </div>
 
+            <div aria-labelledby="notifications-tab" class="tab-pane fade" id="notifications" role="tabpanel">
+                notifications
+            </div>
          
-            
-
+        
 
 
             
@@ -442,7 +435,7 @@
         <!-- Bootstrap --><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
         <!-- Eon Styles --><script src="https://rohinarya12.github.io/eonstyles/new/eon.js"></script>
         <!-- Daemonite --><script src="daemonite/material.min.js"></script>
-        <!-- Waves --><script src="daemonite/waves.min.js"></script><script>addWaves();function addWaves(){ Waves.attach('.eon-contained', ['waves-button', 'waves-light']);Waves.attach('.eon-outlined', ['waves-button']);Waves.attach('.eon-text', ['waves-button']);var config = {duration: 250}; Waves.init(config);}</script>
+        <!-- Waves --><script src="daemonite/waves.min.js"></script><script>addWaves();function addWaves(){ Waves.attach('.eon-contained', ['waves-button']);Waves.attach('.eon-outlined', ['waves-button']);Waves.attach('.eon-text', ['waves-button']);var config = {duration: 250}; Waves.init(config);}</script>
         <!-- Snackbar --><script src="daemonite/snackbar.min.js"></script><style>.snackbar-container {padding-top: 8px !important;padding-bottom: 8px !important;border-radius: 8px !important;max-width: 8723789253786352614975678392738649502976483528059748327952px;}</style>
         <!-- Images Loaded--><script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
         <!-- Button work--><script src='js/charming.js'></script>
