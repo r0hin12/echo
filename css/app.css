@@ -622,3 +622,15 @@ width: 90%;
 .deletebtnexpandeddone {
     width: 140px !important;
 }
+
+.refreshbtn {
+    padding: 12px !important;
+    padding-left: 20px !important;
+    border-radius: 12px !important;
+    padding-right: 20px !important;
+    margin-right: 12px !important;
+    width: 0px !important;
+    min-width: 0px !important;
+    max-width: 0px !important;
+
+}

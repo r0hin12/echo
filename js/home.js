@@ -12,6 +12,7 @@ function showall() {
     document.getElementById('grid').style.removeProperty('display');
     document.getElementById('norelevantstuff').style.display = 'none'
     resizeAllGridItemsAll()
+    sessionStorage.setItem('view', 'all')
 
 }
 
@@ -24,26 +25,31 @@ function dontshowall() {
     if( $('#gridrelevant').is(':empty') ) {
         document.getElementById('norelevantstuff').style.display = 'block'
     }
-
-
+    sessionStorage.setItem('view', 'relevant')
 
     resizeAllGridItems()
 }
+
 urlParams = new URLSearchParams(window.location.search);
 addpostslistener()
 sessionStorage.setItem('fullscreenon', 'no')
+sessionStorage.setItem('view', 'relevant')
 sessionStorage.setItem('viewing', 'stoplookinghere')
 sessionStorage.setItem('currentlyviewinguser', 'uwu')
 
 function load() {
+    window.infiniteScrollCount = 6
+    window.currentScrollCount = 0
+    window.currentRelScrollCount = 0
+
     i = 0
     yeetpostslistener()
     addpostslistener()
     $('#grid').empty()
     $('#gridrelevant').empty()
 
-    exarray = []
-    fearray = []
+    window.exarray = []
+    window.fearray = []
 
     db.collection('app').doc('verified').get().then(function (verifieddoc) {
 
@@ -68,6 +74,7 @@ function load() {
                             fearray.push({ name: elementid, data: elementdata, time: elementtime })
                         }
                         for (let i = 0; i < following.length; i++) {
+
                             if (following[i] == elementdata.uid) {
                                 fearray.push({ name: elementid, data: elementdata, time: elementtime })
                             }
@@ -83,8 +90,10 @@ function load() {
 
                 exarray.reverse()
                 fearray.reverse()
-                build(exarray)
-                buildrelevant(fearray)
+                sessionStorage.setItem("InfScrollData", JSON.stringify(exarray))
+                build()
+                sessionStorage.setItem("InfRelScrollData", JSON.stringify(fearray))
+                buildrelevant()
 
             })
         })
@@ -92,7 +101,17 @@ function load() {
     })
 }
 
-function build(array) {
+function build() {
+
+    array = sessionStorage.getItem('InfScrollData')
+    array = JSON.parse(array)
+    // exarray
+    for (let i = 0; i < currentScrollCount; i++) {
+        array.shift()
+    }
+
+    array = array.slice(0, infiniteScrollCount);
+
     sessionStorage.setItem('count', 0)
     sessionStorage.setItem('maxCount', array.length)
 
@@ -103,15 +122,45 @@ function build(array) {
 
         z = document.createElement('div')
         z.classList.add('shell')
+        z.style.visibility = 'hidden'
         z.id = name + 'shell'
 
         document.getElementById('grid').appendChild(z)
 
+        showelement(name + 'shell', i)
+
         addcontent(name, data, time)
     }
+
+    currentScrollCount = currentScrollCount + infiniteScrollCount
+}
+
+function showelement(id, index) {
+    window.setTimeout(function() {
+        z = document.getElementById(id)
+        z.style.visibility = 'visible'
+        z.classList.add('animated')
+        z.classList.add('fadeInUp')
+        adelay = index * 1000;adelay = adelay / 2;adelay = adelay / 2
+        z.style.animationDelay = adelay
+    }, 1500)
 }
 
 function buildrelevant(array) {
+
+
+
+    array = sessionStorage.getItem('InfRelScrollData')
+    array = JSON.parse(array)
+    // exarray
+    for (let i = 0; i < currentRelScrollCount; i++) {
+        array.shift()
+    }
+
+    array = array.slice(0, infiniteScrollCount);
+
+    // fearray
+
     if (array.length == 0) {
         document.getElementById('norelevantstuff').style.display = 'inline-block'
     }
@@ -129,12 +178,17 @@ function buildrelevant(array) {
 
         z = document.createElement('div')
         z.classList.add('postshell')
+        z.style.visibility = 'hidden'
         z.id = name + 'relevantshell'
+
+        showelement(name + 'relevantshell', i)
 
         document.getElementById('gridrelevant').appendChild(z)
 
         addcontentrelevant(name, data, time)
     }
+
+    currentRelScrollCount = currentRelScrollCount + infiniteScrollCount
 }
 
 async function addcontent(name, data, time) {
@@ -195,7 +249,6 @@ async function addcontent(name, data, time) {
                 document.getElementById('loading').classList.add('fadeOut')
             }, 800)
             window.setTimeout(function () {
-                dontshowall()
                 window.setTimeout(function () {
                     document.getElementById('loading').style.display = 'none'
                 })
@@ -235,7 +288,7 @@ async function addcontentrelevant(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button>'
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button><hr>'
         document.getElementById(name + 'relevantshell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelementrelevant').tooltip()
@@ -249,6 +302,7 @@ async function addcontentrelevant(name, data, time) {
 
         if (sessionStorage.getItem('count2') == sessionStorage.getItem('maxCount2')) {
             addWaves()
+            document.getElementById('gridrelevant').style.display = 'grid'
             $('#' + 'postshell').imagesLoaded(function () {
                 window.setTimeout(function () {
                     resizeAllGridItems()
@@ -536,7 +590,7 @@ async function addstuffuser(name, data, time, last) {
             addWaves()
             window.setTimeout(function() {
                 resizeAllGridItemsUser()
-            }, 500)
+            }, 1000)
         }
 
     }).catch(function (error) {
@@ -859,13 +913,20 @@ function deletepost(id, credentials) {
             $('#infoModal').modal('hide')
             Snackbar.show({ text: 'Your post was deleted.' })
 
-            document.getElementById(id + "relevantshell").classList.add('animated')
-            document.getElementById(id + "relevantshell").classList.add('zoomOut')
-            window.setTimeout(function() {document.getElementById(id + "relevantshell").remove()}, 500)
-
-            document.getElementById(id + "shell").classList.add('animated')
-            document.getElementById(id + "shell").classList.add('zoomOut')
-            window.setTimeout(function() {document.getElementById(id + "shell").remove()}, 500)
+            try {
+                document.getElementById(id + "relevantshell").classList.add('animated')
+                document.getElementById(id + "relevantshell").classList.add('zoomOut')
+                window.setTimeout(function() {document.getElementById(id + "relevantshell").remove()}, 500)   
+            } catch (error) {
+                
+            }
+            try {
+                document.getElementById(id + "shell").classList.add('animated')
+                document.getElementById(id + "shell").classList.add('zoomOut')
+                window.setTimeout(function() {document.getElementById(id + "shell").remove()}, 500)
+            } catch (error) {
+    
+            }
 
             localStorage.removeItem('currentlyviewinguser')
 
@@ -1412,21 +1473,58 @@ function newpost() {
 }
 
 function refreshhome() {
-    document.getElementById('grid').classList.remove('fadeIn')
-    document.getElementById('gridrelevant').classList.remove('fadeIn')
-    document.getElementById('grid').classList.add('fadeOut')
-    document.getElementById('gridrelevant').classList.add('fadeOut')
-    window.setTimeout(function () {
-        document.getElementById('gridrelevant').style.display = 'none'
-        document.getElementById('grid').style.display = 'block'
+    error('Function refreshhome() deprecated.')
+}
+
+
+$(window).scroll(function() {
+    if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        if (sessionStorage.getItem('view') == 'all') {
+            build()
+        }
+        else {
+        
+        }
+    }
+ });
+
+function refresh(btn) {
+
+    btn.onclick = function() {
+        Snackbar.show({text: "Please wait before requesting more posts."})
+    }
+    window.setTimeout(function() {
+        btn.onclick = function() {
+            refresh(this)
+        }
+    }, 12000)
+
+    $('#gridrelevant').empty()
+    $('#grid').empty()
+
+    document.getElementById('containerhometab').classList.remove('fadeIn')
+    document.getElementById('containerhometab').classList.add('animated')
+    document.getElementById('containerhometab').classList.add('fadeOut')
+    document.getElementById('containerhometab').classList.add('fast')
+
+    window.setTimeout(function() {
+
         load()
-    }, 1000)
-    window.setTimeout(resizeAllGridItems(), 1500)
-    window.setTimeout(function () {
-        document.getElementById('grid').classList.add('fadeIn')
-        document.getElementById('gridrelevant').classList.add('fadeIn')
-        document.getElementById('grid').classList.remove('fadeOut')
-        document.getElementById('gridrelevant').classList.remove('fadeOut')
-    }, 1000)
+        window.setTimeout(function() {
+            document.getElementById('containerhometab').classList.remove('fadeOut')
+            document.getElementById('containerhometab').classList.add('fadeIn')
+
+            window.setTimeout(function() {
+                if (sessionStorage.getItem('view') == 'relevant') {
+                    dontshowall()
+                }
+                else {
+                    showall()
+                }
+            }, 300)
+        }, 1000)
+
+
+    }, 600)
 
 }
