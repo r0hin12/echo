@@ -11,6 +11,10 @@
     --contrast-primary: #000;
 } 
 
+html {
+    scroll-behavior: smooth;
+}
+
 .eon-outlined .waves-ripple {
     background: rgba(255, 145, 0, 0.3) !important;
 }

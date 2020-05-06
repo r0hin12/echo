@@ -92,11 +92,15 @@ $(function () {
 
 //Grid
 function resizeGridItem(item) {
-    grid = document.getElementsByClassName("grid")[0];
-    rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-    rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
-    rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
-    item.style.gridRowEnd = "span " + rowSpan;
+    try {
+        grid = document.getElementsByClassName("grid")[0];
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+        item.style.gridRowEnd = "span " + rowSpan;   
+    } catch (error) {
+        console.log('Display resize error (Likely too fast scrolling)');
+    }
 }
 
 function resizeAllGridItems() {
@@ -112,11 +116,15 @@ function resizeAllGridItemsAll() {
     }
 }
 function resizeGridItemAll(item) {
-    grid = document.getElementsByClassName("grid")[1];
-    rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-    rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
-    rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
-    item.style.gridRowEnd = "span " + rowSpan;
+    try {
+        grid = document.getElementsByClassName("grid")[1];
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+        item.style.gridRowEnd = "span " + rowSpan;   
+    } catch (error) {
+        console.log('Display resize error (Likely too fast scrolling)');
+    }
 }
 
 
@@ -127,11 +135,15 @@ function resizeAllGridItemsUser() {
     }
 }
 function resizeGridItemUser(item) {
-    grid = document.getElementById("usergrid");
-    rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-    rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
-    rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
-    item.style.gridRowEnd = "span " + rowSpan;
+    try {
+        grid = document.getElementById("usergrid");
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+        item.style.gridRowEnd = "span " + rowSpan;
+    } catch (error) {
+        console.log('Display resize error (Likely too fast scrolling)');
+    }
 }
 
 document.querySelectorAll('.grid-list').forEach(button => button.addEventListener('click', toggle));
@@ -316,3 +328,43 @@ function preesearch() {
         autocomplete(document.getElementById("search-box"), usersearch);
     })
 }
+
+window.setInterval(function() {
+    resizeAllGridItems()
+    resizeAllGridItemsAll()
+    resizeAllGridItemsUser()
+}, 3500)
+
+$( "#userModal" ).scroll(function() { 
+    obj = document.getElementById('userModal')
+    if( obj.scrollTop === (obj.scrollHeight - obj.offsetHeight)) {
+
+        builduser()
+
+    }
+});
+
+// SCRLLING INFINITE SCROLL
+
+$(window).scroll(function() {
+
+
+    if ($(window).scrollTop() > 300) {
+        document.getElementById('returntotop').setAttribute('style', 'display:block !important');
+        document.getElementById('returntotop').classList.add('fadeInUp')
+        document.getElementById('returntotop').classList.remove('fadeOutDown')
+    }
+    else {
+        document.getElementById('returntotop').classList.add('fadeOutDown')
+        document.getElementById('returntotop').classList.remove('fadeInUp')
+    }
+
+    if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        if (sessionStorage.getItem('view') == 'all') {
+            build()
+        }
+        else {
+            buildrelevant()
+        }
+    }
+ });

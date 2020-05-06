@@ -589,7 +589,7 @@ width: 90%;
     object-fit: cover;
 }
 .usershell {
-    width: 440px;
+    width: 400px;
 }
 
 .userbadge {
@@ -630,7 +630,47 @@ width: 90%;
     padding-right: 20px !important;
     margin-right: 12px !important;
     width: 0px !important;
-    min-width: 0px !important;
     max-width: 0px !important;
 
+}
+
+.returntoptop {
+    position: fixed !important;
+    bottom: 12px; 
+    right: 12px;
+    display: none;
+}
+
+.usercard {
+    background-color: var(--bg-secondary);
+    color: var(--content-primary);
+    position: relative; 
+    z-index: 2; 
+    animation-delay: 0.5s; 
+    padding-bottom: 12px;
+}
+
+.userimg {
+    border-radius: 15px 15px 0px 0px; 
+    width: 100%; 
+    max-height: 800px; 
+    object-fit: cover
+}
+
+.captiontxt {
+    max-width: 100%; 
+    line-height: 0px;
+}
+
+.postuserbtn {
+    padding-left: 3px !important; 
+    padding-right: 3px !important; 
+    color: var(--content-primary) !important;
+
+}
+
+.posticonuser {
+    display: inline-block; 
+    color: var(--content-primary); 
+    padding: 3px;
 }

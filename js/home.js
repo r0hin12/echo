@@ -41,6 +41,7 @@ function load() {
     window.infiniteScrollCount = 6
     window.currentScrollCount = 0
     window.currentRelScrollCount = 0
+    window.currentUserScrollCount = 0
 
     i = 0
     yeetpostslistener()
@@ -146,7 +147,7 @@ function showelement(id, index) {
     }, 1500)
 }
 
-function buildrelevant(array) {
+function buildrelevant() {
 
 
 
@@ -293,7 +294,6 @@ async function addcontentrelevant(name, data, time) {
         window.setTimeout(function () {
             $('#' + name + 'verifiedelementrelevant').tooltip()
         }, 500)
-
 
         addpfprelevant(data.uid, name)
 
@@ -579,11 +579,11 @@ async function addstuffuser(name, data, time, last) {
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
 
-        a.innerHTML = '<div class="card animated fadeIn" style="position: relative; z-index: 2; animation-delay: 0.5s; padding-bottom: 12px;"><img id="' + name + 'imgelelel" class="animated fadeIn" style="border-radius: 15px 15px 0px 0px; width: 100%; max-height: 800px; object-fit: cover" src="' + url + '"><br><center><p style="max-width: 100%; line-height: 0px;">' + data.data.caption + '</p><center><button id="' + name + 'eluser" style="padding-left: 3px !important; padding-right: 3px !important; color: #000 !important;" onclick="' + likeFunc + '" class="waves eon-text heart"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" style="padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" class="waves eon-text"><i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">info</i></button><button style="padding: 0px !important; padding-left: 3px !important; padding-right: 3px !important;color: #000 !important;" onclick="' + fullFunc + '" class="waves eon-text"><i style="color: #000; font-size: 28px;" class="material-icons">fullscreen</i></button><br></div></div><br></center><br></div>'
+        a.innerHTML = '<div class="card usercard animated fadeIn"><img id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
-            document.getElementById(name + "commentEluser").innerHTML = '<i style="display: inline-block; color: #000; padding: 3px;" class="material-icons">chat_bubble_outline</i> ' + bambam
+            document.getElementById(name + "commentEluser").innerHTML = '<i class="material-icons posticonuser">chat_bubble_outline</i> ' + bambam
         })
 
         if (last) {
@@ -599,6 +599,7 @@ async function addstuffuser(name, data, time, last) {
 }
 
 async function usermodal(uid) {
+    window.currentUserScrollCount = 0
     previousview = sessionStorage.getItem("currentlyviewinguser")
     document.getElementById('usermodalfollowtext').style.visibility = 'hidden'
 
@@ -735,6 +736,7 @@ async function usermodal(uid) {
 }
 
 function loaduserposts(uid) {
+
     array = []
     db.collection('posts').doc('posts').get().then(function (doc) {
         userpostcount = 0
@@ -750,7 +752,8 @@ function loaduserposts(uid) {
         }
 
         array.reverse()
-        actualuser(array)
+        sessionStorage.setItem("InfUserScrollData", JSON.stringify(array))
+        builduser()
 
 
     }).catch(function (error) {
@@ -758,7 +761,18 @@ function loaduserposts(uid) {
     })
 }
 
-function actualuser(array) {
+function builduser() {
+
+    array = sessionStorage.getItem('InfUserScrollData')
+    array = JSON.parse(array)
+
+    for (let i = 0; i < currentUserScrollCount; i++) {
+        array.shift()
+    }
+
+    array = array.slice(0, infiniteScrollCount);
+    currentUserScrollCount = currentUserScrollCount + infiniteScrollCount
+
     for (let i = 0; i < array.length; i++) {
         name = array[i].name;
         data = array[i].data;
@@ -772,7 +786,7 @@ function actualuser(array) {
 
         arraylengthminusone = array.length - 1
         if (i == arraylengthminusone) {
-                addstuffuser(name, data, time, true)
+            addstuffuser(name, data, time, true)
         }
         else {
             addstuffuser(name, data, time, false)
@@ -1406,7 +1420,6 @@ function newpost() {
             $('#uploadmodal').modal('toggle')
         }
         else {
-
             document.getElementById('captioninput').value = ''
 
             var storageRef = firebase.storage().ref();
@@ -1475,18 +1488,6 @@ function newpost() {
 function refreshhome() {
     error('Function refreshhome() deprecated.')
 }
-
-
-$(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() == $(document).height()) {
-        if (sessionStorage.getItem('view') == 'all') {
-            build()
-        }
-        else {
-        
-        }
-    }
- });
 
 function refresh(btn) {
 
