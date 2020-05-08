@@ -143,6 +143,7 @@ function resizeGridItemUser(item) {
         item.style.gridRowEnd = "span " + rowSpan;
     } catch (error) {
         console.log('Display resize error (Likely too fast scrolling)');
+
     }
 }
 

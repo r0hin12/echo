@@ -220,7 +220,7 @@ async function addcontent(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button><hr>'
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'shell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelement').tooltip()
@@ -289,7 +289,7 @@ async function addcontentrelevant(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon">info</i></button><hr>'
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'relevantshell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelementrelevant').tooltip()
@@ -422,6 +422,7 @@ function fullscreenrelevant(id) {
 }
 
 function loadComments(id) {
+    unnewcomment()
     sessionStorage.setItem('viewing', id)
     $('#commentsbox').empty()
     document.getElementById('charcount').onclick = function () {
@@ -445,7 +446,7 @@ function loadComments(id) {
             a.classList.add('animated')
             a.classList.add('fadeIn')
             reportFunc = "reportComment('" + doc.id + "')"
-            userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#postmodal').modal('toggle')"
+            userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
             a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><a class="userlinkoncomment" onclick="' + userFunc33 + '" >' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button></div></div>'
             document.getElementById('commentsbox').appendChild(a)
             document.getElementById('commentsbox').appendChild(document.createElement('br'))
@@ -455,7 +456,7 @@ function loadComments(id) {
     })
 
     history.pushState(null, "", "?post=" + id)
-    $('#postmodal').modal('toggle')
+    $('#commentModal').modal('toggle')
 }
 
 function like(id) {
@@ -535,6 +536,23 @@ function like(id) {
     })
 }
 
+function unnewcomment() {
+    document.getElementById('addcommentbtn').removeAttribute('style');
+    document.getElementById('addcommentbtn').classList.remove('fadeOutUp')
+    document.getElementById('addcommentbtn').classList.add('fadeInDown')
+    document.getElementById('newcommentbox').style.display = 'none'
+}
+
+function newcomment() {
+    document.getElementById('addcommentbtn').classList.remove('fadeInDown')
+    document.getElementById('addcommentbtn').classList.add('fadeOutUp')
+    document.getElementById('newcommentbox').style.display = 'block'
+
+    window.setTimeout(function() {
+        document.getElementById('addcommentbtn').setAttribute('style', 'display:none !important');
+    }, 800)
+}
+
 function addComment(id) {
     text = document.getElementById('commentbox').value
     if (text == "" || text == " " || text == "  ") {
@@ -542,7 +560,7 @@ function addComment(id) {
     }
     else {
         if (document.getElementById('commentbox').value.length > 200) {
-            $('#postmodal').modal('toggle')
+            $('#commentModal').modal('toggle')
             error('Too many characters. The limit is 200.')
         }
         else {
@@ -1083,6 +1101,7 @@ function listenlikes() {
     db.collection("posts").doc('likes').onSnapshot(function (doc) {
         for (let i = 0; i < doc.data().latest + 1; i++) {
             if (doc.data()[i] == undefined) {
+
             }
             else {
                 isliked = false
@@ -1220,7 +1239,7 @@ function updatechars() {
 
 }
 
-$('#postmodal').on('hidden.bs.modal', function () {
+$('#commentModal').on('hidden.bs.modal', function () {
     if (sessionStorage.getItem('skiponce123') == "true") {
         sessionStorage.setItem('skiponce123', "false")
     }

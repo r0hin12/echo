@@ -17,28 +17,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         var myParam = urlParams.get('return');
         console.log('Doing auth change stuff');
 
-        x = sessionStorage.getItem('gottoadd')
-
-        if (x == false || x == 'false') {
-            sessionStorage.removeItem('gottoadd')
-            console.log('updating');
-            theusername = document.getElementById('user1').value
-            console.log('username: ' + theusername);
-            db.collection('app').doc('details').update({
-                usernames: firebase.firestore.FieldValue.arrayUnion(theusername)
-
-            }).then(function () {
-                db.collection('users').doc(user.uid).set({
-                    username: document.getElementById('user1').value,
-                }).then(function () { })
-            })
-        }
-
-        else {
-
-        }
-
-
         if (myParam == null) {
 
 
@@ -86,45 +64,17 @@ function signupemail() {
             error('You can not use whitespace in these fields.')
         }
         else {
-
-
-            db.collection('app').doc('details').get().then(function (doc) {
-                usernames = doc.data().usernames
-            }).then(function () {
-
-                for (let i = 0; i < usernames.length; i++) {
-                    if (usernames[i] == user) {
-                        console.log(usernames[i]);
-                        sessionStorage.setItem('continue', 'false')
-                        console.log(sessionStorage.getItem('continue'));
-                    }
-
-                }
-
-                if (sessionStorage.getItem('continue') == 'false') {
-                    error('This username is taken.')
-                }
-
-                else {
-                    sessionStorage.setItem('gottoadd', false)
-                    firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function (error) {
-                        var errorMessage = error.message;
-                        document.getElementById('erorrModalMsg').innerHTML = errorMessage
-                        $('#errorModal').modal('toggle')
-
-                        // ...
-                    });
-
-                }
-
-            })
-
-
+            sessionStorage.setItem('gottoadd', false)
+            firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function (error) {
+                var errorMessage = error.message;
+                document.getElementById('erorrModalMsg').innerHTML = errorMessage
+                $('#errorModal').modal('toggle')
+                });
 
 
         }
 
-    }
+        }
 
 }
 function hasWhiteSpace(s) {

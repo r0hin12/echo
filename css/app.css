@@ -589,7 +589,7 @@ width: 90%;
     object-fit: cover;
 }
 .usershell {
-    width: 400px;
+    width: 340px;
 }
 
 .userbadge {
@@ -673,4 +673,25 @@ width: 90%;
     display: inline-block; 
     color: var(--content-primary); 
     padding: 3px;
+}
+
+#commentsbox {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+#commentsbox .card {
+    background-color: var(--bg-quaternary)
+}
+
+.label {
+    color: grey !important;
+}
+
+#commentbox {
+    color: var(--content-primary);
+}
+
+.infobtn {
+    color: white !important;
 }

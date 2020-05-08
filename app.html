@@ -222,6 +222,32 @@
 
         </div><div class="modal-footer"></div></div></div>
         </div>
+
+        <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-body">
+
+            <center>
+                <h2>Comments <span class="chip">Read Only 😢</span>  </h2>
+                <a onclick="newcomment()" id="addcommentbtn" class="eon-text animated">add a comment</a>
+                
+                <div style="display: none;" class="animated fadeInUp" id="newcommentbox">
+                    <div style="width: 100%; display: inline-block" class="floating-label textfield-box">
+                        <label class="label" for="commentbox">Add a Comment</label>
+                        <textarea onkeydown="updatechars()" class="form-control" id="commentbox" placeholder="..." rows="1"></textarea>
+                    </div>
+                    <a onclick="addComment()" id="charcount" style="width: 100%;" class="waves eon-outlined animated">Post Comment (0/200 chars)</a>
+                </div>
+                
+                <br><hr><br>
+
+                <div id="commentsbox"></div>
+                
+                <br><br><br>
+                
+                <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
+            </center>
+            </div></div></div>
+        </div>
+            
         
 
 

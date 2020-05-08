@@ -2,7 +2,7 @@
     --bg-primary: #282A34;
     --bg-secondary: #3C3F51;
     --bg-tertiary: #191a22;
-    --bg-quaternary: #17181f;
+    --bg-quaternary: #262831;
     --eon-primary: rgb(226, 51, 51);
     --eon-secondary: #fcad45;
     --content-primary: #fff;
@@ -10,6 +10,19 @@
     --content-tertiary: #5c5c5c;
     --contrast-primary: #000;
 } 
+
+/* :root {
+    --bg-primary: rgb(243, 243, 243);
+    --bg-secondary: rgb(255, 255, 255);
+    --bg-tertiary: #ffffff;
+    --bg-quaternary: #909090;
+    --eon-primary: rgb(226, 51, 51);
+    --eon-secondary: #fcad45;
+    --content-primary: rgb(0, 0, 0);
+    --content-secondary: #252525;
+    --content-tertiary: #5c5c5c;
+    --contrast-primary: rgb(255, 255, 255);
+}  */
 
 html {
     scroll-behavior: smooth;
@@ -28,9 +41,12 @@ html {
 }
 .eon-contained:hover {
     background-color: #ee7b00 !important;
+    color: var(--eon-secondary) !important;
 }
 .eon-outlined {
     background-color: transparent !important;
+    color: var(--eon-secondary) !important;
+    border-color: var(--eon-secondary) !important;
 }
 .eon-outlined:hover {
     background-color: rgb(238, 123, 0, 0.1) !important;
