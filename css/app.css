@@ -312,24 +312,24 @@ width: 90%;
 }
 
 .postpfp {
-    width: 35px;
-    height: 35px; 
+    width: 36px;
+    height: 36px; 
     object-fit: cover; 
     padding: 2px; 
-    border-radius: 35px;
+    border-radius: 36px;
     background-image: linear-gradient(white, white), linear-gradient(45deg, var(--eon-primary), var(--eon-secondary));
     background-origin: border-box;
     background-clip: content-box, border-box;
     object-fit: cover;
-    -webkit-border-radius: 35px;
+    -webkit-border-radius: 36px;
     -moz-border-radius: 35px;
     cursor: pointer;  
-    transition: all 1s; 
+    transition: all 8s; 
 }
 
 .postpfp:hover {
-    border-radius: 0px;
-    transition: all 1s;
+    border-radius: 12px;
+    transition: all 0.3s;
 }
 
 .postname {
@@ -694,4 +694,44 @@ width: 90%;
 
 .infobtn {
     color: white !important;
+}
+
+.commentpfp {
+    padding: 2px; 
+    display: inline-block; 
+    border-radius: 50px; 
+    width: 50px; 
+    height: 50px; 
+
+    background-image: linear-gradient(white, white), linear-gradient(45deg, var(--eon-primary), var(--eon-secondary));
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    object-fit: cover;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+
+    transition: all 1s;
+}
+
+.commentpfp:hover {
+    cursor: pointer;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+
+    transition: all 0.2s;
+}
+
+.commenttext {
+    padding-left: 68px; 
+    max-width: 86%; 
+    display: inline-block
+}
+
+.commentcontent {
+    right: 25px;
+}
+
+.commentcard {
+    text-align: left;
 }

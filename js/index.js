@@ -19,6 +19,8 @@ function go() {
     
 }
 
+sessionStorage.setItem('emptything', "false")
+
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
 
@@ -46,7 +48,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         x = sessionStorage.getItem('emptything')
 
         if (x == 'false') {
-            go()
         }
 
         else {

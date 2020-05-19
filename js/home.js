@@ -220,7 +220,7 @@ async function addcontent(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul> <button title="' + data.caption + '" id="' + name + 'elcaption" class="postbuttons"><i class="material-icons posticon animated">subject</i></button>    <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'shell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelement').tooltip()
@@ -289,7 +289,7 @@ async function addcontentrelevant(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>       <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>    <button title="' + data.caption + '" id="' + name + 'elcaptionrelevant" class="postbuttons"><i class="material-icons posticon animated">subject</i></button>   <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'relevantshell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelementrelevant').tooltip()
@@ -422,7 +422,10 @@ function fullscreenrelevant(id) {
 }
 
 function loadComments(id) {
+    document.getElementById('readonlychip').setAttribute('style', 'display:none !important');
     unnewcomment()
+    document.getElementById('addcommentbtn').setAttribute('style', 'display:none !important');
+
     sessionStorage.setItem('viewing', id)
     $('#commentsbox').empty()
     document.getElementById('charcount').onclick = function () {
@@ -432,31 +435,46 @@ function loadComments(id) {
     db.collection("posts").doc('comments').get().then(function (doc) {
         sessionStorage.setItem('viewingdata', doc.data()[id].length)
 
-        if (doc.data()[id].size == 0) {
+        if (doc.data()[id].length == 0) {
             h = document.createElement('div')
             h.innerHTML = '<div class="alert alert-info alert-dismissible fade show" role="alert"><strong><i class="material-icons">notification_important</i></strong> Be the first to add a comment.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
             document.getElementById('commentsbox').appendChild(h)
         }
-
+        
+        if (doc.data()[id].length >= 50) {
+            document.getElementById('readonlychip').setAttribute('style', 'display:inline-fullscreen_exit !important');
+        }
+        else {
+            document.getElementById('addcommentbtn').setAttribute('style', 'display:block !important');
+        }
         for (let i = 0; i < doc.data()[id].length; i++) {
             const element = doc.data()[id][i];
-
-            a = document.createElement('div')
-            a.classList.add('card')
-            a.classList.add('animated')
-            a.classList.add('fadeIn')
-            reportFunc = "reportComment('" + doc.id + "')"
-            userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
-            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><a class="userlinkoncomment" onclick="' + userFunc33 + '" >' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button></div></div>'
-            document.getElementById('commentsbox').appendChild(a)
-            document.getElementById('commentsbox').appendChild(document.createElement('br'))
-            addpfpcomment(element.user, i)
-            addWaves()
+            buildcomment(element, id, i)
         }
+        addWaves()
     })
 
     history.pushState(null, "", "?post=" + id)
     $('#commentModal').modal('toggle')
+}
+
+function buildcomment(element, id, i) {
+    a = document.createElement('div')
+    a.classList.add('card')
+    a.classList.add('animated')
+    a.classList.add('fadeIn')
+    reportFunc = "reportComment('Post: " + id + " | Id: " + i + "')"
+    userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
+    if (element.user == user.uid) {
+        reportbtnhtml = ''
+    }
+    else {
+        reportbtnhtml = '<button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button>'
+    }
+    a.innerHTML = '<div class="card-body commentcard"><img class="centeredy commentpfp" onclick="' + userFunc33 + '" id="' + i + 'pfpel" alt=""><p class="commenttext"><a class="userlinkoncomment">' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy commentcontent">' + reportbtnhtml + '</div>'
+    document.getElementById('commentsbox').appendChild(a)
+    document.getElementById('commentsbox').appendChild(document.createElement('br'))
+    addpfpcomment(element.user, i)
 }
 
 function like(id) {
@@ -555,6 +573,7 @@ function newcomment() {
 
 function addComment(id) {
     text = document.getElementById('commentbox').value
+    sessionStorage.setItem('wasitme', 'true')
     if (text == "" || text == " " || text == "  ") {
         Snackbar.show({ text: 'You must include content.' })
     }
@@ -573,8 +592,10 @@ function addComment(id) {
                 })
             }).then(function () {
                 document.getElementById('charcount').innerHTML = 'Post Comment (0/200 chars)'
-                x = parseInt(sessionStorage.getItem('viewing'), 10)
-                Snackbar.show({ text: 'New comments have been added.', onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: 'Refresh' })
+                a = {user: user.uid, name: user.displayName, content: text}
+                b = id
+                c = 'not matter'
+                buildcomment(a, b, c)
             });
         }
     };
@@ -980,8 +1001,10 @@ function deletepost(id, credentials) {
 }
 }
 
-function reportComment(id) {
-    console.log('reporting function??');
+function reportComment(id, index) {
+    console.log("REPORTNG FUNCTION");
+    console.log(id);
+    console.log(index);
 }
 
 function reportUser(id) {
@@ -1025,7 +1048,7 @@ function refreshcomments(id) {
 }
 
 function listencomments() {
-    db.collection('posts').doc('comments').onSnapshot(function (doc) {
+   commentslistener = db.collection('posts').doc('comments').onSnapshot(function (doc) {
 
 
         viewing = sessionStorage.getItem('viewing')
@@ -1036,8 +1059,16 @@ function listencomments() {
             if (savedsession == parseInt(sessionStorage.getItem('viewingdata'), 10)) {
             }
             else {
-                x = parseInt(sessionStorage.getItem('viewing'), 10)
-                Snackbar.show({ pos: 'bottom-left', text: "New comments are added.", onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: "refresh" })
+                wasitme = sessionStorage.getItem('addedcomment')
+                if (wasitme == 'true') {
+                    sessionStorage.setItem('addedcomment', 'false')
+                }
+                else {
+                    x = parseInt(sessionStorage.getItem('viewing'), 10)
+                    Snackbar.show({ pos: 'bottom-left', text: "New comments are added.", onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: "refresh" })
+                }
+                
+                
             }
         }
 
@@ -1049,6 +1080,7 @@ function listencomments() {
             else {
                 try {
                     document.getElementById(i + 'commentEl').innerHTML = '<i class="material-icons posticon">chat_bubble_outline</i> ' + doc.data()[i].length
+                    $('#' + i + 'commentEl').attr('data-original-title', 'View Comments').tooltip('show').tooltip('hide')
                 }
                 catch {
 
@@ -1061,7 +1093,7 @@ function listencomments() {
 }
 
 function listencommentsrelevant() {
-    db.collection('posts').doc('comments').onSnapshot(function (doc) {
+    commentsrelevantlistener = db.collection('posts').doc('comments').onSnapshot(function (doc) {
 
         for (let i = 0; i < doc.data().latest + 1; i++) {
 
@@ -1071,6 +1103,7 @@ function listencommentsrelevant() {
             else {
                 try {
                     document.getElementById(i + 'commentElrelevant').innerHTML = '<i class="material-icons posticon">chat_bubble_outline</i> ' + doc.data()[i].length   
+                    $('#' + i + 'commentElrelevant').attr('data-original-title', 'View Comments').tooltip('show').tooltip('hide')
                 } catch (error) {
                 
                 }
@@ -1084,6 +1117,7 @@ function listencommentsrelevant() {
 function addpfprelevant(uid, docid) {
     db.collection('users').doc(uid).get().then(function (doc) {
         document.getElementById(docid + 'pfpelurlrelevant').src = doc.data().url
+        $('#' + docid + "pfpelurlrelevant").attr('data-original-title', 'View User').tooltip('show').tooltip('hide')
 
 
     })
@@ -1092,14 +1126,16 @@ function addpfprelevant(uid, docid) {
 function addpfp(uid, docid) {
     db.collection('users').doc(uid).get().then(function (doc) {
         document.getElementById(docid + 'pfpelurl').src = doc.data().url
+        $('#' + docid + "pfpelurl").attr('data-original-title', 'View User').tooltip('show').tooltip('hide')
 
 
     })
 }
 
 function listenlikes() {
-    db.collection("posts").doc('likes').onSnapshot(function (doc) {
+    likeslistener = db.collection("posts").doc('likes').onSnapshot(function (doc) {
         for (let i = 0; i < doc.data().latest + 1; i++) {
+            $('#' + i + 'elcaption').tooltip()
             if (doc.data()[i] == undefined) {
 
             }
@@ -1116,6 +1152,9 @@ function listenlikes() {
                 if (isliked) {
                     try {
                         document.getElementById(i + 'el').innerHTML = '<i id="' + i + 'elicon" style="color: red;" class="material-icons posticon animated">favorite</i> ' + doc.data()[i].length
+                        $('#' + i + 'el').attr('data-original-title', 'Liked').tooltip('show').tooltip('hide')
+                        
+                        
                     } catch {
 
                     }
@@ -1125,11 +1164,12 @@ function listenlikes() {
                     try {
                         if (doc.data()[i].length == 0) {
                             document.getElementById(i + 'el').innerHTML = '<i id="' + i + 'elicon" class="material-icons posticon animated">favorite_border</i> '
+                            $('#' + i + 'el').attr('data-original-title', 'Like').tooltip('show').tooltip('hide')
                         }
                         else {
                             document.getElementById(i + 'el').innerHTML = '<i id="' + i + 'elicon" class="material-icons posticon animated">favorite_border</i> ' + doc.data()[i].length
+                            $('#' + i + 'el').attr('data-original-title', 'Like').tooltip('show').tooltip('hide')
                         }
-
                     } catch {
                     }
 
@@ -1142,9 +1182,9 @@ function listenlikes() {
 }
 
 function listenlikesrelevant() {
-    db.collection("posts").doc('likes').onSnapshot(function (doc) {
-
+    likeslistenerrelevant = db.collection("posts").doc('likes').onSnapshot(function (doc) {
         for (let i = 0; i < doc.data().latest + 1; i++) {
+            $('#' + i + 'elcaptionrelevant').tooltip()
             if (doc.data()[i] == undefined) {
             }
             else {
@@ -1159,6 +1199,7 @@ function listenlikesrelevant() {
                 if (isliked) {
                     try {
                         document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" style=" color: red;" class="material-icons posticon animated">favorite</i> ' + doc.data()[i].length
+                        $('#' + i + 'elrelevant').attr('data-original-title', 'Liked').tooltip('show').tooltip('hide')
                     } catch (error) {
                         
                     }
@@ -1168,12 +1209,15 @@ function listenlikesrelevant() {
                     if (doc.data()[i].length == 0) {
                         try {
                             document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> '    
+                            $('#' + i + 'elrelevant').attr('data-original-title', 'Like').tooltip('show').tooltip('hide')
                         } catch (error) {
                         }
+
                     }
                     else {
                         try {
                             document.getElementById(i + 'elrelevant').innerHTML = '<i id="' + i + 'eliconrelevant" class="material-icons posticon animated">favorite_border</i> ' + doc.data()[i].length    
+                            $('#' + i + 'elrelevant').attr('data-original-title', 'Like').tooltip('show').tooltip('hide')
                         } catch (error) {
 
                         }

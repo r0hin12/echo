@@ -131,10 +131,10 @@
 
                       <center id="infobtngroup">
                           <br>
-                        <a data-dismiss="modal" id="commentbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">comment</i></a> 
-                        <a data-dismiss="modal" id="userbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">person</i></a>
-                        <a data-dismiss="modal" id="reportbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">report</i></a> 
-                        <a id="deletebtnfrominfo" class="waves eon-text animated deletebtnunexpanded"><i class="material-icons gradicon">delete</i></a> 
+                        <a data-toggle="tooltip" data-placement="top" title="View Comments" data-dismiss="modal" id="commentbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">comment</i></a> 
+                        <a data-toggle="tooltip" data-placement="top" title="View User" data-dismiss="modal" id="userbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">person</i></a>
+                        <a data-toggle="tooltip" data-placement="top" title="Report Post" data-dismiss="modal" id="reportbtnfrominfo" class="waves eon-text"><i class="material-icons gradicon">report</i></a> 
+                        <a data-toggle="tooltip" data-placement="top" title="Remove Post" id="deletebtnfrominfo" class="waves eon-text animated deletebtnunexpanded"><i class="material-icons gradicon">delete</i></a> 
 
 
                     <br><br>
@@ -226,7 +226,7 @@
         <div class="modal fade bd-example-modal-lg" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-body">
 
             <center>
-                <h2>Comments <span class="chip">Read Only 😢</span>  </h2>
+                <h2>Comments <span id="readonlychip" class="chip animated fadeInRight">Read Only 😢</span>  </h2>
                 <a onclick="newcomment()" id="addcommentbtn" class="eon-text animated">add a comment</a>
                 
                 <div style="display: none;" class="animated fadeInUp" id="newcommentbox">

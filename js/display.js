@@ -363,9 +363,17 @@ $(window).scroll(function() {
     if($(window).scrollTop() + $(window).height() == $(document).height()) {
         if (sessionStorage.getItem('view') == 'all') {
             build()
+            likeslistener()
+            listenlikes()
+            commentslistener()
+            listencomments()
         }
         else {
             buildrelevant()
+            likeslistenerrelevant()
+            listenlikesrelevant()
+            commentsrelevantlistener()
+            listencommentsrelevant()
         }
     }
  });
