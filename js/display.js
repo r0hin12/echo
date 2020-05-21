@@ -75,8 +75,11 @@ function collapse() {
 
 
 
-//Console Error
-console.warn('Please do not try to troubleshoot. If you want our support team, you may contact us using various platforms. Choose account -> support for more options.')
+console.log("%cEonnect Developer Tools", "background: white; color: purple; font-size: x-large");
+console.log('Do not mess around with console as your account could get destroyed. We do not offer support to those who run unofficial JavaScript.')
+console.log('If you have any questions or need help with something, please contact us. Report errors below this line')
+console.log("%c-----------------", "background: black; color: white;");
+
 
 //Tooltips
 $(function () {
@@ -334,6 +337,7 @@ window.setInterval(function() {
     resizeAllGridItems()
     resizeAllGridItemsAll()
     resizeAllGridItemsUser()
+    addWaves()
 }, 3500)
 
 $( "#userModal" ).scroll(function() { 

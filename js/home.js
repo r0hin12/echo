@@ -850,17 +850,20 @@ async function usermodal(uid) {
             }
 
         })
-
-        if (user.uid == uid) {
-            document.getElementById('ownwarning').style.display = 'block'
-            document.getElementById('followbtn').innerHTML = 'unfollow'
-            document.getElementById('followbtn').onclick = function () {
-                Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
-            }
-            loaduserposts(uid)
-            db.collection('users').doc(user.uid).get().then(function(doc) {
-                loaduserfollowdetails(doc.data())
-            })
+        try {
+            if (user.uid == uid) {
+                document.getElementById('ownwarning').style.display = 'block'
+                document.getElementById('followbtn').innerHTML = 'unfollow'
+                document.getElementById('followbtn').onclick = function () {
+                    Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
+                }
+                loaduserposts(uid)
+                db.collection('users').doc(user.uid).get().then(function(doc) {
+                    loaduserfollowdetails(doc.data())
+                })
+            }   
+        } catch {
+            // USER IS NOT DEFINED
         }
     }
 }
@@ -929,7 +932,7 @@ function loaduserfollowdetails(data) {
 }
 
 function loaduserposts(uid) {
-    array = []
+    anarray = []
     db.collection('posts').doc('posts').get().then(function (doc) {
         userpostcount = 0
         latest = doc.data().latest
@@ -937,14 +940,15 @@ function loaduserposts(uid) {
             if (doc.data()[i] == undefined) {
             }
             else {
+                
                 if (doc.data()[i].data.uid == uid) {
-                    array.push({ name: i, data: doc.data()[i], time: doc.data()[i].timestamp })
+                    anarray.push({ name: i, data: doc.data()[i], time: doc.data()[i].timestamp })
                 }
             }
         }
 
-        array.reverse()
-        sessionStorage.setItem("InfUserScrollData", JSON.stringify(array))
+        anarray.reverse()
+        sessionStorage.setItem("InfUserScrollData", JSON.stringify(anarray))
         builduser()
 
 
@@ -955,20 +959,21 @@ function loaduserposts(uid) {
 
 function builduser() {
 
-    array = sessionStorage.getItem('InfUserScrollData')
-    array = JSON.parse(array)
+    userarray = sessionStorage.getItem('InfUserScrollData')
+    userarray = JSON.parse(userarray)
+
 
     for (let i = 0; i < currentUserScrollCount; i++) {
-        array.shift()
+        userarray.shift()
     }
 
-    array = array.slice(0, infiniteScrollCount);
+    userarray = userarray.slice(0, infiniteScrollCount);
     currentUserScrollCount = currentUserScrollCount + infiniteScrollCount
 
-    for (let i = 0; i < array.length; i++) {
-        name = array[i].name;
-        data = array[i].data;
-        time = array[i].time;
+    for (let i = 0; i < userarray.length; i++) {
+        name = userarray[i].name;
+        data = userarray[i].data;
+        time = userarray[i].time;
 
         z = document.createElement('div')
         z.id = name + 'usersshell'
@@ -976,7 +981,7 @@ function builduser() {
 
         document.getElementById('usergrid').appendChild(z)
 
-        arraylengthminusone = array.length - 1
+        arraylengthminusone = userarray.length - 1
 
         if (i == arraylengthminusone) {
             addstuffuser(name, data, time, true)

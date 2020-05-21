@@ -14,6 +14,8 @@ window.storage = firebase.storage();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
 
+        console.log('Personal Token: ' + user.uid);
+
         window.user = firebase.auth().currentUser
         checkfirsttime()
         addappcontent()
