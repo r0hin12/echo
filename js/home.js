@@ -431,49 +431,136 @@ function loadComments(id) {
     document.getElementById('charcount').onclick = function () {
         addComment(id)
     }
-
-    db.collection("posts").doc('comments').get().then(function (doc) {
-        sessionStorage.setItem('viewingdata', doc.data()[id].length)
-
-        if (doc.data()[id].length == 0) {
-            h = document.createElement('div')
-            h.innerHTML = '<div class="alert alert-info alert-dismissible fade show" role="alert"><strong><i class="material-icons">notification_important</i></strong> Be the first to add a comment.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
-            document.getElementById('commentsbox').appendChild(h)
-        }
-        
-        if (doc.data()[id].length >= 50) {
-            document.getElementById('readonlychip').setAttribute('style', 'display:inline-fullscreen_exit !important');
-        }
-        else {
-            document.getElementById('addcommentbtn').setAttribute('style', 'display:block !important');
-        }
-        for (let i = 0; i < doc.data()[id].length; i++) {
-            const element = doc.data()[id][i];
-            buildcomment(element, id, i)
-        }
-        addWaves()
+    db.collection('posts').doc('commentlikes').get().then(function(doc) {
+        window.cachelikes = doc.data()
+        db.collection("posts").doc('comments').get().then(function (doc) {
+            sessionStorage.setItem('viewingdata', doc.data()[id].length)
+    
+            if (doc.data()[id].length == 0) {
+                h = document.createElement('div')
+                h.innerHTML = '<div class="alert alert-info alert-dismissible fade show" role="alert"><strong><i class="material-icons">notification_important</i></strong> Be the first to add a comment.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+                document.getElementById('commentsbox').appendChild(h)
+            }
+            
+            if (doc.data()[id].length >= 50) {
+                document.getElementById('readonlychip').setAttribute('style', 'display:inline-fullscreen_exit !important');
+            }
+            else {
+                document.getElementById('addcommentbtn').setAttribute('style', 'display:block !important');
+            }
+            for (let i = 0; i < doc.data()[id].length; i++) {
+                const element = doc.data()[id][i];
+                buildcomment(element, id, i, cachelikes)
+            }
+            addWaves()
+            sortUsingNestedText($('#commentsbox'), "div.card", "div.inline")
+        })
     })
-
     history.pushState(null, "", "?post=" + id)
     $('#commentModal').modal('toggle')
 }
 
-function buildcomment(element, id, i) {
+function likeComment(id, i, element) {
+
+    element.firstElementChild.classList.add('yesliked')
+
+    oldnum = parseInt(document.getElementById(id + i + 'commentcount').innerHTML)
+    newnum = oldnum + 1
+    document.getElementById(id + i + 'commentcount').innerHTML = newnum
+    
+
+
+
+    arname = id + '>withindex<' + i
+    element.onclick = function() {
+        Snackbar.show({
+            text: "Please wait..."
+        })
+    }
+
+    db.collection('posts').doc('commentlikes').update({
+        [arname]: firebase.firestore.FieldValue.arrayUnion(user.uid)
+    }).then(function() {
+        window.setTimeout(function() {
+            element.onclick = function() {
+                unLikeComment(id, i, element)
+            }
+        }, 1500)
+
+    })
+
+}
+
+function unLikeComment(id, i, element) {
+
+    element.firstElementChild.classList.remove('yesliked')
+
+    oldnum = parseInt(document.getElementById(id + i + 'commentcount').innerHTML)
+    newnum = oldnum - 1
+    document.getElementById(id + i + 'commentcount').innerHTML = newnum
+
+    arname = id + '>withindex<' + i
+    element.onclick = function() {
+        Snackbar.show({
+            text: "Please wait..."
+        })
+    }
+
+    db.collection('posts').doc('commentlikes').update({
+        [arname]: firebase.firestore.FieldValue.arrayRemove(user.uid)
+    }).then(function() {
+        window.setTimeout(function() {
+            element.onclick = function() {
+                likeComment(id, i, element)
+            }
+        }, 1500)
+    })
+
+}
+
+function buildcomment(element, id, i, likes) {
     a = document.createElement('div')
     a.classList.add('card')
     a.classList.add('animated')
+    a.classList.add('singularcommentbox')
     a.classList.add('fadeIn')
     reportFunc = "reportComment('Post: " + id + " | Id: " + i + "')"
+    likeCommentFunc = "likeComment('" + id + "', '" + i + "', this)"
+    unlikeCommentFunc = "unLikeComment('" + id + "', '" + i + "', this)"
     userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
+
+    likesname = id + '>withindex<' + i
+
+    if (likes[likesname] == undefined) {
+        likehtml = '<button onclick="' + likeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">0</div></button>'
+    }
+    else {
+        commentLiked = false
+        for (let i = 0; i < likes[likesname].length; i++) {
+            if (likes[likesname][i] == user.uid) {
+                commentLiked = true
+            }
+        }
+
+        if (commentLiked) {
+            likehtml = '<button onclick="' + unlikeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked yesliked commentlikeicon">thumb_up</i> <div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+        }
+        else {
+            likehtml = '<button onclick="' + likeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+        }
+
+    }
+
     if (element.user == user.uid) {
         reportbtnhtml = ''
+        //likehtml = '<button onclick="' + likeCommentFunc + '" class="waves eon-text"><i class="material-icons">thumb_up</i>U MADE THIS BRO</button>'
     }
     else {
         reportbtnhtml = '<button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button>'
     }
-    a.innerHTML = '<div class="card-body commentcard"><img class="centeredy commentpfp" onclick="' + userFunc33 + '" id="' + i + 'pfpel" alt=""><p class="commenttext"><a class="userlinkoncomment">' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy commentcontent">' + reportbtnhtml + '</div>'
+
+    a.innerHTML = '<div class="card-body commentcard"><img class="centeredy commentpfp" onclick="' + userFunc33 + '" id="' + i + 'pfpel" alt=""><p class="commenttext"><a class="userlinkoncomment">' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy commentcontent">' + likehtml + reportbtnhtml + '</div>'
     document.getElementById('commentsbox').appendChild(a)
-    document.getElementById('commentsbox').appendChild(document.createElement('br'))
     addpfpcomment(element.user, i)
 }
 
@@ -589,13 +676,14 @@ function addComment(id) {
                     user: user.uid,
                     name: user.displayName,
                     content: text,
+                    likes: [],
                 })
             }).then(function () {
                 document.getElementById('charcount').innerHTML = 'Post Comment (0/200 chars)'
                 a = {user: user.uid, name: user.displayName, content: text}
                 b = id
                 c = 'not matter'
-                buildcomment(a, b, c)
+                buildcomment(a, b, c, cachelikes)
             });
         }
     };
@@ -608,7 +696,9 @@ function addpfpcomment(usr, id) {
 }
 
 async function addstuffuser(name, data, time, last) {
+
     var storageRef = firebase.storage().ref();
+
     storageRef.child('users/' + data.data.uid + '/' + data.data.file).getDownloadURL().then(function (url) {
 
         a = document.createElement('div')
@@ -643,16 +733,15 @@ async function usermodal(uid) {
     document.getElementById('usermodalfollowtext').style.visibility = 'hidden'
 
     if (previousview == uid) {
-        $('#userModal').modal('toggle')
+        $('#userModal').modal('show')
         window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
     }
 
     else {
-        toggleloader()
         sessionStorage.setItem('currentlyviewinguser', uid)
         window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
         $('#usergrid').empty()
-        $('#userModal').modal('toggle')
+        $('#userModal').modal('show')
 
 
         db.collection('users').doc(uid).get().then(function (userdoc) {
@@ -683,6 +772,7 @@ async function usermodal(uid) {
                         isfollow = true
                 }
             }
+
             if (isfollow) {
                 if (user.uid !== uid) {
 
@@ -701,6 +791,7 @@ async function usermodal(uid) {
                     unfollow(uid, username)
                 }
                 loaduserposts(uid)
+                loaduserfollowdetails(userdoc.data())
 
                 }
             }
@@ -752,14 +843,11 @@ async function usermodal(uid) {
                     else {
                         if (user.uid !== uid) {
                             loaduserposts(uid)
+                            loaduserfollowdetails(userdoc.data())
                         }
                     }
                 }
             }
-        
-            window.setTimeout(function() {
-                toggleloader()
-            }, 500)
 
         })
 
@@ -770,12 +858,77 @@ async function usermodal(uid) {
                 Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
             }
             loaduserposts(uid)
+            db.collection('users').doc(user.uid).get().then(function(doc) {
+                loaduserfollowdetails(doc.data())
+            })
         }
     }
 }
 
-function loaduserposts(uid) {
+function addpfpfollowbox(uid) {
+    db.collection('users').doc(uid).get().then(function(doc) {
+        document.getElementById(uid + 'followboxelementid').src = doc.data().url
+    })
+}
 
+function addpfpfollowingbox(uid) {
+    db.collection('users').doc(uid).get().then(function(doc) {
+        document.getElementById(uid + 'followingboxelementid').src = doc.data().url
+    })
+}
+
+
+function loaduserfollowdetails(data) {
+    db.collection('app').doc('details').get().then(function(doc) {
+        
+        for (let i = 0; i < data.followers.length; i++) {
+            const uid = data.followers[i];
+            place = doc.data().map.indexOf(uid)   
+            name = doc.data().usernames[place]
+
+            k = document.createElement('a')
+            k.onclick = function() {
+                simclosemodal()
+                usermodal(uid)
+            }
+            k.classList.add('list-group-item')
+            k.classList.add('waves-effect')
+            k.classList.add('waves-light')
+            k.innerHTML = '<img id="' + uid + 'followboxelementid" src="https://i.imgur.com/PL0xMvQ.jpg" class="followerphoto" alt=""><div class="inline folowtext">' + name + '</div>'
+            document.getElementById('followerselementbox').appendChild(k)
+
+            addpfpfollowbox(uid)
+
+        }
+
+        for (let i = 0; i < data.following.length; i++) {
+            const uid = data.following[i];
+            place = doc.data().map.indexOf(uid)   
+            name = doc.data().usernames[place]
+
+            k = document.createElement('a')
+            k.onclick = function() {
+                simclosemodal()
+                usermodal(uid)
+            }
+            k.classList.add('list-group-item')
+            k.classList.add('waves-effect')
+            k.classList.add('waves-light')
+            k.innerHTML = '<img id="' + uid + 'followingboxelementid" src="https://i.imgur.com/PL0xMvQ.jpg" class="followerphoto" alt=""><div class="inline folowtext">' + name + '</div>'
+            document.getElementById('followingelementbox').appendChild(k)
+
+            addpfpfollowingbox(uid)
+
+        }
+
+        addWaves()
+
+    })
+
+
+}
+
+function loaduserposts(uid) {
     array = []
     db.collection('posts').doc('posts').get().then(function (doc) {
         userpostcount = 0
@@ -824,6 +977,7 @@ function builduser() {
         document.getElementById('usergrid').appendChild(z)
 
         arraylengthminusone = array.length - 1
+
         if (i == arraylengthminusone) {
             addstuffuser(name, data, time, true)
         }
@@ -1300,6 +1454,10 @@ $('#commentModal').on('hidden.bs.modal', function () {
 });
 
 $('#userModal').on('hidden.bs.modal', function () {
+    $('#followerselementbox').empty()
+    $('#followingelementbox').empty()
+    hidefollowers()
+    hidefollowing()
     if (sessionStorage.getItem('skiponce3') == "true") {
         sessionStorage.setItem('skiponce3', "false")
     }
@@ -1537,7 +1695,7 @@ function newpost() {
                         document.getElementById('blah').style.display = 'none'
                         document.getElementById('captionel').style.display = 'none'
 
-                        refreshhome()
+                        document.getElementById('rereshtbn').click()
 
 
 
@@ -1591,4 +1749,61 @@ function refresh(btn) {
 
     }, 600)
 
+}
+
+function sortUsingNestedText(parent, childSelector, keySelector) {
+    var items = parent.children(childSelector).sort(function(a, b) {
+        var vA = $(keySelector, a).text();
+        var vB = $(keySelector, b).text();
+        return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+    });
+    parent.append(items);
+}
+
+// sortUsingNestedText($('#commentsbox'), "div.card", "div.inline")
+
+function showfollowers() {
+    hidefollowing()
+    document.getElementById('followersbox').style.display = 'block'
+    document.getElementById('followersbox').classList.add('bounceIn')
+    document.getElementById('followersbox').classList.remove('bounceOut')
+    document.getElementById('viewfollowers').innerHTML = '<i class="material-icons cancelshowbtn">cancel</i>'
+    document.getElementById('viewfollowers').onclick = function() {
+        hidefollowers() 
+    }
+}
+
+function hidefollowers() {
+    document.getElementById('followersbox').classList.remove('bounceIn')
+    document.getElementById('followersbox').classList.add('bounceOut')
+    document.getElementById('viewfollowers').innerHTML = 'view'
+    document.getElementById('viewfollowers').onclick = function() {
+        showfollowers() 
+    }
+}
+function showfollowing() {
+    hidefollowers()
+    document.getElementById('followingbox').style.display = 'block'
+    document.getElementById('followingbox').classList.add('bounceIn')
+    document.getElementById('followingbox').classList.remove('bounceOut')
+    document.getElementById('viewfollowing').innerHTML = '<i class="material-icons cancelshowbtn">cancel</i>'
+    document.getElementById('viewfollowing').onclick = function() {
+        hidefollowing() 
+    }
+}
+
+function hidefollowing() {
+    document.getElementById('followingbox').classList.remove('bounceIn')
+    document.getElementById('followingbox').classList.add('bounceOut')
+    document.getElementById('viewfollowing').innerHTML = 'view'
+    document.getElementById('viewfollowing').onclick = function() {
+        showfollowing() 
+    }
+}
+
+function simclosemodal() {
+    hidefollowing()
+    hidefollowers()
+    $('#followerselementbox').empty()
+    $('#followingelementbox').empty()   
 }

@@ -23,7 +23,6 @@ $(window).ready(function () {
         
     }
     else {
-        console.log("Going to tab: " + tab);
         tabe(tab)
     }
 

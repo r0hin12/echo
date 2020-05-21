@@ -735,3 +735,71 @@ width: 90%;
 .commentcard {
     text-align: left;
 }
+
+.noliked {
+    color: var(--eon-secondary) !important;
+    transition: all 1s !important;
+}
+
+.yesliked {
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    padding: 8px;
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;  
+
+    transition: all 1s !important;
+}
+
+.commentlikeicon {
+    padding-right: 6px;
+}
+
+.singularcommentbox {
+    margin-bottom: 18px;
+}
+
+.followersbox {
+    position: absolute;
+    overflow-x: scroll;
+    display: none;
+    width: 200%;
+    left: 0px;
+    z-index: 80;
+    height: 240px;
+    background-color: var(--bg-secondary)
+}
+
+.followingbox {
+    position: absolute;
+    overflow-x: scroll;
+    display: none;
+    width: 200%;
+    right: 0px;
+    z-index: 80;
+    height: 240px;
+    background-color: var(--bg-secondary)
+}
+
+
+.cancelshowbtn {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.followers {
+    text-align: left;
+}
+
+.followerphoto {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.folowtext {
+    padding-left: 8px;
+}

@@ -85,7 +85,8 @@ function profilesetup2() {
 
 
                 db.collection('app').doc('details').update({
-                    usernames: firebase.firestore.FieldValue.arrayUnion(username)
+                    usernames: firebase.firestore.FieldValue.arrayUnion(username),
+                    map: firebase.firestore.FieldValue.arrayUnion(username)
                 })
                 db.collection('users').doc(user.uid).update({
                     username: username,

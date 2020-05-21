@@ -15,7 +15,6 @@ firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
 
         window.user = firebase.auth().currentUser
-        console.log("User is signed in: " + user.displayName);
         checkfirsttime()
         addappcontent()
         preesearch()

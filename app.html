@@ -185,12 +185,32 @@
                                     <div class="col-sm usermodalcolumn">
                                         <h2 id="userfollowers">...</h2>
                                         <p class="inline">Followers</p><br>
-                                        <button class="eon-text">view</button>
+                                        <button id="viewfollowers" onclick="showfollowers()" class="eon-text">view</button>
+
+                                        <div id="followersbox" class="card animated followersbox">
+                                            <div class="card-body">
+                                                <center>
+                                                    <h4>Followers</h4>
+                                                </center>
+                                                <div id="followerselementbox" class="list-group followers">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm usermodalcolumn">
                                         <h2 id="userfollowing">...</h2>
                                         <p class="inline">Following</p><br>
-                                        <button class="eon-text">view</button>
+                                        <button id="viewfollowing" onclick="showfollowing()" class="eon-text">view</button>
+
+                                        <div id="followingbox" class="card animated followingbox">
+                                            <div class="card-body">
+                                                <center>
+                                                    <h4>Following</h4>
+                                                </center>
+                                                <div id="followingelementbox" class="list-group followers">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </center>
@@ -392,7 +412,7 @@
         <ul class="navbar-nav mr-auto">
         </ul>
 
-        <button class="eon-text refreshbtn" onclick="refresh(this)"><i class="material-icons">refresh</i></button>
+        <button id="rereshtbn" class="eon-text refreshbtn" onclick="refresh(this)"><i class="material-icons">refresh</i></button>
 
         <button onclick="disablegrid()" id="gridbtn" class="grid-list without-text">
             <div class="icon">
