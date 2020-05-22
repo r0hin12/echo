@@ -1,10 +1,3 @@
-interval = window.setInterval(function () {
-    if (typeof (user) != "undefined" && typeof (user) != null) {
-        clearInterval(interval)
-        load()
-    }
-}, 200);
-
 function showall() {
     document.getElementById('dropdownMenuButton1').innerHTML = 'Showing All Posts <i class="material-icons">keyboard_arrow_down</i>'
 

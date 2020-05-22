@@ -51,7 +51,12 @@ function tabe(tab) {
 
         switch (tab) {
             case "home":
-                // Load posts, etc
+                interval = window.setInterval(function () {
+                    if (typeof (user) != "undefined" && typeof (user) != null) {
+                        clearInterval(interval)
+                        load()
+                    }
+                }, 200);
                 break;
             case "account":
                 // Load account details, etc
