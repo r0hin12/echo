@@ -1,12 +1,11 @@
 $(window).ready(function () {
 
     sessionStorage.setItem('first-time-home', 'true')
+    sessionStorage.setItem('first-time-account', 'true')
+    sessionStorage.setItem('first-time-notifications', 'true')
     sessionStorage.setItem('first-time-home', 'true')
     sessionStorage.setItem('first-time-home', 'true')
-    sessionStorage.setItem('first-time-home', 'true')
-    sessionStorage.setItem('first-time-home', 'true')
-    sessionStorage.setItem('first-time-home', 'true')
-    sessionStorage.setItem('first-time-home', 'true')
+
 
     var urlParams = new URLSearchParams(window.location.search);
     tab = urlParams.get('tab')
