@@ -166,6 +166,7 @@ width: 90%;
     text-align: left;
     z-index: auto;
 
+    transition: all 0.3s;
 }
 .navbarbutton:hover {
     width: 100%;
@@ -543,7 +544,8 @@ width: 90%;
 }
 
 .userstats {
-    background-color: var(--bg-primary)
+    background-color: var(--bg-primary);
+    width: 100%;
 }
 
 .usermodalcolumn:first-child {
@@ -583,8 +585,8 @@ width: 90%;
 .modal { overflow: auto !important; }
 
 .usermodalpfp {
-    width: 160px;
-    height: 160px;
+    width: 130px;
+    height: 130px;
     border-radius: 150px;
     object-fit: cover;
 }
@@ -802,4 +804,68 @@ width: 90%;
 
 .folowtext {
     padding-left: 8px;
+}
+
+.navbarbutton:hover {
+    background-color: rgb(0, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.pfcardtop {
+    width: 100%;
+    padding: 20px 50px 20px 50px;
+    background-image: radial-gradient( circle 636.6px at 10% 20%,  rgba(243,94,125,1) 0%, rgba(213,200,111,1) 90% );
+    border-radius: 15px;
+}
+
+#pfp3 {
+    width: 50%;
+    border-radius: 50%;
+}
+
+#pfcard {
+    padding: 0px;
+}
+
+#pfcardbody {
+    padding: 0px;
+}
+
+.delay1s {
+    animation-delay: 0.3s;
+}
+
+.connectionbtn {
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.list-group div{
+    border-radius: 15px !important;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.expansion-panel-toggler:hover {
+    background-color: var(--bg-primary);
+    color: var(--content-primary);
+    border-radius: 12px;
+}
+.expansion-panel-toggler:focus {
+    background-color: var(--bg-primary);
+    color: var(--content-primary);
+    border-radius: 12px;
+}
+
+.collapsed-show {
+    color: var(--content-primary)
+}
+.collapsed-hide {
+    color: var(--content-primary)
+}
+
+.imginbtn {
+    width: 40px;
 }

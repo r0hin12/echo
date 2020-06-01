@@ -123,10 +123,18 @@ function signout() {
 }
 
 function addappcontent() {
+    document.getElementById('viewprofilebtn').onclick = function() {
+        usermodal(user.uid)
+    }
+    
     db.collection('users').doc(user.uid).get().then(function(doc) {
 
+        window.cacheuser = doc.data()
+
         document.getElementsByClassName('main-avatar')[0].src = doc.data().url
+        document.getElementById('pfp3').src = doc.data().url
         document.getElementsByClassName('main-avatar')[0].style.display = 'block'
+        document.getElementById('pfcard').style.display = 'block'
 
         if (doc.data().name == null || doc.data().name == undefined) {
             db.collection('users').doc(user.uid).update({
@@ -134,7 +142,36 @@ function addappcontent() {
             })
         }
 
+        if (doc.data().twitter.id == null || doc.data().twitter.id == undefined) {
+        }
+        else {
+            var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "password");
+            goFunc = "gotwitter('" + user.providerData[index].uid + "')"
+            document.getElementById('twitterlinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + user.providerData[index].displayName + '</a>.'
+            document.getElementById('twitterlinkbutton').innerHTML = 'unlink twitter ->'
+            document.getElementById('twitterlinkbutton').onclick = function() {
+                unlinktwitter()
+            }
+            hs = document.createElement('button')
+            hs.classList.add('eon-text')
+            hs.classList.add('connectionbtn')
+            hs.onclick = function() {
+                gotwitter(user.providerData[index].uid)
+            }
+            hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
+            document.getElementById("cardconnections").appendChild(hs)
+        }
+
         document.getElementById('sidebarname').innerHTML = user.displayName + '<br><span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
+
+        document.getElementById('name5').innerHTML = user.displayName
+        if (doc.data().bio == undefined || doc.data().bio == null) {
+            document.getElementById('bio5').innerHTML = 'Your bio is empty.'
+        }
+        else {
+            document.getElementById('bio5').innerHTML = doc.data().bio
+        }
+        
 
         // REPUTATION
 
@@ -198,4 +235,28 @@ function nFormatter(num, digits) {
     return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
 }
 
-    
+
+function youareleaving(id) {
+    if (cacheuser.skipwarning1) {
+        window.open("" + id)
+    }
+    else {
+        $('#leavingmodal').modal('toggle')
+        document.getElementById('continuebtn').onclick = function() {
+            if (document.getElementById('skipdialogswitch').checked) {
+                db.collection('users').doc(user.uid).update({
+                    skipwarning1: true
+                }).then(function(doc) {
+                    window.cacheuser = doc.data()
+                    window.open(id)
+                    $('#leavingmodal').modal('toggle')
+                })
+            }
+            else {
+                window.open(id)
+                $('#leavingmodal').modal('toggle')
+            }
+            
+        }
+    }
+}

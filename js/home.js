@@ -30,12 +30,14 @@ sessionStorage.setItem('view', 'relevant')
 sessionStorage.setItem('viewing', 'stoplookinghere')
 sessionStorage.setItem('currentlyviewinguser', 'uwu')
 
-function load() {
-    window.infiniteScrollCount = 6
-    window.currentScrollCount = 0
-    window.currentRelScrollCount = 0
-    window.currentUserScrollCount = 0
+// INFINITE SCROLL VARIABLES
 
+window.infiniteScrollCount = 6
+window.currentScrollCount = 0
+window.currentRelScrollCount = 0
+window.currentUserScrollCount = 0
+
+function load() {
     i = 0
     yeetpostslistener()
     addpostslistener()
@@ -701,7 +703,7 @@ async function addstuffuser(name, data, time, last) {
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
 
-        a.innerHTML = '<div class="card usercard animated fadeIn"><img id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
+        a.innerHTML = '<div class="card usercard animated fadeIn"><img id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><br><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
@@ -746,6 +748,23 @@ async function usermodal(uid) {
             if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") { }
             else { document.getElementById('usermodalbio').innerHTML = doc.data().bio }
             document.getElementById('userrep').innerHTML = doc.data().rep
+
+            $('#connections').empty()
+
+            // Connections -> Twitter
+            if (doc.data().twitter !== undefined) {
+                if (doc.data().twitter.enabled) {
+                    hs = document.createElement('button')
+                    hs.classList.add('eon-text')
+                    hs.classList.add('connectionbtn')
+                    hs.onclick = function() {
+                        $('#userModal').modal('toggle')
+                        gotwitter(doc.data().twitter.uid)
+                    }
+                    hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
+                    document.getElementById("connections").appendChild(hs)
+                }
+            }
 
             following = doc.data().following
             if (following == undefined) {
@@ -944,14 +963,12 @@ function loaduserposts(uid) {
         sessionStorage.setItem("InfUserScrollData", JSON.stringify(anarray))
         builduser()
 
-
     }).catch(function (error) {
         console.log(error)
     })
 }
 
 function builduser() {
-
     userarray = sessionStorage.getItem('InfUserScrollData')
     userarray = JSON.parse(userarray)
 

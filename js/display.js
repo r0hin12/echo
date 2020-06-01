@@ -381,3 +381,10 @@ $(window).scroll(function() {
         }
     }
  });
+
+ //ERROR BACKUP WTF
+
+ function error(msg) {
+    document.getElementById('erorrModalMsg').innerHTML = msg
+    $('#errorModal').modal('toggle')
+}

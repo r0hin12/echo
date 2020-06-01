@@ -102,6 +102,20 @@
             </div>
         </div></div></div>
 
+        <div class="modal fade bd-example-modal-lg" id="leavingmodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content">
+            <div class="modal-body">
+                <center><h3>Heads Up!</h3>
+                <p>Looks like you requested to follow a link! Click below to proceed to your destination.</p>
+                <div style="display: inline-block" class="custom-control custom-switch">
+                    <input class="custom-control-input" id="skipdialogswitch" type="checkbox">
+                    <span class="custom-control-track"></span>
+                    <label class="custom-control-label" for="skipdialogswitch">Always skip this dialog</label>
+                  </div>
+                  <br><br>
+                <button id="continuebtn" class="eon-contained">continue</button>
+            </div>
+        </div></div></div>
+
         <div class="modal fade bd-example-modal-lg" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div id="infomodal-content" class="modal-content">
             <div class="modal-body">
                 <center><h2>Post Info</h2></center>
@@ -163,13 +177,16 @@
                             <div class="col-sm">
                                 <img id="usermodalpfp" class="usermodalpfp" alt="Error loading image.">
                                 <br><br>
+                                <div id="connections">
+                                </div>
+                                <br>
                                 <h4 style="display: none;" id="usermodalfollowtext" class="animated"><i class="material-icons" id="followicon">done</i> Following</h4>
                             </div>
                             <div class="col-sm">
                                 <div style="position: relative;">
                                 <h2 id="usermodaltitle">User Name</h2>
                             </div>
-                        <p id="usermodalbio">BIO</p>
+                        <p id="usermodalbio"></p>
 
                         <button id="followbtn" class="eon-contained">Follow</button>
                         <br><br>
@@ -467,7 +484,82 @@
             </div>
          
             <div aria-labelledby="account-tab" class="tab-pane fade" id="account" role="tabpanel">
-                account_box
+                <br><br>
+                <h2 class="leader">Account</h2>
+                <br>
+                <button id="viewprofilebtn" class="eon-text">view profile</button>
+                <hr><br>
+
+                <div class="row">
+                    <div class="col-sm">
+
+                        <h4>Your Profile Card</h4>
+                        <br>
+                        <center>
+                            <div style="display: none;" id="pfcard" class="card animated fadeIn">
+                                <div id="pfcardbody" class="card-body">
+                                    <div class='animated zoomIn pfcardtop shadow-sm'>
+                                        <img class="animated zoomIn delay1s" id="pfp3" alt="">
+                                    </div>
+                                    <br>
+                                    <h4 id="name5">NAME</h4>
+                                    <p id="bio5">Bio</p>
+                                    <div id="cardconnections">
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </center>
+
+                    </div>
+                    <div class="col-sm">
+                        <h4>Link Social Media Accounts</h4>
+                        <br>
+                        <div class="list-group" id="socials">
+                            <div class="expansion-panel list-group-item">
+                              <a class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#collapseGoogle">
+                                Twitter
+                                <div class="expansion-panel-icon ml-3 text-black-secondary">
+                                  <i class="collapsed-show material-icons">keyboard_arrow_down</i>
+                                  <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                                </div>
+                              </a>
+                              <div class="collapse" data-parent="#socials" id="collapseGoogle">
+                                <div class="expansion-panel-body">
+                                    
+                                    <p id="twitterlinktext">Link your Twitter account to Eonnect. You will have the option to show or hide your Twitter on your profile!</p>
+
+                                    <center>
+                                        <button id="twitterlinkbutton" onclick="linktwitter()" class="eon-outlined">Link Twitter -></button>
+                                    </center>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="expansion-panel list-group-item">
+                                <a class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#collapseGoogle">
+                                  Twitter
+                                  <div class="expansion-panel-icon ml-3 text-black-secondary">
+                                    <i class="collapsed-show material-icons">keyboard_arrow_down</i>
+                                    <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                                  </div>
+                                </a>
+                                <div class="collapse" data-parent="#socials" id="collapseGoogle">
+                                  <div class="expansion-panel-body">
+                                      
+                                      <p id="twitterlinktext">Link your Twitter account to Eonnect. You will have the option to show or hide your Twitter on your profile!</p>
+  
+                                      <center>
+                                          <button id="twitterlinkbutton" onclick="linktwitter()" class="eon-outlined">Link Twitter -></button>
+                                      </center>
+  
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                    </div>
+                </div>
+
             </div>
 
 
@@ -497,8 +589,10 @@
         <!-- Firebase Variables --> <script src="js/firebase.js"></script>
         <!-- Display --> <script src="js/display.js"></script>
         <!-- Tabs --> <script src="js/tabs.js"></script>
+        <!-- Link Profile --> <script src="js/link.js"></script>
         <!-- Home Tab --> <script src="js/home.js"></script>
         <!-- APP --> <script src="js/app.js"></script>
+        
         
 
 

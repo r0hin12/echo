@@ -36,7 +36,7 @@ function tabe(tab) {
     $('.iconactive').each(function(i, obj) {
         obj.classList.remove('iconactive')
     })
-    $('#justifiedTab').children('h4').each(function () { this.classList.remove('navbarbuttontextactive'); })
+    $('.navbarbuttontextactive').each(function() {this.classList.remove('navbarbuttontextactive')})
     document.getElementById(tab + '-tab').classList.add('navthing')
     document.getElementById(tab + '-icon').classList.add('iconactive')
     document.getElementById(tab + '-text').classList.add('navbarbuttontextactive')

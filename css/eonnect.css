@@ -1,8 +1,8 @@
 :root {
-    --bg-primary: #282A34;
-    --bg-secondary: #3C3F51;
-    --bg-tertiary: #191a22;
-    --bg-quaternary: #262831;
+    --bg-primary: rgb(19, 19, 24);
+    --bg-secondary: rgb(26, 28, 36);
+    --bg-tertiary: rgb(35, 36, 46);
+    --bg-quaternary: #2f313b;
     --eon-primary: rgb(226, 51, 51);
     --eon-secondary: #fcad45;
     --content-primary: #fff;
@@ -26,6 +26,11 @@
 
 html {
     scroll-behavior: smooth;
+}
+
+.card {
+    background-color: var(--bg-tertiary);
+    display: inline-block;
 }
 
 .eon-outlined .waves-ripple {
