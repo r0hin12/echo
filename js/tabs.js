@@ -31,6 +31,8 @@ function tabe(tab) {
     //sessionStorage.setItem("currentviewingdm", 'not')
     //unshowdm()
 
+    document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.split(tab.charAt(0))[1] + ' | Eonnect'
+
     sessionStorage.setItem("currentab", tab)
     $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })
     $('.iconactive').each(function(i, obj) {
