@@ -1,10 +1,21 @@
+function functiontofindIndexByKeyValue(arraytosearch, key, valuetosearch) {
+
+    for (var i = 0; i < arraytosearch.length; i++) {
+
+    if (arraytosearch[i][key] == valuetosearch) {
+    return i;
+    }
+    }
+    return null;
+}
+
 db = firebase.firestore()
 
 function linktwitter() {
     var provider = new firebase.auth.TwitterAuthProvider();
     firebase.auth().currentUser.linkWithPopup(provider).then(function(result) {
 
-        var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "password");
+        var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "twitter.com");
 
         db.collection('users').doc(user.uid).update({
             twitter: {
@@ -53,40 +64,67 @@ youareleaving('https://twitter.com/intent/user?user_id=1075828370183737344')
 
 }
 
+function linkgithub() {
+    var provider = new firebase.auth.GithubAuthProvider();
+    firebase.auth().currentUser.linkWithPopup(provider).then(function(result) {
+        var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "github.com");
 
+        db.collection('users').doc(user.uid).update({
+            github: {
+                id: user.providerData[index].uid,
+                enabled: true,
 
+            }
+        }).then(function() {
+            Snackbar.show({text: 'GitHub linked successfully.'})
+            goFunc = "gogithub('" + user.providerData[index].uid + "')"
+            getgithubprofile(user.providerData[index].uid).then(function(data) {
+                document.getElementById('githublinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + data.login + '</a>.'
+            })
+            document.getElementById('githublinkbutton').innerHTML = 'unlink github ->'
+            document.getElementById('githublinkbutton').onclick = function() {
+                unlinkgithub()
+            }
+        })
 
+      }).catch(function(error) {
+        document.getElementById('erorrModalMsg').innerHTML = error.message + '<br><br>Try logging out of GitHub then logging back in. If this does not work, contact us.'
+        $('#errorModal').modal('toggle')
+      });
+}
 
+function unlinkgithub() {
+    user.unlink("github.com").then(function() { 
+        db.collection('users').doc(user.uid).update({
+            github: firebase.firestore.FieldValue.delete()
+        }).then(function() {
+            document.getElementById('githublinktext').innerHTML = 'Link your GitHub account to Eonnect. You will have the option to show or hide your GitHub on your profile!'
+            document.getElementById('githublinkbutton').innerHTML = 'link github ->'
+            document.getElementById('githublinkbutton').onclick = function() {
+                linkgithub()
+            }
+            Snackbar.show({text: "GitHub unlinked successfully."})
+        })
+      }).catch(function(error) {
+        document.getElementById('erorrModalMsg').innerHTML = error.message + '<br><br>Try logging out of GitHub then logging back in. If this does not work, contact us.'
+        $('#errorModal').modal('toggle')
+      });
+}
 
+function gogithub(uid) {
+    getgithubprofile(uid).then(function(data) {
+        youareleaving('https://github.com/' + data.login)  
+    })
+}
 
+function getgithubprofile(uid) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function functiontofindIndexByKeyValue(arraytosearch, key, valuetosearch) {
-
-    for (var i = 0; i < arraytosearch.length; i++) {
-
-    if (arraytosearch[i][key] == valuetosearch) {
-    return i;
-    }
-    }
-    return null;
+    return     $.ajax({
+        beforeSend: function(request) {
+            request.setRequestHeader("Authorization", 'token 37f01be351d5ee933b166bdc9514993487d23157');
+        },
+        dataType: "json",
+        url: "https://api.github.com/user/" + uid,
+        success: function(data) {}
+    });
 }

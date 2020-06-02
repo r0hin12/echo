@@ -351,36 +351,38 @@ $( "#userModal" ).scroll(function() {
 
 // SCRLLING INFINITE SCROLL
 
-$(window).scroll(function() {
+function loadscrolling() {
+    $(window).scroll(function() {
 
 
-    if ($(window).scrollTop() > 300) {
-        document.getElementById('returntotop').setAttribute('style', 'display:block !important');
-        document.getElementById('returntotop').classList.add('fadeInUp')
-        document.getElementById('returntotop').classList.remove('fadeOutDown')
-    }
-    else {
-        document.getElementById('returntotop').classList.add('fadeOutDown')
-        document.getElementById('returntotop').classList.remove('fadeInUp')
-    }
-
-    if($(window).scrollTop() + $(window).height() == $(document).height()) {
-        if (sessionStorage.getItem('view') == 'all') {
-            build()
-            likeslistener()
-            listenlikes()
-            commentslistener()
-            listencomments()
+        if ($(window).scrollTop() > 300) {
+            document.getElementById('returntotop').setAttribute('style', 'display:block !important');
+            document.getElementById('returntotop').classList.add('fadeInUp')
+            document.getElementById('returntotop').classList.remove('fadeOutDown')
         }
         else {
-            buildrelevant()
-            likeslistenerrelevant()
-            listenlikesrelevant()
-            commentsrelevantlistener()
-            listencommentsrelevant()
+            document.getElementById('returntotop').classList.add('fadeOutDown')
+            document.getElementById('returntotop').classList.remove('fadeInUp')
         }
-    }
- });
+    
+        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            if (sessionStorage.getItem('view') == 'all') {
+                build()
+                likeslistener()
+                listenlikes()
+                commentslistener()
+                listencomments()
+            }
+            else {
+                buildrelevant()
+                likeslistenerrelevant()
+                listenlikesrelevant()
+                commentsrelevantlistener()
+                listencommentsrelevant()
+            }
+        }
+     });
+}
 
  //ERROR BACKUP WTF
 

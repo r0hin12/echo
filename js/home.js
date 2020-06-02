@@ -32,7 +32,7 @@ sessionStorage.setItem('currentlyviewinguser', 'uwu')
 
 // INFINITE SCROLL VARIABLES
 
-window.infiniteScrollCount = 6
+window.infiniteScrollCount = 12
 window.currentScrollCount = 0
 window.currentRelScrollCount = 0
 window.currentUserScrollCount = 0
@@ -762,6 +762,22 @@ async function usermodal(uid) {
                         gotwitter(doc.data().twitter.uid)
                     }
                     hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
+                    document.getElementById("connections").appendChild(hs)
+                }
+            }
+
+            // Connections -> GitHub
+            if (doc.data().github !== undefined) {
+                if (doc.data().github.enabled) {
+                    hs = document.createElement('button')
+                    hs.classList.add('eon-text')
+                    hs.classList.add('connectionbtn')
+                    hs.onclick = function() {
+                        $('#userModal').modal('toggle')
+                        gotwitter(doc.data().github.uid)
+                    }
+                    var customProps = window.getComputedStyle(document.documentElement);
+                    hs.innerHTML = '<img class="imginbtn" src="assets/GitHub-Mark-' + customProps.getPropertyValue('--content-primary').replace(/\s/g, '').charAt(0).toUpperCase() + customProps.getPropertyValue('--content-primary').slice(1) + '.png"></img>'
                     document.getElementById("connections").appendChild(hs)
                 }
             }

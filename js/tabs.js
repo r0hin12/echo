@@ -56,6 +56,7 @@ function tabe(tab) {
                     if (typeof (user) != "undefined" && typeof (user) != null) {
                         clearInterval(interval)
                         load()
+                        loadscrolling()
                     }
                 }, 200);
                 break;

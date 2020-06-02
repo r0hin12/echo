@@ -104,6 +104,11 @@ custom-control-label::before {
     height: 38px
 }
 
+.vertical-content {
+    padding: 10px; 
+    display: inline-block;
+}
+
 .stats-primary {
     color: var(--content-primary);
     line-height: 0px;
@@ -137,6 +142,10 @@ width: 90%;
 .iconinactive {
     color: var(--content-secondary);
     padding: 6px;
+}
+
+.form-control {
+    color: var(--content-primary) !important;
 }
 
 .iconactive {
@@ -577,6 +586,10 @@ width: 90%;
     -moz-text-fill-color: transparent;
 }
 
+.floating-label label {
+    color: var(--content-primary) !important;
+}
+
 .inline {
     display: inline-block;
     line-height: 0px;
@@ -819,7 +832,9 @@ width: 90%;
 }
 
 #pfp3 {
-    width: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
     border-radius: 50%;
 }
 
@@ -867,5 +882,23 @@ width: 90%;
 }
 
 .imginbtn {
-    width: 40px;
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    padding: 10px;
+}
+
+.block {
+    display: block !important;
+    width: 100% !important;
+}
+
+.dropdown {
+    padding: 0px;
+}
+
+.accmanagedropdown {
+    padding: 12px;
+
+    border-radius: 12px;
 }

@@ -115,13 +115,6 @@ function hasWhiteSpace(s) {
     return /\s/g.test(s);
 }
 
-function signout() {
-    Snackbar.show({ text: 'Signing out...' })
-    window.setTimeout(function () {
-        firebase.auth().signOut()
-    }, 2000)
-}
-
 function addappcontent() {
     document.getElementById('viewprofilebtn').onclick = function() {
         usermodal(user.uid)
@@ -142,10 +135,10 @@ function addappcontent() {
             })
         }
 
-        if (doc.data().twitter.id == null || doc.data().twitter.id == undefined) {
+        if (doc.data().twitter == null || doc.data().twitter == undefined) {
         }
         else {
-            var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "password");
+            var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "twitter.com");
             goFunc = "gotwitter('" + user.providerData[index].uid + "')"
             document.getElementById('twitterlinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + user.providerData[index].displayName + '</a>.'
             document.getElementById('twitterlinkbutton').innerHTML = 'unlink twitter ->'
@@ -159,6 +152,29 @@ function addappcontent() {
                 gotwitter(user.providerData[index].uid)
             }
             hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
+            document.getElementById("cardconnections").appendChild(hs)
+        }
+
+        if (doc.data().github == null || doc.data().twitter == undefined) {
+        }
+        else {
+            var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "github.com");
+            goFunc = "gogithub('" + user.providerData[index].uid + "')"
+            getgithubprofile(user.providerData[index].uid).then(function(data) {
+                document.getElementById('githublinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + data.login + '</a>.'
+            })
+            document.getElementById('githublinkbutton').innerHTML = 'unlink github ->'
+            document.getElementById('githublinkbutton').onclick = function() {
+                unlinkgithub()
+            }
+            hs = document.createElement('button')
+            hs.classList.add('eon-text')
+            hs.classList.add('connectionbtn')
+            hs.onclick = function() {
+                gogithub(user.providerData[index].uid)
+            }
+            var customProps = window.getComputedStyle(document.documentElement);
+            hs.innerHTML = '<img class="imginbtn" src="assets/GitHub-Mark-' + customProps.getPropertyValue('--content-primary').replace(/\s/g, '').charAt(0).toUpperCase() + customProps.getPropertyValue('--content-primary').slice(1) + '.png"></img>'
             document.getElementById("cardconnections").appendChild(hs)
         }
 
@@ -258,5 +274,73 @@ function youareleaving(id) {
             }
             
         }
+    }
+}
+
+function changedisplayname() {
+    sessionStorage.removeItem('viewUser')
+    toggleloader()
+    newdisplayname = document.getElementById('newdisplayname').value
+    if (newdisplayname == '' || newdisplayname == ' ' || newdisplayname == null || newdisplayname == undefined) {
+        error('Something went wrong. Please try again later.')
+    }
+    else {
+        user.updateProfile({
+            displayName: newdisplayname
+        }).then(function () {
+            db.collection('users').doc(user.uid).update({
+                name: newdisplayname
+            }).then(function() {
+                window.setTimeout(function () {
+                    toggleloader()
+                    showcomplete()
+                    window.setTimeout(function() {
+                        window.location.reload()
+                    }, 1100)
+                }, 2800)
+            }).catch(function(error) {
+                togglelsoader()
+                alert(error.message)
+            })
+        }).catch(function (error) {
+            toggleloader()
+            alert(error.message)
+        });
+    }
+}
+
+function preparenamechange() {
+    document.getElementById('newdisplayname').placeholder = user.displayName
+    $('#changenamemodal').modal('toggle')
+}
+
+function preparebiochange() {
+    db.collection('users').doc(user.uid).get().then(function(doc) {
+        document.getElementById('newbio').placeholder = doc.data().bio
+    }).then(function() {
+        $('#changebiomodal').modal('toggle')
+    })
+}
+
+function changebio() {
+    sessionStorage.removeItem('currentlyviewinguser')
+    toggleloader()
+    newbio = document.getElementById('newbio').value
+    if (newbio == '' || newbio == ' ' || newbio == null || newbio == undefined) {
+        error('Something went wrong. Please try again later.')
+    }
+    else {
+        db.collection('users').doc(user.uid).update({
+            bio: newbio
+        }).then(function() {
+            window.setTimeout(function () {
+                toggleloader()
+                showcomplete()
+                $('#bio5').html(newbio)
+            }, 2800)
+        }).catch(function(error) {
+            togglelsoader()
+            alert(error.message)
+        })
     }
 }
