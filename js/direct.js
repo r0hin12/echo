@@ -1,0 +1,7 @@
+function loaddirect() {
+
+}
+
+function newdirect() {
+    
+}

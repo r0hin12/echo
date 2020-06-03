@@ -35,6 +35,11 @@ function check(width) {
 }
 
 function expand() {
+
+    document.getElementById('sidebar').classList.add('buttonexpanded')
+    document.getElementById('sidebar').classList.add('fadeInLeft')
+    document.getElementById('sidebar').classList.remove('fadeOutLeft')
+
     document.getElementById('expandbtn').classList.add('fadeOutLeft')
     window.setTimeout(function () {
         document.getElementById('expandbtn').style.display = 'none'
@@ -46,10 +51,6 @@ function expand() {
     window.setTimeout(function () {
         document.getElementById('collapsebtn').classList.remove('zoomIn')
     }, 800)
-
-    document.getElementById('sidebar').classList.add('buttonexpanded')
-    document.getElementById('sidebar').classList.add('fadeInLeft')
-    document.getElementById('sidebar').classList.remove('fadeOutLeft')
 
 }
 

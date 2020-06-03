@@ -2,7 +2,7 @@ $(window).ready(function () {
 
     sessionStorage.setItem('first-time-home', 'true')
     sessionStorage.setItem('first-time-account', 'true')
-    sessionStorage.setItem('first-time-notifications', 'true')
+    sessionStorage.setItem('first-time-inbox', 'true')
     sessionStorage.setItem('first-time-home', 'true')
     sessionStorage.setItem('first-time-home', 'true')
 
@@ -60,10 +60,12 @@ function tabe(tab) {
                     }
                 }, 200);
                 break;
-            case "account":
-                // Load account details, etc
+            case "inbox":
+                loaddirect()
                 break;
-
+            case "account":
+                //
+                break;
             default:
                 break;
         }
