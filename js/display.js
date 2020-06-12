@@ -90,7 +90,6 @@ $(function () {
 //Popovers 
 $(function () {
     $('[data-toggle="popover"]').popover({
-        trigger: "focus"
     })
 })
 
@@ -247,7 +246,7 @@ function autocomplete(inp, arr) {
 
             b = document.createElement("DIV");
             b.value = arr[i]
-            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML = "@<strong>" + arr[i].substr(0, val.length) + "</strong>";
             b.innerHTML += arr[i].substr(val.length);
 
             b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
@@ -390,4 +389,77 @@ function loadscrolling() {
  function error(msg) {
     document.getElementById('erorrModalMsg').innerHTML = msg
     $('#errorModal').modal('toggle')
+}
+
+//Preflight Email Change. Add text to popover when click button
+function prepreflightemail() {
+    window.setTimeout(() => {
+        $('#changemailpopoverbtn').click()    
+    }, 100);
+}
+
+function preflightemail() {
+    try {
+        window.setTimeout(() => {
+            document.getElementById('currentemail').innerHTML = user.email    
+            addWaves()
+        }, 400);   
+    } catch (error) {
+    }
+}
+
+$('body').on('click', function (e) {
+    $('[data-toggle=popover]').each(function () {
+        // hide any open popovers when the anywhere else in the body is clicked
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});
+
+function prepreflightpassword() {
+    window.setTimeout(() => {
+        $('#changpasswordpopoverbtn').click()    
+    }, 100);
+}
+
+function prepreflightvisibility() {
+    window.setTimeout(() => {
+        $('#changevisibilitypopoverbtn').click()    
+    }, 100);
+}
+
+function preflightemail() {
+    try {
+        window.setTimeout(() => {
+            document.getElementById('currentemail').innerHTML = user.email
+            addWaves()
+        }, 400);   
+    } catch (error) {
+    }
+}
+
+function preflightvisibility() {
+    try {
+        window.setTimeout(() => {
+
+            document.getElementById('currentvisibility').innerHTML = cacheuser.type
+
+            if (cacheuser.type == "public") {
+                document.getElementById('btnconfirmvisibilitybtn').onclick = function() {
+                    confirmchangevisibility('private')
+                }
+                document.getElementById('btnconfirmvisibilitybtn').innerHTML = 'Switch to Private'
+            }
+            else {
+                document.getElementById('btnconfirmvisibilitybtn').onclick = function() {
+                    confirmchangevisibility('public')
+                }
+                document.getElementById('btnconfirmvisibilitybtn').innerHTML = 'Switch to Public'
+            }
+            addWaves()
+        }, 400);
+    } catch (error) {
+        
+    }
 }

@@ -10,9 +10,31 @@ $(window).ready(function () {
     var urlParams = new URLSearchParams(window.location.search);
     tab = urlParams.get('tab')
 
+    switch (tab) {
+        case "returnstatusemail":
+            Snackbar.show({text: "You email was successfully changed."})
+            tab = 'account'
+            break;
+        case "returnstatuspass":
+            Snackbar.show({text: "You password was successfully changed."})
+            tab = 'account'
+            break;
+        case "returnstatusprivate":
+            Snackbar.show({text: "You visibility was successfully changed to private."})
+            tab = 'account'
+            break;
+        case "returnstatuspublic":
+            Snackbar.show({text: "You password was successfully changed to public."})
+            tab = 'account'
+            break;
+        default:
+            break;
+    }
+
+
+
     if (tab == null || tab == undefined) {
 
-        urlParams = new URLSearchParams(window.location.search);
         sessionStorage.setItem('viewPost', urlParams.get('post'))
         sessionStorage.setItem('viewInfo', urlParams.get('info'))
         sessionStorage.setItem('fullInfo', urlParams.get('fullscreen'))

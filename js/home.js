@@ -559,10 +559,67 @@ function buildcomment(element, id, i, likes) {
     addpfpcomment(element.user, i)
 }
 
+function likeuser(id) {
+
+    db.collection('posts').doc('likes').get().then(function (doc) {
+        alreadyliked = false
+        for (let i = 0; i < doc.data()[id].length; i++) {
+            const element = doc.data()[id][i];
+            if (element == user.uid) {
+                var alreadyliked = true
+            }
+        }
+
+        if (doc.data()[id][0] == user.uid) {
+            Snackbar.show({ text: 'You cannot remove like on your own post.' })
+        }
+
+        else {
+            if (alreadyliked == true) {
+
+                prev = document.getElementById(id + 'eluser').innerHTML
+                prev = prev.replace('<i class="material-icons posticonuser">favorite_border</i> ', '')
+                future = parseInt(prev) - 1
+                prev = document.getElementById(id + 'eluser').innerHTML = '<i class="material-icons posticonuser">favorite_border</i> ' + future
+
+                db.collection('posts').doc('likes').update({
+                    [id]: firebase.firestore.FieldValue.arrayRemove(user.uid)
+                })
+                try {
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eluser').classList.add('rubberBand')
+                    }, 500)
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eluser').classList.remove('rubberBand')
+                    }, 1300)
+                } catch {
+                }
+            }
+            else {
+                prev = document.getElementById(id + 'eluser').innerHTML
+                prev = prev.replace('<i class="material-icons posticonuser">favorite_border</i> ', '')
+                future = parseInt(prev) + 1
+                prev = document.getElementById(id + 'eluser').innerHTML = '<i class="material-icons posticonuser">favorite_border</i> ' + future
+
+                db.collection('posts').doc('likes').update({
+                    [id]: firebase.firestore.FieldValue.arrayUnion(user.uid)
+                })
+                try {
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eluser').classList.add('jello')
+                    }, 500)
+
+                    window.setTimeout(function () {
+                        document.getElementById(id + 'eluser').classList.remove('jello')
+                    }, 1300)
+                } catch {
+                }
+            }
+        }
+    })
+}
+
 function like(id) {
-
-
-
     sessionStorage.setItem('skiponce2', "true")
     db.collection('posts').doc('likes').get().then(function (doc) {
         alreadyliked = false
@@ -698,12 +755,12 @@ async function addstuffuser(name, data, time, last) {
 
         a = document.createElement('div')
         a.classList.add('content')
-        likeFunc = "like('" + name + "')"
+        likeFunc = "likeuser('" + name + "')"
         commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "')"
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
 
-        a.innerHTML = '<div class="card usercard animated fadeIn"><img id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><br><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
+        a.innerHTML = '<div class="card usercard animated fadeIn"><img id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><br><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn animated"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
@@ -960,6 +1017,7 @@ function loaduserfollowdetails(data) {
 }
 
 function loaduserposts(uid) {
+
     anarray = []
     db.collection('posts').doc('posts').get().then(function (doc) {
         userpostcount = 0

@@ -90,7 +90,9 @@ function profilesetup2() {
                 })
                 db.collection('users').doc(user.uid).update({
                     username: username,
-                    name: displayname
+                    name: displayname,
+                    emailchange: firebase.firestore.FieldValue.serverTimestamp(),
+                    passchange: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 user.updateProfile({
                     displayName: displayname,
@@ -102,7 +104,8 @@ function profilesetup2() {
                 db.collection('users').doc(user.uid).get().then(function (doc) {
                     if (doc.data().type == undefined) {
                         db.collection('users').doc(user.uid).update({
-                            type: 'public'
+                            type: 'public',
+
                         })
                     }
                 })
@@ -343,4 +346,113 @@ function changebio() {
             alert(error.message)
         })
     }
+}
+
+function confirmchangemeil() {
+    toggleloader()
+    db.collection('users').doc(user.uid).get().then(function(doc) {
+        firebasedate = doc.data().emailchange.toDate()
+        currentdate = new Date()
+        var diffMinutes = parseInt((currentdate - firebasedate) / (1000 * 60), 10); 
+        if (diffMinutes > 120) {
+            user.updateEmail(document.getElementById('newemail').value).then(function() {
+                $('#changemailpopoverbtn').popover('hide');
+                db.collection("users").doc(user.uid).update({
+                    emailchange: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(function() {
+                    window.setTimeout(function() {
+                        toggleloader()
+                        window.setTimeout(function() {
+                            showcomplete()
+                            window.setTimeout(function() {
+                                history.pushState(null, '', '/eonnect/app.html?tab=returnstatusemail');
+                                window.location.reload()
+                            }, 3600)
+                            Snackbar.show({text: "Updating records... Do not leave this page."})
+                        }, 200)
+                    }, 500)
+                })
+            }).catch(function(error) {
+                window.setTimeout(function() {
+                    toggleloader()
+                    document.getElementById('erorrModalMsg').innerHTML = error
+                    $('#errorModal').modal('toggle')
+                }, 800)
+            });
+        }
+        else {
+
+            
+            window.setTimeout(function() {
+                error('You are doing this too much! Please wait up to 2 hours or contact support.')
+                toggleloader()
+            }, 1000)
+
+        }
+    })
+}
+
+function confirmchangepass() {
+    $('#changpasswordpopoverbtn').popover('hide');
+    toggleloader()
+    db.collection('users').doc(user.uid).get().then(function(doc) {
+        firebasedate = doc.data().passchange.toDate()
+        currentdate = new Date()
+        var diffMinutes = parseInt((currentdate - firebasedate) / (1000 * 60), 10); 
+        if (diffMinutes > 120) {
+            user.updatePassword(document.getElementById('newpassword').value).then(function() {
+                db.collection("users").doc(user.uid).update({
+                    passchange: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(function() {
+                    window.setTimeout(function() {
+                        toggleloader()
+                        window.setTimeout(function() {
+                            showcomplete()
+                            window.setTimeout(function() {
+                                history.pushState(null, '', '/eonnect/app.html?tab=returnstatuspass');
+                                window.location.reload()
+                            }, 3600)
+                            Snackbar.show({text: "Updating records... Do not leave this page."})
+                        }, 200)
+                    }, 500)
+                })
+            }).catch(function(error) {
+                window.setTimeout(function() {
+                    toggleloader()
+                    document.getElementById('erorrModalMsg').innerHTML = error
+                    $('#errorModal').modal('toggle')
+                }, 800)
+            });
+        }
+        else {
+
+            
+            window.setTimeout(function() {
+                error('You are doing this too much! Please wait up to 2 hours or contact support.')
+                toggleloader()
+            }, 1000)
+
+        }
+    })
+}
+
+function confirmchangevisibility(result) {
+    $('#changpasswordpopoverbtn').popover('hide');
+    toggleloader()
+
+    db.collection('users').doc(user.uid).update({
+        type: result,
+    }).then(function(doc) {
+        window.setTimeout(function() {
+            toggleloader()
+            window.setTimeout(function() {
+                showcomplete()
+                window.setTimeout(function() {
+                    history.pushState(null, '', '/eonnect/app.html?tab=returnstatus' + result);
+                    window.location.reload()
+                }, 3600)
+                Snackbar.show({text: "Updating records... Do not leave this page."})
+            }, 200)
+        }, 800)
+    })
 }

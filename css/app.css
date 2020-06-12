@@ -255,7 +255,6 @@ width: 90%;
 }
 
 .dropdown {
-    display: inline-block;
     padding-left: 24px;
     color: var(--content-primary);
 }
@@ -899,6 +898,32 @@ width: 90%;
 
 .accmanagedropdown {
     padding: 12px;
-
     border-radius: 12px;
+}
+
+.dropdownmanagecontainer {
+    display: inline-block
+}
+
+#changemailpopoverbtn {
+    position: absolute !important;
+    z-index: -2;
+    visibility: hidden;
+}
+
+#changpasswordpopoverbtn {
+    position: absolute !important;
+    z-index: -2;
+    visibility: hidden;
+}
+
+#changevisibilitypopoverbtn {
+    position: absolute !important;
+    z-index: -2;
+    visibility: hidden;
+}
+
+
+.maincolor {
+    color: var(--content-primary)
 }

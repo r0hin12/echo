@@ -355,7 +355,7 @@
             </div>
             <div class="centered animated fadeIn" style="display: none;" id="profilesetup2">
                 <div class="card">
-                    <div style="color: black;" class="card-body">
+                    <div class="card-body maincolor">
                         <h3>Complete your Profile</h3>
                         <br>
                         <div class="floating-label textfield-box">
@@ -374,7 +374,7 @@
         <div style="display: none;" class="doemail animated fadeIn" id="doemail">
             <div class="centered animated fadeIn" id="emailsetup1">
                 <div class="card">
-                    <div style="color: black;" class="card-body">
+                    <div class="card-body maincolor">
                         <h3>Verify your Email</h3>
                         <br>
                         <center>
@@ -383,7 +383,11 @@
                             <p id="verifyresponse"></p>
                             <button onclick="checkverification()" class="eon-text">Check Verification</button>
                             </div>
+                            <br><br>
+                            <a href="help.html?support=noemailaccess">Don't have access to this email?</a>
                         </center>
+                        <br>
+                        
                     </div>
                 </div>
             </div>
@@ -534,11 +538,14 @@
                                     <h4>Edit Your Profile</h4>
                                     <center>
                                     <br>
-                                    <div class="card animated fadeIn block">
+                                    <div id="acounteditcard" class="card animated fadeIn block">
                                         <div id="pfcardbody" class="card-body">
                                             <br>
-                                            <div class="dropdown">
-                                                <button aria-expanded="false" aria-haspopup="true" class="eon-text block" data-toggle="dropdown" type="button">Edit Profile</button>
+                                            <a onclick="preflightemail()" id="changemailpopoverbtn" tabindex="0" class="eon-text block" role="button" data-toggle="popover" title="Switch Email" data-html="true" data-content="<small>Current Email: <b id='currentemail'></b></small><br><div class='floating-label textfield-box'>     <label for='newemail'>New Email</label>     <input class='form-control' id='newemail' type='text'>   </div><br><button onclick='confirmchangemeil()' class='eon-contained block'>confirm</button>">Change Email</a>
+                                            <a onclick="preflightvisibility()" id="changevisibilitypopoverbtn" tabindex="0" class="eon-text block" role="button" data-toggle="popover" title="Switch Visibility" data-html="true" data-content="<small>Current Visibility: <b id='currentvisibility'></b></small><button id='btnconfirmvisibilitybtn' onclick='window.location.reload()' class='eon-contained block'>unable to load</button>">Change Visibility</a>
+                                            <a id="changpasswordpopoverbtn" tabindex="0" class="eon-text block" role="button" data-toggle="popover" title="Change Password" data-html="true" data-content="<div class='floating-label textfield-box'>     <label for='newpassword'>New Password</label>     <input class='form-control' id='newpassword' type='password'>   </div><br><button onclick='confirmchangepass()' class='eon-contained block'>confirm</button>">Change Password</a>
+                                            <div class="dropdown dropdownmanagecontainer">
+                                                <button aria-expanded="false" aria-haspopup="true" class="eon-text" data-toggle="dropdown" type="button">Edit Profile</button>
                                                 <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu accmanagedropdown">
                                                     <center>
                                                         <a onclick="preparenamechange()" class="eon-text block" href="#">Change Name</a>
@@ -546,19 +553,20 @@
                                                     </center>
                                                 </div>
                                             </div>
-                                            <div class="dropdown">
-                                                <button aria-expanded="false" aria-haspopup="true" class="eon-text block" data-toggle="dropdown" type="button">Edit Account</button>
+                                            <div class="dropdown dropdownmanagecontainer">
+                                                <button aria-expanded="false" aria-haspopup="true" class="eon-text" data-toggle="dropdown" type="button">Edit Account</button>
                                                 <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu accmanagedropdown">
                                                     <center>
-                                                        <a class="eon-text block" href="#">Change Email</a>
-                                                        <a class="eon-text block" href="#">Change Password</a>
-                                                        <a class="eon-text block" href="#">Change Visibilty</a>
+                                                        <a class="eon-text block" onclick="prepreflightemail()" href="#">Change Email</a>
+                                                        <a class="eon-text block" onclick="prepreflightpassword()" href="#">Change Password</a>
+                                                        <a class="eon-text block" onclick="prepreflightvisibility()" href="#">Change Visibilty</a>
                                                     </center>
                                                 </div>
                                             </div>
                                             <br><br>
                                         </div>
                                     </div>
+                                    <br><br><br>
                                 </center>
                             </div>
 
@@ -603,18 +611,15 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-sm">
-                                <br>
                                 <h4>Danger Zone</h4>
                                 <br>
                                 <div class="card animated fadeIn block">
                                     <div class="card-body">
                                         <center>
                                             <button onclick="signout()" class="eon-text block">Log Out</button>
-                                            <br>
                                             <div class="dropdown">
-                                                <button aria-expanded="false" aria-haspopup="true" class="eon-text block" data-toggle="dropdown" type="button">Account Management</button>
+                                                <button style="display: block !important; width: 100% !important;" aria-expanded="false" aria-haspopup="true" class="eon-text block" data-toggle="dropdown" type="button">Account Management</button>
                                                 <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu accmanagedropdown">
                                                 <center>
                                                     <a class="eon-text block" href="#">Disable Account</a>
@@ -626,6 +631,7 @@
                                         </center>
                                     </div>
                                 </div>
+                                <br><br><br>
                             </div>
 
                         </div>
