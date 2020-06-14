@@ -71,17 +71,12 @@ firebase.auth().onAuthStateChanged(function (user) {
         if (myParam == null) {
 
 
-            window.setTimeout(function() {
                 $('#successmodal').modal('toggle')
-            }, 1000)
             localStorage.setItem('destinationurl', 'app.html')
 
         }
         else {
-            window.setTimeout(function() {
                 $('#successmodal').modal('toggle')
-            }, 1000)
-        
             localStorage.setItem('destinationurl', urlParams.get('return'))
         }
 
@@ -160,5 +155,13 @@ input.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
     signinemail()
+  }
+});
+
+var input = document.getElementById("successmodal");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    document.getElementById("zoomBtn").click();
   }
 });
