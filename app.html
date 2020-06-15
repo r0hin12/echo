@@ -331,6 +331,22 @@
             </div><div class="modal-footer"></div></div></div>
         </div>
 
+        <div class="modal fade" id="newdmmodal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-body">
+            <h3>New DM</h3>
+            <br>
+            <div class="floating-label textfield-box">
+                <label for="newdmfield">Recipient's Username</label>
+                <input class="form-control" id="newdmfield" placeholder="" type="text">
+            </div>
+              <br><br>
+            <center>
+            <button type="button" class="waves eon-text" data-dismiss="modal">cancel</button>
+            <button onclick="newdm()" type="button" class="waves eon-contained" data-dismiss="modal">request</button>
+            </center>
+             
+            </div><div class="modal-footer"></div></div></div>
+        </div>
+
         <!-- ===========================--] Content [=================================== -->    
 
         <div style="display: none;" class="doprofile animated fadeIn" id="doprofile">
@@ -503,9 +519,58 @@
                     </div>
 
                     <div aria-labelledby="inbox-tab" class="tab-pane fade" id="inbox" role="tabpanel">
-                        <br><br>
-                        <h2 class="leader">Inbox</h2>
-                        <br>
+
+
+                        <div class="inboxsidebar">
+                            <div class="inboxsidebarpadding">
+                                <div class="searchbarmsg floating-label textfield-box">
+                                    <label for="msgsearch">Search</label>
+                                    <input class="form-control" id="msgsearch" type="text">
+                                </div>
+                                <button data-toggle="modal" data-target="#newdmmodal" class="eon-text centeredy refreshbtn adddmbtn"><i class="material-icons">add</i></button>
+                            </div>
+
+                            <br>
+
+                            <div class="inboxsidebarpadding">
+                                <div class="list-group" id="accordionOne">
+                                    <div class="expansion-panel list-group-item">
+                                      <a id="clickybtnshowdmreq" aria-controls="pendingdm" aria-expanded="false" class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#pendingdm">
+                                        DM Requests <span id="dmreqstatus" class="badge badge-pill badge-secondary animated infinite slower">0</span>
+
+                                        <div class="expansion-panel-icon ml-3 text-black-secondary">
+                                          <i class="collapsed-show material-icons">keyboard_arrow_down</i>
+                                          <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                                        </div>
+                                      </a>
+                                      <div class="collapse" data-parent="#accordionOne" id="pendingdm">
+                                        <div class="expansion-panel-body">
+                                            <center id="dmreqlist">
+                                                <button onclick="Snackbar.show({text: 'Refreshing...'});loadpending()" id="skiddpypo" class="eon-text refreshbtn hidden"><i class="material-icons">refresh</i></button>
+                                            </center>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+                            <div id="messagelist">
+                                <div class="messagelistboxactive">
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2Fexample.png?alt=media&token=2f3c4769-b40e-4f76-a9ec-f43d934353a6" class="msgimg centeredy" alt="">
+                                    <div class="boxtext centeredy"><h4 class="heavy">Name</h4><br><p class="grey nolineheight">Recent text</p></div>
+                                </div>
+                                
+                            </div>
+
+
+                        </div>
+
+                        <div class="inboxcontent">
+
+                        </div>
+
+
                     </div>
                 
                     <div aria-labelledby="account-tab" class="tab-pane fade" id="account" role="tabpanel">

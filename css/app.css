@@ -639,12 +639,9 @@ width: 90%;
 
 .refreshbtn {
     padding: 12px !important;
-    padding-left: 20px !important;
     border-radius: 12px !important;
-    padding-right: 20px !important;
     margin-right: 12px !important;
-    width: 0px !important;
-    max-width: 0px !important;
+    min-width: 18px !important;
 
 }
 
@@ -923,7 +920,111 @@ width: 90%;
     visibility: hidden;
 }
 
-
 .maincolor {
     color: var(--content-primary)
+}
+
+.grey {
+    color: grey !important;
+}
+
+.nolineheight {
+    line-height: 0px;
+    margin: 0px;
+}
+
+.heavy {
+    padding-bottom: 0px;
+    line-height: 0px;
+    margin: 0px;
+}
+
+.inboxsidebar {
+    position: absolute; 
+    left: 0px;
+    top: 0px;
+    height: 100%;
+
+    padding: 34px;
+    padding-right: 0px;
+    width: 35%;
+    background-color: var(--bg-secondary)
+}
+
+.inboxsidebarpadding {
+    padding-right: 34px;
+    position: relative;
+}
+
+.inboxcontent {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    
+    width: 65%;
+    background-color: var(--bg-tertiary)
+}
+
+.messagelistboxactive {
+    width: 100%;
+    padding: 24px 12px 24px 64px;
+    background-color: var(--bg-tertiary);
+    border-radius: 12px 0px 0px 12px;
+    height: 80px;
+    position: relative;
+
+    cursor: pointer;
+}
+
+.msgimg {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+
+    position: absolute;
+    left: 12px;
+}
+
+.searchbarmsg {
+    width: 80%;
+    display: inline-block;
+}
+
+.adddmbtn {
+    right: 12px;
+    display: inline-block !important;
+}
+
+.pendingcard {
+    width: 100%;
+    padding: 24px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.dmreqpfp {
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.reject {
+    display: inline-block;
+    margin-right: 0px;
+    padding-right: 0px;
+    color: red !important;
+}
+
+.approve {
+    display: inline-block;
+    margin-right: 0px;
+    padding-right: 0px;
+    color: lime !important;
+}
+
+.hidden {
+    display: none !important;
 }

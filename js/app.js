@@ -460,3 +460,4 @@ function confirmchangevisibility(result) {
 function sharewithqr() {
     transfer('https://r0h.in/qr/api.html?target=' + location.protocol + '//' + location.host + location.pathname + "?user=" + user.uid + "&return=" + location.protocol + '//' + location.host + location.pathname + "?tab=account&typeof=url&return-site=Eonnect") 
 }
+

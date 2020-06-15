@@ -1,5 +1,10 @@
 $(window).ready(function () {
 
+    sessionStorage.removeItem('viewPost')
+    sessionStorage.removeItem('viewInfo')
+    sessionStorage.removeItem('fullInfo')
+    sessionStorage.removeItem('viewUser')
+
     sessionStorage.setItem('first-time-home', 'true')
     sessionStorage.setItem('first-time-account', 'true')
     sessionStorage.setItem('first-time-inbox', 'true')
@@ -83,7 +88,12 @@ function tabe(tab) {
                 }, 200);
                 break;
             case "inbox":
-                loaddirect()
+                interval = window.setInterval(function () {
+                    if (typeof (user) != "undefined" && typeof (user) != null) {
+                        clearInterval(interval)
+                        loaddirect()
+                    }
+                }, 200);
                 break;
             case "account":
                 //

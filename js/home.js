@@ -445,7 +445,7 @@ function loadComments(id) {
             }
             for (let i = 0; i < doc.data()[id].length; i++) {
                 const element = doc.data()[id][i];
-                buildcomment(element, id, i, cachelikes)
+                buildcomment(element, id, i, cachelikes, false)
             }
             addWaves()
             sortUsingNestedText($('#commentsbox'), "div.card", "div.inline")
@@ -513,7 +513,7 @@ function unLikeComment(id, i, element) {
 
 }
 
-function buildcomment(element, id, i, likes) {
+function buildcomment(element, id, i, likes, forceliked) {
     a = document.createElement('div')
     a.classList.add('card')
     a.classList.add('animated')
@@ -523,11 +523,13 @@ function buildcomment(element, id, i, likes) {
     likeCommentFunc = "likeComment('" + id + "', '" + i + "', this)"
     unlikeCommentFunc = "unLikeComment('" + id + "', '" + i + "', this)"
     userFunc33 = "usermodal('" + element.user + "'); sessionStorage.setItem('skiponce123', 'true'); $('#commentModal').modal('toggle')"
-
     likesname = id + '>withindex<' + i
 
     if (likes[likesname] == undefined) {
         likehtml = '<button onclick="' + likeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">0</div></button>'
+        if (forceliked) {
+            likehtml = '<button data-toggle="tooltip" data-placement="top" title="You cannot unlike your own comment!" class="waves eon-text likedtooltip"><i class="material-icons noliked yesliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">1</div></button>'
+        }
     }
     else {
         commentLiked = false
@@ -538,24 +540,39 @@ function buildcomment(element, id, i, likes) {
         }
 
         if (commentLiked) {
-            likehtml = '<button onclick="' + unlikeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked yesliked commentlikeicon">thumb_up</i> <div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+            if (element.user == user.uid) {
+                likehtml = '<button data-toggle="tooltip" data-placement="top" title="You cannot unlike your own comment!" class="waves eon-text likedtooltip"><i class="material-icons noliked yesliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+            }
+            else {
+                likehtml = '<button onclick="' + unlikeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked yesliked commentlikeicon">thumb_up</i> <div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+            }
         }
         else {
-            likehtml = '<button onclick="' + likeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+            if (forceliked) {
+                likehtml = '<button data-toggle="tooltip" data-placement="top" title="You cannot unlike your own comment!" class="waves eon-text likedtooltip"><i class="material-icons noliked yesliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+            }
+            else {
+                likehtml = '<button onclick="' + likeCommentFunc + '" class="waves eon-text"><i class="material-icons noliked commentlikeicon">thumb_up</i><div id="' + id + i + 'commentcount' + '" class="inline">' + likes[likesname].length + '</div></button>'
+            }
         }
 
     }
 
     if (element.user == user.uid) {
-        reportbtnhtml = ''
-        //likehtml = '<button onclick="' + likeCommentFunc + '" class="waves eon-text"><i class="material-icons">thumb_up</i>U MADE THIS BRO</button>'
+        flaghtml = '<i data-toggle="tooltip" data-placement="top" title="This is your comment!" class="material-icons flagtooltip">flag</i>'
+        reportbtnhtml = '<button data-toggle="tooltip" data-placement="top" title="You cannot report your own comment!" class="waves eon-text tooltipreport"><i class="material-icons">report_problem</i></button>'
     }
     else {
+        flaghtml = ''
         reportbtnhtml = '<button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button>'
     }
 
-    a.innerHTML = '<div class="card-body commentcard"><img class="centeredy commentpfp" onclick="' + userFunc33 + '" id="' + i + 'pfpel" alt=""><p class="commenttext"><a class="userlinkoncomment">' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy commentcontent">' + likehtml + reportbtnhtml + '</div>'
+
+    a.innerHTML = '<div class="card-body commentcard"><img class="centeredy commentpfp" onclick="' + userFunc33 + '" id="' + i + 'pfpel" alt=""><p class="commenttext">' + flaghtml + '<a class="userlinkoncomment">' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy commentcontent">' + likehtml + reportbtnhtml + '</div>'
     document.getElementById('commentsbox').appendChild(a)
+    $('.tooltipreport').tooltip()
+    $('.flagtooltip').tooltip()
+    $('.likedtooltip').tooltip()
     addpfpcomment(element.user, i)
 }
 
@@ -723,27 +740,38 @@ function addComment(id) {
         }
         else {
             document.getElementById('commentbox').value = ''
+
+
             db.collection('posts').doc('comments').update({
                 [id]: firebase.firestore.FieldValue.arrayUnion({
                     user: user.uid,
                     name: user.displayName,
                     content: text,
-                    likes: [],
                 })
             }).then(function () {
-                document.getElementById('charcount').innerHTML = 'Post Comment (0/200 chars)'
-                a = {user: user.uid, name: user.displayName, content: text}
-                b = id
-                c = 'not matter'
-                buildcomment(a, b, c, cachelikes)
+                db.collection('posts').doc('comments').get().then(function(doc) {
+                    int = doc.data()[id].length
+                    updatedint = int - 1
+                    somename = id + '>withindex<' + updatedint
+                    db.collection('posts').doc('commentlikes').update({
+                        [somename]: firebase.firestore.FieldValue.arrayUnion(user.uid)
+                    }).then(function() {
+                        document.getElementById('charcount').innerHTML = 'Post Comment (0/200 chars)'
+                        a = {user: user.uid, name: user.displayName, content: text}
+                        b = id
+                        c = int
+                        buildcomment(a, b, c, cachelikes, true)
+                    })
+                })
             });
         }
     };
 }
 
-function addpfpcomment(usr, id) {
+function addpfpcomment(usr, int) {
+
     db.collection('users').doc(usr).get().then(function (doc) {
-        document.getElementById(id + 'pfpel').src = doc.data().url
+        document.getElementById(int + 'pfpel').src = doc.data().url
     })
 }
 
@@ -1255,45 +1283,44 @@ function reportUser(id) {
 }
 
 function refreshcomments(id) {
+    document.getElementById('readonlychip').setAttribute('style', 'display:none !important');
+    unnewcomment()
+    document.getElementById('addcommentbtn').setAttribute('style', 'display:none !important');
 
     sessionStorage.setItem('viewing', id)
     $('#commentsbox').empty()
     document.getElementById('charcount').onclick = function () {
         addComment(id)
     }
-
-    db.collection("posts").doc('comments').get().then(function (doc) {
-        sessionStorage.setItem('viewingdata', doc.data()[id].length)
-        if (doc.data()[id].size == 0) {
-
-            h = document.createElement('div')
-            h.innerHTML = '<div class="alert alert-info alert-dismissible fade show" role="alert"><strong><i class="material-icons">notification_important</i></strong> Be the first to add a comment.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
-            document.getElementById('commentsbox').appendChild(h)
-        }
-        for (let i = 0; i < doc.data()[id].length; i++) {
-            const element = doc.data()[id][i];
-
-            a = document.createElement('div')
-            a.classList.add('card')
-            a.classList.add('animated')
-            a.classList.add('fadeIn')
-            reportFunc = "reportComment('" + doc.id + "')"
-            a.innerHTML = '<div<div style="text-align: left;" class="card-body"><img class="centeredy" style="padding: 5px; display: inline-block; border-radius: 200000px; width: 50px; height: 50px; object-fit: cover;"id="' + i + 'pfpel" alt=""><p style="padding-left: 68px; max-width: 86%; display: inline-block;"><b>' + element.name + ' » </b> ' + element.content + '</p><div class="centeredy" style="right: 25px;"><button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button></div></div>'
-            document.getElementById('commentsbox').appendChild(a)
-            document.getElementById('commentsbox').appendChild(document.createElement('br'))
-            addpfpcomment(element.user, i)
+    db.collection('posts').doc('commentlikes').get().then(function(doc) {
+        window.cachelikes = doc.data()
+        db.collection("posts").doc('comments').get().then(function (doc) {
+            sessionStorage.setItem('viewingdata', doc.data()[id].length)
+    
+            if (doc.data()[id].length == 0) {
+                h = document.createElement('div')
+                h.innerHTML = '<div class="alert alert-info alert-dismissible fade show" role="alert"><strong><i class="material-icons">notification_important</i></strong> Be the first to add a comment.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+                document.getElementById('commentsbox').appendChild(h)
+            }
+            
+            if (doc.data()[id].length >= 50) {
+                document.getElementById('readonlychip').setAttribute('style', 'display:inline-fullscreen_exit !important');
+            }
+            else {
+                document.getElementById('addcommentbtn').setAttribute('style', 'display:block !important');
+            }
+            for (let i = 0; i < doc.data()[id].length; i++) {
+                const element = doc.data()[id][i];
+                buildcomment(element, id, i, cachelikes, false)
+            }
             addWaves()
-
-        }
-
+            sortUsingNestedText($('#commentsbox'), "div.card", "div.inline")
+        })
     })
-
 }
 
 function listencomments() {
    commentslistener = db.collection('posts').doc('comments').onSnapshot(function (doc) {
-
-
         viewing = sessionStorage.getItem('viewing')
         if (viewing == 'stoplookinghere') {
         }
@@ -1302,7 +1329,7 @@ function listencomments() {
             if (savedsession == parseInt(sessionStorage.getItem('viewingdata'), 10)) {
             }
             else {
-                wasitme = sessionStorage.getItem('addedcomment')
+                wasitme = sessionStorage.getItem('wasitme')
                 if (wasitme == 'true') {
                     sessionStorage.setItem('addedcomment', 'false')
                 }
