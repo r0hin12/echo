@@ -93,6 +93,9 @@ function profilesetup2() {
                     name: displayname,
                     emailchange: firebase.firestore.FieldValue.serverTimestamp(),
                     passchange: firebase.firestore.FieldValue.serverTimestamp(),
+                    direct_active: [],
+                    direct_activity: firebase.firestore.FieldValue.serverTimestamp(),
+                    direct_pending: []
                 })
                 user.updateProfile({
                     displayName: displayname,

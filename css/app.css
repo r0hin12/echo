@@ -966,14 +966,37 @@ width: 90%;
     background-color: var(--bg-tertiary)
 }
 
-.messagelistboxactive {
-    width: 100%;
+.messagelistbox {
+    width: -webkit-calc(100% - 34px);
+    width:    -moz-calc(100% - 34px);
+    width:         calc(100% - 34px);
+
     padding: 24px 12px 24px 64px;
-    background-color: var(--bg-tertiary);
-    border-radius: 12px 0px 0px 12px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    background-color: var(--bg-primary);
+    border-radius: 15px;
     height: 80px;
     position: relative;
 
+    transition: all 1s;
+    cursor: pointer;
+}
+
+.messagelistboxactive {
+    width: 100%;
+
+    margin-top: 24px;
+    margin-bottom: 24px;
+    padding: 24px 12px 24px 64px;
+
+    background-color: var(--bg-tertiary);
+    border-radius: 15px 0px 0px 15px;
+    height: 90px;
+    position: relative;
+
+    transition: all 1s;
     cursor: pointer;
 }
 
@@ -1027,4 +1050,201 @@ width: 90%;
 
 .hidden {
     display: none !important;
+}
+
+.topbarimg {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.dmdetails {
+    color: var(--content-primary);
+    padding-left: 75px;
+}
+
+.basicpadding {
+    padding-left: 34px;
+    padding-top: 25px;
+    padding-right: 34px;
+    padding-bottom: 25px;
+    height: 113px;
+}
+
+.directfooter {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.content2 {
+    padding-bottom: 12px;
+    padding-top: 12px;
+    padding-right: 18px;
+}
+
+.divider1 {
+    margin: 0px !important;
+    width:  calc(100% - 50px);
+}
+
+.divider2 {
+    margin: 0px !important
+}
+
+.chatcontainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 34px;
+}
+
+#messagecontent {
+    overflow: scroll;
+    position: relative;
+    height: calc(100% - 213px);
+}
+
+.directfooter {
+    height: 100px;
+}
+
+.newmsgbox {
+    width: 85%;
+    display: inline-block
+}
+
+.newdmmsgbtn {
+    width: 10%;
+    height: 50px;
+    display: inline-block;
+
+    right: 0px;
+}
+
+.relative {
+    position: relative;
+}
+
+.navbtnicon {
+    min-width: 0px !important;
+    padding: 12px !important;
+}
+
+.messagecontainer {
+    width: 100%;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+.msgcontainerclient {
+    float: right;
+    padding: 16px;
+    border-radius: 12px;
+
+    background-image: linear-gradient( 90deg,   rgb(138, 202, 255), rgb(48, 164, 241) );
+    position: relative;
+}
+
+.msgcontainerclient:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 28px solid transparent;
+	border-left-color: rgb(48, 164, 241);
+	border-right: 0;
+	border-bottom: 0;
+	margin-top: -14px;
+	margin-right: -28px;
+}
+
+.msgcontainerother {
+    float: left;
+    padding: 16px;
+    border-radius: 12px;
+
+    background-color: var(--bg-quaternary);
+    position: relative;
+}
+
+.msgcontainerother:after {
+    content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 28px solid transparent;
+	border-right-color: var(--bg-quaternary);
+	border-left: 0;
+	border-top: 0;
+	margin-top: -14px;
+	margin-left: -28px;
+}
+
+.msgsubtextcontainerclient {
+    float: right;
+    padding: 8px;
+}
+
+.msgsubtextcontainerother {
+    float: left;
+    padding: 8px;
+
+}
+
+.msgcontainerapp {
+    float: center;
+    text-align: center;
+
+    padding: 16px;
+    margin-bottom: 24px;
+    margin-top: 12px;
+    border-radius: 12px;
+
+    background-color: var(--bg-primary);
+    position: relative;
+}
+
+#refreshstatusbtn {
+    display: inline-block !important;
+    margin-top: 12px;
+    padding: 3px !important;
+}
+
+#navbarstatus {
+    display: inline-block;
+    padding-right: 4px;
+}
+
+.boxtext2 {
+    position: absolute;
+    right: 12px;
+}
+
+.delay1 {
+    animation-delay: 0.3s;
+}
+.delay2 {
+    animation-delay: 0.6s;
+}
+.delay3 {
+    animation-delay: 0.9s;
+}
+.delay4 {
+    animation-delay: 1.12s;
 }

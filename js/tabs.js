@@ -4,6 +4,10 @@ $(window).ready(function () {
     sessionStorage.removeItem('viewInfo')
     sessionStorage.removeItem('fullInfo')
     sessionStorage.removeItem('viewUser')
+    sessionStorage.removeItem('currenDM')
+
+        var urlParams = new URLSearchParams(window.location.search);
+        sessionStorage.setItem('currenDM', urlParams.get('dm'))
 
     sessionStorage.setItem('first-time-home', 'true')
     sessionStorage.setItem('first-time-account', 'true')
@@ -44,6 +48,7 @@ $(window).ready(function () {
         sessionStorage.setItem('viewInfo', urlParams.get('info'))
         sessionStorage.setItem('fullInfo', urlParams.get('fullscreen'))
         sessionStorage.setItem('viewUser', urlParams.get('user'))
+        sessionStorage.setItem('currenDM', urlParams.get('dm'))
         tabe("home")
         checkUrls()
         
@@ -88,12 +93,7 @@ function tabe(tab) {
                 }, 200);
                 break;
             case "inbox":
-                interval = window.setInterval(function () {
-                    if (typeof (user) != "undefined" && typeof (user) != null) {
-                        clearInterval(interval)
-                        loaddirect()
-                    }
-                }, 200);
+                // Everything is automatically loaded to enable in-app notifications. Slows down app loading however...
                 break;
             case "account":
                 //
