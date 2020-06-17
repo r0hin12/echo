@@ -9,6 +9,7 @@ firebase.initializeApp({
 });
 
 window.db = firebase.firestore();
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
 
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
@@ -21,16 +22,18 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 function doconnect() {
-  var peer = new Peer();
+  window.peer = new Peer();
 
   peer.on('open', function (id) {
     // ID is id
-    console.log(id);
+    console.log('Opened connection with ID: ' + id);
 
     var urlParams = new URLSearchParams(window.location.search);
-    uid = urlParams.get('target');
+    window.uid = urlParams.get('target');
+    window.type = urlParams.get('type');
+
     if (uid == null || uid == undefined) {
-      console.log('URL Param target is undefined.');
+      transferdark('app.html')
       return;
     }
     alphabeticalized = [];
@@ -41,55 +44,204 @@ function doconnect() {
       var textB = b.toUpperCase();
       return textA < textB ? -1 : textA > textB ? 1 : 0;
     });
+
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString();
+
+    db.collection('rtc')
+    .doc(string + type)
+    .onSnapshot(function (doc) {
+      if (doc.data().skiddy == 'GONE') {
+        showcomplete();
+      }
+    });
+
+    $('#waitingid').html('Private Room ID: ' + string + type);
+    if (type == 'av') {
+      $('#waitingtype').html('Video & Audio Chat');
+    } else {
+      $('#waitingtype').html('Audio Chat');
+    }
 
     if (alphabeticalized[0] == user.uid) {
       // I am the host because I have a more alphabeticalized name
       db.collection('rtc')
-        .doc(string)
+        .doc(string + type)
         .set({
-          hostready: id,
+          hostready: false,
         })
         .then(function () {
+          window.setTimeout(function () {
+            db.collection('rtc')
+              .doc(string + type)
+              .set({
+                hostready: id,
+              })
+              .then(function () {
+                peer.on('disconnected', function () {
+                  window.close();
+                });
+                peer.on('connection', (conn) => {
+                  showconnected();
 
-            peer.on('connection', (conn) => {
-                console.log('Connected to peer. Listeners setup.');
-              window.conn = conn
-              conn.on('data', (data) => {
-                  console.log(data);
-              });
-              conn.on('open', () => {
-              });
-            });
+                  videoya = true;
+                  if (type == 'a') {
+                    videoya = false;
+                  } else {
+                    // Stream for client
+                    navigator.getUserMedia(
+                      { video: true, audio: false },
+                      function (stream) {
+                        document.getElementById('mine').srcObject = stream;
+                        document.getElementById('mine').play();
+                      }
+                    );
+                  }
 
+                  // Stream for peer
+                  navigator.getUserMedia(
+                    { video: videoya, audio: true },
+                    function (stream) {
+                      call = peer.call(conn.peer, stream);
+                      call.on('stream', function (stream) {
+                        // `stream` is the MediaStream of the remote peer.
+                        // Here you'd add it to an HTML video/canvas element.
+                        document.getElementById('theirs').srcObject = stream;
+                        document.getElementById('theirs').play();
+                        window.bstream = stream;
+                        setInterval(() => {
+                          if (bstream.active == false) {
+                            clearInterval();
+                            showcomplete();
+                          }
+                        }, 1000);
+                      });
+                    }
+                  );
+
+                  window.conn = conn;
+                  conn.on('data', (data) => {
+                    console.log(data);
+                  });
+                  conn.on('open', () => {});
+                });
+              });
+          }, 2500);
         });
     } else {
       // I am not the host, so wait until the host is ready.
       listener = db
         .collection('rtc')
-        .doc(string)
+        .doc(string + type)
         .onSnapshot(function (doc) {
+          if (doc.exists == false) {
+            db.collection('rtc')
+              .doc(string + type)
+              .set({
+                enabled: true,
+              })
+              .then(function () {
+                window.location.reload();
+              });
+          }
           if (doc.data().hostready !== false) {
             // Host is ready (set it to false again)
-            listener();
             window.conn = peer.connect(doc.data().hostready);
             conn.on('open', () => {
-                console.log('Connected to peer. Listeners setup.');
+              listener();
+            });
+            conn.on('data', (data) => {
+              console.log(data);
+            });
+            peer.on('disconnected', function () {
+              showcomplete();
+            });
+            peer.on('call', function (call) {
+              showconnected();
+
+              // Answer the call, providing our mediaStream
+              videoya = true;
+              if (window.type == 'a') {
+                videoya = false;
+              } else {
+                // Stream for client
+                navigator.getUserMedia({ video: true, audio: false }, function (
+                  stream
+                ) {
+                  document.getElementById('mine').srcObject = stream;
+                  document.getElementById('mine').play();
+                });
+              }
+
+              // Stream for peer
+              navigator.getUserMedia({ video: videoya, audio: true }, function (
+                stream
+              ) {
+                call.answer(stream);
+                call.on('stream', function (stream) {
+                  document.getElementById('theirs').srcObject = stream;
+                  window.astream = stream;
+                  setInterval(() => {
+                    if (astream.active == false) {
+                      clearInterval();
+                      peer.disconnect();
+                      showcomplete();
+                    }
+                  }, 1000);
+                  document.getElementById('theirs').play();
+                });
               });
-              conn.on('data', (data) => {
-                console.log(data);
             });
 
             // doc.data().hostready is the other person peer ID
-            db.collection('rtc').doc(string).set({
-              hostready: false,
-            });
+            db.collection('rtc')
+              .doc(string + type)
+              .set({
+                hostready: false,
+              });
           }
         });
     }
   });
-
-
-
 }
 
+function showconnected() {
+  $('#unconnected').addClass('animated');
+  $('#unconnected').addClass('fadeOutUp');
+
+  if (type == 'a') {
+    $('#cameorabtn').addClass('hidden')
+  }
+
+  db.collection('users')
+    .doc(uid)
+    .get()
+    .then(function (doc) {
+      $('.userimg').attr('src', doc.data().url);
+      $('.userimg').removeClass('hidden');
+      $('#name').html(doc.data().name);
+      $('#disconnectbtn').get(0).onclick = function () {
+        peer.disconnect();
+        db.collection('rtc')
+          .doc(string + type)
+          .update({
+            skiddy: 'GONE',
+          })
+          .then(function () {
+            window.setTimeout(function () {
+              db.collection('rtc')
+                .doc(string + type)
+                .update({
+                  skiddy: 'PAPA',
+                });
+            }, 500);
+          });
+        showcomplete();
+      };
+      addWaves();
+    });
+}
+
+function showcomplete() {
+  $('#connected').addClass('animated');
+  $('#connected').addClass('fadeOutUp');
+}

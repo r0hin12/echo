@@ -1248,3 +1248,9 @@ width: 90%;
 .delay4 {
     animation-delay: 1.12s;
 }
+
+#ultimatenotifbadge {
+    position: absolute;
+    right: 12px;
+    top: 11px;
+}

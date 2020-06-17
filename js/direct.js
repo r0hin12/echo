@@ -240,7 +240,6 @@ function loadactive() {
 
                 if (element == sessionStorage.getItem('currenDM')) {
                     window.setTimeout(function() {
-                        showcomplete()
                         document.getElementById(element + 'chatsidebarboxel').click()
                     }, 1500)
                     
@@ -264,7 +263,7 @@ function addsidebarcardcontent(uid, verification) {
         string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
 
         
-        document.getElementById(uid + 'chatsidebarboxel').innerHTML = '<img src="' + doc.data().url + '" class="msgimg centeredy" alt=""><div class="boxtext centeredy"><h4 class="heavy">' + doc.data().name + '</h4><br><p id="' + uid + 'recenttextel" class="grey nolineheight"></p></div><div class="boxtext2 centeredy"><span id="' + string + 'notifbadge" class="badge badge-pill badge-info animated jello infinite"></span></div>'
+        document.getElementById(uid + 'chatsidebarboxel').innerHTML = '<img src="' + doc.data().url + '" class="msgimg centeredy" alt=""><div class="boxtext centeredy"><h4 class="heavy">' + doc.data().name + '</h4><br><p id="' + uid + 'recenttextel" class="grey nolineheight"></p></div><div class="boxtext2 centeredy"><span id="' + string + 'notifbadge" class="badge badge-pill notifbadge badge-secondary animated jello infinite"></span></div>'
         document.getElementById(uid + 'chatsidebarboxel').classList.remove('hidden')
         addWaves()
         BUILD_DIRECT_VARIABLES(uid)
@@ -296,8 +295,10 @@ function BUILD_DIRECT_VARIABLES(uid) {
         
 
         unreadkey = "unread_" + user.uid
+
         if (doc.data()[unreadkey]) {
-            document.getElementById(string + 'notifbadge').innerHTML = "!!"
+            document.getElementById(doc.id + 'notifbadge').innerHTML = "!!"
+            checkAllNotifs()
         }
 
     })
@@ -307,6 +308,8 @@ function BUILD_DIRECT_VARIABLES(uid) {
 }
 
 function BUILD_DIRECT(uid, btnel) {
+
+    document.getElementById('newdmmessage').click()
 
     alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
@@ -319,6 +322,7 @@ function BUILD_DIRECT(uid, btnel) {
     if (document.getElementById(string + 'notifbadge').innerHTML == '!!') {
         // Clear notifications
         document.getElementById(string + 'notifbadge').innerHTML = ''
+        checkAllNotifs()
         notifkey = 'unread_' + user.uid
         db.collection('direct').doc(string).update({
             [notifkey]: false,
@@ -414,10 +418,13 @@ function BUILD_DIRECT(uid, btnel) {
 
     // WebRTC Management
     document.getElementById('direct-callbtn').onclick = function() {
-        window.open('rtc.html?type=a&target=' + uid)
+        window.open('rtc.html?type=a&target=' + uid);
+        sendCallMsg(uid)
+
     }
     document.getElementById('direct-videobtn').onclick = function() {
         window.open('rtc.html?type=av&target=' + uid)
+        sendVideoMsg(uid)
     }
 
 }
@@ -487,7 +494,7 @@ function BUILD_MESSAGE(name, msg, string) {
             msgcontent = '<h3><i class="material-icons gradicon">question_answer</i>Invitation from ' + name + '</h3>' + name + ' requested to message you.' 
         }
         textContainer = 'msgcontainerapp shadow-lg'
-        prevuid == 'disabled'
+        prevuid = 'disabled'
     }
     if (msg.app_preset == 'eonnect-direct-rejection') {
         if (msg.sender == user.uid) {
@@ -497,7 +504,7 @@ function BUILD_MESSAGE(name, msg, string) {
             msgcontent = '<h3><i class="material-icons gradicon">close</i>' + name + ' declied you.</h3>' + name + ' rejected your request to message them.'
         }
         textContainer = 'msgcontainerapp shadow-lg'
-        prevuid == 'disabled'
+        prevuid = 'disabled'
     }
     if (msg.app_preset == 'eonnect-direct-approval') {
         if (msg.sender == user.uid) {
@@ -507,7 +514,29 @@ function BUILD_MESSAGE(name, msg, string) {
             msgcontent = '<h3><i class="material-icons gradicon">check</i>' + name + ' approved you.</h3>' + name + ' accepted your request to message them.'
         }
         textContainer = 'msgcontainerapp shadow-lg'
-        prevuid == 'disabled'
+        prevuid = 'disabled'
+    }
+    if (msg.app_preset == 'eonnect-direct-call') {
+        if (msg.sender == user.uid) {
+            msgcontent = '<h3><i class="material-icons gradicon">phone</i>You started a call with ' + name + ".</h3>"
+        }
+        else {
+            goFunc1 = "window.open('rtc.html?type=a&target=" + msg.sender + "')"
+            msgcontent = '<h3><i class="material-icons gradicon">phone</i>' + name + ' started a call.</h3><center><button onclick="' + goFunc1 + '" class="eon-text">join</button></center>'
+        }
+        textContainer = 'msgcontainerapp shadow-lg'
+        prevuid = 'disabled'
+    }
+    if (msg.app_preset == 'eonnect-direct-video') {
+        if (msg.sender == user.uid) {
+            msgcontent = '<h3><i class="material-icons gradicon">videocam</i>You started a video call with ' + name + ".</h3>"
+        }
+        else {
+            goFunc1 = "window.open('rtc.html?type=av&target=" + msg.sender + "')"
+            msgcontent = '<h3><i class="material-icons gradicon">phone</i>' + name + ' started a video call.</h3><center><button onclick="' + goFunc1 + '" class="eon-text">join</button></center>'
+        }
+        textContainer = 'msgcontainerapp shadow-lg'
+        prevuid = 'disabled'
     }
 
 
@@ -534,6 +563,7 @@ function BUILD_MESSAGE(name, msg, string) {
     else {
         document.getElementById(string + 'chatcontainer').appendChild(p)
         document.getElementById(string + 'chatcontainer').appendChild(document.createElement('br'))
+        addWaves()
     }
 
     prevuid = msg.sender
@@ -592,17 +622,26 @@ function ENACT_CHANGES(uid) {
         
 
         if( $('#' + string + 'chatcontainer').length ) {
-            BUILD_MESSAGE(undefined, msg, string)
-            ScrollBottom()
-
-            if ($('#' + string + 'chatcontainer').hasClass('hidden')) {
-                document.getElementById(string + 'notifbadge').innerHTML = '!!'
-            }
-
+            db.collection('users').doc(uid).get().then(function(doc) {
+                BUILD_MESSAGE(doc.data().name, msg, string)
+                ScrollBottom()
+                if ($('#' + string + 'chatcontainer').hasClass('hidden')) {
+                    document.getElementById(string + 'notifbadge').innerHTML = '!!'
+                    checkAllNotifs()
+                }
+                else {
+                    notifkey = 'unread_' + user.uid
+                    db.collection('direct').doc(string).update({
+                        [notifkey]: false,
+                    })
+                }
+    
+            })
         }
         else {
             // Add a ping
             document.getElementById(string + 'notifbadge').innerHTML = '!!'
+            checkAllNotifs()
 
             if (sessionStorage.getItem('currentab') !== 'inbox') {
                 Snackbar.show({
@@ -651,4 +690,71 @@ function refreshStatus(uid) {
         }
         $('#navbarstatus').html(status)
     })
+}
+
+function sendCallMsg(uid) {
+    alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
+    now = new Date()
+
+    unreadkey = 'unread_' + uid
+    db.collection('direct').doc(string).update({
+        [unreadkey]: true,
+        messages: firebase.firestore.FieldValue.arrayUnion({
+            app_preset: 'eonnect-direct-call',
+            content: 'eonnect-direct-call',
+            sender: user.uid,
+            timestamp: now,
+        })
+    }).then(function() {
+        ENACT_CHANGES(uid)
+    })
+    db.collection('directlisteners').doc(uid).update({
+        most_recent_sender: user.uid
+    }).then(function() {
+        db.collection('directlisteners').doc(uid).update({
+            most_recent_sender: 'none'
+        })
+    })
+}
+
+function sendVideoMsg(uid) {
+    alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
+    now = new Date()
+
+    unreadkey = 'unread_' + uid
+    db.collection('direct').doc(string).update({
+        [unreadkey]: true,
+        messages: firebase.firestore.FieldValue.arrayUnion({
+            app_preset: 'eonnect-direct-video',
+            content: 'eonnect-direct-video',
+            sender: user.uid,
+            timestamp: now,
+        })
+    }).then(function() {
+        ENACT_CHANGES(uid)
+    })
+    db.collection('directlisteners').doc(uid).update({
+        most_recent_sender: user.uid
+    }).then(function() {
+        db.collection('directlisteners').doc(uid).update({
+            most_recent_sender: 'none'
+        })
+    })
+}
+
+function checkAllNotifs() {
+    notifexists = false
+    $('.notifbadge').each(function(i) {
+        if ($(this).html().includes("!!")) {
+            notifexists = true
+        }
+    })
+    if (notifexists) {
+        $('#ultimatenotifbadge').html('!!')
+    }
+    else {
+        $('#ultimatenotifbadge').html('')
+    }
 }
