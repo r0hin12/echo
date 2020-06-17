@@ -412,6 +412,14 @@ function BUILD_DIRECT(uid, btnel) {
         document.getElementById('messagecontent').appendChild(chatcontainer)
     }
 
+    // WebRTC Management
+    document.getElementById('direct-callbtn').onclick = function() {
+        window.open('rtc.html?type=a&target=' + uid)
+    }
+    document.getElementById('direct-videobtn').onclick = function() {
+        window.open('rtc.html?type=av&target=' + uid)
+    }
+
 }
 
 function ADD_MESSAGE(uid) {
