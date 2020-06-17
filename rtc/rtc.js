@@ -55,6 +55,10 @@ function doconnect() {
       }
     });
 
+    $('#waitingtext').removeClass('hidden')
+    $('#loadingtext').removeClass('fadeIn')
+    $('#loadingtext').addClass('fadeOutUp')
+
     $('#waitingid').html('Private Room ID: ' + string + type);
     if (type == 'av') {
       $('#waitingtype').html('Video & Audio Chat');

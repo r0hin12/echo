@@ -309,7 +309,7 @@ function BUILD_DIRECT_VARIABLES(uid) {
 
 function BUILD_DIRECT(uid, btnel) {
 
-    document.getElementById('newdmmessage').click()
+    document.getElementById('newdmmsg').click()
 
     alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
