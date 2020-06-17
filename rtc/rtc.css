@@ -77,3 +77,7 @@ video {
     padding: 30px !important;
     border-radius: 50% !important;
 }
+
+.logortc {
+    width: 80px;
+}

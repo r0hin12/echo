@@ -207,6 +207,7 @@ function doconnect() {
 function showconnected() {
   $('#unconnected').addClass('animated');
   $('#unconnected').addClass('fadeOutUp');
+  $('#connected').removeClass('hidden')
 
   if (type == 'a') {
     $('#cameorabtn').addClass('hidden')
@@ -242,6 +243,7 @@ function showconnected() {
 }
 
 function showcomplete() {
+  $('#complete').removeClass('hidden')
   $('#connected').addClass('animated');
   $('#connected').addClass('fadeOutUp');
 }

@@ -159,16 +159,20 @@
       </div>
     </div>
     <!-- ===========================--] Content [=================================== -->
-    <div id="unconnected">
+    <div class="animated fadeIn" id="unconnected">
       <center>
         <br /><br /><br />
-        <h2>Waiting...</h2>
+        <img class="animated pulse infinite logortc slow" src="assets/logo.png" alt="">
+        <h3>Eonnect Voice Platform</h3>
+        <br><br><br><br>
+        <h2>Waiting for peer...</h2>
+        <br><br><br>
         <p id="waitingid"></p>
         <p id="waitingtype"></p>
       </center>
       <br /><br />
     </div>
-    <div id="connected">
+    <div class="hidden" id="connected">
       <div class="centered">
         <div class="animated pulse infinite slower">
           <img src="" class="userimg animated fadeInUp hidden" alt="" />
@@ -193,7 +197,7 @@
       </div>
     </div>
 
-    <div id="complete">
+    <div class="hidden" id="complete">
       <div class="centered">
         <h2>Your call has ended.</h2>
         <p>You can close this tab.</p>
