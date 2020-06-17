@@ -261,8 +261,6 @@ function addsidebarcardcontent(uid, verification) {
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
         string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
-
-        
         document.getElementById(uid + 'chatsidebarboxel').innerHTML = '<img src="' + doc.data().url + '" class="msgimg centeredy" alt=""><div class="boxtext centeredy"><h4 class="heavy">' + doc.data().name + '</h4><br><p id="' + uid + 'recenttextel" class="grey nolineheight"></p></div><div class="boxtext2 centeredy"><span id="' + string + 'notifbadge" class="badge badge-pill notifbadge badge-secondary animated jello infinite"></span></div>'
         document.getElementById(uid + 'chatsidebarboxel').classList.remove('hidden')
         addWaves()

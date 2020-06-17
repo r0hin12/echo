@@ -818,6 +818,8 @@ async function usermodal(uid) {
     }
 
     else {
+        $('#followerselementbox').empty()
+        $('#followingelementbox').empty()
         sessionStorage.setItem('currentlyviewinguser', uid)
         window.history.pushState(null, '', '/eonnect/app.html?user=' + uid);
         $('#usergrid').empty()
@@ -830,7 +832,9 @@ async function usermodal(uid) {
             useruid = doc.data().uid
             document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
             document.getElementById('usermodalpfp').src = doc.data().url
-            if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") { }
+            if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") {
+                document.getElementById('usermodalbio').innerHTML = ""
+             }
             else { document.getElementById('usermodalbio').innerHTML = doc.data().bio }
             document.getElementById('userrep').innerHTML = doc.data().rep
 
@@ -995,8 +999,8 @@ function addpfpfollowingbox(uid) {
 
 
 function loaduserfollowdetails(data) {
-    db.collection('app').doc('details').get().then(function(doc) {
-        
+    db.collection('app').doc('details').get().then(function(doc) {   
+
         for (let i = 0; i < data.followers.length; i++) {
             const uid = data.followers[i];
             place = doc.data().map.indexOf(uid)   
@@ -1004,15 +1008,19 @@ function loaduserfollowdetails(data) {
 
             k = document.createElement('a')
             k.onclick = function() {
-                simclosemodal()
-                usermodal(uid)
+                hidefollowing()
+                hidefollowers()
+                $('#userModal').modal('hide')
+                window.setTimeout(function() {
+                    sessionStorage.setItem('skiponce123', 'true')
+                    usermodal(uid)
+                }, 1000)
             }
             k.classList.add('list-group-item')
             k.classList.add('waves-effect')
             k.classList.add('waves-light')
             k.innerHTML = '<img id="' + uid + 'followboxelementid" src="https://i.imgur.com/PL0xMvQ.jpg" class="followerphoto" alt=""><div class="inline folowtext">' + name + '</div>'
             document.getElementById('followerselementbox').appendChild(k)
-
             addpfpfollowbox(uid)
 
         }
@@ -1024,8 +1032,13 @@ function loaduserfollowdetails(data) {
 
             k = document.createElement('a')
             k.onclick = function() {
-                simclosemodal()
-                usermodal(uid)
+                hidefollowing()
+                hidefollowers()
+                $('#userModal').modal('hide')
+                window.setTimeout(function() {
+                    sessionStorage.setItem('skiponce123', 'true')
+                    usermodal(uid)
+                }, 1000)
             }
             k.classList.add('list-group-item')
             k.classList.add('waves-effect')
@@ -1570,8 +1583,6 @@ $('#commentModal').on('hidden.bs.modal', function () {
 });
 
 $('#userModal').on('hidden.bs.modal', function () {
-    $('#followerselementbox').empty()
-    $('#followingelementbox').empty()
     hidefollowers()
     hidefollowing()
     if (sessionStorage.getItem('skiponce3') == "true") {
@@ -1882,6 +1893,7 @@ function showfollowers() {
     hidefollowing()
     document.getElementById('followersbox').style.display = 'block'
     document.getElementById('followersbox').classList.add('bounceIn')
+    document.getElementById('followersbox').classList.add('fast')
     document.getElementById('followersbox').classList.remove('bounceOut')
     document.getElementById('viewfollowers').innerHTML = '<i class="material-icons cancelshowbtn">cancel</i>'
     document.getElementById('viewfollowers').onclick = function() {
@@ -1892,6 +1904,7 @@ function showfollowers() {
 function hidefollowers() {
     document.getElementById('followersbox').classList.remove('bounceIn')
     document.getElementById('followersbox').classList.add('bounceOut')
+    document.getElementById('followersbox').classList.add('fast')
     document.getElementById('viewfollowers').innerHTML = 'view'
     document.getElementById('viewfollowers').onclick = function() {
         showfollowers() 
@@ -1915,11 +1928,4 @@ function hidefollowing() {
     document.getElementById('viewfollowing').onclick = function() {
         showfollowing() 
     }
-}
-
-function simclosemodal() {
-    hidefollowing()
-    hidefollowers()
-    $('#followerselementbox').empty()
-    $('#followingelementbox').empty()   
 }
