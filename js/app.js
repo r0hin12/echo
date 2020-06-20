@@ -96,6 +96,11 @@ function profilesetup2() {
                     direct_active: [],
                     direct_activity: firebase.firestore.FieldValue.serverTimestamp(),
                     direct_pending: []
+                }).then(function() {
+                    $('#savebtn').html('confirm (click again)')
+                    document.getElementById('savebtn').onclick = function() {
+                        window.location.reload()
+                    }
                 })
                 user.updateProfile({
                     displayName: displayname,

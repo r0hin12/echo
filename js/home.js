@@ -86,6 +86,10 @@ function load() {
 
                 exarray.reverse()
                 fearray.reverse()
+
+                window.currentScrollCount = 0
+                window.currentRelScrollCount = 0
+                window.currentUserScrollCount = 0
                 sessionStorage.setItem("InfScrollData", JSON.stringify(exarray))
                 build()
                 sessionStorage.setItem("InfRelScrollData", JSON.stringify(fearray))
@@ -1848,16 +1852,12 @@ function refresh(btn) {
         }
     }, 12000)
 
-    $('#gridrelevant').empty()
-    $('#grid').empty()
-
     document.getElementById('containerhometab').classList.remove('fadeIn')
     document.getElementById('containerhometab').classList.add('animated')
     document.getElementById('containerhometab').classList.add('fadeOut')
     document.getElementById('containerhometab').classList.add('fast')
 
     window.setTimeout(function() {
-
         load()
         window.setTimeout(function() {
             document.getElementById('containerhometab').classList.remove('fadeOut')

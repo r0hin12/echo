@@ -2,6 +2,7 @@ db = firebase.firestore()
 prevuid = 'na'
 abritaryindex = 0
 abritarysecondindex = 0
+sessionStorage.setItem('itwasmesoskip', 'false')
 
 interval2 = window.setInterval(function () {
     if (typeof (user) != "undefined" && typeof (user) != null) {
@@ -53,6 +54,8 @@ function newdm() {
                     })
                     db.collection('users').doc(user.uid).update({
                         direct_active: firebase.firestore.FieldValue.arrayUnion(dmuid)
+                    }).then(function() {
+                        refreshactive()
                     })
                     db.collection('users').doc(dmuid).update({
                         direct_pending: firebase.firestore.FieldValue.arrayUnion(user.uid)
@@ -95,6 +98,9 @@ function loadpending() {
             pending = doc.data().direct_pending 
 
             document.getElementById('dmreqstatus').innerHTML = pending.length
+            if (pending.length == 0) {
+                document.getElementById('dmreqstatus').innerHTML = ''
+            }
             if (pending.length > 0) {
                 document.getElementById('dmreqstatus').classList.add('jello')
                 document.getElementById('clickybtnshowdmreq').click()
@@ -184,13 +190,19 @@ function approve(uid) {
         document.getElementById(uid + 'pendingcardel').classList.add('zoomOutUp')
         window.setTimeout(function() {
             $('#' + uid + 'pendingcardel').remove()
-            window.location.reload()
+            newnum = parseInt(document.getElementById('dmreqstatus').innerHTML) - 1
+            document.getElementById('dmreqstatus').innerHTML = newnum
+            if (newnum == 0) {
+                document.getElementById('dmreqstatus').innerHTML = ''
+            }
         }, 1000)
-
-        // Build sidebar for person
-
-        
+        refreshactive()
+        db.collection('directlisteners').doc(uid).update({
+            most_recent_sender: 'eonnect_direct_approverq_' + user.uid
+        })
     })
+
+
 
 
 }
@@ -208,6 +220,12 @@ function addpendingcardcontent(element, verification) {
         $('.verified').tooltip()
         addWaves()
     })
+}
+
+function refreshactive() {
+    $('#messagelist').empty()
+    $('#messagecontent').empty()
+    loadactive()
 }
 
 function loadactive() {
@@ -311,8 +329,10 @@ function BUILD_DIRECT(uid, btnel) {
 
     alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
+
     if ($('#' + string + 'chatcontainer').length) {
         if (!$('#' + string + 'chatcontainer').hasClass('hidden')) {
+            // Do nothing if chat exists and it's not hidden
             return;
         }
     }
@@ -333,10 +353,76 @@ function BUILD_DIRECT(uid, btnel) {
     $('.chatcontainer').addClass('hidden')
     
 
-    db.collection('users').doc(uid).get().then(function(doc) {
-        $('.topbarimg').attr('src', doc.data().url)
-        $('#navbarname').html(doc.data().name)
+    if (this["dmcache"+uid] == undefined) {
+        db.collection('users').doc(uid).get().then(function(doc) {
+            this["dmcache"+uid] = doc.data()
+            $('.topbarimg').attr('src', doc.data().url)
+            $('#navbarname').html(doc.data().name)
+    
+            document.getElementById('refreshstatusbtn').onclick = function() {
+                Snackbar.show({text: "You are doing this too much!"})
+            }
+        
+            window.setTimeout(function() {
+                document.getElementById('refreshstatusbtn').onclick = function() {
+                    $('#navbarstatus').html("Loading...")
+                    window.setTimeout(function() {
+                        refreshStatus(uid)
+                    }, 500)
+                } 
+            }, 3000)
+    
+    
+            if (doc.data().direct_activity == undefined || doc.data().direct_activity == null) {
+                status = 'unknown status'
+            }
+            else {
+                ts = doc.data().direct_activity.toDate()
+                now = new Date();
+                const diff = now.getTime() -  ts.getTime();
+    
+                if (diff > 10 * 60 * 1000) {
+                    status = 'Inactive'
+                }
+                else {
+                    status = 'Online'
+                }
+            }
+            $('#navbarstatus').html(status)
+    
+            $('#chatnav').removeClass('hidden')
+            $('.divider1').removeClass('hidden')
+            $('.divider2').removeClass('hidden')
+            $('.directfooter').removeClass('hidden')
+            document.getElementById('newdmmsgbtn').onclick = function() {
+                ADD_MESSAGE(uid)
+            }
+            
+            alphabeticalized = []
+            alphabeticalized.push(user.uid)
+            alphabeticalized.push(uid)
+            alphabeticalized.sort(function(a, b) {
+                var textA = a.toUpperCase();
+                var textB = b.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
+            string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
+            stringvar = this["marker" + string]
+    
+            if ($('#' + string + 'chatcontainer').is(':empty')){
+                // If its empty, build messages
+                for (let i = 0; i < stringvar.length; i++) {
+                    BUILD_MESSAGE(doc.data().name, stringvar[i], string)
+                }
+        
+                ScrollBottom()
+            }
+        })
+    }
+    else {
 
+        $('.topbarimg').attr('src', this["dmcache"+uid].url)
+        $('#navbarname').html(this["dmcache"+uid].name)
 
         document.getElementById('refreshstatusbtn').onclick = function() {
             Snackbar.show({text: "You are doing this too much!"})
@@ -352,11 +438,11 @@ function BUILD_DIRECT(uid, btnel) {
         }, 3000)
 
 
-        if (doc.data().direct_activity == undefined || doc.data().direct_activity == null) {
+        if (this["dmcache"+uid].direct_activity == undefined || this["dmcache"+uid].direct_activity == null) {
             status = 'unknown status'
         }
         else {
-            ts = doc.data().direct_activity.toDate()
+            ts = this["dmcache"+uid].direct_activity.toDate()
             now = new Date();
             const diff = now.getTime() -  ts.getTime();
 
@@ -389,13 +475,15 @@ function BUILD_DIRECT(uid, btnel) {
         stringvar = this["marker" + string]
 
         if ($('#' + string + 'chatcontainer').is(':empty')){
+            // If its empty, build messages
             for (let i = 0; i < stringvar.length; i++) {
-                BUILD_MESSAGE(doc.data().name, stringvar[i], string)
+                BUILD_MESSAGE(this["dmcache"+uid].name, stringvar[i], string)
             }
     
             ScrollBottom()
         }
-    })
+
+    }
 
     // Chat Management
     alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
@@ -441,6 +529,16 @@ function ADD_MESSAGE(uid) {
         string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
         now = new Date()
 
+        tempmsg = {
+            app_preset: 'none',
+            content: content,
+            sender: user.uid,
+            timestamp: now
+        }
+        BUILD_MESSAGE(cacheuser.name, tempmsg , string, true)
+        ScrollBottom()
+
+
         unreadkey = 'unread_' + uid
         db.collection('direct').doc(string).update({
             [unreadkey]: true,
@@ -451,6 +549,7 @@ function ADD_MESSAGE(uid) {
                 timestamp: now,
             })
         }).then(function() {
+            sessionStorage.setItem('itwasmesoskip', 'true')
             ENACT_CHANGES(uid)
         })
         db.collection('directlisteners').doc(uid).update({
@@ -464,8 +563,13 @@ function ADD_MESSAGE(uid) {
 
 }
 
-function BUILD_MESSAGE(name, msg, string) {
+function BUILD_MESSAGE(name, msg, string, anim) {
     p = document.createElement('div')
+
+    if (anim == true) {
+        p.classList.add('animated')
+        p.classList.add('fadeIn')
+    }
 
     p.classList.add('messagecontainer')
     p.classList.add('clearfix')
@@ -588,6 +692,13 @@ function PREPARE_LISTEN_MESSAGES() {
 function LISTEN_MESSAGES() {
     db.collection('directlisteners').doc(user.uid).onSnapshot(function(doc) {
         changed_dm = doc.data().most_recent_sender
+        if (changed_dm.startsWith('eonnect_direct_approverq_')) {
+            userid = changed_dm.split('rq_')[1]
+            db.collection('users').doc(userid).get().then(function(doc) {
+                Snackbar.show({text: doc.data().name + ' approved your request!'})
+            })
+            return true
+        }
         if (changed_dm == 'none') {
 
         }
@@ -621,7 +732,13 @@ function ENACT_CHANGES(uid) {
 
         if( $('#' + string + 'chatcontainer').length ) {
             db.collection('users').doc(uid).get().then(function(doc) {
-                BUILD_MESSAGE(doc.data().name, msg, string)
+                if (sessionStorage.getItem('itwasmesoskip') !== 'true') {
+                    BUILD_MESSAGE(doc.data().name, msg, string)
+                }
+                else {
+                    sessionStorage.setItem('itwasmesoskip', 'false')
+                }
+                
                 ScrollBottom()
                 if ($('#' + string + 'chatcontainer').hasClass('hidden')) {
                     document.getElementById(string + 'notifbadge').innerHTML = '!!'

@@ -262,7 +262,7 @@ width: 90%;
 .btn235ws {
     color: var(--content-primary) !important;
     outline: none !important;
-    
+    margin-left: 12px;
 }
 
 
@@ -1030,7 +1030,7 @@ width: 90%;
 .dmreqpfp {
     width: 48px;
     height: 48px;
-    overflow: hidden;
+    object-fit: cover;
     border-radius: 50%;
 }
 
@@ -1253,4 +1253,8 @@ width: 90%;
     position: absolute;
     right: 12px;
     top: 11px;
+}
+
+.checkverifybtn {
+    animation-delay: 10s;
 }
