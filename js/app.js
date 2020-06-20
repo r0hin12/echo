@@ -146,6 +146,7 @@ function addappcontent() {
             })
         }
 
+        $('#cardconnections').empty()
         if (doc.data().twitter == null || doc.data().twitter == undefined) {
         }
         else {
@@ -469,3 +470,48 @@ function sharewithqr() {
     transfer('https://r0h.in/qr/api.html?target=' + location.protocol + '//' + location.host + location.pathname + "?user=" + user.uid + "&return=" + location.protocol + '//' + location.host + location.pathname + "?tab=account&typeof=url&return-site=Eonnect") 
 }
 
+function preparenpicchange() {
+    u = document.createElement("input")
+    u.id = 'newpicel'
+    u.style.display = 'none'
+    u.setAttribute("type", "file");
+    u.setAttribute("accept", "image/*");
+    document.getElementById('profilepicdyndiv').appendChild(u)
+    $("#newpicel").change(function(){
+        changepfp()
+    });
+    $('#newpicel').click()
+}
+
+function changepfp() {
+    toggleloader()
+    file = document.getElementById('newpicel').files[0]
+    var storageRef = firebase.storage().ref();
+    var fileRef = storageRef.child('logos/' + file.name);
+
+    fileRef.put(file).then(function() {
+        db.collection('users').doc(user.uid).get().then(function(doc) {
+            if (doc.data().filename !== 'example') {
+                // Delete old pfp
+                deleteRef = storageRef.child('logos/' + doc.data().filename + '.' + doc.data().filetype)
+                deleteRef.delete()
+            }
+            storageRef.child('logos/' + file.name).getDownloadURL().then(function (url) {
+                db.collection("users").doc(user.uid).update({
+                    url: url,
+                    filetype: file.name.split('.').pop(),
+                    filename: file.name.split('.').slice(0, -1).join('.')
+                }).then(function() {
+                    window.setTimeout(() => {
+                        addappcontent()
+                        toggleloader()
+                        showcomplete()
+                    }, 500);
+                    Snackbar.show({text: "Profile picture was successfully updated."})
+                })
+            })
+        })
+    })
+
+    $('#newpicel').remove()
+}
