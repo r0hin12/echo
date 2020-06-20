@@ -89,7 +89,6 @@ function load() {
 
                 window.currentScrollCount = 0
                 window.currentRelScrollCount = 0
-                window.currentUserScrollCount = 0
                 sessionStorage.setItem("InfScrollData", JSON.stringify(exarray))
                 build()
                 sessionStorage.setItem("InfRelScrollData", JSON.stringify(fearray))

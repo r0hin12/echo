@@ -62,7 +62,7 @@ function profilesetup1() {
 
 function profilesetup2() {
 
-    username = document.getElementById('usernamefield').value
+    username = document.getElementById('usernamefield').value.toLowerCase()
     displayname = document.getElementById('namefield').value
     taken = false
 
