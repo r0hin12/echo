@@ -67,8 +67,11 @@ function newdm() {
 
 }
 
-function loaddirect() {
+function loaddirectclick() {
     loadpending()
+}
+
+function loaddirect() {
     loadactive()
     PREPARE_LISTEN_MESSAGES()
 
@@ -94,6 +97,7 @@ function loadpending() {
     db.collection('users').doc(user.uid).get().then(function(doc) {
         db.collection('app').doc("verified").get().then(function(verifieddoc) {
             verifiedlist = verifieddoc.data().verified 
+            loadpendingfr(doc.data(), verifiedlist)
 
             pending = doc.data().direct_pending 
 
@@ -152,6 +156,12 @@ function reject(uid) {
         document.getElementById(uid + 'pendingcardel').classList.add('zoomOutUp')
         window.setTimeout(function() {
             $('#' + uid + 'pendingcardel').remove()
+            newnum = parseInt(document.getElementById('dmreqstatus').innerHTML) - 1
+            document.getElementById('dmreqstatus').innerHTML = newnum
+            if (newnum == 0) {
+                document.getElementById('dmreqstatus').innerHTML = ''
+                document.getElementById('skiddpypo').classList.remove('hidden')
+            }
         }, 1000)
         
     })
@@ -187,13 +197,14 @@ function approve(uid) {
         })
     }).then(function() {
         document.getElementById(uid + 'pendingcardel').classList.add('animated')
-        document.getElementById(uid + 'pendingcardel').classList.add('zoomOutUp')
+        document.getElementById(uid + 'pendingcardel').classList.add('fadeOutUp')
         window.setTimeout(function() {
             $('#' + uid + 'pendingcardel').remove()
             newnum = parseInt(document.getElementById('dmreqstatus').innerHTML) - 1
             document.getElementById('dmreqstatus').innerHTML = newnum
             if (newnum == 0) {
                 document.getElementById('dmreqstatus').innerHTML = ''
+                document.getElementById('skiddpypo').classList.remove('hidden')
             }
         }, 1000)
         refreshactive()
@@ -872,4 +883,108 @@ function checkAllNotifs() {
     else {
         $('#ultimatenotifbadge').html('')
     }
+}
+
+// Follow Requests
+
+function loadpendingfr(user, verified) {
+    document.getElementById('skiddpypofr').onclick = function() {
+        Snackbar.show({text: 'You are doing this too much!'})
+    }
+
+    window.setTimeout(function() {
+        document.getElementById('skiddpypofr').onclick = function() {
+            db.collection('users').doc(user.uid).get().then(function(doc) {
+                db.collection('app').doc("verified").get().then(function(verifieddoc) {
+                    verifiedlist = verifieddoc.data().verified 
+                    loadpendingfr(doc.data(), verifiedlist)
+                })
+            }).then(function() {
+                Snackbar.show({text: 'Refreshing...'})
+            })
+        } 
+    }, 6000)
+    
+    requests = user.requested
+    document.getElementById('frreqstatus').innerHTML = requests.length
+
+    if (requests.length == 0) {
+        document.getElementById('frreqstatus').innerHTML = ''
+    }
+    if (requests.length > 0) {
+        document.getElementById('frreqstatus').classList.add('jello')
+        document.getElementById('clickybtnshowfrreq').click()
+        document.getElementById('skiddpypofr').classList.add('hidden')
+    }
+    else {
+        document.getElementById('skiddpypofr').classList.remove('hidden')
+    }
+    for (let i = 0; i < requests.length; i++) {
+        const element = requests[i];
+        u = document.createElement('div')
+        u.classList.add('card')
+        u.id = element + 'pendingcardelfr'
+        u.classList.add('pendingcard')
+        document.getElementById('frreqlist').appendChild(u)
+        addpendingcardcontentfr(element, verified)
+    }
+}
+
+function addpendingcardcontentfr(element, verification) {
+    db.collection('users').doc(element).get().then(function(doc) {
+        verified = ''
+        for (let i = 0; i < verification.length; i++) {if (verification[i] == element) {verified = '<i id="' + name + 'verifiedelement" data-toggle="tooltip" data-placement="top" title="Verified" class="material-icons verified">verified_user</i><br><br>'}   }
+
+        rejectFunc = "rejectfollow('" + element + "')"
+        approveFunc = "approvefollow('" + element + "')"
+        viewuserFunc = "usermodal('" + element + "')"
+    
+        document.getElementById(element + 'pendingcardelfr').innerHTML = '<img class="dmreqpfp" src="' + doc.data().url + '" alt=""><h3>' + doc.data().name + '</h3>' + verified + '<p class="nolineheight">' + doc.data().rep + ' Rep</p><br><center><button onclick="' + viewuserFunc + '" class="eon-contained">view user</button><br><br></center><button onclick="' + rejectFunc + '" class="eon-text reject refreshbtn"><i class="material-icons">close</i></button><button onclick="' + approveFunc + '" class="eon-text approve refreshbtn"><i class="material-icons">check</i></button>'
+        $('.verified').tooltip()
+        addWaves()
+    })
+}
+
+function rejectfollow(id) {
+    db.collection('users').doc(user.uid).update({
+        requested: firebase.firestore.FieldValue.arrayRemove(id)
+    }).then(function () {
+        Snackbar.show({text: "Declined follow request."})
+        document.getElementById(uid + 'pendingcardelfr').classList.add('animated')
+        document.getElementById(uid + 'pendingcardelfr').classList.add('zoomOutUp')
+        window.setTimeout(function() {
+            $('#' + id + 'pendingcardelfr').remove()
+            newnum = parseInt(document.getElementById('frreqstatus').innerHTML) - 1
+            document.getElementById('frreqstatus').innerHTML = newnum
+            if (newnum == 0) {
+                document.getElementById('frreqstatus').innerHTML = ''
+                document.getElementById('skiddpypofr').classList.remove('hidden')
+            }
+        }, 1000)
+    })
+}
+
+function approvefollow(id) {
+    db.collection('users').doc(user.uid).update({
+        requested: firebase.firestore.FieldValue.arrayRemove(id)
+    })
+    db.collection('users').doc(user.uid).update({
+        followers: firebase.firestore.FieldValue.arrayUnion(id)
+    })
+    db.collection('users').doc(id).update({
+        following: firebase.firestore.FieldValue.arrayUnion(user.uid)
+    })
+    Snackbar.show({text: "Approved follow request."})
+    document.getElementById(id + 'pendingcardelfr').classList.add('animated')
+    document.getElementById(id + 'pendingcardelfr').classList.add('fadeOutUp')
+    window.setTimeout(function() {
+        $('#' + id + 'pendingcardelfr').remove()
+        newnum = parseInt(document.getElementById('frreqstatus').innerHTML) - 1
+        document.getElementById('frreqstatus').innerHTML = newnum
+        if (newnum == 0) {
+            document.getElementById('frreqstatus').innerHTML = ''
+            document.getElementById('skiddpypofr').classList.remove('hidden')
+        }
+    }, 1000)
+
 }

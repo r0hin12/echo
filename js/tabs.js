@@ -94,6 +94,12 @@ function tabe(tab) {
                 break;
             case "inbox":
                 // Everything is automatically loaded to enable in-app notifications. Slows down app loading however...
+                intervalinbox = window.setInterval(function () {
+                    if (typeof (user) != "undefined" && typeof (user) != null) {
+                        clearInterval(intervalinbox)
+                        loaddirectclick()
+                    }
+                }, 200);
                 break;
             case "account":
                 //

@@ -553,6 +553,23 @@
                                         </div>
                                       </div>
                                     </div>
+                                    <div class="expansion-panel list-group-item">
+                                        <a id="clickybtnshowfrreq" aria-controls="pendingfr" aria-expanded="false" class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#pendingfr">
+                                          Follow Requests <span id="frreqstatus" class="badge badge-pill badge-secondary animated infinite slower">0</span>
+  
+                                          <div class="expansion-panel-icon ml-3 text-black-secondary">
+                                            <i class="collapsed-show material-icons">keyboard_arrow_down</i>
+                                            <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                                          </div>
+                                        </a>
+                                        <div class="collapse" data-parent="#accordionOne" id="pendingfr">
+                                          <div class="expansion-panel-body">
+                                              <center id="frreqlist">
+                                                  <button onclick="Snackbar.show({text: 'Refreshing...'});loadpendingfr()" id="skiddpypofr" class="eon-text refreshbtn hidden"><i class="material-icons">refresh</i></button>
+                                              </center>
+                                          </div>
+                                        </div>
+                                      </div>
                                 </div>
                             </div>
                             <br>

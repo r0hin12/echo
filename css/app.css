@@ -1153,7 +1153,7 @@ width: 90%;
     padding: 16px;
     border-radius: 12px;
 
-    background-image: linear-gradient( 90deg,   rgb(138, 202, 255), rgb(48, 164, 241) );
+    background-image: linear-gradient( 90deg,rgb(241, 114, 30),rgb(221, 156, 17));
     position: relative;
 }
 
@@ -1165,7 +1165,7 @@ width: 90%;
 	width: 0;
 	height: 0;
 	border: 28px solid transparent;
-	border-left-color: rgb(48, 164, 241);
+	border-left-color: rgb(221, 156, 17);
 	border-right: 0;
 	border-bottom: 0;
 	margin-top: -14px;

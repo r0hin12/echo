@@ -950,13 +950,13 @@ async function usermodal(uid) {
 
                             document.getElementById('followbtn').innerHTML = 'cancel request'
                             document.getElementById('followbtn').onclick = function () {
-                                unrequest(uid, username)
+                                follow(uid, username)
                             }
                         }
                         else {
                             document.getElementById('followbtn').innerHTML = 'request'
                             document.getElementById('followbtn').onclick = function () {
-                                request(uid, username)
+                                follow(uid, username)
                             } 
                         }
                     }
@@ -1646,8 +1646,6 @@ function addpostslistener() {
 }
 
 function follow(uid, name) {
-
-
     db.collection('users').doc(uid).get().then(function (doc) {
         if (doc.data().type == 'private') {
 
