@@ -1258,3 +1258,12 @@ width: 90%;
 .checkverifybtn {
     animation-delay: 10s;
 }
+
+.subtext {
+    color: grey;
+}
+
+.unselectedconten {
+    width: 90%;
+    text-align: center;
+}

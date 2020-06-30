@@ -81,3 +81,27 @@ video {
 .logortc {
     width: 80px;
 }
+
+#rtctoplogocontainer {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+}
+
+.rtcicon {
+    width: 48px;
+    display: inline-block;
+}
+
+.pos {
+    width: 418px;
+}
+
+.logosubtext {
+    display: inline-block;
+    font-size: 33px;
+    font-weight: 500;
+    margin: 0px;
+    left: 70px;
+    line-height: 0px;
+}

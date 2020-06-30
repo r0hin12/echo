@@ -5,7 +5,7 @@
     <!---==== Meta ====--->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="assets/logo.png"/>
+    <link rel="icon" type="image/png" href="assets/logo.png" />
     <title>Document</title>
 
     <!---==== CSS ====-->
@@ -153,9 +153,8 @@
             </div>
           </div>
 
-          <br><br>
+          <br /><br />
           <button data-dismiss="modal" class="eon-text">close</button>
-
         </div>
       </div>
     </div>
@@ -163,22 +162,73 @@
     <div class="animated fadeIn" id="unconnected">
       <center>
         <br /><br /><br />
-        <img class="animated pulse infinite logortc slow" src="assets/logo.png" alt="">
-        <h3>Eonnect Voice Platform</h3>
+        <img
+          class="animated pulse infinite logortc slow"
+          src="assets/logo.png"
+          alt=""
+        />
+        <h3>Eonnect communication platform</h3>
         <div class="animated fadeIn" id="loadingtext">
           <h2>Connecting...</h2>
         </div>
         <div id="waitingtext" class="hidden animated fadeInUp">
-        <h2>Waiting for peer...</h2>
-        <p id="waitingid"></p>
-        <p id="waitingtype"></p>
-        <figure> <div class="figure-content"> <div class="figure-grid"> <div class="background area-top-left"> <div class="color-slide"></div> </div> <div class="background area-top-right"> <div class="color-slide"></div> </div> <div class="background area-bottom-left"> <div class="color-slide"></div> </div> <div class="background area-bottom-right"> <div class="color-slide"></div> </div> <div class="back-circle area-left"> <div class="circle"></div> </div> <div class="back-circle area-right"> <div class="circle"></div> </div> <div class="middle-circle area-top"> <div class="circle shadow"> <div class="dot glow"></div> </div> </div> <div class="middle-circle area-bottom"> <div class="circle shadow"> <div class="dot glow"></div> </div> </div> <div class="front-circle area-top"> <div class="circle shadow"> <div class="dot glow"></div> </div> </div> <div class="front-circle area-bottom"> <div class="circle shadow"> <div class="dot glow"></div> </div> </div> </div> </div><br/> </figure>
-      </div>
+          <h2>Waiting for peer...</h2>
+          <p id="waitingid"></p>
+          <p id="waitingtype"></p>
+          <figure>
+            <div class="figure-content">
+              <div class="figure-grid">
+                <div class="background area-top-left">
+                  <div class="color-slide"></div>
+                </div>
+                <div class="background area-top-right">
+                  <div class="color-slide"></div>
+                </div>
+                <div class="background area-bottom-left">
+                  <div class="color-slide"></div>
+                </div>
+                <div class="background area-bottom-right">
+                  <div class="color-slide"></div>
+                </div>
+                <div class="back-circle area-left">
+                  <div class="circle"></div>
+                </div>
+                <div class="back-circle area-right">
+                  <div class="circle"></div>
+                </div>
+                <div class="middle-circle area-top">
+                  <div class="circle shadow"><div class="dot glow"></div></div>
+                </div>
+                <div class="middle-circle area-bottom">
+                  <div class="circle shadow"><div class="dot glow"></div></div>
+                </div>
+                <div class="front-circle area-top">
+                  <div class="circle shadow"><div class="dot glow"></div></div>
+                </div>
+                <div class="front-circle area-bottom">
+                  <div class="circle shadow"><div class="dot glow"></div></div>
+                </div>
+              </div>
+            </div>
+            <br />
+          </figure>
+        </div>
       </center>
       <br /><br />
     </div>
     <div class="hidden" id="connected">
+
+      <div class="card animated fadeInDown" id="rtctoplogocontainer">
+        <div class="card-body">
+          <img src="assets/logo.png" class="rtcicon" alt="">
+          <div class="pos"></div>
+          <h1 class="logosubtext centeredy">Communication Platform</h1>
+        </div>
+      </div>
+
       <div class="centered">
+
+
         <div class="animated pulse infinite slower">
           <img src="" class="userimg animated fadeInUp hidden" alt="" />
         </div>
@@ -199,13 +249,15 @@
             <i class="material-icons">call_end</i>
           </button>
         </center>
+
+
       </div>
     </div>
 
     <div class="hidden" id="complete">
       <div class="centered">
         <h2>Your call has ended.</h2>
-        <p>You can close this tab.</p>
+        <p>You can close or reload this tab.</p>
       </div>
     </div>
 

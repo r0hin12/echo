@@ -10,11 +10,16 @@ firebase.initializeApp({
 
 window.db = firebase.firestore();
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+sessionStorage.setItem('skiponeu', 'false');
+sessionStorage.setItem('skiponeu2', 'false');
+window.setInterval(() => {
+  sessionStorage.setItem('skiponeu', 'false');
+  sessionStorage.setItem('skiponeu2', 'false');
+}, 30000);
 
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     window.user = firebase.auth().currentUser;
-
     doconnect();
   } else {
     transfer('index.html?return=' + window.location.href);
@@ -23,9 +28,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 function doconnect() {
   window.peer = new Peer();
-
   peer.on('open', function (id) {
-    // ID is id
     console.log('Opened connection with ID: ' + id);
 
     var urlParams = new URLSearchParams(window.location.search);
@@ -33,9 +36,10 @@ function doconnect() {
     window.type = urlParams.get('type');
 
     if (uid == null || uid == undefined) {
-      transferdark('app.html')
+      transferdark('app.html');
       return;
     }
+
     alphabeticalized = [];
     alphabeticalized.push(user.uid);
     alphabeticalized.push(uid);
@@ -48,16 +52,50 @@ function doconnect() {
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString();
 
     db.collection('rtc')
-    .doc(string + type)
-    .onSnapshot(function (doc) {
-      if (doc.data().skiddy == 'GONE') {
-        showcomplete();
-      }
-    });
+      .doc(string + type)
+      .onSnapshot(function (doc) {
+        if (doc.data().skiddy == 'GONE') {
+          showcomplete();
+        }
+        db.collection('rtc').doc(string + type).update({
+          lfg: 'na'
+        })
+          if (doc.data().lfg == 'ya') {
+            console.log('ha');
+            console.log(sessionStorage.getItem('skiponeu2'));
+            console.log(sessionStorage.getItem('skiponeu'));
+            if (sessionStorage.getItem('skiponeu') == 'true') {
+              sessionStorage.setItem('skiponeu2', 'false');
+              sessionStorage.setItem('skiponeu', 'false');
+            } else {
+              sessionStorage.getItem('ah');
+              sessionStorage.getItem('skiponeu');
+              db.collection('rtc')
+                .doc(string + type)
+                .update({
+                  lfg: 'na',
+                })
+                .then(function () {
+                  console.log(
+                    'should reload or avoid ' +
+                      sessionStorage.getItem('skiponeu2')
+                  );
+                  if (sessionStorage.getItem('skiponeu2') == 'true') {
+                    sessionStorage.setItem('skiponeu2', 'false');
+                    console.log('avoided loop');
+                  } else {
+                    window.location.reload();
+                  }
+                });
+            }
+          }
+      });
 
-    $('#waitingtext').removeClass('hidden')
-    $('#loadingtext').removeClass('fadeIn')
-    $('#loadingtext').addClass('fadeOutUp')
+    checkstrangestuf(string + type);
+
+    $('#waitingtext').removeClass('hidden');
+    $('#loadingtext').removeClass('fadeIn');
+    $('#loadingtext').addClass('fadeOutUp');
 
     $('#waitingid').html('Private Room ID: ' + string + type);
     if (type == 'av') {
@@ -211,10 +249,10 @@ function doconnect() {
 function showconnected() {
   $('#unconnected').addClass('animated');
   $('#unconnected').addClass('fadeOutUp');
-  $('#connected').removeClass('hidden')
+  $('#connected').removeClass('hidden');
 
   if (type == 'a') {
-    $('#cameorabtn').addClass('hidden')
+    $('#cameorabtn').addClass('hidden');
   }
 
   db.collection('users')
@@ -247,7 +285,16 @@ function showconnected() {
 }
 
 function showcomplete() {
-  $('#complete').removeClass('hidden')
+  $('#complete').removeClass('hidden');
   $('#connected').addClass('animated');
   $('#connected').addClass('fadeOutUp');
+}
+
+function checkstrangestuf(str) {
+  db.collection('rtc').doc(str).update({
+    lfg: 'ya',
+  }).then(function() {
+    sessionStorage.setItem('skiponeu', 'true');
+    sessionStorage.setItem('skiponeu2', 'true');
+  })
 }
