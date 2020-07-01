@@ -28,7 +28,7 @@ function newdm() {
                     [user.uid]: [],
                     [uwuunread2]: []
                 }).then(function (doc) {
-                    Snackbar.show({ text: 'Private DM created.' })
+                    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Private DM created.' })
                     $('#messageslist').empty()
                     loaddms()
 

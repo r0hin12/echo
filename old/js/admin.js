@@ -67,7 +67,7 @@ function unreport(id) {
     db.collection('posts').doc('reported').update({
         [id]: firebase.firestore.FieldValue.delete()
     }).then(function () {
-        Snackbar.show({ text: 'The post was unreported.' })
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'The post was unreported.' })
     })
 }
 
@@ -86,7 +86,7 @@ function deletepost(id) {
                 db.collection('posts').doc('reported').update({
                     [id]: firebase.firestore.FieldValue.delete()
                 }).then(function () {
-                    Snackbar.show({ text: 'The post was deleted.' })
+                    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'The post was deleted.' })
                 })
 
             })

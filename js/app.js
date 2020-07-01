@@ -377,7 +377,7 @@ function confirmchangemeil() {
                                 history.pushState(null, '', '/eonnect/app.html?tab=returnstatusemail');
                                 window.location.reload()
                             }, 3600)
-                            Snackbar.show({text: "Updating records... Do not leave this page."})
+                            Snackbar.show({showAction: false,pos: 'bottom-center',text: "Updating records... Do not leave this page."})
                         }, 200)
                     }, 500)
                 })
@@ -421,7 +421,7 @@ function confirmchangepass() {
                                 history.pushState(null, '', '/eonnect/app.html?tab=returnstatuspass');
                                 window.location.reload()
                             }, 3600)
-                            Snackbar.show({text: "Updating records... Do not leave this page."})
+                            Snackbar.show({showAction: false,pos: 'bottom-center',text: "Updating records... Do not leave this page."})
                         }, 200)
                     }, 500)
                 })
@@ -460,7 +460,7 @@ function confirmchangevisibility(result) {
                     history.pushState(null, '', '/eonnect/app.html?tab=returnstatus' + result);
                     window.location.reload()
                 }, 3600)
-                Snackbar.show({text: "Updating records... Do not leave this page."})
+                Snackbar.show({showAction: false,pos: 'bottom-center',text: "Updating records... Do not leave this page."})
             }, 200)
         }, 800)
     })
@@ -507,7 +507,7 @@ function changepfp() {
                         toggleloader()
                         showcomplete()
                     }, 500);
-                    Snackbar.show({text: "Profile picture was successfully updated."})
+                    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Profile picture was successfully updated."})
                 })
             })
         })

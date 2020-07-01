@@ -10,11 +10,16 @@ firebase.initializeApp({
 
 window.db = firebase.firestore();
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+
+sessionStorage.setItem('muted', 'false')
+sessionStorage.setItem('deafened', 'false')
 sessionStorage.setItem('skiponeu', 'false');
 sessionStorage.setItem('skiponeu2', 'false');
+sessionStorage.setItem('justsent', 'false')
 window.setInterval(() => {
   sessionStorage.setItem('skiponeu', 'false');
   sessionStorage.setItem('skiponeu2', 'false');
+  sessionStorage.setItem('justsent', 'false')
 }, 30000);
 
 firebase.auth().onAuthStateChanged(function (user) {
@@ -29,7 +34,8 @@ firebase.auth().onAuthStateChanged(function (user) {
 function doconnect() {
   window.peer = new Peer();
   peer.on('open', function (id) {
-    console.log('Opened connection with ID: ' + id);
+    console.log('ECP | Opened connection with ID: ' + id);
+    console.log('------ STATUS EVENTS BELOW --------');
 
     var urlParams = new URLSearchParams(window.location.search);
     window.uid = urlParams.get('target');
@@ -49,7 +55,7 @@ function doconnect() {
       return textA < textB ? -1 : textA > textB ? 1 : 0;
     });
 
-    string = alphabeticalized[0].toString() + alphabeticalized[1].toString();
+    window.string = alphabeticalized[0].toString() + alphabeticalized[1].toString();
 
     db.collection('rtc')
       .doc(string + type)
@@ -60,35 +66,46 @@ function doconnect() {
         db.collection('rtc').doc(string + type).update({
           lfg: 'na'
         })
-          if (doc.data().lfg == 'ya') {
-            console.log('ha');
-            console.log(sessionStorage.getItem('skiponeu2'));
-            console.log(sessionStorage.getItem('skiponeu'));
-            if (sessionStorage.getItem('skiponeu') == 'true') {
-              sessionStorage.setItem('skiponeu2', 'false');
-              sessionStorage.setItem('skiponeu', 'false');
-            } else {
-              sessionStorage.getItem('ah');
-              sessionStorage.getItem('skiponeu');
-              db.collection('rtc')
-                .doc(string + type)
-                .update({
-                  lfg: 'na',
-                })
-                .then(function () {
-                  console.log(
-                    'should reload or avoid ' +
-                      sessionStorage.getItem('skiponeu2')
-                  );
-                  if (sessionStorage.getItem('skiponeu2') == 'true') {
-                    sessionStorage.setItem('skiponeu2', 'false');
-                    console.log('avoided loop');
-                  } else {
-                    window.location.reload();
-                  }
-                });
-            }
+        if (doc.data().lfg == 'ya') {
+          if (sessionStorage.getItem('skiponeu') == 'true') {
+            sessionStorage.setItem('skiponeu2', 'false');
+            sessionStorage.setItem('skiponeu', 'false');
+          } else {
+            db.collection('rtc')
+              .doc(string + type)
+              .update({
+                lfg: 'na',
+              })
+              .then(function () {
+                if (sessionStorage.getItem('skiponeu2') == 'true') {
+                  sessionStorage.setItem('skiponeu2', 'false');
+                  console.log('ECP | Avoided reload loop with sessionStorage: ' + sessionStorage.getItem('skiponeu2') + ' and ' + sessionStorage.getItem('skiponeu') );
+                } else {
+                  window.location.reload();
+                }
+              });
           }
+        }
+
+        if (doc.data().sent !== 'nothing') {
+          if (doc.data().sent == undefined) {
+            db.collection('rtc').doc(string + type).update({
+              sent: 'nothing',
+            })
+          }
+          else {
+            if (sessionStorage.getItem('justsent') == 'true') {
+              sent(doc.data().sent)
+              sessionStorage.setItem('justsent', 'false');
+            } else {
+              db.collection('rtc').doc(string + type).update({
+                sent: 'nothing',
+              })
+              recieveda(doc.data().sent)
+            }
+
+          }
+        }
       });
 
     checkstrangestuf(string + type);
@@ -130,9 +147,12 @@ function doconnect() {
                     videoya = false;
                   } else {
                     // Stream for client
-                    navigator.getUserMedia(
-                      { video: true, audio: false },
+                    navigator.getUserMedia({
+                        video: true,
+                        audio: false
+                      },
                       function (stream) {
+                        window.mystreamfinal = stream
                         document.getElementById('mine').srcObject = stream;
                         document.getElementById('mine').play();
                       }
@@ -140,11 +160,15 @@ function doconnect() {
                   }
 
                   // Stream for peer
-                  navigator.getUserMedia(
-                    { video: videoya, audio: true },
+                  navigator.getUserMedia({
+                      video: videoya,
+                      audio: true
+                    },
                     function (stream) {
+                      window.mystreamfinal = stream
                       call = peer.call(conn.peer, stream);
                       call.on('stream', function (stream) {
+                        window.theirstreamfinal = stream
                         // `stream` is the MediaStream of the remote peer.
                         // Here you'd add it to an HTML video/canvas element.
                         document.getElementById('theirs').srcObject = stream;
@@ -206,20 +230,25 @@ function doconnect() {
                 videoya = false;
               } else {
                 // Stream for client
-                navigator.getUserMedia({ video: true, audio: false }, function (
-                  stream
-                ) {
+                navigator.getUserMedia({
+                  video: true,
+                  audio: false
+                }, function (stream) {
+                  window.mystreamfinal = stream
                   document.getElementById('mine').srcObject = stream;
                   document.getElementById('mine').play();
                 });
               }
 
               // Stream for peer
-              navigator.getUserMedia({ video: videoya, audio: true }, function (
-                stream
-              ) {
+              navigator.getUserMedia({
+                video: videoya,
+                audio: true
+              }, function (stream) {
+                window.mystreamfinal = stream
                 call.answer(stream);
                 call.on('stream', function (stream) {
+                  window.theirstreamfinal = stream
                   document.getElementById('theirs').srcObject = stream;
                   window.astream = stream;
                   setInterval(() => {
@@ -255,33 +284,37 @@ function showconnected() {
     $('#cameorabtn').addClass('hidden');
   }
 
-  db.collection('users')
-    .doc(uid)
-    .get()
-    .then(function (doc) {
-      $('.userimg').attr('src', doc.data().url);
-      $('.userimg').removeClass('hidden');
-      $('#name').html(doc.data().name);
-      $('#disconnectbtn').get(0).onclick = function () {
-        peer.disconnect();
-        db.collection('rtc')
-          .doc(string + type)
-          .update({
-            skiddy: 'GONE',
-          })
-          .then(function () {
-            window.setTimeout(function () {
-              db.collection('rtc')
-                .doc(string + type)
-                .update({
-                  skiddy: 'PAPA',
-                });
-            }, 500);
-          });
-        showcomplete();
-      };
-      addWaves();
-    });
+  db.collection('users').doc(user.uid).get().then(function(doc) {
+    document.getElementsByClassName('userimg')[1].setAttribute('src', doc.data().url)
+    document.getElementsByClassName('userimg')[1].classList.remove('hidden')
+    document.getElementsByClassName('usertext')[1].innerHTML = doc.data().name
+  })
+
+  db.collection('users').doc(uid).get().then(function (doc) {
+    document.getElementsByClassName('userimg')[0].setAttribute('src', doc.data().url)
+    document.getElementsByClassName('userimg')[0].classList.remove('hidden')
+    document.getElementsByClassName('usertext')[0].innerHTML = doc.data().name
+
+    $('#disconnectbtn').get(0).onclick = function () {
+      peer.disconnect();
+      db.collection('rtc')
+        .doc(string + type)
+        .update({
+          skiddy: 'GONE',
+        })
+        .then(function () {
+          window.setTimeout(function () {
+            db.collection('rtc')
+              .doc(string + type)
+              .update({
+                skiddy: 'PAPA',
+              });
+          }, 500);
+        });
+      showcomplete();
+    };
+    addWaves();
+  });
 }
 
 function showcomplete() {
@@ -293,8 +326,116 @@ function showcomplete() {
 function checkstrangestuf(str) {
   db.collection('rtc').doc(str).update({
     lfg: 'ya',
-  }).then(function() {
+  }).then(function () {
     sessionStorage.setItem('skiponeu', 'true');
     sessionStorage.setItem('skiponeu2', 'true');
   })
+}
+
+function send(sentitem) {
+  sessionStorage.setItem('justsent', 'true');
+  db.collection('rtc').doc(string + type).update({
+    sent: sentitem,
+  }).then(function() {
+    window.setTimeout(function() {
+      db.collection('rtc').doc(string + type).update({
+        sent: 'nothing',
+      })
+    })
+  })
+}
+
+function recieveda(exp, sent) {
+  if (sent) {
+    console.log('ECP | Playing sent expression: ' + exp);
+  }
+  else {
+    console.log('ECP | Received expression: ' + exp);
+  }
+
+  switch (exp) {
+    case 'heart':
+      heartel = document.createElement('div')
+      heartel.classList.add('heartbefore')
+      heartel.classList.add('centered')
+      heartel.innerHTML = '<i class="material-icons animated heartBeat infinite">favorite</i>'
+      heartel.id = 'heartel'
+      document.getElementById('body').appendChild(heartel)
+      window.setTimeout(function() {
+        document.getElementById('heartel').classList.add('heartafter')
+      }, 100)
+      window.setTimeout(function() {
+        document.getElementById('heartel').classList.add('animated')
+        document.getElementById('heartel').classList.add('bounceOut')
+        window.setTimeout(function() {
+          $('#heartel').remove()
+        }, 1000)
+      }, 1000)
+      break;
+    case 'eonnect-code-mute':
+        document.getElementById('theirs').muted = true
+      break;
+    case 'eonnect-code-unmute':
+      document.getElementById('theirs').muted = false
+      break;
+
+    default:
+      break;
+  }
+}
+
+function sent(exp) {
+  if (exp !== 'eonnect-code-unmute' && exp !== 'eonnect-code-mute') {
+    console.log('ECP | Sent expression: ' + exp);
+    Snackbar.show({showAction: false,pos: 'bottom-center',text: "You sent expression: " + exp.charAt(0).toUpperCase() + exp.slice(1)})
+    recieveda(exp, true)
+  }
+}
+
+function togglemute(hide) {
+  sessionStorage.setItem('justsent', 'true');
+  if (sessionStorage.getItem('muted') == 'true') {
+    if (!hide) {
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Unmuted"})
+    }
+    $('#mutebtn').html('<i class="material-icons animate bounceIn">mic</i>')
+    db.collection('rtc').doc(string + type).update({
+      sent: 'eonnect-code-unmute'
+    }).then(function() {
+      console.log('ECP | Unmuted client'); 
+      sessionStorage.setItem('muted', 'false') 
+    })
+  }
+  else {
+    $('#mutebtn').html('<i class="material-icons animate bounceIn">mic_off</i>')
+    if (!hide) {
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Muted"})
+    }
+    db.collection('rtc').doc(string + type).update({
+      sent: 'eonnect-code-mute'
+    }).then(function() {
+      console.log('ECP | Muted client'); 
+      sessionStorage.setItem('muted', 'true') 
+    })
+  }
+}
+
+function toggledeafen() {
+  if (sessionStorage.getItem('deafened') == 'true') {
+    $('#deafenbtn').html('<i class="material-icons animated bounceIn">hearing</i>')
+    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Undeafened"})
+    sessionStorage.setItem('deafened', 'false') 
+    sessionStorage.setItem('muted', 'true') 
+    document.getElementById('theirs').muted = false
+    togglemute(true)
+  }
+  else {
+    $('#deafenbtn').html('<i class="material-icons animated bounceIn">hearing_disabled</i>')
+    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Deafened"})
+    sessionStorage.setItem('deafened', 'true') 
+    sessionStorage.setItem('muted', 'false') 
+    document.getElementById('theirs').muted = true
+    togglemute(true)
+
+  }
 }

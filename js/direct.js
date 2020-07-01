@@ -17,7 +17,7 @@ function newdm() {
 
     db.collection('app').doc('details').get().then(function(doc) {
         index = doc.data().usernames.indexOf(username)
-        if (index == -1) {Snackbar.show({text: "This username does not exist in our records."})}
+        if (index == -1) {Snackbar.show({showAction: false,pos: 'bottom-center',text: "This username does not exist in our records."})}
         else {
             dmuid = doc.data().map[index]
             alphabeticalized = []
@@ -85,13 +85,13 @@ function loaddirect() {
 
 function loadpending() {
     document.getElementById('skiddpypo').onclick = function() {
-        Snackbar.show({text: 'You are doing this too much!'})
+        Snackbar.show({showAction: false,pos: 'bottom-center',text: 'You are doing this too much!'})
     }
 
     window.setTimeout(function() {
         document.getElementById('skiddpypo').onclick = function() {
             loadpending()
-            Snackbar.show({text: 'Refreshing...'})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'})
         } 
     }, 3000)
     db.collection('users').doc(user.uid).get().then(function(doc) {
@@ -373,7 +373,7 @@ function BUILD_DIRECT(uid, btnel) {
             $('#navbarname').html(doc.data().name)
     
             document.getElementById('refreshstatusbtn').onclick = function() {
-                Snackbar.show({text: "You are doing this too much!"})
+                Snackbar.show({showAction: false,pos: 'bottom-center',text: "You are doing this too much!"})
             }
         
             window.setTimeout(function() {
@@ -438,7 +438,7 @@ function BUILD_DIRECT(uid, btnel) {
         $('#navbarname').html(this["dmcache"+uid].name)
 
         document.getElementById('refreshstatusbtn').onclick = function() {
-            Snackbar.show({text: "You are doing this too much!"})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You are doing this too much!"})
         }
     
         window.setTimeout(function() {
@@ -708,7 +708,7 @@ function LISTEN_MESSAGES() {
         if (changed_dm.startsWith('eonnect_direct_approverq_')) {
             userid = changed_dm.split('rq_')[1]
             db.collection('users').doc(userid).get().then(function(doc) {
-                Snackbar.show({text: doc.data().name + ' approved your request!'})
+                Snackbar.show({showAction: false,pos: 'bottom-center',text: doc.data().name + ' approved your request!'})
             })
             return true
         }
@@ -772,7 +772,7 @@ function ENACT_CHANGES(uid) {
             checkAllNotifs()
 
             if (sessionStorage.getItem('currentab') !== 'inbox') {
-                Snackbar.show({
+                Snackbar.show({showAction: false,pos: 'bottom-center',
                     text: "New Message: " + msg.content.substring(0,12) + '...',
                     pos: 'bottom-right'
                 })
@@ -891,7 +891,7 @@ function checkAllNotifs() {
 
 function loadpendingfr(user, verified) {
     document.getElementById('skiddpypofr').onclick = function() {
-        Snackbar.show({text: 'You are doing this too much!'})
+        Snackbar.show({showAction: false,pos: 'bottom-center',text: 'You are doing this too much!'})
     }
 
     window.setTimeout(function() {
@@ -902,7 +902,7 @@ function loadpendingfr(user, verified) {
                     loadpendingfr(doc.data(), verifiedlist)
                 })
             }).then(function() {
-                Snackbar.show({text: 'Refreshing...'})
+                Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'})
             })
         } 
     }, 6000)
@@ -951,7 +951,7 @@ function rejectfollow(id) {
     db.collection('users').doc(user.uid).update({
         requested: firebase.firestore.FieldValue.arrayRemove(id)
     }).then(function () {
-        Snackbar.show({text: "Declined follow request."})
+        Snackbar.show({showAction: false,pos: 'bottom-center',text: "Declined follow request."})
         document.getElementById(uid + 'pendingcardelfr').classList.add('animated')
         document.getElementById(uid + 'pendingcardelfr').classList.add('zoomOutUp')
         window.setTimeout(function() {
@@ -976,7 +976,7 @@ function approvefollow(id) {
     db.collection('users').doc(id).update({
         following: firebase.firestore.FieldValue.arrayUnion(user.uid)
     })
-    Snackbar.show({text: "Approved follow request."})
+    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Approved follow request."})
     document.getElementById(id + 'pendingcardelfr').classList.add('animated')
     document.getElementById(id + 'pendingcardelfr').classList.add('fadeOutUp')
     window.setTimeout(function() {

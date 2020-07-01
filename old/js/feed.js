@@ -38,7 +38,7 @@ $("#imgInp").change(function () {
 function addComment(id) {
     text = document.getElementById('commentbox').value
     if (text == "" || text == " " || text == "  ") {
-        Snackbar.show({ text: 'You must include content.' })
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'You must include content.' })
     }
     else {
         if (document.getElementById('commentbox').value.length > 200) {
@@ -57,7 +57,7 @@ function addComment(id) {
             }).then(function () {
                 document.getElementById('charcount').innerHTML = 'Post Comment (0/200 chars)'
                 x = parseInt(sessionStorage.getItem('viewing'), 10)
-                Snackbar.show({ text: 'New comments have been added.', onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: 'Refresh' })
+                Snackbar.show({showAction: false,pos: 'bottom-center', text: 'New comments have been added.', onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: 'Refresh' })
 
 
             })
@@ -448,7 +448,7 @@ async function usermodal(uid) {
                         document.getElementById('ownwarning').style.display = 'block'
                         document.getElementById('followbtn').innerHTML = 'unfollow'
                         document.getElementById('followbtn').onclick = function () {
-                            Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
+                            Snackbar.show({showAction: false,pos: 'bottom-center', pos: 'bottom-left', text: "You can't unfollow yourself." })
                         }
                         loaduserposts(uid)
                     }
@@ -604,7 +604,7 @@ function info(id) {
                             db.collection('posts').doc('reported').update({
                                 [id]: firebase.firestore.FieldValue.delete()
                             }).then(function () {
-                                Snackbar.show({ text: 'Your post was deleted.' })
+                                Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Your post was deleted.' })
                             })
 
                         })
@@ -629,7 +629,7 @@ function info(id) {
                     db.collection('posts').doc('reported').update({
                         [id]: { name: id, timestamp: content.timestamp, data: { caption: content.data.caption, file: content.data.file, name: content.data.name, type: content.data.type, uid: content.data.uid } }
                     }).then(function () {
-                        Snackbar.show({ text: 'Post was reported' })
+                        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Post was reported' })
                     })
 
                 })
@@ -706,7 +706,7 @@ function listencomments() {
             }
             else {
                 x = parseInt(sessionStorage.getItem('viewing'), 10)
-                Snackbar.show({ pos: 'bottom-left', text: "New comments are added.", onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: "refresh" })
+                Snackbar.show({showAction: false,pos: 'bottom-center', pos: 'bottom-left', text: "New comments are added.", onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: "refresh" })
             }
         }
 
@@ -944,7 +944,7 @@ function addpostslistener() {
         else {
 
             if (localStorage.getItem('currentab') == 'explore') {
-                Snackbar.show({ pos: 'bottom-left', text: "Posts have been modified.", onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: "refresh" })
+                Snackbar.show({showAction: false,pos: 'bottom-center', pos: 'bottom-left', text: "Posts have been modified.", onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: "refresh" })
             }
 
 
@@ -1022,7 +1022,7 @@ function follow(uid, name) {
             db.collection('users').doc(uid).collection('follow').doc('requested').update({
                 requested: firebase.firestore.FieldValue.arrayUnion(user.uid)
             }).then(function () {
-                Snackbar.show({ text: 'Requested to follow ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'cancel' })
+                Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Requested to follow ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'cancel' })
                 document.getElementById('followbtn').innerHTML = 'cancel request'
                 document.getElementById('followbtn').onclick = function () {
                     unrequest(uid, username)
@@ -1036,7 +1036,7 @@ function follow(uid, name) {
                 db.collection('users').doc(uid).collection('follow').doc('followers').update({
                     followers: firebase.firestore.FieldValue.arrayUnion(user.uid)
                 }).then(function () {
-                    Snackbar.show({ text: 'Started following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'Unfollow' })
+                    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Started following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'Unfollow' })
 
                     document.getElementById('followbtn').innerHTML = 'unfollow'
                     document.getElementById('followbtn').onclick = function () {
@@ -1058,7 +1058,7 @@ function unfollow(uid, name) {
         db.collection('users').doc(uid).collection('follow').doc('followers').update({
             followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
         }).then(function () {
-            Snackbar.show({ text: 'Stopped following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
+            Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Stopped following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
             document.getElementById('followbtn').innerHTML = 'follow'
             document.getElementById('followbtn').onclick = function () {
                 follow(uid, username)
@@ -1072,7 +1072,7 @@ function unrequest(uid, name) {
     db.collection('users').doc(uid).collection('follow').doc('requested').update({
         followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
     }).then(function () {
-        Snackbar.show({ text: 'Cancelled follow request for ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Cancelled follow request for ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
         document.getElementById('followbtn').innerHTML = 'request'
         document.getElementById('followbtn').onclick = function () {
             follow(uid, username)

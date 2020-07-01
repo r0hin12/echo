@@ -16,7 +16,7 @@ function enableparticles() {
     db.collection('users').doc(user.uid).update({
         particles: true
     }).then(function () {
-        Snackbar.show({ text: 'Enabled chatroom particles.' });
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Enabled chatroom particles.' });
 
 
 
@@ -40,7 +40,7 @@ function disableparticles() {
     db.collection('users').doc(user.uid).update({
         particles: false
     }).then(function () {
-        Snackbar.show({ text: 'Disabled chatroom particles.' })
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Disabled chatroom particles.' })
 
     })
 
@@ -67,7 +67,7 @@ function checkparticles() {
 }
 
 function nothing() {
-    Snackbar.show({ text: 'Processing too many requests. Please wait a moment.' })
+    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Processing too many requests. Please wait a moment.' })
 
     if (document.getElementById('c3').checked) {
         document.getElementById('c3').checked = false

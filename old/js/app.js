@@ -201,7 +201,7 @@ function finishprofile() {
 }
 
 function signout() {
-    Snackbar.show({ text: 'Signing out...' })
+    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Signing out...' })
     window.setTimeout(function () {
         firebase.auth().signOut()
     }, 2000)
@@ -210,7 +210,7 @@ function signout() {
 function newpost() {
     var caption = document.getElementById('captioninput').value
     if (caption == '' || caption == " " || caption == null) {
-        Snackbar.show({ text: 'An error occured. Try again later.', onActionClick: function (element) { $(element).css('opacity', 0); window.location.reload() }, actionText: 'Reload Page' })
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'An error occured. Try again later.', onActionClick: function (element) { $(element).css('opacity', 0); window.location.reload() }, actionText: 'Reload Page' })
     }
     else {
         if (document.getElementById('captioninput').value.length > 50) {
@@ -263,7 +263,7 @@ function newpost() {
                                 db.collection('posts').doc('reported').update({
                                     latest: newnum
                                 }).then(function () {
-                                    Snackbar.show({ text: 'Post uploaded.', onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: 'refresh' })
+                                    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Post uploaded.', onActionClick: function (element) { $(element).css('opacity', 0); load() }, actionText: 'refresh' })
                                     document.getElementById('captionel').style.display = 'none'
                                     document.getElementById('blah').style.display = 'none'
                                     document.getElementById('captionel').style.display = 'none'
@@ -430,7 +430,7 @@ function changedisplaynameconfirm() {
         user.updateProfile({
             displayName: newdisplayname
         }).then(function () {
-            Snackbar.show({ text: 'Display name changed. Reloading...' })
+            Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Display name changed. Reloading...' })
             window.setTimeout(function () {
                 window.location.reload()
             }, 1800)
@@ -463,7 +463,7 @@ function changeprofilepicconfirm() {
                         filetype: file.name.split('.').pop(),
                         filename: file.name.split('.').slice(0, -1).join('.')
                     }).then(function () {
-                        Snackbar.show({ text: 'Profile picture was successfully replaced' })
+                        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Profile picture was successfully replaced' })
                         console.log(url);
                         document.getElementById('accountpfp').src = url
                         document.getElementById('pfp1').src = url
@@ -488,7 +488,7 @@ function changeprofilepicconfirm() {
                                 filetype: file.name.split('.').pop(),
                                 filename: file.name.split('.').slice(0, -1).join('.')
                             }).then(function () {
-                                Snackbar.show({ text: 'Profile picture was successfully replaced' })
+                                Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Profile picture was successfully replaced' })
                                 console.log(url);
                                 document.getElementById('accountpfp').src = url
                                 document.getElementById('pfp1').src = url
@@ -525,7 +525,7 @@ function changebiographyconfirm() {
         })
 
             .then(function () {
-                Snackbar.show({ text: 'Biography changed.' })
+                Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Biography changed.' })
                 window.setTimeout(function () {
                     document.getElementById('accountbio').innerHTML = newbiography
                     document.getElementsByClassName('newbiography').value = ''

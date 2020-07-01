@@ -471,7 +471,7 @@ function likeComment(id, i, element) {
 
     arname = id + '>withindex<' + i
     element.onclick = function() {
-        Snackbar.show({
+        Snackbar.show({showAction: false,pos: 'bottom-center',
             text: "Please wait..."
         })
     }
@@ -499,7 +499,7 @@ function unLikeComment(id, i, element) {
 
     arname = id + '>withindex<' + i
     element.onclick = function() {
-        Snackbar.show({
+        Snackbar.show({showAction: false,pos: 'bottom-center',
             text: "Please wait..."
         })
     }
@@ -591,7 +591,7 @@ function likeuser(id) {
         }
 
         if (doc.data()[id][0] == user.uid) {
-            Snackbar.show({ text: 'You cannot remove like on your own post.' })
+            Snackbar.show({showAction: false,pos: 'bottom-center', text: 'You cannot remove like on your own post.' })
         }
 
         else {
@@ -652,7 +652,7 @@ function like(id) {
         }
 
         if (doc.data()[id][0] == user.uid) {
-            Snackbar.show({ text: 'You cannot remove like on your own post.' })
+            Snackbar.show({showAction: false,pos: 'bottom-center', text: 'You cannot remove like on your own post.' })
         }
 
         else {
@@ -734,7 +734,7 @@ function addComment(id) {
     text = document.getElementById('commentbox').value
     sessionStorage.setItem('wasitme', 'true')
     if (text == "" || text == " " || text == "  ") {
-        Snackbar.show({ text: 'You must include content.' })
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'You must include content.' })
     }
     else {
         if (document.getElementById('commentbox').value.length > 200) {
@@ -975,7 +975,7 @@ async function usermodal(uid) {
                 document.getElementById('ownwarning').style.display = 'block'
                 document.getElementById('followbtn').innerHTML = 'unfollow'
                 document.getElementById('followbtn').onclick = function () {
-                    Snackbar.show({ pos: 'bottom-left', text: "You can't unfollow yourself." })
+                    Snackbar.show({showAction: false,pos: 'bottom-center', pos: 'bottom-left', text: "You can't unfollow yourself." })
                 }
                 loaduserposts(uid)
                 db.collection('users').doc(user.uid).get().then(function(doc) {
@@ -1165,7 +1165,7 @@ function info(id) {
                     db.collection('posts').doc('reported').update({
                         [id]: { name: id, timestamp: content.timestamp, data: { caption: content.data.caption, file: content.data.file, name: content.data.name, type: content.data.type, uid: content.data.uid } }
                     }).then(function () {
-                        Snackbar.show({ text: 'Post was reported' })
+                        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Post was reported' })
                     })
 
                 })
@@ -1251,7 +1251,7 @@ function deletepost(id, credentials) {
 
         window.setTimeout(function() {
             $('#infoModal').modal('hide')
-            Snackbar.show({ text: 'Your post was deleted.' })
+            Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Your post was deleted.' })
 
             try {
                 document.getElementById(id + "relevantshell").classList.add('animated')
@@ -1351,7 +1351,7 @@ function listencomments() {
                 }
                 else {
                     x = parseInt(sessionStorage.getItem('viewing'), 10)
-                    Snackbar.show({ pos: 'bottom-left', text: "New comments are added.", onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: "refresh" })
+                    Snackbar.show({pos: 'bottom-center', pos: 'bottom-left', text: "New comments are added.", onActionClick: function (element) { $(element).css('opacity', 0); refreshcomments(x) }, actionText: "refresh" })
                 }
                 
                 
@@ -1639,7 +1639,7 @@ function addpostslistener() {
         }
         else {
             if (localStorage.getItem('currentab') == 'explore') {
-                Snackbar.show({ pos: 'bottom-left', text: "Posts have been modified.", onActionClick: function (element) { $(element).css('opacity', 0); refreshhome() }, actionText: "refresh" })
+                Snackbar.show({pos: 'bottom-center', pos: 'bottom-left', text: "Posts have been modified.", onActionClick: function (element) { $(element).css('opacity', 0); refreshhome() }, actionText: "refresh" })
             };
         };
     });
@@ -1652,7 +1652,7 @@ function follow(uid, name) {
             db.collection('users').doc(uid).update({
                 requested: firebase.firestore.FieldValue.arrayUnion(user.uid)
             }).then(function () {
-                Snackbar.show({ text: 'Requested to follow ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'cancel' })
+                Snackbar.show({pos: 'bottom-center', text: 'Requested to follow ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'cancel' })
                 document.getElementById('followbtn').innerHTML = 'cancel request'
                 document.getElementById('followbtn').onclick = function () {
                     unrequest(uid, username)
@@ -1676,7 +1676,7 @@ function follow(uid, name) {
                 db.collection('users').doc(uid).update({
                     followers: firebase.firestore.FieldValue.arrayUnion(user.uid)
                 }).then(function () {
-                    Snackbar.show({ text: 'Started following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'Unfollow' })
+                    Snackbar.show({pos: 'bottom-center', text: 'Started following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); unfollow(uid) }, actionText: 'Unfollow' })
                     document.getElementById('followbtn').innerHTML = 'unfollow'
                     document.getElementById('followbtn').onclick = function () {
                         unfollow(uid, username)
@@ -1706,7 +1706,7 @@ function unfollow(uid, name) {
         db.collection('users').doc(uid).update({
             followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
         }).then(function () {
-            Snackbar.show({ text: 'Stopped following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
+            Snackbar.show({pos: 'bottom-center', text: 'Stopped following ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
             document.getElementById('followbtn').innerHTML = 'follow'
             document.getElementById('followbtn').onclick = function () {
                 follow(uid, username)
@@ -1727,7 +1727,7 @@ function unrequest(uid, name) {
     db.collection('users').doc(uid).update({
         followers: firebase.firestore.FieldValue.arrayRemove(user.uid)
     }).then(function () {
-        Snackbar.show({ text: 'Cancelled follow request for ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
+        Snackbar.show({pos: 'bottom-center', text: 'Cancelled follow request for ' + name + '.', onActionClick: function (element) { $(element).css('opacity', 0); follow(uid, name) }, actionText: 'undo' })
         document.getElementById('followbtn').innerHTML = 'request'
         document.getElementById('followbtn').onclick = function () {
             follow(uid, username)
@@ -1817,7 +1817,7 @@ function newpost() {
                     db.collection('posts').doc('reported').update({
                         latest: newnum
                     }).then(function () {
-                        Snackbar.show({ text: 'Your photo was uploaded.' })
+                        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Your photo was uploaded.' })
                         $('#uploadmodal').modal('toggle')
                         document.getElementById('captionel').style.display = 'none'
                         document.getElementById('blah').style.display = 'none'
@@ -1841,7 +1841,7 @@ function refreshhome() {
 function refresh(btn) {
 
     btn.onclick = function() {
-        Snackbar.show({text: "Please wait before requesting more posts."})
+        Snackbar.show({showAction: false,pos: 'bottom-center',text: "Please wait before requesting more posts."})
     }
     window.setTimeout(function() {
         btn.onclick = function() {

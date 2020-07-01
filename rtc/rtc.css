@@ -9,6 +9,48 @@ p {
     color: grey;
 }
 
+.dropdown-menu:before {
+    background-color: var(--bg-primary);
+    color: var(--content-primary);
+
+}
+
+button:focus {
+    outline: none;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+.bg {
+    -webkit-animation: AnimationName 10s ease infinite;
+    -moz-animation: AnimationName 10s ease infinite;
+    animation: AnimationName 10s ease infinite;
+    background: linear-gradient(167deg, #030f49, #4b006e);
+    background-size: 800% 800%;
+
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+}
+
 #unconnected {
     position: absolute;
     width: 100%;
@@ -24,8 +66,8 @@ p {
     top: 0px;
     left: 0px;
     width: 100%;
+    background-color: rgb(19, 19, 19, 0.5);
     height: 100%;
-    background-color: rgb(0, 0, 0);
     z-index: 2;
 }
 
@@ -47,7 +89,7 @@ p {
     left: 0px;
     text-align: center;
     height: 100%;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(19, 19, 19, 0.5);
     z-index: 1;
 }
 
@@ -104,4 +146,87 @@ video {
     margin: 0px;
     left: 70px;
     line-height: 0px;
+}
+
+.bottombar {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+}
+
+.therow {
+    width: 100%;
+}
+
+.usertext {
+    padding-top: 24px;
+    font-weight: 500;
+}
+
+.dots {
+    font-weight: 600;
+    font-size: 150px;
+    color: grey;
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.dot1 {
+    animation-delay: 0.10s;
+}
+
+.dot2 {
+    animation-delay: 0.20s;
+}
+
+.dot3 {
+    animation-delay: 0.30s;
+}
+
+.iconbtn {
+    display: inline-block;
+    min-width: 0px !important;
+    margin: 4px;
+    width: 30px !important;
+    height: 30px !important;
+    outline: none;
+    padding: 30px !important;
+    border-radius: 50% !important;   
+}
+
+.iconbtn2 {
+    min-width: 0px !important;
+    padding: 8px !important;
+    border-radius: 8px !important;
+    margin: 4px;
+    outline: none; 
+}
+
+.fav {
+    color: red;
+}
+
+.happy {
+    color: lime;
+}
+
+.heartbefore {
+    position: fixed;
+    font-size: 24px !important;
+    z-index: 2000;
+    color: red;
+    transition: all 1s;
+}
+
+.heartafter {
+    font-size: 200px !important;
+    transition: all 1s;
+}
+
+.bottombar2 {
+    padding: 12px;
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
 }

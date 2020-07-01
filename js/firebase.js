@@ -30,7 +30,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 
 function signout() {
-    Snackbar.show({ text: 'Signing out...' })
+    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Signing out...' })
     window.setTimeout(function () {
         firebase.auth().signOut()
     }, 2000)

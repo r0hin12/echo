@@ -21,19 +21,19 @@ $(window).ready(function () {
 
     switch (tab) {
         case "returnstatusemail":
-            Snackbar.show({text: "You email was successfully changed."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You email was successfully changed."})
             tab = 'account'
             break;
         case "returnstatuspass":
-            Snackbar.show({text: "You password was successfully changed."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You password was successfully changed."})
             tab = 'account'
             break;
         case "returnstatusprivate":
-            Snackbar.show({text: "You visibility was successfully changed to private."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You visibility was successfully changed to private."})
             tab = 'account'
             break;
         case "returnstatuspublic":
-            Snackbar.show({text: "You password was successfully changed to public."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You password was successfully changed to public."})
             tab = 'account'
             break;
         default:
@@ -60,10 +60,8 @@ $(window).ready(function () {
 })
 
 function tabe(tab) {
-    //sessionStorage.setItem("currentviewingdm", 'not')
-    //unshowdm()
-
     document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.split(tab.charAt(0))[1] + ' | Eonnect'
+
 
     sessionStorage.setItem("currentab", tab)
     $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })

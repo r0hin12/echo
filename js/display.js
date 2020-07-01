@@ -16,16 +16,30 @@ function check(width) {
         document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: 800px; transiton: all 0.5s;} .eonnect-main-expanded {width: 100% !important; transiton: all 0.5s;}'
 
         document.getElementById('expandbtn').style.display = 'block'
-        document.getElementById('collapsebtn').style.display = 'none'
+        if (sessionStorage.getItem('currentab') == 'inbox') {
+            document.getElementById('expandbtn').classList.add('expandedbtninbox')
+        }
+        else {
+            document.getElementById('expandbtn').classList.remove('expandedbtninbox')
+        }
+    
+        if (sessionStorage.getItem('currentab') == 'account') {
+            document.getElementById('expandbtn').classList.add('expandedbtnaccount')
+        }
+        else {
+            document.getElementById('expandbtn').classList.remove('expandedbtnaccount')
+        }
 
     }
     else {
 
         document.getElementById('expandbtn').style.display = 'none'
-        document.getElementById('collapsebtn').style.display = 'none'
+        document.getElementById('sidebar').classList.remove('fadeOutLeft')
+        document.getElementById('sidebar').classList.add('fadeInLeft')
 
         document.getElementById('expand').classList.add('eonnect-main-unexpanded')
         document.getElementById('expand').classList.remove('eonnect-main-expanded')
+        document.getElementById('expand').classList.remove('buttonunexpanded')
 
         elwidth = width - 275
         document.getElementById('expand').style.width = elwidth + 'px'
@@ -40,38 +54,42 @@ function expand() {
     document.getElementById('sidebar').classList.add('fadeInLeft')
     document.getElementById('sidebar').classList.remove('fadeOutLeft')
 
-    document.getElementById('expandbtn').classList.add('fadeOutLeft')
-    window.setTimeout(function () {
-        document.getElementById('expandbtn').style.display = 'none'
-        document.getElementById('expandbtn').classList.remove('fadeOutLeft')
-    }, 800)
+    document.getElementById('expandbtn').classList.remove('expandedbtnaccount')
+    document.getElementById('expandbtn').classList.remove('expandedbtninbox')
 
-    document.getElementById('collapsebtn').style.display = 'block'
-    document.getElementById('collapsebtn').classList.add('zoomIn')
-    window.setTimeout(function () {
-        document.getElementById('collapsebtn').classList.remove('zoomIn')
-    }, 800)
+    document.getElementById('expandbtn').classList.add('expandedbtn')
+    document.getElementById('expandbtn').onclick = function() {
+        collapse();
+        this.classList.toggle('openedham');
+        this.setAttribute('aria-expanded', this.classList.contains('openedham'))
+    }
 
 }
 
 function collapse() {
-    document.getElementById('collapsebtn').classList.add('fadeOutLeft')
-    window.setTimeout(function () {
-        document.getElementById('collapsebtn').style.display = 'none'
-        document.getElementById('collapsebtn').classList.remove('fadeOutLeft')
-    }, 800)
-
-    document.getElementById('expandbtn').style.display = 'block'
-    document.getElementById('expandbtn').classList.add('zoomIn')
-    window.setTimeout(function () {
-        document.getElementById('expandbtn').classList.remove('zoomIn')
-    }, 800)
-
-    window.setTimeout(function () {
-        document.getElementById('sidebar').classList.remove('buttonexpanded')
-    }, 800)
     document.getElementById('sidebar').classList.remove('fadeInLeft')
     document.getElementById('sidebar').classList.add('fadeOutLeft')
+    document.getElementById('expandbtn').classList.remove('expandedbtn')
+
+    if (sessionStorage.getItem('currentab') == 'inbox') {
+        document.getElementById('expandbtn').classList.add('expandedbtninbox')
+    }
+    else {
+        document.getElementById('expandbtn').classList.remove('expandedbtninbox')
+    }
+
+    if (sessionStorage.getItem('currentab') == 'account') {
+        document.getElementById('expandbtn').classList.add('expandedbtnaccount')
+    }
+    else {
+        document.getElementById('expandbtn').classList.remove('expandedbtnaccount')
+    }
+
+    document.getElementById('expandbtn').onclick = function() {
+        expand();
+        this.classList.toggle('openedham');
+        this.setAttribute('aria-expanded', this.classList.contains('openedham'))
+    }
 }
 
 

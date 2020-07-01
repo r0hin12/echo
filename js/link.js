@@ -25,7 +25,7 @@ function linktwitter() {
 
             }
         }).then(function() {
-            Snackbar.show({text: 'Twitter linked successfully.'})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Twitter linked successfully.'})
             goFunc = "gotwitter('" + user.providerData[index].uid + "')"
             document.getElementById('twitterlinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + user.providerData[index].displayName + '</a>.'
             document.getElementById('twitterlinkbutton').innerHTML = 'unlink twitter ->'
@@ -50,7 +50,7 @@ function unlinktwitter() {
             document.getElementById('twitterlinkbutton').onclick = function() {
                 linktwitter()
             }
-            Snackbar.show({text: "Twitter unlinked successfully."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "Twitter unlinked successfully."})
         })
       }).catch(function(error) {
         document.getElementById('erorrModalMsg').innerHTML = error.message + '<br><br>Try logging out of Twitter then logging back in. If this does not work, contact us.'
@@ -76,7 +76,7 @@ function linkgithub() {
 
             }
         }).then(function() {
-            Snackbar.show({text: 'GitHub linked successfully.'})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: 'GitHub linked successfully.'})
             goFunc = "gogithub('" + user.providerData[index].uid + "')"
             getgithubprofile(user.providerData[index].uid).then(function(data) {
                 document.getElementById('githublinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + data.login + '</a>.'
@@ -103,7 +103,7 @@ function unlinkgithub() {
             document.getElementById('githublinkbutton').onclick = function() {
                 linkgithub()
             }
-            Snackbar.show({text: "GitHub unlinked successfully."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "GitHub unlinked successfully."})
         })
       }).catch(function(error) {
         document.getElementById('erorrModalMsg').innerHTML = error.message + '<br><br>Try logging out of GitHub then logging back in. If this does not work, contact us.'
