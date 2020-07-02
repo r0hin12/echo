@@ -101,7 +101,7 @@ function doconnect() {
               db.collection('rtc').doc(string + type).update({
                 sent: 'nothing',
               })
-              recieveda(doc.data().sent)
+              receiveda(doc.data().sent)
             }
 
           }
@@ -116,9 +116,9 @@ function doconnect() {
 
     $('#waitingid').html('Private Room ID: ' + string + type);
     if (type == 'av') {
-      $('#waitingtype').html('Video & Audio Chat');
+      $('#waitingtype').html('Private Room Type: Video & Audio Chat');
     } else {
-      $('#waitingtype').html('Audio Chat');
+      $('#waitingtype').html('Private Room Type: Audio Chat');
     }
 
     if (alphabeticalized[0] == user.uid) {
@@ -345,7 +345,7 @@ function send(sentitem) {
   })
 }
 
-function recieveda(exp, sent) {
+function receiveda(exp, sent) {
   if (sent) {
     console.log('ECP | Playing sent expression: ' + exp);
   }
@@ -354,6 +354,30 @@ function recieveda(exp, sent) {
   }
 
   switch (exp) {
+    case 'eonnect-code-mute':
+        document.getElementById('theirs').muted = true
+        $('#mutethem').removeClass('hidden')
+        $('#mutethem').addClass('zoomIn')
+        $('#mutethem').removeClass('zoomOut')
+      break;
+    case 'eonnect-code-unmute':
+      $('#mutethem').removeClass('hidden')
+      $('#mutethem').addClass('zoomOut')
+      $('#mutethem').removeClass('zoomIn')
+      document.getElementById('theirs').muted = false
+      break;
+    case 'eonnect-code-deafen':
+        $('#deafenthem').removeClass('hidden')
+        $('#deafenthem').addClass('zoomIn')
+        $('#deafenthem').removeClass('zoomOut')
+        document.getElementById('theirs').muted = true
+      break;
+    case 'eonnect-code-undeafen':
+      $('#deafenthem').removeClass('hidden')
+      $('#deafenthem').addClass('zoomOut')
+      $('#deafenthem').removeClass('zoomIn')
+      document.getElementById('theirs').muted = false
+      break;
     case 'heart':
       heartel = document.createElement('div')
       heartel.classList.add('heartbefore')
@@ -372,70 +396,103 @@ function recieveda(exp, sent) {
         }, 1000)
       }, 1000)
       break;
-    case 'eonnect-code-mute':
-        document.getElementById('theirs').muted = true
+    case 'happy':
       break;
-    case 'eonnect-code-unmute':
-      document.getElementById('theirs').muted = false
-      break;
-
     default:
       break;
   }
 }
 
 function sent(exp) {
-  if (exp !== 'eonnect-code-unmute' && exp !== 'eonnect-code-mute') {
+  if (exp !== 'eonnect-code-unmute' && exp !== 'eonnect-code-mute' && exp !== 'eonnect-code-undeafen' && exp !== 'eonnect-code-deafen') {
     console.log('ECP | Sent expression: ' + exp);
     Snackbar.show({showAction: false,pos: 'bottom-center',text: "You sent expression: " + exp.charAt(0).toUpperCase() + exp.slice(1)})
-    recieveda(exp, true)
+    receiveda(exp, true)
   }
 }
 
-function togglemute(hide) {
+function togglemute(hide, fromdeafen) {
+  $('#muteme').removeClass('hidden')
   sessionStorage.setItem('justsent', 'true');
   if (sessionStorage.getItem('muted') == 'true') {
     if (!hide) {
-      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Unmuted"})
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "You have been unmuted."})
+      $('#muteme').addClass('zoomOut')
+      $('#muteme').removeClass('zoomIn')
     }
+    // If unmuting and deafened, undeafen
+    if (sessionStorage.getItem('deafened') == 'true') {
+      toggledeafen('true')
+    }
+
     $('#mutebtn').html('<i class="material-icons animate bounceIn">mic</i>')
-    db.collection('rtc').doc(string + type).update({
-      sent: 'eonnect-code-unmute'
-    }).then(function() {
-      console.log('ECP | Unmuted client'); 
-      sessionStorage.setItem('muted', 'false') 
-    })
+    sessionStorage.setItem('muted', 'false') 
+    if (!fromdeafen) {
+      db.collection('rtc').doc(string + type).update({
+        sent: 'eonnect-code-unmute'
+      }).then(function() {
+        console.log('ECP | Unmuted client'); 
+      })
+    }
   }
   else {
-    $('#mutebtn').html('<i class="material-icons animate bounceIn">mic_off</i>')
     if (!hide) {
-      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Muted"})
+      $('#muteme').addClass('zoomIn')
+      $('#muteme').removeClass('zoomOut')
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "You have been muted."})
     }
-    db.collection('rtc').doc(string + type).update({
-      sent: 'eonnect-code-mute'
-    }).then(function() {
-      console.log('ECP | Muted client'); 
-      sessionStorage.setItem('muted', 'true') 
-    })
+    $('#mutebtn').html('<i class="material-icons animate bounceIn">mic_off</i>')
+    sessionStorage.setItem('muted', 'true') 
+    if (!fromdeafen) {
+      db.collection('rtc').doc(string + type).update({
+        sent: 'eonnect-code-mute'
+      }).then(function() {
+        console.log('ECP | Muted client'); 
+      })
+    }
   }
 }
 
-function toggledeafen() {
+function toggledeafen(hide) {
+  $('#deafenme').removeClass('hidden')
   if (sessionStorage.getItem('deafened') == 'true') {
+    $('#deafenme').addClass('zoomOut')
+    $('#deafenme').removeClass('zoomIn')
     $('#deafenbtn').html('<i class="material-icons animated bounceIn">hearing</i>')
-    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Undeafened"})
+    if (!hide) {
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "You have been undeafened and unmuted."})
+    }
     sessionStorage.setItem('deafened', 'false') 
-    sessionStorage.setItem('muted', 'true') 
     document.getElementById('theirs').muted = false
-    togglemute(true)
+
+    // If muted trying to undeafen, mute them, then toggle mute
+    sessionStorage.setItem('muted', 'true')
+    togglemute(true, true)
+    $('#muteme').addClass('zoomOut')
+    $('#muteme').removeClass('zoomIn')
+
+    sessionStorage.setItem('justsent', 'true');
+    db.collection('rtc').doc(string + type).update({
+      sent: 'eonnect-code-undeafen'
+    })
   }
   else {
+    $('#deafenme').addClass('zoomIn')
+    $('#deafenme').removeClass('zoomOut')
     $('#deafenbtn').html('<i class="material-icons animated bounceIn">hearing_disabled</i>')
-    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Deafened"})
+    if (!hide) {
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "You have been deafened and muted."})
+    }
     sessionStorage.setItem('deafened', 'true') 
-    sessionStorage.setItem('muted', 'false') 
     document.getElementById('theirs').muted = true
-    togglemute(true)
 
+    // If unmuted trying to deafen, mute 
+    if (sessionStorage.getItem('muted') == 'false') {
+      togglemute(true, true)
+    }
+    sessionStorage.setItem('justsent', 'true');
+    db.collection('rtc').doc(string + type).update({
+      sent: 'eonnect-code-deafen'
+    })
   }
 }

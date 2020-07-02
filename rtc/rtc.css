@@ -52,7 +52,7 @@ button:focus {
 }
 
 #unconnected {
-    position: absolute;
+    position: fixed;
     width: 100%;
     top: 0px;
     left: 0px;
@@ -229,4 +229,47 @@ video {
     position: absolute;
     bottom: 12px;
     left: 12px;
+}
+
+.iconactive {
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    padding: 12px;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+.inline {
+    display: inline-block !important;
+    width: 20px;
+}
+
+.muteglyph1 {
+    position: absolute;
+    left: calc(50% + 80px);
+    top: calc(50% + 80px);
+    transform: translate(-50%,-50%);
+
+    background-color: var(--bg-tertiary);
+    padding-top: 8px;
+    border-radius: 50%;
+    font-size: 24px;
+    padding-bottom: 8px;
+    z-index: 20;
+}
+
+.muteglyph2 {
+    position: absolute;
+    left: calc(50% + 80px);
+    top: calc(50% + 80px);
+    transform: translate(-50%,-50%);
+
+    background-color: var(--bg-tertiary);
+    padding-top: 8px;
+    border-radius: 50%;
+    font-size: 24px;
+    padding-bottom: 8px;
+    z-index: 21;
 }

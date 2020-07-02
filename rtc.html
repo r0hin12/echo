@@ -91,6 +91,22 @@
     </div>
   </div>
 
+  <div id="conInfoModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <center>
+          <h3>Connection Info</h3>
+        </center>
+        <br>
+        <p id="waitingid"></p>
+        <p id="waitingtype"></p>
+        <center>
+          <button data-dismiss="modal" class="eon-text inline">close</button>
+        </center>
+      </div>
+    </div>
+  </div>
+
   <div id="cameramodal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -108,7 +124,9 @@
         </div>
 
         <br /><br />
-        <button data-dismiss="modal" class="eon-text">close</button>
+        <center>
+          <button data-dismiss="modal" class="eon-text inline">close</button>
+        </center>
       </div>
     </div>
   </div>
@@ -127,54 +145,11 @@
         <h2>Connecting...</h2>
       </div>
       <div id="waitingtext" class="hidden animated fadeInUp">
+        <h1><i class="material-icons iconactive animated pulse infinite">access_time</i></h1>
+        <br>
         <h2>Waiting for peer...</h2>
-        <p id="waitingid"></p>
-        <p id="waitingtype"></p>
-        <figure>
-          <div class="figure-content">
-            <div class="figure-grid">
-              <div class="background area-top-left">
-                <div class="color-slide"></div>
-              </div>
-              <div class="background area-top-right">
-                <div class="color-slide"></div>
-              </div>
-              <div class="background area-bottom-left">
-                <div class="color-slide"></div>
-              </div>
-              <div class="background area-bottom-right">
-                <div class="color-slide"></div>
-              </div>
-              <div class="back-circle area-left">
-                <div class="circle"></div>
-              </div>
-              <div class="back-circle area-right">
-                <div class="circle"></div>
-              </div>
-              <div class="middle-circle area-top">
-                <div class="circle shadow">
-                  <div class="dot glow"></div>
-                </div>
-              </div>
-              <div class="middle-circle area-bottom">
-                <div class="circle shadow">
-                  <div class="dot glow"></div>
-                </div>
-              </div>
-              <div class="front-circle area-top">
-                <div class="circle shadow">
-                  <div class="dot glow"></div>
-                </div>
-              </div>
-              <div class="front-circle area-bottom">
-                <div class="circle shadow">
-                  <div class="dot glow"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <br />
-        </figure>
+        <br>
+        <a data-target="#conInfoModal" data-toggle="modal" class="eon-text">connection info</a>
       </div>
     </center>
     <br /><br />
@@ -193,10 +168,12 @@
         <div class="col-5">
           <center>
             <div class="animated pulse infinite slower">
-              <img src="" class="userimg animated fadeInUp hidden" alt="" />
-              <br>
-              <h2 class="usertext">Name</h2>
+              <img src="" class="userimg animated fadeInUp hidden shadow-lg" alt="" />
+              <div id="muteme" class="muteglyph1 animated zoomIn hidden"><i class="material-icons iconactive">mic_off</i></div>
+              <div id="deafenme" class="muteglyph2 animated zoomIn hidden"><i class="material-icons iconactive">hearing_disabled</i></div>
             </div>
+            <br>
+            <h2 class="usertext">Name</h2>
           </center>
         </div>
         <div class="col-2">
@@ -208,8 +185,10 @@
 
             <br><br><br>
 
-            <button id="mutebtn" onclick="togglemute()" class="eon-contained iconbtn"><i class="material-icons">mic</i></button>
-            <button id="deafenbtn" onclick="toggledeafen()" class="eon-contained iconbtn"><i class="material-icons">hearing</i></button>
+            <button id="mutebtn" onclick="togglemute()" class="eon-contained iconbtn"><i
+                class="material-icons">mic</i></button>
+            <button id="deafenbtn" onclick="toggledeafen()" class="eon-contained iconbtn"><i
+                class="material-icons">hearing</i></button>
 
             <br><br><br><br>
             <button data-target="#cameramodal" data-toggle="modal" id="cameorabtn" class="eon-contained">
@@ -220,10 +199,12 @@
         <div class="col-5">
           <center>
             <div class="animated pulse infinite slower">
-              <img src="" class="userimg animated fadeInUp hidden" alt="" />
-              <br>
-              <h2 class="usertext">Name</h2>
+              <img src="" class="userimg animated fadeInUp hidden shadow-lg" alt="" />
+              <div id="mutethem" class="muteglyph1 animated zoomIn hidden"><i class="material-icons iconactive">mic_off</i></div>
+              <div id="deafenthem" class="muteglyph2 animated zoomIn hidden"><i class="material-icons iconactive">hearing_disabled</i></div>
             </div>
+            <br>
+            <h2 class="usertext">Name</h2>
           </center>
         </div>
       </div>
