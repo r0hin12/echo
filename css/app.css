@@ -55,6 +55,7 @@ custom-control-label::before {
 
 #sidebar {
     width: 300px;
+    height: 100%;
     padding-right: 25px;
     padding-top: 16px;
     position: fixed;
@@ -1370,3 +1371,8 @@ custom-control-label::before {
     top: 50px;
 }
 
+.supportbtn {
+    position: absolute !important;
+    bottom: 12px;
+    left: 12px;
+}

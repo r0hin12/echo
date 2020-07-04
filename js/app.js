@@ -360,6 +360,15 @@ function changebio() {
 function confirmchangemeil() {
     toggleloader()
     db.collection('users').doc(user.uid).get().then(function(doc) {
+        if (doc.data().emailchange == undefined) {
+            var d = new Date();
+            d.setDate(d.getDate() - 2);
+            db.collection('users').doc(user.uid).update({
+               emailchange: d
+            }).then(function() {
+                confirmchangemeil()
+            })
+        }
         firebasedate = doc.data().emailchange.toDate()
         currentdate = new Date()
         var diffMinutes = parseInt((currentdate - firebasedate) / (1000 * 60), 10); 
