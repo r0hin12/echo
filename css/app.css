@@ -1086,6 +1086,8 @@ custom-control-label::before {
     padding-right: 34px;
     padding-bottom: 25px;
     height: 113px;
+    z-index: 20; 
+    position: relative;
 }
 
 .directfooter {
@@ -1102,6 +1104,7 @@ custom-control-label::before {
 .divider1 {
     margin: 0px !important;
     width: calc(100% - 50px);
+    z-index: 0;
 }
 
 .divider2 {
@@ -1113,6 +1116,10 @@ custom-control-label::before {
     width: 100%;
     height: 100%;
     padding: 34px;
+    overflow: scroll;
+
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 #messagecontent {

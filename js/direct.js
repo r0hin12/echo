@@ -2,7 +2,9 @@ db = firebase.firestore()
 prevuid = 'na'
 abritaryindex = 0
 abritarysecondindex = 0
+infScrollEnabled = false
 sessionStorage.setItem('itwasmesoskip', 'false')
+sessionStorage.setItem('active_dm', 'false')
 
 interval2 = window.setInterval(function () {
     if (typeof (user) != "undefined" && typeof (user) != null) {
@@ -336,6 +338,9 @@ function BUILD_DIRECT_VARIABLES(uid) {
 
 function BUILD_DIRECT(uid, btnel) {
 
+    sessionStorage.setItem('active_dm', uid)
+    infScroll_enable()
+
     document.getElementById('newdmmsg').click()
     document.getElementById('unselectedconten').classList.add('animated')
     document.getElementById('unselectedconten').classList.add('fadeOutUp')
@@ -422,13 +427,15 @@ function BUILD_DIRECT(uid, btnel) {
             string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
             stringvar = this["marker" + string]
     
+            this["messagesarray" + uid] = []
             if ($('#' + string + 'chatcontainer').is(':empty')){
                 // If its empty, build messages
                 for (let i = 0; i < stringvar.length; i++) {
-                    BUILD_MESSAGE(doc.data().name, stringvar[i], string)
+                    var item = {name: doc.data().name, stringvar: stringvar[i], string: string}
+                    this["messagesarray" + uid].push(item)
                 }
-        
-                ScrollBottom()
+                this['messagesarray' + uid].reverse()
+                buildInfScroll()
             }
         })
     }
@@ -510,6 +517,9 @@ function BUILD_DIRECT(uid, btnel) {
         chatcontainer.classList.add('chatcontainer')
         chatcontainer.classList.add('animated')
         chatcontainer.classList.add('fadeIn')
+        chatcontainer.onscroll = function() {
+            loadScrolling(string)
+        }
         chatcontainer.id = string + 'chatcontainer'
 
         document.getElementById('messagecontent').appendChild(chatcontainer)
@@ -576,7 +586,7 @@ function ADD_MESSAGE(uid) {
 
 }
 
-function BUILD_MESSAGE(name, msg, string, anim) {
+function BUILD_MESSAGE(name, msg, string, anim, reverse) {
     p = document.createElement('div')
 
     if (anim == true) {
@@ -658,26 +668,27 @@ function BUILD_MESSAGE(name, msg, string, anim) {
         p.innerHTML = '<div class="' + textContainer + '">' + msgcontent + '</div>'
 
     if (prevuid == msg.sender) {
-        if (msg.sender == user.uid) {
-            try {
-                $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainerclient').last().get(0).innerHTML += '<br>' + msgcontent   
-            } catch (error) {
-                
+        try {
+            if (reverse) {
+                $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainerclient').first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainerclient').first().get(0).innerHTML
             }
-        }
-        else {
-            try {
-                $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainerother').last().get(0).innerHTML += '<br>' + msgcontent   
-            } catch (error) {
-                
+            else {
+                $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainerclient').last().get(0).innerHTML += '<br>' + msgcontent   
             }
+            
         }
-
+        catch { }
     }
 
     else {
-        document.getElementById(string + 'chatcontainer').appendChild(p)
-        document.getElementById(string + 'chatcontainer').appendChild(document.createElement('br'))
+        if (reverse) {
+            $('#' + string + 'chatcontainer').append(p)
+            document.getElementById(string + 'chatcontainer').append(document.createElement('br'))
+        }
+        else {
+            $('#' + string + 'chatcontainer').prepend(p)
+            document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
+        }
         addWaves()
     }
 
@@ -989,4 +1000,54 @@ function approvefollow(id) {
         }
     }, 1000)
 
+}
+
+function infScroll_enable() {
+    if (infScrollEnabled == true) {
+        return;
+    }
+
+    window.infiniteScrollCount = 24
+    infScrollEnabled = true
+    activedm = sessionStorage.getItem('active_dm')
+    this['currentScrollCount' + activedm] = 0
+}
+
+function buildInfScroll() {
+    activedm = sessionStorage.getItem('active_dm')
+
+    // If currentcount is NaN, disable scroll bug happened
+    if (isNaN(this['currentScrollCount' + activedm])) {
+        this['currentScrollCount' + activedm] = 0
+    }
+
+    // array is copy of array
+    // this['currentScrollCount' + activedm] is number of postsalready printed
+    array = this["messagesarray" + activedm]
+
+    // delete first posts from temporary array that already printed
+    for (let i = 0; i < this['currentScrollCount' + activedm]; i++) {
+        array.shift()
+    }
+
+    // remove all posts except for next "infintie scroll count" amount
+    array = array.slice(0, infiniteScrollCount);
+    
+    // build whats left and add it to active dm
+    for (let i = 0; i < array.length; i++) {
+        BUILD_MESSAGE(array[i].name, array[i].stringvar,array[i].string, false, true)
+    }
+
+    // update current scroll count
+    this['currentScrollCount' + activedm] = this['currentScrollCount' + activedm] + infiniteScrollCount
+
+}
+
+//BUILD_MESSAGE(doc.data().name, stringvar[i], string)
+//ScrollBottom()
+
+function loadScrolling(id) {
+    if (document.getElementById(id + 'chatcontainer').scrollTop < 12) {
+        buildInfScroll()
+    }
 }

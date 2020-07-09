@@ -794,10 +794,20 @@
                             <ul class="navbar-nav mr-auto">
                             </ul>
 
-                            <button id="direct-callbtn" class="eon-text navbtnicon animated fadeInUp delay1"><i
+                            <div class="dropdown dropdownmanagecontainer">
+                                <button aria-expanded="false" aria-haspopup="true" class="eon-text navbtnicon animated fadeInUp delay1"
+                                    data-toggle="dropdown" type="button"><i
                                     class="material-icons">phone</i></button>
-                            <button id="direct-videobtn" class="eon-text navbtnicon animated fadeInUp delay2"><i
-                                    class="material-icons">video_call</i></button>
+                                <div aria-labelledby="dropdownMenuButton1"
+                                    class="dropdown-menu menu accmanagedropdown">
+                                    <center>
+                                        <button id="direct-callbtn" class="eon-text navbtnicon animated zoomIn"><i
+                                            class="material-icons">phone</i></button>
+                                    <button id="direct-videobtn" class="eon-text navbtnicon animated zoomIn delay1"><i
+                                            class="material-icons">video_call</i></button>
+                                    </center>
+                                </div>
+                            </div>
                             <button id="direct-flagbtn" class="eon-text navbtnicon animated fadeInUp delay3"><i
                                     class="material-icons">flag</i></button>
                             <button id="direct-infobtn" class="eon-text navbtnicon animated fadeInUp delay4"><i
