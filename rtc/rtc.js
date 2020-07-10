@@ -32,7 +32,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 function doconnect() {
-  window.peer = new Peer();
+  window.peer = new Peer({host: '34.75.0.77', port: 3000, secure: false});
   peer.on('open', function (id) {
     console.log('ECP | Opened connection with ID: ' + id);
     console.log('------ STATUS EVENTS BELOW --------');
