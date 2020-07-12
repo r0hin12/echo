@@ -378,27 +378,8 @@ function receiveda(exp, sent) {
       $('#deafenthem').removeClass('zoomIn')
       document.getElementById('theirs').muted = false
       break;
-    case 'heart':
-      heartel = document.createElement('div')
-      heartel.classList.add('heartbefore')
-      heartel.classList.add('centered')
-      heartel.innerHTML = '<i class="material-icons animated heartBeat infinite">favorite</i>'
-      heartel.id = 'heartel'
-      document.getElementById('body').appendChild(heartel)
-      window.setTimeout(function() {
-        document.getElementById('heartel').classList.add('heartafter')
-      }, 100)
-      window.setTimeout(function() {
-        document.getElementById('heartel').classList.add('animated')
-        document.getElementById('heartel').classList.add('bounceOut')
-        window.setTimeout(function() {
-          $('#heartel').remove()
-        }, 1000)
-      }, 1000)
-      break;
-    case 'happy':
-      break;
     default:
+      EXPRESSION_Default(exp, sent)
       break;
   }
 }
