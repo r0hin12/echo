@@ -375,6 +375,9 @@ function BUILD_DIRECT(uid, btnel) {
         db.collection('users').doc(uid).get().then(function(doc) {
             this["dmcache"+uid] = doc.data()
             $('.topbarimg').attr('src', doc.data().url)
+            document.getElementById("topbarimg").onclick = function() {
+                usermodal(uid)
+            }
             $('#navbarname').html(doc.data().name)
     
             document.getElementById('refreshstatusbtn').onclick = function() {
@@ -435,6 +438,7 @@ function BUILD_DIRECT(uid, btnel) {
                     this["messagesarray" + uid].push(item)
                 }
                 this['messagesarray' + uid].reverse()
+                $("#info2c").html(this["messagesarray" + uid].length)
                 buildInfScroll()
             }
         })
@@ -442,6 +446,9 @@ function BUILD_DIRECT(uid, btnel) {
     else {
 
         $('.topbarimg').attr('src', this["dmcache"+uid].url)
+        document.getElementById("topbarimg").onclick = function() {
+            usermodal(uid)
+        }
         $('#navbarname').html(this["dmcache"+uid].name)
 
         document.getElementById('refreshstatusbtn').onclick = function() {
@@ -529,11 +536,25 @@ function BUILD_DIRECT(uid, btnel) {
     document.getElementById('direct-callbtn').onclick = function() {
         window.open('rtc.html?type=a&target=' + uid);
         sendCallMsg(uid)
-
     }
+
     document.getElementById('direct-videobtn').onclick = function() {
         window.open('rtc.html?type=av&target=' + uid)
         sendVideoMsg(uid)
+    }
+
+    document.getElementById('direct-flagbtn').onclick = function() {
+        reportUser(uid)
+    }
+
+    document.getElementById('direct-infobtn').onclick = function() {
+        userInfo(uid)
+    }
+
+    $("#info2a").html(uid)
+    $("#info2b").html(string)
+    document.getElementById('purgefrominfo').onclick = function() {
+        prepurgefunction(uid)
     }
 
 }
@@ -1050,4 +1071,12 @@ function loadScrolling(id) {
     if (document.getElementById(id + 'chatcontainer').scrollTop < 12) {
         buildInfScroll()
     }
+}
+
+function userInfo(uid) {
+    $('#conversationInfo').modal('toggle')
+}
+
+function prepurgefunction(uid) {
+    console.log('Purge function _ ' + uid);
 }

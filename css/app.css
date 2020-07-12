@@ -1077,7 +1077,7 @@ custom-control-label::before {
 
 .dmdetails {
     color: var(--content-primary);
-    padding-left: 75px;
+    margin-left: 85px;
 }
 
 .basicpadding {
@@ -1382,4 +1382,12 @@ custom-control-label::before {
     position: absolute !important;
     bottom: 12px;
     left: 12px;
+}
+
+.deletebtnicon {
+    width: 35px;
+}
+
+#returntouser {
+    margin-right: 8px;
 }

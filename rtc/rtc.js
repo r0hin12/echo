@@ -477,3 +477,13 @@ function toggledeafen(hide) {
     })
   }
 }
+
+function getinfo() {
+  $("#infoModal").modal('toggle')
+  $('#roomid').html(string)
+  if (type == 'a') {
+    $('#roomtype').html('Audio Only')
+    return;
+  }
+  $('#roomtype').html('Video & Audio')
+}

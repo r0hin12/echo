@@ -130,6 +130,25 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade bd-example-modal-lg" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <center>
+                    <h2>Info</h2>
+                    <br>
+                  <h4>Room ID: <small id="roomid">a</small> running on <small id="roomtype">a</small></h4>
+                  <br><br>
+                    <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+
+
   <!-- ===========================--] Content [=================================== -->
 
   <div class="bg">
@@ -231,7 +250,7 @@
             </center>
           </div>
         </div>
-        <button class="eon-text iconbtn2">
+        <button onclick="getinfo()" class="eon-text iconbtn2">
           <i class="material-icons">info</i>
         </button>
         <br>

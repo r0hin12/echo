@@ -201,7 +201,7 @@ async function addcontent(name, data, time) {
         a = document.createElement('div')
         a.classList.add('content')
         likeFunc = "like('" + name + "')"
-        commentFunc = "loadComments('" + name + "')"
+        commentFunc = "loadComments('" + name + "', '" + data.uid + "')"
         infoFunc = "info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
@@ -229,7 +229,7 @@ async function addcontent(name, data, time) {
         if (sessionStorage.getItem('viewPost') == name) {
             sessionStorage.setItem('skiponce', 'true')
             sessionStorage.setItem('skiponce3', 'true')
-            loadComments(name)
+            loadComments(name, data.uid)
         }
 
         x = parseInt(sessionStorage.getItem('count'), 10);
@@ -270,7 +270,7 @@ async function addcontentrelevant(name, data, time) {
         a = document.createElement('div')
         a.classList.add('content')
         likeFunc = "like('" + name + "')"
-        commentFunc = "loadComments('" + name + "')"
+        commentFunc = "loadComments('" + name + "', '" + data.uid + "')"
         infoFunc = "info('" + name + "')"
         fullFunc = "fullscreenrelevant('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
@@ -419,7 +419,13 @@ function fullscreenrelevant(id) {
     }
 }
 
-function loadComments(id) {
+function loadComments(id, poster) {
+    document.getElementById('returntouser').onclick = function() {
+        window.setTimeout(function() {
+            usermodal(poster)
+        }, 1000)
+    }
+
     document.getElementById('readonlychip').setAttribute('style', 'display:none !important');
     unnewcomment()
     document.getElementById('addcommentbtn').setAttribute('style', 'display:none !important');
@@ -787,7 +793,7 @@ async function addstuffuser(name, data, time, last) {
         a = document.createElement('div')
         a.classList.add('content')
         likeFunc = "likeuser('" + name + "')"
-        commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "')"
+        commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "', '" + data.data.uid + "')"
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
 
@@ -1132,7 +1138,7 @@ function info(id) {
 
         document.getElementById('commentbtnfrominfo').onclick = function () {
             sessionStorage.setItem('tocomments', true)
-            loadComments(id)
+            loadComments(id, doc.data()[id].data.uid)
         }
         document.getElementById('userbtnfrominfo').onclick = function () {
             sessionStorage.setItem('touser', true)
@@ -1186,12 +1192,9 @@ function info(id) {
 }
 
 function deletepost(id, credentials) {
-
     if (credentials !== user.uid) {
         error('Suspicious activity detected. Your account has been flagged.')
         reportUser(user.uid)
-
-
     }
     else {
 
@@ -1295,6 +1298,7 @@ function reportComment(id, index) {
 }
 
 function reportUser(id) {
+    alert('Incomplete report function. \n\n\nTarget: ' + id)
     console.log('report user function??');
 }
 
