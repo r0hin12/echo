@@ -841,6 +841,15 @@ async function usermodal(uid) {
             useruid = doc.data().uid
             document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
             document.getElementById('usermodalpfp').src = doc.data().url
+
+            if (doc.data().gradient.a == undefined || doc.data().gradient.b == undefined) {
+                document.getElementById('usermodalpfp').classList.remove('customgradientprofileimg')
+            }
+            else {
+                document.getElementById('usermodalpfp').classList.add('customgradientprofileimg')
+                document.getElementById('dynamicstyle3').innerHTML = '.customgradientprofileimg {background-image: linear-gradient(white, white), linear-gradient(45deg, #' + doc.data().gradient.a + ', #' + doc.data().gradient.b + ') !important}'
+            }
+
             if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") {
                 document.getElementById('usermodalbio').innerHTML = ""
              }

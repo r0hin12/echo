@@ -39,6 +39,8 @@
     <style id="togglegrid"></style>
     <!-- Dynamic Style #2-->
     <style id="animatedsidebar"></style>
+    <!-- Dynamic Style #3-->
+    <style id="dynamicstyle3"></style>
 
 </head>
 
@@ -1016,8 +1018,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <br>
+                            <h4>Gradient Personalization</h4>
+                            <br>
+                            <div class="card animated fadeIn block">
+                                <div class="card-body">
+                                    <center>
+                                        <button data-toggle="popover" title="Gradient Personalization" data-content="Personalize your profile with a custom gradient! This feature is in beta and may be a premium upgrade later." class="eon-text gradicon">what is this?</button>
+                                        
+                                        <div class="floating-label">
+                                            <label for="gradientcode">Enter Gradient Code</label>
+                                            <input class="form-control" id="gradientcode" placeholder="Example: 'e23333-fcad45'" type="text">
+                                        </div>
+                                        
+                                        <br>
+                                        <button onclick="updategradient()" class="eon-contained">update</button>
+                                    </center>
+                                </div>
+                            </div>
+                            <br><br><br>
+
                         </div>
+
                         <div class="col-sm">
+                            <br>
                             <h4>Danger Zone</h4>
                             <br>
                             <div class="card animated fadeIn block">
@@ -1042,7 +1066,6 @@
                             </div>
                             <br><br><br>
                         </div>
-
                     </div>
 
                 </div>

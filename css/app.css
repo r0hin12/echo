@@ -63,8 +63,6 @@ custom-control-label::before {
 }
 
 .avatar {
-    width: 100px;
-    height: 100px;
     border: 3px solid transparent;
     border-radius: 80px;
     background-image: linear-gradient(white, white), linear-gradient(45deg, var(--eon-primary), var(--eon-secondary));
@@ -614,6 +612,14 @@ custom-control-label::before {
     height: 130px;
     border-radius: 150px;
     object-fit: cover;
+
+    border: 6px solid transparent;
+    border-radius: 80px;
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    object-fit: cover;
+    -webkit-border-radius: 500px;
+    -moz-border-radius: 500px;
 }
 
 .usershell {

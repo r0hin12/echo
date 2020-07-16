@@ -524,3 +524,26 @@ function changepfp() {
 
     $('#newpicel').remove()
 }
+
+function updategradient() {
+    code = document.getElementById("gradientcode").value
+
+    if (code.length == 13 && code[6] == '-') {
+        console.log('Gradient code is properly formatted...');
+        document.getElementById("gradientcode").value = ''
+
+        db.collection('users').doc(user.uid).update({
+            gradient: {
+                "a": code.split("-")[0],
+                "b": code.split("-")[1],
+            }
+        }).then(function() {
+            sessionStorage.removeItem('currentlyviewinguser')
+            Snackbar.show({text: "Gradient code updated. This may take a few minutes to update."})
+        })
+
+    }
+    else {
+        error('Please use the following format: <br><br>"e23333-fcad45"')
+    }
+}
