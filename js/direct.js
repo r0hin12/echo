@@ -833,6 +833,11 @@ function ScrollBottom() {
     objDiv.scrollTop = objDiv.scrollHeight;
 }
 
+function ScrollTop() {
+    var objDiv = document.getElementById("messagecontent");
+    objDiv.scrollTop = 0;
+}
+
 function updateStatus() {
     db.collection('users').doc(user.uid).update({
         direct_activity: firebase.firestore.FieldValue.serverTimestamp()
@@ -1122,6 +1127,7 @@ function showEonnectNews() {
             document.getElementById('eonnect-dm-latest').innerHTML = document.getElementById('eonnect-dm-latest').innerHTML + newupdatehtml
         }
     });
+    ScrollTop()
 }
 
 $(window).on('resize', fixdisplayheight());
