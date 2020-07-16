@@ -242,6 +242,11 @@ function refreshactive() {
 }
 
 function loadactive() {
+    if (sessionStorage.getItem('currenDM') == 'eonnect-news') {
+        showEonnectNews()
+        $('#unselectedconten').addClass('fadeOutUp')
+    }
+
     db.collection('users').doc(user.uid).get().then(function(doc) {
         db.collection('app').doc("verified").get().then(function(verifieddoc) {
             arr = doc.data().direct_active
@@ -273,10 +278,10 @@ function loadactive() {
                     window.setTimeout(function() {
                         document.getElementById(element + 'chatsidebarboxel').click()
                     }, 1500)
-                    
                 }
                 
             }
+            fixdisplayheight()
         })
     })
 }
@@ -341,9 +346,16 @@ function BUILD_DIRECT(uid, btnel) {
     sessionStorage.setItem('active_dm', uid)
     infScroll_enable()
 
+    $('#changelogbamstyle').html('')
     document.getElementById('newdmmsg').click()
-    document.getElementById('unselectedconten').classList.add('animated')
     document.getElementById('unselectedconten').classList.add('fadeOutUp')
+
+    $('#chatnav').removeClass('fadeOutUp')
+    $('#chatnav').addClass('fadeIn')
+    $('#divider1').removeClass('fadeOutUp')
+    $('#divider1').addClass('zoomIn')
+    $('#directfooter').addClass('fadeInUp')
+    $('#directfooter').removeClass('fadeOutDown')
 
     alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
@@ -1080,3 +1092,36 @@ function userInfo(uid) {
 function prepurgefunction(uid) {
     console.log('Purge function _ ' + uid);
 }
+
+function showEonnectNews() {
+    sessionStorage.setItem('active_dm', 'eonnectnews')
+
+    $('.messagelistboxactive').removeClass('messagelistboxactive')
+    $('#eonnectNewschatsidebarboxel').addClass('messagelistboxactive')
+    $('.chatcontainer').addClass('hidden')   
+
+    $('#eonnectNewsContent').removeClass('hidden')
+    $('#changelogbamstyle').html('#messagecontent {height: calc(100%) !important; top: 0px; position: absolute; overflow-y: scroll}')
+
+    $('#chatnav').removeClass('fadeIn')
+    $('#chatnav').addClass('fadeOutUp')
+    $('#divider1').removeClass('zoomIn')
+    $('#divider1').addClass('fadeOutUp')
+    $('#directfooter').removeClass('fadeInUp')
+    $('#directfooter').addClass('fadeOutDown')
+    history.pushState(null, '', '/eonnect/app.html?tab=inbox&dm=eonnect-news');
+
+    if ($('#eonnect-dm-version').html() !== 'loading') {
+        return false;
+    }
+    // Have to build
+    $.getJSON("https://gitlab.com/api/v4/projects/16896350/repository/commits", function( data ) {
+        $('#eonnect-dm-version').html(data[0].title)
+        for (let i = 0; i < data.length; i++) {
+            newupdatehtml = '<div class="card updatecard"><div class="card-body"><p><b>' + data[i].title + '</b> commited by ' + data[i].author_name + '</p><div class="commentmsg">' + data[i].message.split(data[i].title)[1].replace(new RegExp("-", "g"), '<br>').replace(new RegExp("Eonnect 🔥", "g"), "<br><br><i>Eonnect 🔥</i>") + '</div><br><p>' + data[i].authored_date + ' | <a href="' + data[i].web_url + '" target="_blank">view commit</a></p></div></div>'
+            document.getElementById('eonnect-dm-latest').innerHTML = document.getElementById('eonnect-dm-latest').innerHTML + newupdatehtml
+        }
+    });
+}
+
+$(window).on('resize', fixdisplayheight());

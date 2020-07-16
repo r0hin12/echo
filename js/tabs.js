@@ -98,6 +98,9 @@ function tabe(tab) {
                         loaddirectclick()
                     }
                 }, 200);
+                window.setTimeout(function() {
+                    fixdisplayheight()
+                }, 800)
                 break;
             case "account":
                 //

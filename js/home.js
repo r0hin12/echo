@@ -194,10 +194,6 @@ async function addcontent(name, data, time) {
     var storageRef = firebase.storage().ref();
     storageRef.child('users/' + data.uid + '/' + data.file).getDownloadURL().then(function (url) {
 
-        db.collection('users').doc(data.uid).get().then(function (doc) {
-            pfpurl = doc.url
-        })
-
         a = document.createElement('div')
         a.classList.add('content')
         likeFunc = "like('" + name + "')"
@@ -262,10 +258,6 @@ async function addcontent(name, data, time) {
 async function addcontentrelevant(name, data, time) {
     var storageRef = firebase.storage().ref();
     storageRef.child('users/' + data.uid + '/' + data.file).getDownloadURL().then(function (url) {
-
-        db.collection('users').doc(data.uid).get().then(function (doc) {
-            pfpurl = doc.url
-        })
 
         a = document.createElement('div')
         a.classList.add('content')
@@ -842,7 +834,7 @@ async function usermodal(uid) {
             document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
             document.getElementById('usermodalpfp').src = doc.data().url
 
-            if (doc.data().gradient.a == undefined || doc.data().gradient.b == undefined) {
+            if (doc.data().gradient == undefined) {
                 document.getElementById('usermodalpfp').classList.remove('customgradientprofileimg')
             }
             else {
@@ -1417,8 +1409,15 @@ function addpfprelevant(uid, docid) {
     db.collection('users').doc(uid).get().then(function (doc) {
         document.getElementById(docid + 'pfpelurlrelevant').src = doc.data().url
         $('#' + docid + "pfpelurlrelevant").attr('data-original-title', 'View User').tooltip('show').tooltip('hide')
+        
+        if (doc.data().gradient == undefined) {
+            gradientstyle = ''
+        }
+        else {
+            gradientstyle = 'linear-gradient(white, white), linear-gradient(45deg, #' + doc.data().gradient.a + ', #' + doc.data().gradient.b + ')'
+        }
 
-
+        $('#' + docid + 'pfpelurlrelevant').css('background-image', gradientstyle)
     })
 }
 
@@ -1427,7 +1426,14 @@ function addpfp(uid, docid) {
         document.getElementById(docid + 'pfpelurl').src = doc.data().url
         $('#' + docid + "pfpelurl").attr('data-original-title', 'View User').tooltip('show').tooltip('hide')
 
+        if (doc.data().gradient == undefined) {
+            gradientstyle = ''
+        }
+        else {
+            gradientstyle = 'linear-gradient(white, white), linear-gradient(45deg, #' + doc.data().gradient.a + ', #' + doc.data().gradient.b + ')'
+        }
 
+        $('#' + docid + 'pfpelurl').css('background-image', gradientstyle)
     })
 }
 

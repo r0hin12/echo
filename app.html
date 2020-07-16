@@ -41,6 +41,11 @@
     <style id="animatedsidebar"></style>
     <!-- Dynamic Style #3-->
     <style id="dynamicstyle3"></style>
+    <!-- Dynamic Style #4-->
+    <style id="messageliststyle"></style>
+    <!-- Dynamic Style #5-->
+    <style id="changelogbamstyle"></style>
+
 
 </head>
 
@@ -675,8 +680,6 @@
                 </a>
             </div>
 
-            <a class='supportbtn eon-text' target="_blank" href="support.html">Get Support <i class="material-icons">open_in_new</i></a>
-
         </div>
 
         <div id="expand" class="eonnect-main-unexpanded">
@@ -758,70 +761,81 @@
 
 
                     <div class="inboxsidebar">
-                        <div class="inboxsidebarpadding">
-                            <div class="searchbarmsg floating-label textfield-box">
-                                <label for="msgsearch">Search</label>
-                                <input class="form-control" id="msgsearch" type="text">
+                        <div id="calculationheight1">
+                            <div class="inboxsidebarpadding">
+                                <div class="searchbarmsg floating-label textfield-box">
+                                    <label for="msgsearch">Search</label>
+                                    <input class="form-control" id="msgsearch" type="text">
+                                </div>
+                                <button data-toggle="modal" data-target="#newdmmodal" class="eon-text centeredy refreshbtn adddmbtn">
+                                    <i class="material-icons">add</i>
+                                </button>
                             </div>
-                            <button data-toggle="modal" data-target="#newdmmodal"
-                                class="eon-text centeredy refreshbtn adddmbtn"><i
-                                    class="material-icons">add</i></button>
-                        </div>
-
-                        <br>
-
-                        <div class="inboxsidebarpadding">
-                            <div class="list-group" id="accordionOne">
-                                <div class="expansion-panel list-group-item">
-                                    <a id="clickybtnshowdmreq" aria-controls="pendingdm" aria-expanded="false"
-                                        class="expansion-panel-toggler collapsed" data-toggle="collapse"
-                                        href="#pendingdm">
-                                        DM Requests <span id="dmreqstatus"
-                                            class="badge badge-pill badge-secondary animated infinite slower">0</span>
-
-                                        <div class="expansion-panel-icon ml-3 text-black-secondary">
-                                            <i class="collapsed-show material-icons">keyboard_arrow_down</i>
-                                            <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                            <br>
+                            <div class="inboxsidebarpadding">
+                                <div class="list-group" id="accordionOne">
+                                    <div class="expansion-panel list-group-item">
+                                        <a id="clickybtnshowdmreq" aria-controls="pendingdm" aria-expanded="false"
+                                            class="expansion-panel-toggler collapsed" data-toggle="collapse"
+                                            href="#pendingdm">
+                                            DM Requests <span id="dmreqstatus"
+                                                class="badge badge-pill badge-secondary animated infinite slower">0</span>
+    
+                                            <div class="expansion-panel-icon ml-3 text-black-secondary">
+                                                <i class="collapsed-show material-icons">keyboard_arrow_down</i>
+                                                <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                                            </div>
+                                        </a>
+                                        <div class="collapse" data-parent="#accordionOne" id="pendingdm">
+                                            <div class="expansion-panel-body">
+                                                <center id="dmreqlist">
+                                                    <button
+                                                        onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpending()"
+                                                        id="skiddpypo" class="eon-text refreshbtn hidden"><i
+                                                            class="material-icons">refresh</i></button>
+                                                </center>
+                                            </div>
                                         </div>
-                                    </a>
-                                    <div class="collapse" data-parent="#accordionOne" id="pendingdm">
-                                        <div class="expansion-panel-body">
-                                            <center id="dmreqlist">
-                                                <button
-                                                    onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpending()"
-                                                    id="skiddpypo" class="eon-text refreshbtn hidden"><i
-                                                        class="material-icons">refresh</i></button>
-                                            </center>
+                                    </div>
+                                    <div class="expansion-panel list-group-item">
+                                        <a id="clickybtnshowfrreq" aria-controls="pendingfr" aria-expanded="false"
+                                            class="expansion-panel-toggler collapsed" data-toggle="collapse"
+                                            href="#pendingfr">
+                                            Follow Requests <span id="frreqstatus"
+                                                class="badge badge-pill badge-secondary animated infinite slower">0</span>
+    
+                                            <div class="expansion-panel-icon ml-3 text-black-secondary">
+                                                <i class="collapsed-show material-icons">keyboard_arrow_down</i>
+                                                <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
+                                            </div>
+                                        </a>
+                                        <div class="collapse" data-parent="#accordionOne" id="pendingfr">
+                                            <div class="expansion-panel-body">
+                                                <center id="frreqlist">
+                                                    <button
+                                                        onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpendingfr()"
+                                                        id="skiddpypofr" class="eon-text refreshbtn hidden"><i
+                                                            class="material-icons">refresh</i></button>
+                                                </center>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="expansion-panel list-group-item">
-                                    <a id="clickybtnshowfrreq" aria-controls="pendingfr" aria-expanded="false"
-                                        class="expansion-panel-toggler collapsed" data-toggle="collapse"
-                                        href="#pendingfr">
-                                        Follow Requests <span id="frreqstatus"
-                                            class="badge badge-pill badge-secondary animated infinite slower">0</span>
-
-                                        <div class="expansion-panel-icon ml-3 text-black-secondary">
-                                            <i class="collapsed-show material-icons">keyboard_arrow_down</i>
-                                            <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
-                                        </div>
-                                    </a>
-                                    <div class="collapse" data-parent="#accordionOne" id="pendingfr">
-                                        <div class="expansion-panel-body">
-                                            <center id="frreqlist">
-                                                <button
-                                                    onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpendingfr()"
-                                                    id="skiddpypofr" class="eon-text refreshbtn hidden"><i
-                                                        class="material-icons">refresh</i></button>
-                                            </center>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
+                            <br>
                         </div>
-                        <br>
-                        <div id="messagelist"></div>
+                        <div id="messagelist">
+                            <div onclick="showEonnectNews()" class="messagelistbox animated shadow-sm fadeInUp" id="eonnectNewschatsidebarboxel">
+                                <img src="assets/logo.png" class="msgimg centeredy" alt="">
+                                <div class="boxtext centeredy">
+                                    <h4 class="heavy">What's New?</h4>
+                                    <br>
+                                    <p id="eonnectNewsrecenttextel" class="grey nolineheight">Eonnect v3.x</p>
+                                </div>
+                                <div class="boxtext2 centeredy">
+                                    <span id="eonnectNewsnotifbadge" class="badge badge-pill notifbadge badge-secondary animated jello infinite"></span>
+                                </div></div>
+                        </div>
                     </div>
 
                     <div id="chatcontent" class="inboxcontent">
@@ -859,16 +873,30 @@
 
                         </nav>
                         <center>
-                            <hr class="divider1 hidden animated zoomIn">
+                            <hr id="divider1" class="divider1 hidden animated zoomIn">
                         </center>
                         <div id="unselected">
-                            <div id="unselectedconten" class="centered unselectedconten">
+                            <div id="unselectedconten" class="centered animated unselectedconten">
                                 <p class="subtext">Select a message or choose "+" to start a new thread.</p>
                             </div>
                         </div>
-                        <div id="messagecontent"></div>
+                        <div id="messagecontent">
+                            <div class="hidden animated fadeIn" id='eonnectNewsContent'>
 
-                        <div class='directfooter hidden animated fadeIn'>
+                                <center>
+                                    <br><br>
+                                    <span class="chip"><span id="eonnect-dm-version">loading</span></span>
+                                    <br><br>
+                                    <h3>Changelog</h3>
+                                    <p id="eonnect-dm-latest"></p>
+
+                                </center>
+
+                            </div>
+
+                        </div>
+
+                        <div id="directfooter" class='directfooter hidden animated fadeInUp'>
                             <hr class="divider2 hidden animated zoomIn slow">
                             <br>
                             <div class="relative">
@@ -1064,7 +1092,16 @@
                                     </center>
                                 </div>
                             </div>
-                            <br><br><br>
+                            <br><br>
+                            <h4>Need Help?</h4>
+                            <br>
+                            <div class="card animated fadeInUp block">
+                                <div class="card-body">
+                                    <center>
+                                        <a class='eon-text' target="_blank" href="support.html">Get Support <i class="material-icons">open_in_new</i></a>
+                                    </center>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

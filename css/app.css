@@ -60,6 +60,7 @@ custom-control-label::before {
     padding-top: 16px;
     position: fixed;
     border-radius: 0px 12px 12px 0px;
+    overflow-y: scroll
 }
 
 .avatar {
@@ -1396,4 +1397,20 @@ custom-control-label::before {
 
 #returntouser {
     margin-right: 8px;
+}
+
+#messagelist {
+    height: auto;
+    overflow-y: scroll;
+    flex: 1 1 auto;
+}
+
+.updatecard {
+    background-color: var(--bg-primary);
+    width: 90%;
+    margin-bottom: 12px;
+}
+
+.commentmsg {
+    text-align: left;
 }

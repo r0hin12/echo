@@ -481,3 +481,8 @@ function preflightvisibility() {
         
     }
 }
+
+function fixdisplayheight() {
+    height = $('#calculationheight1').height()
+    $('#messageliststyle').html('#messagelist {height: calc(100% - ' + height + 'px)}')
+}
