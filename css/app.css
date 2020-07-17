@@ -1165,6 +1165,10 @@ custom-control-label::before {
     width: 100%;
 }
 
+.systemmessagecontainer {
+    width: 100%;
+}
+
 .clearfix:after {
     content: ".";
     display: block;

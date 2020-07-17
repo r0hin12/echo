@@ -655,13 +655,9 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             purgeFunc = "purge_agree('" + msg.sender + "', '" + name + "')"
             msgcontent = '<h3><i class="material-icons gradicon">delete_sweep</i>Purge Request</h3>' + name + ' requested to purge your chat history with them.<br><br><a onclick="' + purgeFunc + '" class="eon-contained">confirm</a>' 
         }
-        textContainer = 'msgcontainerapp shadow-lg'
-        prevuid = 'disabled'
     }
     if (msg.app_preset == 'eonnect-direct-purge_approval') {
         msgcontent = '<h3><i class="material-icons gradicon">insights</i>Time to start fresh!</h3>This is the beggining of your new chat history.' 
-        textContainer = 'msgcontainerapp shadow-lg'
-        prevuid = 'disabled'
     }    
     if (msg.app_preset == 'eonnect-direct-invitation') {
         if (msg.sender == user.uid) {
@@ -670,8 +666,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         else {
             msgcontent = '<h3><i class="material-icons gradicon">question_answer</i>Invitation from ' + name + '</h3>' + name + ' requested to message you.' 
         }
-        textContainer = 'msgcontainerapp shadow-lg'
-        prevuid = 'disabled'
     }
     if (msg.app_preset == 'eonnect-direct-rejection') {
         if (msg.sender == user.uid) {
@@ -680,8 +674,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         else {
             msgcontent = '<h3><i class="material-icons gradicon">close</i>' + name + ' declied you.</h3>' + name + ' rejected your request to message them.'
         }
-        textContainer = 'msgcontainerapp shadow-lg'
-        prevuid = 'disabled'
     }
     if (msg.app_preset == 'eonnect-direct-approval') {
         if (msg.sender == user.uid) {
@@ -690,8 +682,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         else {
             msgcontent = '<h3><i class="material-icons gradicon">check</i>' + name + ' approved you.</h3>' + name + ' accepted your request to message them.'
         }
-        textContainer = 'msgcontainerapp shadow-lg'
-        prevuid = 'disabled'
     }
     if (msg.app_preset == 'eonnect-direct-call') {
         if (msg.sender == user.uid) {
@@ -701,8 +691,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             goFunc1 = "window.open('rtc.html?type=a&target=" + msg.sender + "')"
             msgcontent = '<h3><i class="material-icons gradicon">phone</i>' + name + ' started a call.</h3><center><button onclick="' + goFunc1 + '" class="eon-text">join</button></center>'
         }
-        textContainer = 'msgcontainerapp shadow-lg'
-        prevuid = 'disabled'
     }
     if (msg.app_preset == 'eonnect-direct-video') {
         if (msg.sender == user.uid) {
@@ -712,20 +700,32 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             goFunc1 = "window.open('rtc.html?type=av&target=" + msg.sender + "')"
             msgcontent = '<h3><i class="material-icons gradicon">phone</i>' + name + ' started a video call.</h3><center><button onclick="' + goFunc1 + '" class="eon-text">join</button></center>'
         }
+    }
+
+    if (msg.app_preset.startsWith('eonnect-direct')) {
+        p.classList.remove('messagecontainer')
+        p.classList.add('systemmessagecontainer')
         textContainer = 'msgcontainerapp shadow-lg'
         prevuid = 'disabled'
     }
 
-
-        p.innerHTML = '<div class="' + textContainer + '">' + msgcontent + '</div>'
+    p.innerHTML = '<div class="' + textContainer + '">' + msgcontent + '</div>'
 
     if (prevuid == msg.sender) {
         try {
-            if (reverse) {
-                $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainerclient').first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainerclient').first().get(0).innerHTML
+            if (msg.sender == user.uid) {
+                clientorme = 'client'
             }
             else {
-                $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainerclient').last().get(0).innerHTML += '<br>' + msgcontent   
+                clientorme = 'other'
+            }
+            if (reverse) {
+                console.log(string);
+                $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML
+            }
+            else {
+                console.log(msg);
+                $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainer' + clientorme).last().get(0).innerHTML += '<br>' + msgcontent   
             }
             
         }
@@ -835,6 +835,12 @@ function ENACT_CHANGES(uid) {
                 if ($('#' + string + 'chatcontainer').hasClass('hidden') || sessionStorage.getItem("currentab") !== 'inbox') {
                     document.getElementById(string + 'notifbadge').innerHTML = '!!'
                     checkAllNotifs()
+                    if (sessionStorage.getItem('currentab') !== 'inbox') {
+                        Snackbar.show({showAction: false,pos: 'bottom-center',
+                            text: "New Message: " + msg.content.substring(0,12) + '...',
+                            pos: 'bottom-right'
+                        })
+                    }
                 }
                 else {
                     notifkey = 'unread_' + user.uid
@@ -842,11 +848,10 @@ function ENACT_CHANGES(uid) {
                         [notifkey]: false,
                     })
                 }
-    
             })
         }
         else {
-            // Add a ping
+            // Add a ping because it means you reciveved a message but it is not built
             document.getElementById(string + 'notifbadge').innerHTML = '!!'
             checkAllNotifs()
 
