@@ -371,8 +371,6 @@ $( "#userModal" ).scroll(function() {
 
 function loadscrolling() {
     $(window).scroll(function() {
-
-
         if ($(window).scrollTop() > 300) {
             document.getElementById('returntotop').setAttribute('style', 'display:block !important');
             document.getElementById('returntotop').classList.add('fadeInUp')
@@ -382,8 +380,9 @@ function loadscrolling() {
             document.getElementById('returntotop').classList.add('fadeOutDown')
             document.getElementById('returntotop').classList.remove('fadeInUp')
         }
-    
-        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        docheightminus1 = $(document).height() - 1
+        docheightplus1 = $(document).height() + 1
+        if($(window).scrollTop() + $(window).height() > docheightminus1 && $(window).scrollTop() + $(window).height() < docheightplus1) {
             if (sessionStorage.getItem('view') == 'all') {
                 build()
                 likeslistener()
@@ -485,4 +484,81 @@ function preflightvisibility() {
 function fixdisplayheight() {
     height = $('#calculationheight1').height()
     $('#messageliststyle').html('#messagelist {height: calc(100% - ' + height + 'px)}')
+}
+
+function newpost_selectimage() {
+    $('#newposttitlestyle6').html('#newposttitle { font-size: 28px !important; transition: all 1s !important; }')
+    $('#unselectedpost').addClass('fadeOutUp')
+    $('#unselectedpost').removeClass('fadeInDown')
+    $('#selectimage').addClass("fadeInDown")
+    $('#selectimage').removeClass("hidden")
+    $('#selectimage').removeClass("fadeOutDown")
+    $('#backbtn').removeClass('hidden')
+    $('#backbtn').removeClass('fadeOutLeft')
+    $('#backbtn').addClass('fadeInRight')
+
+    $('#selecttext').addClass('hidden')
+}
+
+function newpost_selecttext() {
+    $('#newposttitlestyle6').html('#newposttitle { font-size: 28px !important; transition: all 1s !important;}')
+    $('#unselectedpost').addClass('fadeOutUp')
+    $('#unselectedpost').removeClass('fadeInDown')
+    $('#selecttext').addClass("fadeInDown")
+    $('#selecttext').removeClass("hidden")
+    $('#selecttext').removeClass("fadeOutDown")
+    $('#backbtn').removeClass('hidden')
+    $('#backbtn').removeClass('fadeOutLeft')
+    $('#backbtn').addClass('fadeInRight')
+
+    $('#selectimage').addClass('hidden')
+}
+
+function newpost_back() {
+    $('#newposttitlestyle6').html('')
+    $('#unselectedpost').removeClass('fadeOutUp')
+    $('#unselectedpost').addClass('fadeInDown')
+    $('#backbtn').removeClass('fadeInRight')
+    $('#backbtn').addClass('fadeOutLeft')
+
+    $('#selecttext').removeClass("fadeInDown")
+    $('#selecttext').addClass("fadeOutDown")
+    $('#selectimage').removeClass("fadeInDown")
+    $('#selectimage').addClass("fadeOutDown")
+
+    window.setTimeout(function() {
+        if (document.getElementById('imgInp').files.length > 0) {
+            $('#selectimage').addClass('hidden')
+        }
+    }, 500)
+}
+
+
+function nexttextstep() {
+    value = document.getElementById('textpostbox').value
+
+    $('#step1').addClass('animated')
+    $('#step1').addClass('fadeOutUp')
+    window.setTimeout(function() {
+        $('#step2').addClass('animated')
+        $('#step2').removeClass('fadeOutDown')
+        $('#step2').addClass('fadeInUp')
+        $('#step1').addClass('hidden')
+        $('#step2').removeClass('hidden')
+    }, 1000)
+
+    $('.emulatedtext').html(value)
+}
+
+function edittext() {
+    $('#step1').removeClass('hidden')
+    $('#step1').removeClass('fadeOutUp')
+    $('#step1').addClass('fadeInDown')
+
+    $('#step2').addClass('fadeOutDown')
+    $('#step2').removeClass('fadeInUp')
+
+    window.setTimeout(function() {
+        $('#step2').addClass('hidden')
+    }, 1000)
 }

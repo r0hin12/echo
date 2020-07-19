@@ -720,11 +720,9 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
                 clientorme = 'other'
             }
             if (reverse) {
-                console.log(string);
                 $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML
             }
             else {
-                console.log(msg);
                 $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainer' + clientorme).last().get(0).innerHTML += '<br>' + msgcontent   
             }
             

@@ -32,7 +32,7 @@ sessionStorage.setItem('currentlyviewinguser', 'uwu')
 
 // INFINITE SCROLL VARIABLES
 
-window.infiniteScrollCount = 12
+window.infiniteScrollCount = 16
 window.currentScrollCount = 0
 window.currentRelScrollCount = 0
 window.currentUserScrollCount = 0
@@ -191,9 +191,75 @@ function buildrelevant() {
 }
 
 async function addcontent(name, data, time) {
+    if (data.url == 'eonnect-home-text_post') {
+        // Text Post
+        a = document.createElement('div')
+        a.classList.add('content')
+        likeFunc = "like('" + name + "')"
+        commentFunc = "loadComments('" + name + "', '" + data.uid + "')"
+        infoFunc = "info('" + name + "')"
+        fullFunc = "fullscreen('" + name + "')"
+        userFunc = "usermodal('" + data.uid + "')"
+        isVerified = false
+        for (let i = 0; i < verified.length; i++) {
+            if (verified[i] == data.uid) {
+                isVerified = true
+            }
+        }
+        if (isVerified) {
+            usersname = data.name + '<i id="' + name + 'verifiedelement" data-toggle="tooltip" data-placement="top" title="Verified" class="material-icons verified">verified_user</i>'
+        }
+        else {
+            usersname = data.name
+        }
+        if (data.url_theme == 'deep') {
+            textCardClass = 'superdeepcard'
+            textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + data.url_content + '</b></p></div>'            
+        }
+        else {
+            textCardClass = data.url_theme + 'card'
+            textStuff = '<div class="card-body"><h5 class="posttextclass">' + data.url_content + '</h5></div>'
+        }
+        a.innerHTML = '<img style="z-index: 200;" class=""><div class="card ' + textCardClass + '">' + textStuff + '</div><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul> <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        document.getElementById(name + 'shell').appendChild(a)
+        window.setTimeout(function () {
+            $('#' + name + 'verifiedelement').tooltip()
+        }, 500)
+
+        addpfp(data.uid, name)
+
+        if (sessionStorage.getItem('viewPost') == name) {
+            sessionStorage.setItem('skiponce', 'true')
+            sessionStorage.setItem('skiponce3', 'true')
+            loadComments(name, data.uid)
+        }
+
+        x = parseInt(sessionStorage.getItem('count'), 10);
+        sessionStorage.setItem('count', x + 1)
+
+        if (sessionStorage.getItem('count') == sessionStorage.getItem('maxCount')) {
+            addWaves()
+            listencomments()
+            $('#' + 'shell').imagesLoaded(function () {
+                window.setTimeout(function () {
+                    resizeAllGridItemsAll()
+                }, 1000)
+            });
+            listenlikes()
+            window.setTimeout(function () {
+                document.getElementById('loading').classList.add('fadeOut')
+            }, 800)
+            window.setTimeout(function () {
+                window.setTimeout(function () {
+                    document.getElementById('loading').style.display = 'none'
+                })
+            }, 1000)
+        }
+        return;
+    }
+
     var storageRef = firebase.storage().ref();
     storageRef.child('users/' + data.uid + '/' + data.file).getDownloadURL().then(function (url) {
-
         a = document.createElement('div')
         a.classList.add('content')
         likeFunc = "like('" + name + "')"
@@ -256,6 +322,60 @@ async function addcontent(name, data, time) {
 }
 
 async function addcontentrelevant(name, data, time) {
+    if (data.url == 'eonnect-home-text_post') {
+        // Text Post
+        a = document.createElement('div')
+        a.classList.add('content')
+        likeFunc = "like('" + name + "')"
+        commentFunc = "loadComments('" + name + "', '" + data.uid + "')"
+        infoFunc = "info('" + name + "')"
+        fullFunc = "fullscreenrelevant('" + name + "')"
+        userFunc = "usermodal('" + data.uid + "')"
+        isVerified = false
+        for (let i = 0; i < verified.length; i++) {
+            if (verified[i] == data.uid) {
+                isVerified = true
+            }
+        }
+        if (isVerified) {
+            usersname = data.name + '<i id="' + name + 'verifiedelementrelevant" data-toggle="tooltip" data-placement="top" title="Verified" class="material-icons verified">verified_user</i>'
+        }
+        else {
+            usersname = data.name
+        }
+        if (data.url_theme == 'deep') {
+            textCardClass = 'superdeepcard'
+            textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + data.url_content + '</b></p></div>'            
+        }
+        else {
+            textCardClass = data.url_theme + 'card'
+            textStuff = '<div class="card-body"><h5 class="posttextclass">' + data.url_content + '</h5></div>'
+        }
+        a.innerHTML = '<img style="z-index: 200;" class=""><div class="card ' + textCardClass + '">' + textStuff + '</div><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>    <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        document.getElementById(name + 'relevantshell').appendChild(a)
+        window.setTimeout(function () {
+            $('#' + name + 'verifiedelementrelevant').tooltip()
+        }, 500)
+
+        addpfprelevant(data.uid, name)
+
+        x = parseInt(sessionStorage.getItem('count2'), 10);
+        sessionStorage.setItem('count2', x + 1)
+
+        if (sessionStorage.getItem('count2') == sessionStorage.getItem('maxCount2')) {
+            addWaves()
+            document.getElementById('gridrelevant').style.display = 'grid'
+            $('#' + 'postshell').imagesLoaded(function () {
+                window.setTimeout(function () {
+                    resizeAllGridItems()
+                }, 1000)
+            });
+            listenlikesrelevant()
+            listencommentsrelevant()
+        }
+        return;
+    }
+
     var storageRef = firebase.storage().ref();
     storageRef.child('users/' + data.uid + '/' + data.file).getDownloadURL().then(function (url) {
 
@@ -777,9 +897,39 @@ function addpfpcomment(usr, int) {
 }
 
 async function addstuffuser(name, data, time, last) {
+    if (data.data.url == 'eonnect-home-text_post') {
+        // Text Post
+        a = document.createElement('div')
+        a.classList.add('content')
+        likeFunc = "likeuser('" + name + "')"
+        commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "', '" + data.data.uid + "')"
+        infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
+        fullFunc = "fullscreen('" + name + "')"
+        if (data.data.url_theme == 'deep') {
+            textCardClass = 'superdeepcard'
+            textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + data.data.url_content + '</b></p></div>'            
+        }
+        else {
+            textCardClass = data.data.url_theme + 'card'
+            textStuff = '<div class="card-body"><h5 class="posttextclass">' + data.data.url_content + '</h5></div>'
+        }
+        a.innerHTML = '<div class="card usercard animated fadeIn"><div class="card ' + textCardClass + '">' + textStuff + '</div><br><center><br><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn animated"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
+        document.getElementById(name + 'usersshell').appendChild(a)
+        db.collection('posts').doc('comments').get().then(function (docee) {
+            bambam = docee.data()[name].length
+            document.getElementById(name + "commentEluser").innerHTML = '<i class="material-icons posticonuser">chat_bubble_outline</i> ' + bambam
+        })
+
+        if (last) {
+            addWaves()
+            window.setTimeout(function() {
+                resizeAllGridItemsUser()
+            }, 1000)
+        }
+        return;
+    }
 
     var storageRef = firebase.storage().ref();
-
     storageRef.child('users/' + data.data.uid + '/' + data.data.file).getDownloadURL().then(function (url) {
 
         a = document.createElement('div')
@@ -788,7 +938,6 @@ async function addstuffuser(name, data, time, last) {
         commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "', '" + data.data.uid + "')"
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
-
         a.innerHTML = '<div class="card usercard animated fadeIn"><img id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><br><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn animated"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
@@ -1136,6 +1285,10 @@ function info(id) {
         document.getElementById('infoc').innerHTML = id
         document.getElementById('infod').innerHTML = doc.data()[id].data.uid
         document.getElementById('infoe').innerHTML = doc.data()[id].data.caption
+        if (doc.data()[id].data.caption == undefined) {
+            document.getElementById('infoe').innerHTML = "Caption N/A."
+        }
+        
 
         document.getElementById('commentbtnfrominfo').onclick = function () {
             sessionStorage.setItem('tocomments', true)
@@ -1440,7 +1593,11 @@ function addpfp(uid, docid) {
 function listenlikes() {
     likeslistener = db.collection("posts").doc('likes').onSnapshot(function (doc) {
         for (let i = 0; i < doc.data().latest + 1; i++) {
-            $('#' + i + 'elcaption').tooltip()
+            try {
+                $('#' + i + 'elcaption').tooltip()    
+            } catch (error) {
+                // It's a text post   
+            }
             if (doc.data()[i] == undefined) {
 
             }
@@ -1489,7 +1646,11 @@ function listenlikes() {
 function listenlikesrelevant() {
     likeslistenerrelevant = db.collection("posts").doc('likes').onSnapshot(function (doc) {
         for (let i = 0; i < doc.data().latest + 1; i++) {
-            $('#' + i + 'elcaptionrelevant').tooltip()
+            try {
+                $('#' + i + 'elcaptionrelevant').tooltip()
+            } catch (error) {
+                // It's a text post
+            }
             if (doc.data()[i] == undefined) {
             }
             else {
@@ -1841,11 +2002,7 @@ function newpost() {
                         document.getElementById('captionel').style.display = 'none'
                         document.getElementById('blah').style.display = 'none'
                         document.getElementById('captionel').style.display = 'none'
-
                         document.getElementById('rereshtbn').click()
-
-
-
                     });
                 });
             })
@@ -1944,4 +2101,70 @@ function hidefollowing() {
     document.getElementById('viewfollowing').onclick = function() {
         showfollowing() 
     }
+}
+
+function selecttheme(theme) {
+    // New post text new text post 
+    text = document.getElementById('textpostbox').value
+
+    if (text == '' || text == " " || text == null || text == undefined) {
+        error('You must include a caption.')
+        $('#uploadmodal').modal('toggle')
+    }
+    else {
+        if (document.getElementById('textpostbox').value.length > 320) {
+            error('Your text contains more than 320 characters.')
+            $('#uploadmodal').modal('toggle')
+        }
+        else {
+            document.getElementById('textpostbox').value = ''
+            $('#uploadmodal').modal('toggle')
+            db.collection('posts').doc('posts').get().then(function (doc) {
+                num = doc.data().latest
+                newnum = num + 1
+                
+                db.collection('posts').doc('posts').update({
+                    [newnum]: {
+                        name: newnum,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        data: {
+                            likes: ['first'],
+                            url: 'eonnect-home-text_post',
+                            url_theme: theme,
+                            url_content: text,
+                            file: 'eonnect-home-text_post',
+                            name: user.displayName,
+                            type: document.getElementById('privateinp2').checked,
+                            uid: user.uid,
+                        }
+                    },
+                    latest: newnum
+                })
+                db.collection('posts').doc('comments').update({
+                    [newnum]: [],
+                    latest: newnum
+                })
+    
+                db.collection('posts').doc('likes').update({
+                    [newnum]: firebase.firestore.FieldValue.arrayUnion(user.uid),
+                    latest: newnum
+                })
+    
+                db.collection('posts').doc('reported').update({
+                    latest: newnum
+                }).then(function () {
+                    Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Your text was uploaded.' })
+                    edittext()
+                    newpost_back()
+                    $('#selecttext').addClass('hidden')
+                    
+                    document.getElementById('captionel').style.display = 'none'
+                    document.getElementById('blah').style.display = 'none'
+                    document.getElementById('captionel').style.display = 'none'
+                    document.getElementById('rereshtbn').click()
+                });
+
+            })
+        };
+    };
 }
