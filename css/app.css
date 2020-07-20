@@ -1463,7 +1463,7 @@ custom-control-label::before {
 
 .superdeepcard::before {
     content: "";
-    background-image: url('https://i.pinimg.com/originals/92/8b/1c/928b1c1a0aa721ead8218c35f8ea0a52.png');
+    background-image: url('../assets/deep.png');
     background-size: cover;
     background-position: center;
     position: absolute;

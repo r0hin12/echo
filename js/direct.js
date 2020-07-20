@@ -248,6 +248,8 @@ function loadactive() {
             $('#changelogbamstyle').html('#messagecontent {height: calc(100%) !important;  margin-top: 0px; overflow-y: scroll; transition: all 1s;}')
         }, 600)
         $('#unselectedconten').addClass('fadeOutUp')
+        $('#unselectedconten').removeClass('fadeInDown')
+        
     }
 
     db.collection('users').doc(user.uid).get().then(function(doc) {
@@ -352,11 +354,13 @@ function BUILD_DIRECT(uid, btnel) {
     $('#eonnectNewsContent').addClass('hidden')
     $('#changelogbamstyle').html('')
     document.getElementById('newdmmsg').click()
+    document.getElementById('unselectedconten').classList.remove('fadeInDown')
     document.getElementById('unselectedconten').classList.add('fadeOutUp')
 
     $('#chatnav').removeClass('fadeOutUp')
     $('#chatnav').addClass('fadeIn')
     $('#divider1').removeClass('fadeOutUp')
+    $('#divider1').removeClass('hidden')
     $('#divider1').addClass('zoomIn')
     $('#directfooter').addClass('fadeInUp')
     $('#directfooter').removeClass('fadeOutDown')
@@ -642,7 +646,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         // Not client
         textContainer = 'msgcontainerother shadow-sm'
     }
-
     //TIMESTAMP IS msg.timestamp.toDate().toLocaleTimeString().slice(0, msg.timestamp.toDate().toLocaleTimeString().lastIndexOf(":")) + ' ' + msg.timestamp.toDate().toLocaleTimeString().slice(-2)
 
     msgcontent = msg.content
@@ -711,7 +714,16 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
 
     p.innerHTML = '<div class="' + textContainer + '">' + msgcontent + '</div>'
 
-    if (prevuid == msg.sender) {
+    if (prevuid === msg.sender) {
+        // Check if bottommost msg is a system msg
+        el = $('#' + string + 'chatcontainer').find('.clearfix:first')
+        if (el.hasClass('systemmessagecontainer')) {
+            // Make sure dont add msg to previous sent msg
+            prevuid = 'NANNANANANOOOOPE TRASH LOSER L'
+        }
+    }
+
+    if (prevuid === msg.sender) {
         try {
             if (msg.sender == user.uid) {
                 clientorme = 'client'
@@ -721,27 +733,33 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             }
             if (reverse) {
                 $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML
+                console.log('here');
             }
             else {
                 $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainer' + clientorme).last().get(0).innerHTML += '<br>' + msgcontent   
+                console.log('here');
             }
             
         }
         catch { }
     }
-
     else {
+        if (reverse == undefined) {
+            reverse = false
+        }
         if (reverse) {
             $('#' + string + 'chatcontainer').append(p)
             document.getElementById(string + 'chatcontainer').append(document.createElement('br'))
+            console.log('here');
         }
         else {
             $('#' + string + 'chatcontainer').prepend(p)
             document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
+            console.log('here');
         }
         addWaves()
     }
-
+    
     prevuid = msg.sender
     if (msg.app_preset.startsWith('eonnect-')) {
         prevuid = 'disabled'
@@ -1278,4 +1296,15 @@ function purge_agree_complete(uid, name, string, messages, now) {
             })
         })
     })
+}
+
+function leavedm() {
+    $('.messagelistboxactive').removeClass('messagelistboxactive')
+    $('.chatcontainer').addClass('hidden')
+    $('#chatnav').addClass('hidden')
+    $('#divider1').addClass('hidden')
+    $('#directfooter').addClass('hidden')
+    $('#unselectedconten').removeClass('fadeOutUp')
+    $('#unselectedconten').addClass('fadeInDown')
+    history.pushState(null, '', '/eonnect/app.html?tab=inbox')   
 }

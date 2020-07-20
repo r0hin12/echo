@@ -3,38 +3,7 @@
 <html lang="en">
 <head>
     <!---==== THEME ====-->
-    <style id="themeinjection">
-        :root {
-    --bg-primary: #f9f9f9;  
-    --bg-secondary: #fff;
-    --bg-tertiary: #f6f6f6; 
-    --bg-quaternary: #e7e7e7;
-
-    --eon-primary: #ce33e2; 
-    --eon-secondary: rgb(252, 69, 145); 
-
-    --content-primary: black;
-    --content-secondary: #0f0f0f;
-    --content-tertiary: #3b3b3b;
-    --contrast-primary: white; 
-
-    --ripple-primary: rgba(240, 108, 245, 0.3); 
-    --ripple-secondary: rgba(240, 108, 245, 0.1);
-    --button-primary: rgb(206, 51, 226);
-} 
-    </style>
-        <script>
-        if (localStorage.getItem('theme') == undefined || localStorage.getItem('theme') == null) {
-            partone = '--bg-primary: #161922; --bg-secondary: #11131b; --bg-tertiary: #1f202e; --bg-quaternary: #2e2e3f;'
-            partthree = '--content-primary: white; --content-secondary: #c8c8c8; --content-tertiary: #5c5c5c; --contrast-primary: black; '
-            parttwo = '--eon-primary: rgb(51, 147, 226); --eon-secondary: #4548fc; '
-            partfour = '--ripple-primary: rgba(51, 147, 226, 0.3); --ripple-secondary: rgba(51, 147, 226, 0.1); --button-primary: rgb(76, 110, 204); '
-            document.getElementById('themeinjection').innerHTML = ':root {' + partone + parttwo + partthree + partfour + '}'
-        }
-        else {
-            document.getElementById('themeinjection').innerHTML = localStorage.getItem('theme')
-        }
-    </script>
+    <style id="themeinjection">:root{--bg-primary:#f9f9f9;--bg-secondary:#fff;--bg-tertiary:#f6f6f6;--bg-quaternary:#e7e7e7;--eon-primary:#ce33e2;--eon-secondary:rgb(252, 69, 145);--content-primary:black;--content-secondary:#0f0f0f;--content-tertiary:#3b3b3b;--contrast-primary:white;--ripple-primary:rgba(240, 108, 245, 0.3);--ripple-secondary:rgba(240, 108, 245, 0.1);--button-primary:rgb(206, 51, 226)}</style> <script>if(localStorage.getItem('theme')==undefined||localStorage.getItem('theme')==null){partone='--bg-primary: #161922; --bg-secondary: #11131b; --bg-tertiary: #1f202e; --bg-quaternary: #2e2e3f;'; partthree='--content-primary: white; --content-secondary: #c8c8c8; --content-tertiary: #5c5c5c; --contrast-primary: black; '; parttwo='--eon-primary: rgb(51, 147, 226); --eon-secondary: #4548fc; '; partfour='--ripple-primary: rgba(51, 147, 226, 0.3); --ripple-secondary: rgba(51, 147, 226, 0.1); --button-primary: rgb(76, 110, 204); '; document.getElementById('themeinjection').innerHTML=':root {'+partone+parttwo+partthree+partfour+'}'} else{document.getElementById('themeinjection').innerHTML=localStorage.getItem('theme')}</script>
 
     <!---==== Meta ====--->
     <meta charset="UTF-8">
@@ -135,9 +104,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Button trigger modal -->
-
     <!-- Modal -->
     <div class="modal fade bd-example-modal-lg" id="uploadmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -643,7 +609,6 @@
     </div>
 
     <!-- ===========================--] Content [=================================== -->
-
     <div style="display: none;" class="doprofile animated fadeIn" id="doprofile">
         <div class="centered animated fadeIn" id="profilesetup1">
             <div class="card">
@@ -682,7 +647,6 @@
             </div>
         </div>
     </div>
-
     <div style="display: none;" class="doemail animated fadeIn" id="doemail">
         <div class="centered animated fadeIn" id="emailsetup1">
             <div class="card">
@@ -708,19 +672,8 @@
     </div>
 
     <div class="main">
-        <button id="expandbtn" class="menuham expandbtn waves-effect"
-            onclick="expand();this.classList.toggle('openedham');this.setAttribute('aria-expanded', this.classList.contains('openedham'))"
-            aria-label="Main Menu">
-            <svg width="32" height="32" viewBox="0 0 100 100">
-                <path class="lineham line1ham"
-                    d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
-                <path class="lineham line2ham" d="M 20,50 H 80" />
-                <path class="lineham line3ham"
-                    d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
-            </svg>
-        </button>
-
-
+        <button id="expandbtn" class="menuham expandbtn waves-effect" onclick="expand();this.classList.toggle('openedham');this.setAttribute('aria-expanded', this.classList.contains('openedham'))" aria-label="Main Menu"> <svg width="32" height="32" viewBox="0 0 100 100"> <path class="lineham line1ham" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" /> <path class="lineham line2ham" d="M 20,50 H 80" /> <path class="lineham line3ham" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" /> </svg> </button>
+        
         <div class="buttonunexpanded animated" id="sidebar">
             <center>
                 <img src="assets/logo.png" id="mainLogo" alt="">
@@ -753,25 +706,10 @@
             </center>
             <br><br>
             <div style="padding: 12px;" class="nav" id="justifiedTab" role="tablist">
-                <a onclick="tabe('home')" aria-controls="home" aria-selected="true" data-toggle="tab" href="#home"
-                    id="home-tab" role="tab" class="waves-effect waves-button navbarbutton">
-                    <i id="home-icon" class="material-icons centeredy iconinactive">whatshot</i>
-                    <h4 id="home-text" class="navbarbuttontext">Home</h4>
-                </a>
-                <a onclick="tabe('inbox')" aria-controls="inbox" aria-selected="true" data-toggle="tab" href="#inbox"
-                    id="inbox-tab" role="tab" class="waves-effect waves-button navbarbutton">
-                    <i id="inbox-icon" class="material-icons centeredy iconinactive">inbox</i>
-                    <h4 id="inbox-text" class="navbarbuttontext">Inbox</h4>
-                    <span id="ultimatenotifbadge"
-                        class="badge badge-pill badge-primary animated jello slower infinite"></span>
-                </a>
-                <a onclick="tabe('account')" aria-controls="account" aria-selected="true" data-toggle="tab"
-                    href="#account" id="account-tab" role="tab" class="waves-effect waves-button navbarbutton">
-                    <i id="account-icon" class="material-icons centeredy iconinactive">account_box</i>
-                    <h4 id="account-text" class="navbarbuttontext">Account</h4>
-                </a>
+                <a onclick="tabe('home')" aria-controls="home" aria-selected="true" data-toggle="tab" href="#home" id="home-tab" role="tab" class="waves-effect waves-button navbarbutton"> <i id="home-icon" class="material-icons centeredy iconinactive">whatshot</i> <h4 id="home-text" class="navbarbuttontext">Home</h4> </a>
+                <a onclick="tabe('inbox')" aria-controls="inbox" aria-selected="true" data-toggle="tab" href="#inbox" id="inbox-tab" role="tab" class="waves-effect waves-button navbarbutton"> <i id="inbox-icon" class="material-icons centeredy iconinactive">inbox</i><h4 id="inbox-text" class="navbarbuttontext">Inbox</h4> <span id="ultimatenotifbadge" class="badge badge-pill badge-primary animated jello slower infinite"></span> </a> 
+                <a onclick="tabe('account')" aria-controls="account" aria-selected="true" data-toggle="tab" href="#account" id="account-tab" role="tab" class="waves-effect waves-button navbarbutton"> <i id="account-icon" class="material-icons centeredy iconinactive">account_box</i><h4 id="account-text" class="navbarbuttontext">Account</h4> </a>
             </div>
-
         </div>
 
         <div id="expand" class="eonnect-main-unexpanded">
@@ -789,26 +727,18 @@
                         <button data-toggle="modal" data-target="#uploadmodal" class="btn-hover color-4"><i
                                 class="material-icons">add</i>Add Post</button>
                     </nav>
-
                     <hr class="hr">
-
                     <nav class="navbar">
                         <h2 class="leader">Home</h2>
                         <div class="dropdown">
-                            <button aria-expanded="false" aria-haspopup="true" class="eon-text btn235ws dropdown"
-                                data-toggle="dropdown" id="dropdownMenuButton1" type="button">Showing Relevant Posts
-                            </button>
+                            <button aria-expanded="false" aria-haspopup="true" class="eon-text btn235ws dropdown" data-toggle="dropdown" id="dropdownMenuButton1" type="button">Showing Relevant Posts </button>
                             <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu">
-                                <a onclick="dontshowall()" class="dropdown-item waves-effect waves-button"
-                                    href="#">Relevant Posts</a>
-                                <a onclick="showall()" class="dropdown-item waves-effect waves-button" href="#">All
-                                    Posts</a>
+                                <a onclick="dontshowall()" class="dropdown-item waves-effect waves-button" href="#">Relevant Posts</a>
+                                <a onclick="showall()" class="dropdown-item waves-effect waves-button" href="#">All Posts</a>
                             </div>
                         </div>
                         <ul class="navbar-nav mr-auto"></ul>
-
-                        <button id="rereshtbn" class="eon-text refreshbtn" onclick="refresh(this)"><i
-                                class="material-icons">refresh</i></button>
+                        <button id="rereshtbn" class="eon-text refreshbtn" onclick="refresh(this)"><i class="material-icons">refresh</i></button>
                         <button onclick="disablegrid()" id="gridbtn" class="grid-list without-text">
                             <div class="icon">
                                 <div class="dots"><i></i><i></i><i></i><i></i></div>
@@ -816,13 +746,9 @@
                             </div>
                         </button>
                     </nav>
-
                     <br><br>
-
                     <center id="containerhometab">
-                        <button onclick="window.scrollTo(0,0);" style="display: none !important;" id="returntotop"
-                            class="eon-contained refreshbtn returntoptop animated shadow"><i
-                                class="material-icons">keyboard_arrow_up</i></button>
+                        <button onclick="window.scrollTo(0,0);" style="display: none !important;" id="returntotop" class="eon-contained refreshbtn returntoptop animated shadow"><i class="material-icons">keyboard_arrow_up</i></button>
                         <div style="display: none;" class="grid animated fadeIn" id="gridrelevant"></div>
                         <div style="display: none" id="norelevantstuff">
                             <br><br>
@@ -836,7 +762,6 @@
                             </div>
                             <br><br>
                         </div>
-
                         <div style="display: none;" class="grid animated fadeIn" id="grid"></div>
                     </center>
 
@@ -846,12 +771,9 @@
                             <br><br>
                         </center>
                     </div>
-
                 </div>
 
                 <div aria-labelledby="inbox-tab" class="tab-pane fade" id="inbox" role="tabpanel">
-
-
                     <div class="inboxsidebar">
                         <div id="calculationheight1">
                             <div class="inboxsidebarpadding">
@@ -867,12 +789,7 @@
                             <div class="inboxsidebarpadding">
                                 <div class="list-group" id="accordionOne">
                                     <div class="expansion-panel list-group-item">
-                                        <a id="clickybtnshowdmreq" aria-controls="pendingdm" aria-expanded="false"
-                                            class="expansion-panel-toggler collapsed" data-toggle="collapse"
-                                            href="#pendingdm">
-                                            DM Requests <span id="dmreqstatus"
-                                                class="badge badge-pill badge-secondary animated infinite slower">0</span>
-    
+                                        <a id="clickybtnshowdmreq" aria-controls="pendingdm" aria-expanded="false" class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#pendingdm"> DM Requests <span id="dmreqstatus" class="badge badge-pill badge-secondary animated infinite slower">0</span>    
                                             <div class="expansion-panel-icon ml-3 text-black-secondary">
                                                 <i class="collapsed-show material-icons">keyboard_arrow_down</i>
                                                 <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
@@ -881,21 +798,13 @@
                                         <div class="collapse" data-parent="#accordionOne" id="pendingdm">
                                             <div class="expansion-panel-body">
                                                 <center id="dmreqlist">
-                                                    <button
-                                                        onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpending()"
-                                                        id="skiddpypo" class="eon-text refreshbtn hidden"><i
-                                                            class="material-icons">refresh</i></button>
+                                                    <button onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpending()" id="skiddpypo" class="eon-text refreshbtn hidden"><i class="material-icons">refresh</i></button>
                                                 </center>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="expansion-panel list-group-item">
-                                        <a id="clickybtnshowfrreq" aria-controls="pendingfr" aria-expanded="false"
-                                            class="expansion-panel-toggler collapsed" data-toggle="collapse"
-                                            href="#pendingfr">
-                                            Follow Requests <span id="frreqstatus"
-                                                class="badge badge-pill badge-secondary animated infinite slower">0</span>
-    
+                                        <a id="clickybtnshowfrreq" aria-controls="pendingfr" aria-expanded="false" class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#pendingfr"> Follow Requests <span id="frreqstatus" class="badge badge-pill badge-secondary animated infinite slower">0</span>    
                                             <div class="expansion-panel-icon ml-3 text-black-secondary">
                                                 <i class="collapsed-show material-icons">keyboard_arrow_down</i>
                                                 <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
@@ -904,10 +813,7 @@
                                         <div class="collapse" data-parent="#accordionOne" id="pendingfr">
                                             <div class="expansion-panel-body">
                                                 <center id="frreqlist">
-                                                    <button
-                                                        onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpendingfr()"
-                                                        id="skiddpypofr" class="eon-text refreshbtn hidden"><i
-                                                            class="material-icons">refresh</i></button>
+                                                    <button onclick="Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'});loadpendingfr()" id="skiddpypofr" class="eon-text refreshbtn hidden"><i class="material-icons">refresh</i></button>
                                                 </center>
                                             </div>
                                         </div>
@@ -933,7 +839,6 @@
                     </div>
 
                     <div id="chatcontent" class="inboxcontent">
-
                         <nav id="chatnav" class="navbar animated fadeIn basicpadding hidden">
                             <button class="eon-text" id="topbarimg">
                                 <img class="topbarimg" src="" alt="">
@@ -943,51 +848,41 @@
                                 <p id="navbarstatus" class="content2 nolineheight"></p> <button id="refreshstatusbtn"
                                     class="eon-text refreshbtn centeredy"><i class="material-icons">refresh</i></button>
                             </div>
-                            <ul class="navbar-nav mr-auto">
-                            </ul>
+                            <ul class="navbar-nav mr-auto"></ul>
 
                             <div class="dropdown dropdownmanagecontainer">
-                                <button aria-expanded="false" aria-haspopup="true" class="eon-text navbtnicon animated fadeInUp delay1"
-                                    data-toggle="dropdown" type="button"><i
-                                    class="material-icons">phone</i></button>
-                                <div aria-labelledby="dropdownMenuButton1"
-                                    class="dropdown-menu menu accmanagedropdown">
+                                <button aria-expanded="false" aria-haspopup="true" class="eon-text navbtnicon animated fadeInUp delay1" data-toggle="dropdown" type="button"><i class="material-icons">phone</i></button>
+                                <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu accmanagedropdown">
                                     <center>
-                                        <button id="direct-callbtn" class="eon-text navbtnicon animated zoomIn"><i
-                                            class="material-icons">phone</i></button>
-                                    <button id="direct-videobtn" class="eon-text navbtnicon animated zoomIn delay1"><i
-                                            class="material-icons">video_call</i></button>
+                                        <button id="direct-callbtn" class="eon-text navbtnicon animated zoomIn"><i class="material-icons">phone</i></button>
+                                        <button id="direct-videobtn" class="eon-text navbtnicon animated zoomIn delay1"><i class="material-icons">video_call</i></button>
                                     </center>
                                 </div>
                             </div>
-                            <button id="direct-flagbtn" class="eon-text navbtnicon animated fadeInUp delay3"><i
-                                    class="material-icons">flag</i></button>
-                            <button id="direct-infobtn" class="eon-text navbtnicon animated fadeInUp delay4"><i
-                                    class="material-icons">info</i></button>
-
+                            <button id="direct-flagbtn" class="eon-text navbtnicon animated fadeInUp delay3"><i class="material-icons">flag</i></button>
+                            <button id="direct-infobtn" class="eon-text navbtnicon animated fadeInUp delay4"><i class="material-icons">info</i></button>
                         </nav>
+
                         <center>
                             <hr id="divider1" class="divider1 hidden animated zoomIn">
                         </center>
+
                         <div id="unselected">
                             <div id="unselectedconten" class="centered animated unselectedconten">
                                 <p class="subtext">Select a message or choose "+" to start a new thread.</p>
                             </div>
                         </div>
+
                         <div id="messagecontent">
                             <div class="hidden animated fadeIn" id='eonnectNewsContent'>
-
                                 <center>
                                     <br><br>
                                     <span class="chip"><span id="eonnect-dm-version">loading</span></span>
                                     <br><br>
                                     <h3>Changelog</h3>
                                     <p id="eonnect-dm-latest"></p>
-
                                 </center>
-
                             </div>
-
                         </div>
 
                         <div id="directfooter" class='directfooter hidden animated fadeInUp'>
@@ -998,13 +893,10 @@
                                     <label for="newdmmsg">New Message</label>
                                     <input class="form-control" id="newdmmsg" placeholder="" type="text">
                                 </div>
-                                <button class="eon-text newdmmsgbtn centeredy" id="newdmmsgbtn"><i
-                                        class="material-icons">send</i></button>
+                                <button class="eon-text newdmmsgbtn centeredy" id="newdmmsgbtn"><i class="material-icons">send</i></button>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
 
                 <div aria-labelledby="account-tab" class="tab-pane fade" id="account" role="tabpanel">
@@ -1042,50 +934,32 @@
                                 <div id="acounteditcard" class="card animated fadeIn block">
                                     <div id="pfcardbody" class="card-body">
                                         <br>
-                                        <a onclick="preflightemail()" id="changemailpopoverbtn" tabindex="0"
-                                            class="eon-text block" role="button" data-toggle="popover"
-                                            title="Switch Email" data-html="true"
-                                            data-content="<small>Current Email: <b id='currentemail'></b></small><br><div class='floating-label textfield-box'>     <label for='newemail'>New Email</label>     <input class='form-control' id='newemail' type='text'>   </div><br><button onclick='confirmchangemeil()' class='eon-contained block'>confirm</button>">Change
-                                            Email</a>
-                                        <a onclick="preflightvisibility()" id="changevisibilitypopoverbtn" tabindex="0"
-                                            class="eon-text block" role="button" data-toggle="popover"
-                                            title="Switch Visibility" data-html="true"
-                                            data-content="<small>Current Visibility: <b id='currentvisibility'></b></small><button id='btnconfirmvisibilitybtn' onclick='window.location.reload()' class='eon-contained block'>unable to load</button>">Change
-                                            Visibility</a>
-                                        <a id="changpasswordpopoverbtn" tabindex="0" class="eon-text block"
-                                            role="button" data-toggle="popover" title="Change Password" data-html="true"
-                                            data-content="<div class='floating-label textfield-box'>     <label for='newpassword'>New Password</label>     <input class='form-control' id='newpassword' type='password'>   </div><br><button onclick='confirmchangepass()' class='eon-contained block'>confirm</button>">Change
-                                            Password</a>
+                                        <a onclick="preflightemail()" id="changemailpopoverbtn" tabindex="0" class="eon-text block" role="button" data-toggle="popover" title="Switch Email" data-html="true" data-content="<small>Current Email: <b id='currentemail'></b></small><br><div class='floating-label textfield-box'>     <label for='newemail'>New Email</label>     <input class='form-control' id='newemail' type='text'>   </div><br><button onclick='confirmchangemeil()' class='eon-contained block'>confirm</button>">Change Email</a>
+                                        <a onclick="preflightvisibility()" id="changevisibilitypopoverbtn" tabindex="0" class="eon-text block" role="button" data-toggle="popover" title="Switch Visibility" data-html="true" data-content="<small>Current Visibility: <b id='currentvisibility'></b></small><button id='btnconfirmvisibilitybtn' onclick='window.location.reload()' class='eon-contained block'>unable to load</button>">Change Visibility</a>
+                                        <a id="changpasswordpopoverbtn" tabindex="0" class="eon-text block" role="button" data-toggle="popover" title="Change Password" data-html="true" data-content="<div class='floating-label textfield-box'>     <label for='newpassword'>New Password</label>     <input class='form-control' id='newpassword' type='password'>   </div><br><button onclick='confirmchangepass()' class='eon-contained block'>confirm</button>">Change Password</a>
+
                                         <div class="dropdown dropdownmanagecontainer">
-                                            <button aria-expanded="false" aria-haspopup="true" class="eon-text"
-                                                data-toggle="dropdown" type="button">Edit Profile</button>
-                                            <div aria-labelledby="dropdownMenuButton1"
-                                                class="dropdown-menu menu accmanagedropdown">
+                                            <button aria-expanded="false" aria-haspopup="true" class="eon-text" data-toggle="dropdown" type="button">Edit Profile</button>
+                                            <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu accmanagedropdown">
                                                 <center>
-                                                    <a onclick="preparenamechange()" class="eon-text block"
-                                                        href="#">Change Name</a>
-                                                    <a onclick="preparebiochange()" class="eon-text block"
-                                                        href="#">Change Bio</a>
-                                                    <a onclick="preparenpicchange()" class="eon-text block"
-                                                        href="#">Change Photo</a>
+                                                    <a onclick="preparenamechange()" class="eon-text block" href="#">Change Name</a>
+                                                    <a onclick="preparebiochange()" class="eon-text block" href="#">Change Bio</a>
+                                                    <a onclick="preparenpicchange()" class="eon-text block" href="#">Change Photo</a>
                                                 </center>
                                             </div>
                                         </div>
+
                                         <div class="dropdown dropdownmanagecontainer">
-                                            <button aria-expanded="false" aria-haspopup="true" class="eon-text"
-                                                data-toggle="dropdown" type="button">Edit Account</button>
-                                            <div aria-labelledby="dropdownMenuButton1"
-                                                class="dropdown-menu menu accmanagedropdown">
+                                            <button aria-expanded="false" aria-haspopup="true" class="eon-text" data-toggle="dropdown" type="button">Edit Account</button>
+                                            <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu accmanagedropdown">
                                                 <center>
-                                                    <a class="eon-text block" onclick="prepreflightemail()"
-                                                        href="#">Change Email</a>
-                                                    <a class="eon-text block" onclick="prepreflightpassword()"
-                                                        href="#">Change Password</a>
-                                                    <a class="eon-text block" onclick="prepreflightvisibility()"
-                                                        href="#">Change Visibilty</a>
+                                                    <a class="eon-text block" onclick="prepreflightemail()" href="#">Change Email</a>
+                                                    <a class="eon-text block" onclick="prepreflightpassword()" href="#">Change Password</a>
+                                                    <a class="eon-text block" onclick="prepreflightvisibility()" href="#">Change Visibilty</a>
                                                 </center>
                                             </div>
                                         </div>
+
                                         <br><br>
                                     </div>
                                 </div>
@@ -1100,9 +974,7 @@
                             <br>
                             <div class="list-group" id="socials">
                                 <div class="expansion-panel list-group-item">
-                                    <a class="expansion-panel-toggler collapsed" data-toggle="collapse"
-                                        href="#collapseTwitter">
-                                        Twitter
+                                    <a class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#collapseTwitter"> Twitter
                                         <div class="expansion-panel-icon ml-3 text-black-secondary">
                                             <i class="collapsed-show material-icons">keyboard_arrow_down</i>
                                             <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
@@ -1110,19 +982,15 @@
                                     </a>
                                     <div class="collapse" data-parent="#socials" id="collapseTwitter">
                                         <div class="expansion-panel-body">
-                                            <p id="twitterlinktext">Link your Twitter account to Eonnect. You will have
-                                                the option to show or hide your Twitter on your profile!</p>
+                                            <p id="twitterlinktext">Link your Twitter account to Eonnect. You will have the option to show or hide your Twitter on your profile!</p>
                                             <center>
-                                                <button id="twitterlinkbutton" onclick="linktwitter()"
-                                                    class="eon-outlined">Link Twitter -></button>
+                                                <button id="twitterlinkbutton" onclick="linktwitter()" class="eon-outlined">Link Twitter -></button>
                                             </center>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="expansion-panel list-group-item">
-                                    <a class="expansion-panel-toggler collapsed" data-toggle="collapse"
-                                        href="#collapseGitHub">
-                                        GitHub
+                                    <a class="expansion-panel-toggler collapsed" data-toggle="collapse" href="#collapseGitHub"> GitHub
                                         <div class="expansion-panel-icon ml-3 text-black-secondary">
                                             <i class="collapsed-show material-icons">keyboard_arrow_down</i>
                                             <i class="collapsed-hide material-icons">keyboard_arrow_up</i>
@@ -1130,11 +998,9 @@
                                     </a>
                                     <div class="collapse" data-parent="#socials" id="collapseGitHub">
                                         <div class="expansion-panel-body">
-                                            <p id="githublinktext">Link your GitHub account to Eonnect. You will have
-                                                the option to show or hide your GitHub on your profile!</p>
+                                            <p id="githublinktext">Link your GitHub account to Eonnect. You will have the option to show or hide your GitHub on your profile!</p>
                                             <center>
-                                                <button id="githublinkbutton" onclick="linkgithub()"
-                                                    class="eon-outlined">Link GitHub -></button>
+                                                <button id="githublinkbutton" onclick="linkgithub()" class="eon-outlined">Link GitHub -></button>
                                             </center>
                                         </div>
                                     </div>
@@ -1165,11 +1031,10 @@
                                     <center>
                                         <h4>Customize UI</h4> <span class="badge badge-pill badge-primary">Beta</span>
                                         <button data-toggle="popover" title="Personalize UI" data-content="Customize Eonnect by selecting a theme. You can choose a dark or light version to choose what's best for you. This applies to this browser only!" class="eon-text gradicon">what is this?</button>
-                                      <br><br>
+                                        <br><br>
                                         <input class="checkbox" type="checkbox" id="themeinp" style="display: none;">
                                         <label for="themeinp" class="check"> <svg width="18px" height="18px" viewBox="0 0 18 18"> <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z"></path><polyline points="1 9 7 14 15 4"></polyline></svg> </label>
-                                        <p class="checklabel">Light Theme <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Light Theme" data-content="If this is checked, we will display dark text on a light surface."><i class="material-icons smallicon">info</i></a></p>
-                                        
+                                        <p class="checklabel">Light Theme <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Light Theme" data-content="If this is checked, we will display dark text on a light surface."><i class="material-icons smallicon">info</i></a></p>    
                                         <select id="colorthemeinp" class="custom-select">
                                             <option value="blue" selected>Default Colors</option>
                                             <option value="red">Red</option>
@@ -1182,16 +1047,13 @@
                                             <option value="hotpink">Hot Pink</option>
                                             <option value="custom">Custom Color</option>
                                           </select>
-
                                         <br>
                                         <button onclick="updategradientui()" class="eon-contained">update</button>
                                     </center>
                                 </div>
                             </div>
                             <br><br><br>
-
                         </div>
-
                         <div class="col-sm">
                             <br>
                             <h4>Danger Zone</h4>
@@ -1201,11 +1063,8 @@
                                     <center>
                                         <button onclick="signout()" class="eon-text block">Log Out</button>
                                         <div class="dropdown">
-                                            <button style="display: block !important; width: 100% !important;"
-                                                aria-expanded="false" aria-haspopup="true" class="eon-text block"
-                                                data-toggle="dropdown" type="button">Account Management</button>
-                                            <div aria-labelledby="dropdownMenuButton1"
-                                                class="dropdown-menu menu accmanagedropdown">
+                                            <button style="display: block !important; width: 100% !important;" aria-expanded="false" aria-haspopup="true" class="eon-text block" data-toggle="dropdown" type="button">Account Management</button>
+                                            <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu accmanagedropdown">
                                                 <center>
                                                     <a class="eon-text block" href="#">Disable Account</a>
                                                     <br>
@@ -1236,8 +1095,8 @@
     </div>
 
     <!-- ===========================--] /Content [=================================== -->
-    <!---==== JavaScript ====--->
 
+    <!---==== JavaScript ====--->
     <!-- Base Firebase -->
     <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
     <!-- Firebase Auth -->

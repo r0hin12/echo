@@ -80,6 +80,14 @@ function tabe(tab) {
     history.pushState(null, '', '/eonnect/app.html?tab=' + tab);
 
     val = sessionStorage.getItem('first-time-' + tab)
+    if (val == 'false') {
+        switch (tab) {
+            case "inbox":
+                leavedm()
+                // Run when its not first time
+                break;
+        }    
+    }
     if (val == 'true') {
         sessionStorage.setItem('first-time-' + tab, 'false')
 
@@ -89,7 +97,10 @@ function tabe(tab) {
                     if (typeof (user) != "undefined" && typeof (user) != null) {
                         clearInterval(interval)
                         load()
-                        loadscrolling()
+                        window.setTimeout(function() {
+                            loadscrolling()
+                            // Hold off a bit before loading infinite scroll as to not interfere with variables and invoke functions too early.
+                        }, 3500)
                     }
                 }, 200);
                 break;
