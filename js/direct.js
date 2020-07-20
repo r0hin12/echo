@@ -1143,12 +1143,15 @@ function showEonnectNews() {
     $('.messagelistboxactive').removeClass('messagelistboxactive')
     $('#eonnectNewschatsidebarboxel').addClass('messagelistboxactive')
     $('.chatcontainer').addClass('hidden')   
+    $('#chatnav').removeClass('hidden')
 
     $('#eonnectNewsContent').removeClass('hidden')
     window.setTimeout(function() {
-        $('#changelogbamstyle').html('#messagecontent {height: calc(100%) !important;  margin-top: -107px; overflow-y: scroll; transition: all 1s;}')
-    }, 500)
-
+        $('#chatnav').removeClass('fadeIn')
+        window.setTimeout(function() {
+            $('#changelogbamstyle').html('#messagecontent {height: calc(100%) !important;  margin-top: -107px; overflow-y: scroll; transition: all 1s;}')
+        }, 500)
+    }, 250)
     $('#chatnav').removeClass('fadeIn')
     $('#chatnav').addClass('fadeOutUp')
     $('#divider1').removeClass('zoomIn')

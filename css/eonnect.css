@@ -1,28 +1,5 @@
-:root {
-    --bg-primary: rgb(19, 19, 24);
-    --bg-secondary: rgb(26, 28, 36);
-    --bg-tertiary: rgb(35, 36, 46);
-    --bg-quaternary: #2f313b;
-    --eon-primary: #e23333;
-    --eon-secondary: #fcad45;
-    --content-primary: white;
-    --content-secondary: #c8c8c8;
-    --content-tertiary: #5c5c5c;
-    --contrast-primary: #000;
-} 
+/* UI FLIPPIN' REDESIGN :D:D:D */
 
-/* :root {
-    --bg-primary: rgb(243, 243, 243);
-    --bg-secondary: rgb(255, 255, 255);
-    --bg-tertiary: #ffffff;
-    --bg-quaternary: #909090;
-    --eon-primary: rgb(226, 51, 51);
-    --eon-secondary: #fcad45;
-    --content-primary: rgb(0, 0, 0);
-    --content-secondary: #252525;
-    --content-tertiary: #5c5c5c;
-    --contrast-primary: rgb(255, 255, 255);
-}  */
 
 html {
     scroll-behavior: smooth;
@@ -34,33 +11,33 @@ html {
 }
 
 .eon-outlined .waves-ripple {
-    background: rgba(255, 145, 0, 0.3) !important;
+    background: var(--ripple-primary) !important;
 }
 
 .eon-text .waves-ripple {
-    background: rgba(255, 145, 0, 0.3) !important;
+    background: var(--ripple-primary) !important;
 }
 
 .eon-contained {
-    background-color: #ee7b00 !important;
+    background-color: var(--button-primary)  !important;
 }
 .eon-contained:hover {
-    background-color: #ee7b00 !important;
+    background-color: var(--button-primary) !important;
     color: var(--eon-secondary) !important;
 }
 .eon-outlined {
     background-color: transparent !important;
-    color: var(--eon-secondary) !important;
-    border-color: var(--eon-secondary) !important;
+    color: var(--button-primary) !important;
+    border-color: var(--button-primary) !important;
 }
 .eon-outlined:hover {
-    background-color: rgb(238, 123, 0, 0.1) !important;
+    background-color: var(--ripple-secondary) !important;
 }
 .eon-text {
-    color: var(--eon-secondary) !important;
+    color: var(--button-primary) !important;
 }
 .eon-text:hover {
-    background-color: rgb(238, 123, 0, 0.1) !important;
+    background-color: var(--ripple-secondary) !important;
 }
 
 body {

@@ -562,3 +562,60 @@ function edittext() {
         $('#step2').addClass('hidden')
     }, 1000)
 }
+
+function updategradientui() {
+    light = document.getElementById('themeinp').checked
+    color = document.getElementById('colorthemeinp').value
+
+    if (light) {
+        partone = '--bg-primary: #f9f9f9;  --bg-secondary: #fff; --bg-tertiary: #f6f6f6; --bg-quaternary: #e7e7e7;'
+        partthree = '--content-primary: black; --content-secondary: #0f0f0f; --content-tertiary: #3b3b3b; --contrast-primary: white; '
+    }
+    else {
+        partone = '--bg-primary: #161922; --bg-secondary: #11131b; --bg-tertiary: #1f202e; --bg-quaternary: #2e2e3f;'
+        partthree = '--content-primary: white; --content-secondary: #c8c8c8; --content-tertiary: #5c5c5c; --contrast-primary: black; '
+    }
+
+    switch (color) {
+        case 'blue':
+            parttwo = '--eon-primary: rgb(51, 147, 226); --eon-secondary: #4548fc; '
+            partfour = '--ripple-primary: rgba(51, 147, 226, 0.3); --ripple-secondary: rgba(51, 147, 226, 0.1); --button-primary: rgb(76, 110, 204); '
+            break;
+        case 'red':
+            parttwo = '--eon-primary: rgb(226, 51, 51); --eon-secondary: #fc7045; '
+            partfour = '--ripple-primary: rgba(226, 51, 51, 0.3); --ripple-secondary: rgba(226, 51, 51, 0.1); --button-primary: rgb(212, 57, 57); '
+            break;
+        case 'orange':
+            parttwo = '--eon-primary: rgb(226, 86, 51); --eon-secondary: #fcbc45; '
+            partfour = '--ripple-primary: rgba(226, 86, 51, 0.3); --ripple-secondary: rgba(226, 86, 51, 0.1); --button-primary: rgb(212, 100, 35); '
+            break;
+        case 'lime':
+            parttwo = '--eon-primary: rgb(185, 226, 51); --eon-secondary: #45fc91; '
+            partfour = '--ripple-primary: rgba(185, 226, 51, 0.3); --ripple-secondary: rgba(185, 226, 51, 0.1); --button-primary: rgb(91, 212, 35);'
+            break;
+        case 'aqua':
+            parttwo = '--eon-primary: rgb(51, 226, 211); --eon-secondary: #4557fc; '
+            partfour = '--ripple-primary: rgba(51, 226, 211, 0.3); --ripple-secondary: rgba(51, 226, 211, 0.1); --button-primary: rgb(19, 124, 194); '
+            break;
+        case 'purple':
+            parttwo = '--eon-primary: rgb(98, 51, 226); --eon-secondary: #d745fc; '
+            partfour = '--ripple-primary: rgba(98, 51, 226, 0.3);  --ripple-secondary: rgba(98, 51, 226, 0.1); --button-primary: rgb(109, 19, 194); '
+            break;
+        case 'pink':
+            parttwo = '--eon-primary: rgb(206, 51, 226); --eon-secondary: rgb(252, 69, 145); '
+            partfour = '--ripple-primary: rgba(240, 108, 245, 0.3); --ripple-secondary: rgba(240, 108, 245, 0.1); --button-primary: rgb(206, 51, 226);'
+            break;
+        case 'hotpink':
+            parttwo = '--eon-primary: rgb(226, 51, 159); --eon-secondary: #fc458b; '
+            partfour = '--ripple-primary: rgba(226, 51, 159, 0.3); --ripple-secondary: rgba(226, 51, 159, 0.1); --button-primary: rgb(216, 48, 138); '
+            break;
+        default:
+            parttwo = '--eon-primary: rgb(51, 147, 226); --eon-secondary: #4548fc; '
+            partfour = '--ripple-primary: rgba(51, 147, 226, 0.3); --ripple-secondary: rgba(51, 147, 226, 0.1); --button-primary: rgb(76, 110, 204); '
+            break;
+    }
+
+    $('#themeinjection').html(':root {' + partone + parttwo + partthree + partfour + '}')
+    localStorage.setItem('theme', ':root {' + partone + parttwo + partthree + partfour + '}' )
+
+}

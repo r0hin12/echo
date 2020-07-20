@@ -1,8 +1,41 @@
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <!---==== THEME ====-->
+    <style id="themeinjection">
+        :root {
+    --bg-primary: #f9f9f9;  
+    --bg-secondary: #fff;
+    --bg-tertiary: #f6f6f6; 
+    --bg-quaternary: #e7e7e7;
+
+    --eon-primary: rgb(206, 51, 226); 
+    --eon-secondary: rgb(252, 69, 145); 
+
+    --content-primary: black;
+    --content-secondary: #0f0f0f;
+    --content-tertiary: #3b3b3b;
+    --contrast-primary: white; 
+
+    --ripple-primary: rgba(240, 108, 245, 0.3); 
+    --ripple-secondary: rgba(240, 108, 245, 0.1);
+    --button-primary: rgb(206, 51, 226);
+} 
+    </style>
+        <script>
+        if (localStorage.getItem('theme') == undefined || localStorage.getItem('theme') == null) {
+            partone = '--bg-primary: #161922; --bg-secondary: #11131b; --bg-tertiary: #1f202e; --bg-quaternary: #2e2e3f;'
+            partthree = '--content-primary: white; --content-secondary: #c8c8c8; --content-tertiary: #5c5c5c; --contrast-primary: black; '
+            parttwo = '--eon-primary: rgb(51, 147, 226); --eon-secondary: #4548fc; '
+            partfour = '--ripple-primary: rgba(51, 147, 226, 0.3); --ripple-secondary: rgba(51, 147, 226, 0.1); --button-primary: rgb(76, 110, 204); '
+            document.getElementById('themeinjection').innerHTML = ':root {' + partone + parttwo + partthree + partfour + '}'
+        }
+        else {
+            document.getElementById('themeinjection').innerHTML = localStorage.getItem('theme')
+        }
+    </script>
+
     <!---==== Meta ====--->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -663,7 +696,7 @@
         </button>
 
 
-        <div class="buttonunexpanded animated shadow" id="sidebar">
+        <div class="buttonunexpanded animated" id="sidebar">
             <center>
                 <img src="assets/logo.png" id="mainLogo" alt="">
                 <h3 id="logoSupportingText">Eonnect</h3>
@@ -1088,6 +1121,7 @@
                             <div class="card animated fadeIn block">
                                 <div class="card-body">
                                     <center>
+                                        <h4>Customize Profile</h4>
                                         <button data-toggle="popover" title="Gradient Personalization" data-content="Personalize your profile with a custom gradient! This feature is in beta and may be a premium upgrade later." class="eon-text gradicon">what is this?</button>
                                         
                                         <div class="floating-label">
@@ -1097,6 +1131,34 @@
                                         
                                         <br>
                                         <button onclick="updategradient()" class="eon-contained">update</button>
+                                    </center>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="card animated fadeIn block">
+                                <div class="card-body">
+                                    <center>
+                                        <h4>Customize UI</h4> <span class="badge badge-pill badge-primary">Beta</span>
+                                        <button data-toggle="popover" title="Personalize UI" data-content="Customize Eonnect by selecting a theme. You can choose a dark or light version to choose what's best for you. This applies to this browser only!" class="eon-text gradicon">what is this?</button>
+                                      <br><br>
+                                        <input class="checkbox" type="checkbox" id="themeinp" style="display: none;">
+                                        <label for="themeinp" class="check"> <svg width="18px" height="18px" viewBox="0 0 18 18"> <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z"></path><polyline points="1 9 7 14 15 4"></polyline></svg> </label>
+                                        <p class="checklabel">Light Theme <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Light Theme" data-content="If this is checked, we will display dark text on a light surface."><i class="material-icons smallicon">info</i></a></p>
+                                        
+                                        <select id="colorthemeinp" class="custom-select">
+                                            <option value="blue" selected>Default Colors</option>
+                                            <option value="red">Red</option>
+                                            <option value="orange">Orange</option>
+                                            <option value="lime">Lime</option>
+                                            <option value="aqua">Aqua</option>
+                                            <option value="blue">Blue</option>
+                                            <option value="purple">Purple</option>
+                                            <option value="pink">Pink</option>
+                                            <option value="hotpink">Hot Pink</option>
+                                          </select>
+
+                                        <br>
+                                        <button onclick="updategradientui()" class="eon-contained">update</button>
                                     </center>
                                 </div>
                             </div>
