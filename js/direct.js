@@ -545,7 +545,7 @@ function BUILD_DIRECT(uid, btnel) {
         chatcontainer.classList.add('animated')
         chatcontainer.classList.add('fadeIn')
         chatcontainer.onscroll = function() {
-            loadScrolling(string)
+            loadScrollingdirect(string)
         }
         chatcontainer.id = string + 'chatcontainer'
 
@@ -1145,7 +1145,7 @@ function buildInfScroll() {
 //BUILD_MESSAGE(doc.data().name, stringvar[i], string)
 //ScrollBottom()
 
-function loadScrolling(id) {
+function loadScrollingdirect(id) {
     if (document.getElementById(id + 'chatcontainer').scrollTop < 12) {
         buildInfScroll()
     }
@@ -1306,5 +1306,6 @@ function leavedm() {
     $('#directfooter').addClass('hidden')
     $('#unselectedconten').removeClass('fadeOutUp')
     $('#unselectedconten').addClass('fadeInDown')
+    $('#eonnectNewsContent').addClass('hidden')
     history.pushState(null, '', '/eonnect/app.html?tab=inbox')   
 }
