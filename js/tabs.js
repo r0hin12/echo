@@ -1,4 +1,7 @@
 $(window).ready(function () {
+    if (localStorage.getItem('theme_name') !== undefined && localStorage.getItem('theme_name') !== null) {
+        document.getElementById('colorthemeinp').value = localStorage.getItem('theme_name')
+    }
 
     sessionStorage.removeItem('viewPost')
     sessionStorage.removeItem('viewInfo')

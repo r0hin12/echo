@@ -10,6 +10,7 @@ $(window).on('resize', function () {
     }
 });
 
+
 function check(width) {
     if (width < 800) {
         document.getElementById('expand').classList.add('eonnect-main-expanded')
@@ -609,6 +610,23 @@ function updategradientui() {
             parttwo = '--eon-primary: rgb(226, 51, 159); --eon-secondary: #fc458b; '
             partfour = '--ripple-primary: rgba(226, 51, 159, 0.3); --ripple-secondary: rgba(226, 51, 159, 0.1); --button-primary: rgb(216, 48, 138); '
             break;
+        case 'custom':
+            $('#customColorPicker').modal('toggle')
+
+            currentcolors = localStorage.getItem('theme')
+            if (currentcolors == null || currentcolors == undefined) {
+                return;
+            }
+            currentcolors = currentcolors.split('--eon-primary: rgb(')[1]
+            currentcolorsprimary = currentcolors.split('); --eon')[0]
+            currentcolors = localStorage.getItem('theme')
+            currentcolors = currentcolors.split('--eon-secondary: rgb(')[1]
+            currentcolorssecondary = currentcolors.split('); --content')[0]
+
+            document.getElementsByClassName('colrpickertext')[0].innerHTML = 'Primary Color | Current: (' + currentcolorsprimary + ')'
+            document.getElementsByClassName('colrpickertext')[1].innerHTML = 'Secondary Color | Current: (' + currentcolorsprimary + ')'
+
+            return false;
         default:
             parttwo = '--eon-primary: rgb(51, 147, 226); --eon-secondary: #4548fc; '
             partfour = '--ripple-primary: rgba(51, 147, 226, 0.3); --ripple-secondary: rgba(51, 147, 226, 0.1); --button-primary: rgb(76, 110, 204); '
@@ -617,5 +635,37 @@ function updategradientui() {
 
     $('#themeinjection').html(':root {' + partone + parttwo + partthree + partfour + '}')
     localStorage.setItem('theme', ':root {' + partone + parttwo + partthree + partfour + '}' )
-
+    localStorage.setItem('theme_name', color)
 }
+
+function proceedcustomui() {
+    color = document.getElementsByClassName('colrpicker')[0].value
+    color2 = document.getElementsByClassName('colrpicker')[1].value
+
+    aform = color.split('(')[1]
+    bform = aform.split(')')[0]
+    color1 = bform.substring(0, bform.length - 2);
+
+    aform = color2.split('(')[1]
+    bform = aform.split(')')[0]
+    color2 = bform.substring(0, bform.length - 2);
+
+    light = document.getElementById('themeinp').checked
+    if (light) {
+        partone = '--bg-primary: #f9f9f9;  --bg-secondary: #fff; --bg-tertiary: #f6f6f6; --bg-quaternary: #e7e7e7;'
+        partthree = '--content-primary: black; --content-secondary: #0f0f0f; --content-tertiary: #3b3b3b; --contrast-primary: white; '
+    }
+    else {
+        partone = '--bg-primary: #161922; --bg-secondary: #11131b; --bg-tertiary: #1f202e; --bg-quaternary: #2e2e3f;'
+        partthree = '--content-primary: white; --content-secondary: #c8c8c8; --content-tertiary: #5c5c5c; --contrast-primary: black; '
+    }
+    // color1 and color2 format like a,b,c
+
+    parttwo = '--eon-primary: rgb(' + color1 + '); --eon-secondary: rgb(' + color2 + '); '
+    partfour = '--ripple-primary: rgb(' + color1 + ', 0.3); --ripple-secondary: rgb(' + color1 + ', 0.1); --button-primary: rgb(' + color1 + '); '
+
+    $('#themeinjection').html(':root {' + partone + parttwo + partthree + partfour + '}')
+    localStorage.setItem('theme', ':root {' + partone + parttwo + partthree + partfour + '}' )
+    localStorage.setItem('theme_name', 'custom')
+}
+

@@ -10,7 +10,7 @@
     --bg-tertiary: #f6f6f6; 
     --bg-quaternary: #e7e7e7;
 
-    --eon-primary: rgb(206, 51, 226); 
+    --eon-primary: #ce33e2; 
     --eon-secondary: rgb(252, 69, 145); 
 
     --content-primary: black;
@@ -86,7 +86,6 @@
 
 <body id="body">
     <!-- Preflight Modals-->
-
     <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
@@ -334,6 +333,32 @@
                         <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
                     </center>
 
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade bd-example-modal-lg" id="customColorPicker" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <center>
+                        <h2>Custom Theme Color</h2>
+                        <br>
+
+                        <p class="colrpickertext">Primary Color</p>
+                        <input class="colrpicker" value="rgba(206, 51, 226, 1)" data-jscolor="">                      
+                        <br><br><br>
+                        <p class="colrpickertext">Secondary Color</p>
+                        <input class="colrpicker" value="rgba(252, 69, 145,1)" data-jscolor="">                      
+                    
+                    
+                        <br><br><br>
+                    
+                        <button type="button" class="waves eon-text" data-dismiss="modal">cancel</button>
+                        <button onclick="proceedcustomui()" type="button" class="waves eon-contained" data-dismiss="modal">done</button>
+                    </center>
 
                 </div>
             </div>
@@ -1155,6 +1180,7 @@
                                             <option value="purple">Purple</option>
                                             <option value="pink">Pink</option>
                                             <option value="hotpink">Hot Pink</option>
+                                            <option value="custom">Custom Color</option>
                                           </select>
 
                                         <br>
@@ -1260,6 +1286,8 @@
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <!-- Button work-->
     <script src='js/charming.js'></script>
+    <!-- JS Color -->
+    <script src="js/jscolor.js"></script>
 
     <!-- Firebase Variables -->
     <script src="js/firebase.js"></script>

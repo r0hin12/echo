@@ -852,3 +852,7 @@
   background-color: DodgerBlue !important; 
   color: #ffffff;
 } 
+
+.colrpicker {
+  background-color: var(--bg-primary)
+}

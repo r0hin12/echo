@@ -23,7 +23,8 @@ html {
 }
 .eon-contained:hover {
     background-color: var(--button-primary) !important;
-    color: var(--eon-secondary) !important;
+    color: var(--content-secondary) !important;
+    opacity: 0.9;
 }
 .eon-outlined {
     background-color: transparent !important;
