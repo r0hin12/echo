@@ -33,6 +33,7 @@ sessionStorage.setItem('skiponce', 'false')
 sessionStorage.setItem('skiponce2', 'false')
 sessionStorage.setItem('skiponce3', 'false')
 sessionStorage.setItem('skiponce123', 'false')
+sessionStorage.setItem('skiponce1234', 'false')
 // INFINITE SCROLL VARIABLES
 
 window.infiniteScrollCount = 16
@@ -1760,6 +1761,23 @@ function updatechars() {
 
 }
 
+
+$('#postModal').on('hidden.bs.modal', function () {
+    if (sessionStorage.getItem('skiponce1234') == "true") {
+        sessionStorage.setItem('skiponce1234', "false")
+    }
+    else {
+
+        if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
+            window.history.pushState(null, '', '/eonnect/app.html')
+        }
+        else {
+            window.history.pushState(null, '', '/eonnect/app.html?tab=' + sessionStorage.getItem('currentab'));
+        }
+    }
+
+});
+
 $('#commentModal').on('hidden.bs.modal', function () {
     if (sessionStorage.getItem('skiponce123') == "true") {
         sessionStorage.setItem('skiponce123', "false")
@@ -2224,9 +2242,9 @@ async function thegoahead(id, data, userdata) {
     }
 
     // Get user details
-    commentFunc = "loadComments('" + id + "', '" + data.data.uid + "'); $('#postModal').modal('hide')"
-    infoFunc = "info('" + id + "'); $('#postModal').modal('hide')"
-    userFunc = "userodal('" + data.data.uid + "'); $('#postModal').modal('hide')"
+    commentFunc = "loadComments('" + id + "', '" + data.data.uid + "'); sessionStorage.setItem('skiponce1234', 'true'); $('#postModal').modal('hide')"
+    infoFunc = "info('" + id + "'); sessionStorage.setItem('skiponce1234', 'true'); $('#postModal').modal('hide')"
+    userFunc = "userodal('" + data.data.uid + "'); sessionStorage.setItem('skiponce1234', 'true'); $('#postModal').modal('hide')"
 
     caption = data.data.caption
     if (data.data.caption == undefined) {
