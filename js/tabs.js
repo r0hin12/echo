@@ -3,10 +3,11 @@ $(window).ready(function () {
         document.getElementById('colorthemeinp').value = localStorage.getItem('theme_name')
     }
 
-    sessionStorage.removeItem('viewPost')
+    sessionStorage.removeItem('viewComments')
     sessionStorage.removeItem('viewInfo')
     sessionStorage.removeItem('fullInfo')
     sessionStorage.removeItem('viewUser')
+    sessionStorage.removeItem('viewPost')
     sessionStorage.removeItem('currenDM')
 
         var urlParams = new URLSearchParams(window.location.search);
@@ -46,14 +47,32 @@ $(window).ready(function () {
 
 
     if (tab == null || tab == undefined) {
-
-        sessionStorage.setItem('viewPost', urlParams.get('post'))
+        sessionStorage.setItem('viewComments', urlParams.get('comments'))
         sessionStorage.setItem('viewInfo', urlParams.get('info'))
         sessionStorage.setItem('fullInfo', urlParams.get('fullscreen'))
         sessionStorage.setItem('viewUser', urlParams.get('user'))
+        sessionStorage.setItem('viewPost', urlParams.get('post'))
         sessionStorage.setItem('currenDM', urlParams.get('dm'))
-        tabe("home")
-        checkUrls()
+        
+        if (urlParams.get('dm') !== null) {
+            // A DM is active so don't load home and go straight to DMs
+            tabe('inbox')
+        }
+
+        if (urlParams.get('info') == null && 
+            urlParams.get('fullscreen') == null &&
+            urlParams.get('user') == null && 
+            urlParams.get('comments') == null && 
+            urlParams.get('post') == null) {
+                // No URL Params 
+                // Go to home
+                tabe('home') 
+            }
+            else {
+                tabe("Waiting...")
+                $('#notab').removeClass('hidden')
+                checkUrls()
+            }
         
     }
     else {
@@ -64,21 +83,24 @@ $(window).ready(function () {
 
 function tabe(tab) {
     document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.split(tab.charAt(0))[1] + ' | Eonnect'
-
-
     sessionStorage.setItem("currentab", tab)
-    $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })
-    $('.iconactive').each(function(i, obj) {
-        obj.classList.remove('iconactive')
-    })
-    $('.navbarbuttontextactive').each(function() {this.classList.remove('navbarbuttontextactive')})
-    document.getElementById(tab + '-tab').classList.add('navthing')
-    document.getElementById(tab + '-icon').classList.add('iconactive')
-    document.getElementById(tab + '-text').classList.add('navbarbuttontextactive')
-    document.getElementById(tab + '-tab').click()
-    Waves.ripple('#' + tab + '-tab');
-    history.pushState(null, '', '/eonnect/app.html?tab=' + tab);
 
+    try {
+        $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })
+        $('.iconactive').each(function(i, obj) {
+            obj.classList.remove('iconactive')
+        })
+        $('.navbarbuttontextactive').each(function() {this.classList.remove('navbarbuttontextactive')})
+        document.getElementById(tab + '-tab').classList.add('navthing')
+        document.getElementById(tab + '-icon').classList.add('iconactive')
+        document.getElementById(tab + '-text').classList.add('navbarbuttontextactive')
+        document.getElementById(tab + '-tab').click()
+        Waves.ripple('#' + tab + '-tab');
+        history.pushState(null, '', '/eonnect/app.html?tab=' + tab);   
+        $('#notab').addClass('hidden')
+    } catch (error) {
+        $('#notab').removeClass('hidden')
+    }
     val = sessionStorage.getItem('first-time-' + tab)
     if (val == 'false') {
         switch (tab) {

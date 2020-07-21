@@ -336,6 +336,7 @@ function BUILD_DIRECT_VARIABLES(uid) {
         unreadkey = "unread_" + user.uid
 
         if (doc.data()[unreadkey]) {
+            console.log('a');
             document.getElementById(doc.id + 'notifbadge').innerHTML = "!!"
             checkAllNotifs()
         }
@@ -849,6 +850,7 @@ function ENACT_CHANGES(uid) {
                 
                 ScrollBottom()
                 if ($('#' + string + 'chatcontainer').hasClass('hidden') || sessionStorage.getItem("currentab") !== 'inbox') {
+                    console.log('a');
                     document.getElementById(string + 'notifbadge').innerHTML = '!!'
                     checkAllNotifs()
                     if (sessionStorage.getItem('currentab') !== 'inbox') {
@@ -868,6 +870,7 @@ function ENACT_CHANGES(uid) {
         }
         else {
             // Add a ping because it means you reciveved a message but it is not built
+            console.log('a');
             document.getElementById(string + 'notifbadge').innerHTML = '!!'
             checkAllNotifs()
 

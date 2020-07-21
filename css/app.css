@@ -637,6 +637,9 @@ custom-control-label::before {
     margin-left: 12px;
     position: relative;
     top: -3px;
+
+    background-color: var(--bg-quaternary);
+    color: var(--content-primary);
 }
 
 .list-group-item:first-child {
@@ -1108,6 +1111,21 @@ custom-control-label::before {
     padding-right: 25px;
 }
 
+.postimage {
+    opacity: 1;
+    margin-top: 0px;
+
+    transition: all 1s;
+}
+
+.postimage:hover {
+    opacity: 0.50;
+    margin-top: -10px;
+    cursor: pointer;
+
+    transition: all 1s;
+}
+
 .content2 {
     padding-bottom: 12px;
     padding-top: 12px;
@@ -1494,8 +1512,24 @@ custom-control-label::before {
     cursor: pointer;
 }
 
+
 .posttextclass {
     text-align: center;
+}
+
+.content .card {
+    opacity: 1.0;
+    margin-top: 0px;
+
+    transition: all 1s;
+}
+
+.content .card:hover {
+    opacity: 0.6;
+    margin-top: -10px;
+    cursor: pointer;
+    
+    transition: all 1s;
 }
 
 .custom-select {
@@ -1507,4 +1541,42 @@ custom-control-label::before {
 .custom-select:hover {
     color: var(--content-primary);
     border-bottom: 1px solid var(--content-primary);
+}
+
+.postmodalpfp {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    margin-right: 12px;
+}
+
+.postimg {
+    max-height: 800px;
+    border-radius: 12px;
+}
+
+#dividerpostmodal {
+    height: 100%;
+    margin-top: 0px;
+    width: 4px;
+
+    position: absolute;
+    left: -24px;
+}
+
+#sidebarcontent {
+    position: sticky;
+    top: 50%;
+    transform: translate(0,-50%);
+}
+
+.sidebarcontentparent {
+    position: relative !important;
+    padding-left: 0px;
+}
+
+.postfullcard {
+    width: 90%;
 }

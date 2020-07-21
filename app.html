@@ -1,6 +1,11 @@
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
+    <!-- Imagine if I made some insane confession 
+    in one of these code comments... 
+    That would be interesting I think.
+    Maybe you should try and look for it...
+    OR maybe nothing's there -->
 <head>
     <!---==== THEME ====-->
     <style id="themeinjection">:root{--bg-primary:#f9f9f9;--bg-secondary:#fff;--bg-tertiary:#f6f6f6;--bg-quaternary:#e7e7e7;--eon-primary:#ce33e2;--eon-secondary:rgb(252, 69, 145);--content-primary:black;--content-secondary:#0f0f0f;--content-tertiary:#3b3b3b;--contrast-primary:white;--ripple-primary:rgba(240, 108, 245, 0.3);--ripple-secondary:rgba(240, 108, 245, 0.1);--button-primary:rgb(206, 51, 226)}</style> <script>if(localStorage.getItem('theme')==undefined||localStorage.getItem('theme')==null){partone='--bg-primary: #161922; --bg-secondary: #11131b; --bg-tertiary: #1f202e; --bg-quaternary: #2e2e3f;'; partthree='--content-primary: white; --content-secondary: #c8c8c8; --content-tertiary: #5c5c5c; --contrast-primary: black; '; parttwo='--eon-primary: rgb(51, 147, 226); --eon-secondary: #4548fc; '; partfour='--ripple-primary: rgba(51, 147, 226, 0.3); --ripple-secondary: rgba(51, 147, 226, 0.1); --button-primary: rgb(76, 110, 204); '; document.getElementById('themeinjection').innerHTML=':root {'+partone+parttwo+partthree+partfour+'}'} else{document.getElementById('themeinjection').innerHTML=localStorage.getItem('theme')}</script>
@@ -284,6 +289,9 @@
                         <a data-toggle="tooltip" data-placement="top" title="View Comments" data-dismiss="modal"
                             id="commentbtnfrominfo" class="waves eon-text"><i
                                 class="material-icons gradicon">comment</i></a>
+                        <a data-toggle="tooltip" data-placement="top" title="View Post" data-dismiss="modal"
+                            id="postbtnfrominfo" class="waves eon-text"><i
+                                class="material-icons gradicon">insert_photo</i></a>
                         <a data-toggle="tooltip" data-placement="top" title="View User" data-dismiss="modal"
                             id="userbtnfrominfo" class="waves eon-text"><i
                                 class="material-icons gradicon">person</i></a>
@@ -371,12 +379,16 @@
         </div>
     </div>
 
-    <div class="modal fade bd-example-modal-lg" id="postmodal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal fade bd-example-modal-lg" id="postModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg usermodal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
                     <center>
                         <h2>View Post</h2>
+                        <br><br>
+                        <div id="postfull">
+                           
+                        </div>
                         <br><br>
                         <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
                     </center>
@@ -518,8 +530,9 @@
                         <div id="commentsbox"></div>
 
                         <br><br><br>
-
-                        <button id="returntouser" type="button" class="waves eon-text" data-dismiss="modal"><i class="material-icons gradicon">person</i></button> <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
+                        <button data-toggle="tooltip" data-placement="top" title="View Post" id="returntopost" type="button" class="waves eon-text" data-dismiss="modal"><i class="material-icons gradicon">insert_photo</i></button> 
+                        <button data-toggle="tooltip" data-placement="top" title="View User" id="returntouser" type="button" class="waves eon-text" data-dismiss="modal"><i class="material-icons gradicon">person</i></button> 
+                        <button type="button" class="waves eon-contained" data-dismiss="modal">done</button>
                     </center>
                 </div>
             </div>
@@ -899,6 +912,14 @@
                     </div>
                 </div>
 
+                <!-- Oop no tab selected uwu -->
+                <div class="hidden" id="notab">
+                    <div class="centered">
+                        <h4>No Tab Selected</h4>
+                        <p>Choose an option on the left.</p>
+                    </div>
+                </div>
+            
                 <div aria-labelledby="account-tab" class="tab-pane fade" id="account" role="tabpanel">
                     <br><br>
                     <h2 class="leader">Account</h2>
@@ -1164,5 +1185,5 @@
     <script src="js/app.js"></script>
 
 </body>
-
+<!-- Yeah.. there's no confession  :D -->
 </html>

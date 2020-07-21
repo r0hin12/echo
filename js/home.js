@@ -6,7 +6,6 @@ function showall() {
     document.getElementById('norelevantstuff').style.display = 'none'
     resizeAllGridItemsAll()
     sessionStorage.setItem('view', 'all')
-
 }
 
 function dontshowall() {
@@ -29,7 +28,11 @@ sessionStorage.setItem('fullscreenon', 'no')
 sessionStorage.setItem('view', 'relevant')
 sessionStorage.setItem('viewing', 'stoplookinghere')
 sessionStorage.setItem('currentlyviewinguser', 'uwu')
-
+sessionStorage.setItem('currentlyviewingpost', 'owooo ❤️')
+sessionStorage.setItem('skiponce', 'false')
+sessionStorage.setItem('skiponce2', 'false')
+sessionStorage.setItem('skiponce3', 'false')
+sessionStorage.setItem('skiponce123', 'false')
 // INFINITE SCROLL VARIABLES
 
 window.infiniteScrollCount = 16
@@ -198,7 +201,6 @@ async function addcontent(name, data, time) {
         likeFunc = "like('" + name + "')"
         commentFunc = "loadComments('" + name + "', '" + data.uid + "')"
         infoFunc = "info('" + name + "')"
-        fullFunc = "fullscreen('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
         isVerified = false
         for (let i = 0; i < verified.length; i++) {
@@ -220,19 +222,14 @@ async function addcontent(name, data, time) {
             textCardClass = data.url_theme + 'card'
             textStuff = '<div class="card-body"><h5 class="posttextclass">' + data.url_content + '</h5></div>'
         }
-        a.innerHTML = '<img style="z-index: 200;" class=""><div class="card ' + textCardClass + '">' + textStuff + '</div><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul> <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        postFunc = "viewpost('" + name + "')"
+        a.innerHTML = '<img style="z-index: 200;" class=""><div onclick="' + postFunc + '" class="card ' + textCardClass + '">' + textStuff + '</div><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul> <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'shell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelement').tooltip()
         }, 500)
 
         addpfp(data.uid, name)
-
-        if (sessionStorage.getItem('viewPost') == name) {
-            sessionStorage.setItem('skiponce', 'true')
-            sessionStorage.setItem('skiponce3', 'true')
-            loadComments(name, data.uid)
-        }
 
         x = parseInt(sessionStorage.getItem('count'), 10);
         sessionStorage.setItem('count', x + 1)
@@ -280,19 +277,14 @@ async function addcontent(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelel" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul> <button title="' + data.caption + '" id="' + name + 'elcaption" class="postbuttons"><i class="material-icons posticon animated">subject</i></button>    <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        postFunc = "viewpost('" + name + "')"
+        a.innerHTML = '<img style="z-index: 200;" class=""><img onclick="' + postFunc + '" id="' + name + 'imgelel" class="postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurl"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul> <button title="' + data.caption + '" id="' + name + 'elcaption" class="postbuttons"><i class="material-icons posticon animated">subject</i></button>    <button id="' + name + 'el" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentEl" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoEl" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'shell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelement').tooltip()
         }, 500)
 
         addpfp(data.uid, name)
-
-        if (sessionStorage.getItem('viewPost') == name) {
-            sessionStorage.setItem('skiponce', 'true')
-            sessionStorage.setItem('skiponce3', 'true')
-            loadComments(name, data.uid)
-        }
 
         x = parseInt(sessionStorage.getItem('count'), 10);
         sessionStorage.setItem('count', x + 1)
@@ -329,7 +321,6 @@ async function addcontentrelevant(name, data, time) {
         likeFunc = "like('" + name + "')"
         commentFunc = "loadComments('" + name + "', '" + data.uid + "')"
         infoFunc = "info('" + name + "')"
-        fullFunc = "fullscreenrelevant('" + name + "')"
         userFunc = "usermodal('" + data.uid + "')"
         isVerified = false
         for (let i = 0; i < verified.length; i++) {
@@ -351,7 +342,8 @@ async function addcontentrelevant(name, data, time) {
             textCardClass = data.url_theme + 'card'
             textStuff = '<div class="card-body"><h5 class="posttextclass">' + data.url_content + '</h5></div>'
         }
-        a.innerHTML = '<img style="z-index: 200;" class=""><div class="card ' + textCardClass + '">' + textStuff + '</div><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>    <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        postFunc = "viewpost('" + name + "')"
+        a.innerHTML = '<img style="z-index: 200;" class=""><div onclick="' + postFunc + '" class="card ' + textCardClass + '">' + textStuff + '</div><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>    <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'relevantshell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelementrelevant').tooltip()
@@ -399,7 +391,8 @@ async function addcontentrelevant(name, data, time) {
             usersname = data.name
         }
 
-        a.innerHTML = '<img style="z-index: 200;" class=""><img id="' + name + 'imgelelrelevant" class="animated fadeIn postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>    <button title="' + data.caption + '" id="' + name + 'elcaptionrelevant" class="postbuttons"><i class="material-icons posticon animated">subject</i></button>   <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
+        postFunc = "viewpost('" + name + "')"
+        a.innerHTML = '<img onclick="' + postFunc + '" id="' + name + 'imgelelrelevant" class="postimage" src="' + url + '"><nav class="navbar navbar-expand-sm"><img onclick="' + userFunc + '" class="postpfp" id="' + name + 'pfpelurlrelevant"><h4 class="postname centeredy">' + usersname + '</h4><ul class="navbar-nav mr-auto"> </ul>    <button title="' + data.caption + '" id="' + name + 'elcaptionrelevant" class="postbuttons"><i class="material-icons posticon animated">subject</i></button>   <button id="' + name + 'elrelevant" onclick="' + likeFunc + '" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="' + name + 'commentElrelevant" onclick="' + commentFunc + '" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button onclick="' + fullFunc + '" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="' + name + 'infoElrelevant" onclick="' + infoFunc + '" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr>'
         document.getElementById(name + 'relevantshell').appendChild(a)
         window.setTimeout(function () {
             $('#' + name + 'verifiedelementrelevant').tooltip()
@@ -428,11 +421,13 @@ async function addcontentrelevant(name, data, time) {
 }
 
 function checkUrls() {
-    var post = sessionStorage.getItem('viewPost')
+    var post = sessionStorage.getItem('viewComments')
     if (post == "null" || post == " " || post == "") {
     }
     else {
-        //comments(post)
+        db.collection('posts').doc('posts').get().then(function(doc) {
+            loadComments(name, doc.data()[post].data.uid)
+        })
     }
 
     var fullscreen = sessionStorage.getItem('fullInfo')
@@ -456,6 +451,16 @@ function checkUrls() {
     else {
         window.setTimeout(function() {
             usermodal(viewUser)
+        }, 1000)
+    }
+
+    var viewPost = sessionStorage.getItem('viewPost')
+    if (viewPost == 'null' || viewUser == " " || viewUser == "") {
+
+    }
+    else {
+        window.setTimeout(function() {
+            viewpost(viewPost)
         }, 1000)
     }
 
@@ -533,9 +538,12 @@ function fullscreenrelevant(id) {
 
 function loadComments(id, poster) {
     document.getElementById('returntouser').onclick = function() {
-        window.setTimeout(function() {
-            usermodal(poster)
-        }, 1000)
+        sessionStorage.setItem('skiponce123', 'true')
+        usermodal(poster)
+    }
+    document.getElementById('returntopost').onclick = function() {
+        sessionStorage.setItem('skiponce123', 'true')
+        viewpost(id)
     }
 
     document.getElementById('readonlychip').setAttribute('style', 'display:none !important');
@@ -572,7 +580,7 @@ function loadComments(id, poster) {
             sortUsingNestedText($('#commentsbox'), "div.card", "div.inline")
         })
     })
-    history.pushState(null, "", "?post=" + id)
+    history.pushState(null, "", "?comments=" + id)
     $('#commentModal').modal('toggle')
 }
 
@@ -687,7 +695,6 @@ function buildcomment(element, id, i, likes, forceliked) {
         flaghtml = ''
         reportbtnhtml = '<button onclick="' + reportFunc + '" class="waves eon-text"><i class="material-icons">report_problem</i></button>'
     }
-
 
     a.innerHTML = '<div class="card-body commentcard"><img class="centeredy commentpfp" onclick="' + userFunc33 + '" id="' + i + 'pfpel" alt=""><p class="commenttext">' + flaghtml + '<a class="userlinkoncomment">' + element.name + ' » </a> ' + element.content + '</p><div class="centeredy commentcontent">' + likehtml + reportbtnhtml + '</div>'
     document.getElementById('commentsbox').appendChild(a)
@@ -904,7 +911,6 @@ async function addstuffuser(name, data, time, last) {
         likeFunc = "likeuser('" + name + "')"
         commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "', '" + data.data.uid + "')"
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
-        fullFunc = "fullscreen('" + name + "')"
         if (data.data.url_theme == 'deep') {
             textCardClass = 'superdeepcard'
             textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + data.data.url_content + '</b></p></div>'            
@@ -913,7 +919,8 @@ async function addstuffuser(name, data, time, last) {
             textCardClass = data.data.url_theme + 'card'
             textStuff = '<div class="card-body"><h5 class="posttextclass">' + data.data.url_content + '</h5></div>'
         }
-        a.innerHTML = '<div class="card usercard animated fadeIn"><div class="card ' + textCardClass + '">' + textStuff + '</div><br><center><br><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn animated"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
+        postFunc = "viewpost('" + name + "');sessionStorage.setItem('skiponce3', 'true')"
+        a.innerHTML = '<div class="card usercard animated fadeIn"><div onclick="' + postFunc + '" class="card ' + textCardClass + '">' + textStuff + '</div><br><center><br><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn animated"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">info</i></button><br></div></div><br></center><br></div>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
@@ -938,7 +945,8 @@ async function addstuffuser(name, data, time, last) {
         commentFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); loadComments('" + name + "', '" + data.data.uid + "')"
         infoFunc = "sessionStorage.setItem('skiponce3', 'true'); $('#userModal').modal('toggle'); info('" + name + "')"
         fullFunc = "fullscreen('" + name + "')"
-        a.innerHTML = '<div class="card usercard animated fadeIn"><img id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><br><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn animated"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
+        postFunc = "viewpost('" + name + "');sessionStorage.setItem('skiponce3', 'true')"
+        a.innerHTML = '<div class="card usercard animated fadeIn"><img onclick="' + postFunc + '" id="' + name + 'imgelelel" class="animated fadeIn userimg" src="' + url + '"><br><center><br><p class="captiontxt">' + data.data.caption + '</p><center><button id="' + name + 'eluser" onclick="' + likeFunc + '" class="waves eon-text heart postuserbtn animated"><i class="material-icons posticonuser">favorite_border</i> ' + data.data.likes.length + '</button><button id="' + name + 'commentEluser" onclick="' + commentFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">chat_bubble_outline</i> ' + '</button><button id="' + name + 'infoEluser" onclick="' + infoFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">info</i></button><button onclick="' + fullFunc + '" class="waves eon-text postuserbtn animated"><i class="material-icons posticonuser">fullscreen</i></button><br></div></div><br></center><br></div>'
         document.getElementById(name + 'usersshell').appendChild(a)
         db.collection('posts').doc('comments').get().then(function (docee) {
             bambam = docee.data()[name].length
@@ -1289,7 +1297,10 @@ function info(id) {
             document.getElementById('infoe').innerHTML = "Caption N/A."
         }
         
-
+        document.getElementById('postbtnfrominfo').onclick = function () {
+            sessionStorage.setItem('tocomments', true)
+            viewpost(id)
+        }
         document.getElementById('commentbtnfrominfo').onclick = function () {
             sessionStorage.setItem('tocomments', true)
             loadComments(id, doc.data()[id].data.uid)
@@ -1793,8 +1804,6 @@ $('#infoModal').on('hidden.bs.modal', function () {
             sessionStorage.setItem('touser', false)
         }
         else {
-
-
             if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
                 window.history.pushState(null, '', '/eonnect/app.html')
             }
@@ -2167,4 +2176,79 @@ function selecttheme(theme) {
             })
         };
     };
+}
+
+function viewpost(id) {
+    $('#userModal').modal('hide')
+
+    previouspost = sessionStorage.getItem("currentlyviewingpost")
+    if (previouspost == id) {
+        $('#postModal').modal('show')
+        window.history.pushState(null, '', '/eonnect/app.html?post=' + id);
+    }
+    else {
+        // Generate New
+        window.history.pushState(null, '', '/eonnect/app.html?post=' + id);
+        sessionStorage.setItem("currentlyviewingpost", id)
+        // $('#postfull').empty()
+        db.collection('posts').doc('posts').get().then(function(doc) {
+            if (!doc.data()[id].data.type && doc.data()[id].data.uid !== user.uid) {
+                // Check if friends
+                db.collection('users').doc(doc.data()[id].data.uid).get().then((userdoc) => {
+                    statusFriends = false
+                    for (let i = 0; i < userdoc.followers.length; i++) { if (userdoc.followers[i] == user.uid) {
+                            statusFriends = true
+                    }}
+                    if (statusFriends) {
+                        thegoahead(id, doc.data()[id], userdoc.data())
+                    }
+                    else {
+                        $('#postfull').html('<p>This post is private and you are not following them o.O</p>')
+                    }
+                })
+                return;
+            }
+            else {
+                thegoahead(id, doc.data()[id])
+            }
+        
+        })
+        $('#postModal').modal('show')
+    }
+}
+
+async function thegoahead(id, data, userdata) {
+    if (userdata == undefined) {
+        userdata = await db.collection('users').doc(data.data.uid).get()
+        userdata = userdata.data()
+    }
+
+    // Get user details
+    commentFunc = "loadComments('" + id + "', '" + data.data.uid + "'); $('#postModal').modal('hide')"
+    infoFunc = "info('" + id + "'); $('#postModal').modal('hide')"
+    userFunc = "userodal('" + data.data.uid + "'); $('#postModal').modal('hide')"
+
+    caption = data.data.caption
+    if (data.data.caption == undefined) {
+        caption = data.data.url_content
+    }
+
+    if (data.data.url == 'eonnect-home-text_post') {
+        // Text post
+        if (data.data.url_theme == 'deep') {
+            textCardClass = 'superdeepcard'
+            textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + data.data.url_content + '</b></p></div>'            
+        }
+        else {
+            textCardClass = data.data.url_theme + 'card'
+            textStuff = '<div class="card-body"><h5 class="posttextclass">' + data.data.url_content + '</h5></div>'
+        }
+        b = '<div class="card postfullcard ' + textCardClass + '">' + textStuff + '</div>'
+    }
+    else {
+        b = '<img src="' + data.data.url + '" class="postimg shadow" alt="">'
+    }
+
+    a = '<div class="row"><div class="col-8"><center>' + b + '</center></div><div class="col-4 sidebarcontentparent"><hr id="dividerpostmodal" class="vertical-divider"><div id="sidebarcontent"> <nav class="navbar animated fadeInDown"> <button onclick="' + userFunc + '"  class="eon-text"> <img src="' + userdata.url + '" class="postmodalpfp" alt="" > ' + userdata.name + ' </button><ul class="navbar-nav mr-auto"></ul> <button onclick="' + commentFunc + '" class="eon-text navbtnicon animated fadeInUp delay1"><i class="material-icons">comment</i></button> <button onclick="' + infoFunc + '" class="eon-text navbtnicon animated fadeInUp delay2"><i class="material-icons">info</i></button> </nav><hr> <br><br><blockquote class="blockquote"><p class="mb-0">' + caption + '</p></blockquote></div></div></div>'
+    $('#postfull').html(a)
 }
