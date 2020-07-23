@@ -660,14 +660,14 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
     if (msg.app_preset == 'eonnect-direct-file') {
         if (msg.sender == user.uid) {
             downloadFunc = "window.open('" + msg.app_preset_data + "')"
-            msgcontent = '<h3><i class="material-icons gradicon2">attach_file</i>File</h3>You sent a file: ' + msg.content + '<br><br><button onclick="' + downloadFunc + '" class="eon-contained">download</button><br>'
+            msgcontent = '<h3><i class="material-icons gradicon2">attach_file</i>File</h3>You sent a file: ' + msg.content + '<br><br><button onclick="' + downloadFunc + '" class="eon-contained">view</button><br>'
             if (msg.content.endsWith('.png') || msg.content.endsWith('.jpg') || msg.content.endsWith('.jpeg') || msg.content.endsWith('.gif')) {
                 msgcontent = 'You sent an image: <br><br><img src="' + msg.app_preset_data + '" class="inline-direct-img">'
             }
         }
         else {
             downloadFunc = "youareleaving('" + msg.app_preset_data + "')"
-            msgcontent = '<h3><i class="material-icons gradicon2">attach_file</i>File</h3>' + name + ' sent you a file: ' + msg.content + '<br><br><button onclick="' + downloadFunc + '" class="eon-contained">download</button><br>'
+            msgcontent = '<h3><i class="material-icons gradicon2">attach_file</i>File</h3>' + name + ' sent you a file: ' + msg.content + '<br><br><button onclick="' + downloadFunc + '" class="eon-contained">view</button><br>'
             if (msg.content.endsWith('.png') || msg.content.endsWith('.jpg') || msg.content.endsWith('.jpeg') || msg.content.endsWith('.gif')) {
                 msgcontent = 'You received an image: <br><br><img src="' + msg.app_preset_data + '" class="inline-direct-img">'
             }
@@ -1336,41 +1336,64 @@ function leavedm() {
 }
 
 function direct_UploadFile(uid) {
-    $('#skiddyfileupload').on("change", function(){ direct_confirmUpload(uid) });
+    document.getElementById('skiddyfileupload').value = ''
+    sessionStorage.setItem('targetuid', uid)
     $('#skiddyfileupload').click()
 }
 
-function direct_confirmUpload(uid) {
+function direct_confirmUpload() {
+    uid = sessionStorage.getItem('targetuid')
     file = document.getElementById('skiddyfileupload').files[0]
     var storageRef = firebase.storage().ref();
-    storageRef.child('conversations/' + string + '/' + file.name).put(file).then(function() {
-        console.log('uplaoded');
-    }).then(function() {
-        storageRef.child('conversations/' + string + '/' + file.name).getDownloadURL().then(function(url) {
-            now = new Date()
-            unreadkey = 'unread_' + uid
+    var uploadTask = storageRef.child('conversations/' + string + '/' + file.name).put(file);
+    $('#uploadprogress').removeClass('hidden')
+    $('#uploadprogress').removeClass('fadeOut')
+    $('#uploadprogress').addClass('fadeIn')
+    $('#divider2').removeClass('zoomIn')
+    $('#divider2').addClass('fadeOut')
+    uploadTask.on('state_changed', function(snapshot){
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      $('#uploadprogressbar').css('width', progress + '%')
+    }, function(error) {
+      alert(error)
+      $('#divider2').removeClass('fadeOut')
+      $('#divider2').addClass('zoomIn')
+      $('#uploadprogress').removeClass('fadeIn')
+      $('#uploadprogress').addClass('fadeOut')
+      window.setTimeout(function() {
+        $('#uploadprogress').addClass('hidden')
+      }, 1200)
+    }, function() {
+        $('#divider2').removeClass('fadeOut')
+        $('#divider2').addClass('zoomIn')
+        $('#uploadprogress').removeClass('fadeIn')
+        $('#uploadprogress').addClass('fadeOut')
+        window.setTimeout(function() {
+          $('#uploadprogress').addClass('hidden')
+        }, 1200)
+      uploadTask.snapshot.ref.getDownloadURL().then(function(url) {
+        now = new Date()
+        unreadkey = 'unread_' + uid
 
-            db.collection('direct').doc(string).update({
-                [unreadkey]: true,
-                messages: firebase.firestore.FieldValue.arrayUnion({
-                    app_preset: 'eonnect-direct-file',
-                    app_preset_data: url,
-                    content: file.name,
-                    sender: user.uid,
-                    timestamp: now,
-                })
-            }).then(function() {
-                ENACT_CHANGES(uid)
+        db.collection('direct').doc(string).update({
+            [unreadkey]: true,
+            messages: firebase.firestore.FieldValue.arrayUnion({
+                app_preset: 'eonnect-direct-file',
+                app_preset_data: url,
+                content: file.name,
+                sender: user.uid,
+                timestamp: now,
             })
-            db.collection('directlisteners').doc(uid).update({
-                most_recent_sender: user.uid
-            }).then(function() {
-                db.collection('directlisteners').doc(uid).update({
-                    most_recent_sender: 'none'
-                })
-            })
-
+        }).then(function() {
+            ENACT_CHANGES(uid)
         })
-    })
-
+        db.collection('directlisteners').doc(uid).update({
+            most_recent_sender: user.uid
+        }).then(function() {
+            db.collection('directlisteners').doc(uid).update({
+                most_recent_sender: 'none'
+            })
+        })
+      });
+    });
 }

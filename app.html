@@ -899,10 +899,10 @@
                         </div>
 
                         <div id="directfooter" class='directfooter hidden animated fadeInUp'>
-                            <hr class="divider2 hidden animated zoomIn slow">
-                            <input type="file" name="" id="skiddyfileupload">
-                            <div id="uploadprogress" class="progress">
-                                <div id="uploadprogressbar" class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                            <hr id="divider2" class="divider2 hidden animated zoomIn slow">
+                            <input onchange="direct_confirmUpload()" type="file" name="" id="skiddyfileupload">
+                            <div id="uploadprogress" class="hidden progress animated fadeIn">
+                                <div id="uploadprogressbar" class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <br>
                             <div class="relative2">

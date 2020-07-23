@@ -1617,10 +1617,6 @@ custom-control-label::before {
     width: 90%;
 }
 
-#uploadprogress {
- visibility: hidden;
-}
-
 #skiddyfileupload {
     display: none;
 }
@@ -1629,4 +1625,9 @@ custom-control-label::before {
     max-width: 100%;
     max-height: 1200px;
     border-radius: 24px;
+}
+
+.progress-bar {
+    transition: all 0.5s;
+    border-bottom: 0.25rem solid var(--eon-primary);
 }
