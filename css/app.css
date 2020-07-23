@@ -175,6 +175,17 @@ custom-control-label::before {
     -moz-text-fill-color: transparent;
 }
 
+.gradicon2 {
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    padding: 8px;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text;
+    background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
 .navbarbutton {
     width: 100%;
     padding: 6px;
@@ -1164,20 +1175,45 @@ custom-control-label::before {
 }
 
 .newmsgbox {
-    width: 85%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 70%;
     display: inline-block
 }
 
-.newdmmsgbtn {
+.unset {
+    position: unset !important;
+}
+
+.addfilebtn {
+    position: absolute;
+    margin-top: -22px !important;
     width: 10%;
     height: 50px;
     display: inline-block;
+    left: 0px;
+}
 
+.newdmmsgbtn {
+    position: absolute;
+    margin-top: -22px !important;
+    width: 10%;
+    height: 50px;
+    display: inline-block;
     right: 0px;
 }
 
 .relative {
     position: relative;
+}
+
+.relative2 {
+    position: relative;
+    top:0%;
+    left:0%;
+    height:100%;
+    width:100%
 }
 
 .navbtnicon {
@@ -1579,4 +1615,18 @@ custom-control-label::before {
 
 .postfullcard {
     width: 90%;
+}
+
+#uploadprogress {
+ visibility: hidden;
+}
+
+#skiddyfileupload {
+    display: none;
+}
+
+.inline-direct-img {
+    max-width: 100%;
+    max-height: 1200px;
+    border-radius: 24px;
 }

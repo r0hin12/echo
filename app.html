@@ -900,8 +900,18 @@
 
                         <div id="directfooter" class='directfooter hidden animated fadeInUp'>
                             <hr class="divider2 hidden animated zoomIn slow">
+                            <input type="file" name="" id="skiddyfileupload">
+                            <div id="uploadprogress" class="progress">
+                                <div id="uploadprogressbar" class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                             <br>
-                            <div class="relative">
+                            <div class="relative2">
+                                <div class="btn-group dropup unset">
+                                    <button data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="eon-text addfilebtn centeredy"><i class="material-icons">add</i></button>
+                                    <div class="dropdown-menu">
+                                            <button id="addfilebtn" class="eon-outlined block"><i class="material-icons">insert_drive_file</i> file</button>
+                                    </div>
+                                  </div>
                                 <div class="floating-label textfield-box newmsgbox">
                                     <label for="newdmmsg">New Message</label>
                                     <input class="form-control" id="newdmmsg" placeholder="" type="text">

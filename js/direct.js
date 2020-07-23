@@ -439,6 +439,9 @@ function BUILD_DIRECT(uid, btnel) {
             document.getElementById('newdmmsgbtn').onclick = function() {
                 ADD_MESSAGE(uid)
             }
+            document.getElementById('addfilebtn').onclick = function() {
+                direct_UploadFile(uid)
+            }
             
             alphabeticalized = []
             alphabeticalized.push(user.uid)
@@ -510,7 +513,9 @@ function BUILD_DIRECT(uid, btnel) {
         document.getElementById('newdmmsgbtn').onclick = function() {
             ADD_MESSAGE(uid)
         }
-        
+        document.getElementById('addfilebtn').onclick = function() {
+            direct_UploadFile(uid)
+        }
         alphabeticalized = []
         alphabeticalized.push(user.uid)
         alphabeticalized.push(uid)
@@ -651,6 +656,23 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
 
     msgcontent = msg.content
 
+
+    if (msg.app_preset == 'eonnect-direct-file') {
+        if (msg.sender == user.uid) {
+            downloadFunc = "window.open('" + msg.app_preset_data + "')"
+            msgcontent = '<h3><i class="material-icons gradicon2">attach_file</i>File</h3>You sent a file: ' + msg.content + '<br><br><button onclick="' + downloadFunc + '" class="eon-contained">download</button><br>'
+            if (msg.content.endsWith('.png') || msg.content.endsWith('.jpg') || msg.content.endsWith('.jpeg') || msg.content.endsWith('.gif')) {
+                msgcontent = 'You sent an image: <br><br><img src="' + msg.app_preset_data + '" class="inline-direct-img">'
+            }
+        }
+        else {
+            downloadFunc = "youareleaving('" + msg.app_preset_data + "')"
+            msgcontent = '<h3><i class="material-icons gradicon2">attach_file</i>File</h3>' + name + ' sent you a file: ' + msg.content + '<br><br><button onclick="' + downloadFunc + '" class="eon-contained">download</button><br>'
+            if (msg.content.endsWith('.png') || msg.content.endsWith('.jpg') || msg.content.endsWith('.jpeg') || msg.content.endsWith('.gif')) {
+                msgcontent = 'You received an image: <br><br><img src="' + msg.app_preset_data + '" class="inline-direct-img">'
+            }
+        }
+    }
     if (msg.app_preset == 'eonnect-direct-purge_request') {
         if (msg.sender == user.uid) {
             msgcontent = '<h3><i class="material-icons gradicon">delete_sweep</i>Purge Request</h3>You requested to purge your chat history with ' + name + '.' 
@@ -1311,4 +1333,44 @@ function leavedm() {
     $('#unselectedconten').addClass('fadeInDown')
     $('#eonnectNewsContent').addClass('hidden')
     history.pushState(null, '', '/eonnect/app.html?tab=inbox')   
+}
+
+function direct_UploadFile(uid) {
+    $('#skiddyfileupload').on("change", function(){ direct_confirmUpload(uid) });
+    $('#skiddyfileupload').click()
+}
+
+function direct_confirmUpload(uid) {
+    file = document.getElementById('skiddyfileupload').files[0]
+    var storageRef = firebase.storage().ref();
+    storageRef.child('conversations/' + string + '/' + file.name).put(file).then(function() {
+        console.log('uplaoded');
+    }).then(function() {
+        storageRef.child('conversations/' + string + '/' + file.name).getDownloadURL().then(function(url) {
+            now = new Date()
+            unreadkey = 'unread_' + uid
+
+            db.collection('direct').doc(string).update({
+                [unreadkey]: true,
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                    app_preset: 'eonnect-direct-file',
+                    app_preset_data: url,
+                    content: file.name,
+                    sender: user.uid,
+                    timestamp: now,
+                })
+            }).then(function() {
+                ENACT_CHANGES(uid)
+            })
+            db.collection('directlisteners').doc(uid).update({
+                most_recent_sender: user.uid
+            }).then(function() {
+                db.collection('directlisteners').doc(uid).update({
+                    most_recent_sender: 'none'
+                })
+            })
+
+        })
+    })
+
 }

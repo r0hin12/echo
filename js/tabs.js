@@ -44,8 +44,6 @@ $(window).ready(function () {
             break;
     }
 
-
-
     if (tab == null || tab == undefined) {
         sessionStorage.setItem('viewComments', urlParams.get('comments'))
         sessionStorage.setItem('viewInfo', urlParams.get('info'))
@@ -72,13 +70,11 @@ $(window).ready(function () {
                 tabe("Waiting...")
                 $('#notab').removeClass('hidden')
                 checkUrls()
-            }
-        
+            }   
     }
     else {
         tabe(tab)
     }
-
 })
 
 function tabe(tab) {
