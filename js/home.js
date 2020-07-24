@@ -1016,7 +1016,7 @@ async function usermodal(uid) {
                     hs.classList.add('connectionbtn')
                     hs.onclick = function() {
                         $('#userModal').modal('toggle')
-                        gotwitter(doc.data().twitter.uid)
+                        gotwitter(doc.data().twitter.id)
                     }
                     hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
                     document.getElementById("connections").appendChild(hs)

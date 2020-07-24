@@ -15,8 +15,7 @@ function linktwitter() {
     var provider = new firebase.auth.TwitterAuthProvider();
     firebase.auth().currentUser.linkWithPopup(provider).then(function(result) {
 
-        var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "twitter.com");
-
+        index = functiontofindIndexByKeyValue(user.providerData, "providerId", "twitter.com");
         db.collection('users').doc(user.uid).update({
             twitter: {
                 name: user.providerData[index].displayName,
