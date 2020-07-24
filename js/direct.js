@@ -731,7 +731,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
     }
 
     p.innerHTML = '<div class="' + textContainer + '">' + msgcontent + '</div>'
-
     if (prevuid === msg.sender) {
         // Check if bottommost msg is a system msg
         el = $('#' + string + 'chatcontainer').find('.clearfix:first')
@@ -739,35 +738,40 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             // Make sure dont add msg to previous sent msg
             prevuid = 'NANNANANANOOOOPE TRASH LOSER L'
         }
-    }
-    if (prevuid === msg.sender) {
-        try {
-            if (msg.sender == user.uid) {
-                clientorme = 'client'
-            }
-            else {
-                clientorme = 'other'
-            }
-            if (reverse) {
-                if ($('#' + string + 'chatcontainer').children('.messagecontainer').length == 0) {
-                    // error, element doesnt exist so create a container for this at the bottom (prepend cause reversed), then  continue with tryna find messagecontainers and add it to the bottom. or top.
-                    $('#' + string + 'chatcontainer').prepend(p)
-                    document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
-                }
-                $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML
-            }
-            else {
-                $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainer' + clientorme).last().get(0).innerHTML += '<br>' + msgcontent   
-            }
-            
+        if (el.children().first().hasClass('msgcontainerother')) {
+            // Avoided stupid bug trash
+            prevuid = 'THIS BUG WAS SO ANNYOING'
         }
-        catch { }
+}
+    if (prevuid === msg.sender) {
+        if (msg.sender == user.uid) {
+            clientorme = 'client'
+        }
+        else {
+            clientorme = 'other'
+        }
+        if (reverse) {
+            if ($('#' + string + 'chatcontainer').children('.messagecontainer').length == 0) {
+                // error, element doesnt exist so create a container for this at the bottom (prepend cause reversed), then  continue with tryna find messagecontainers and add it to the bottom. or top.
+                $('#' + string + 'chatcontainer').prepend(p)
+                document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
+            }
+            $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML
+        }
+        else {
+            if ($('#' + string + 'chatcontainer').children('.messagecontainer').length == 0) {
+                // error, element doesnt exist so create a container for this at the bottom (prepend cause reversed), then  continue with tryna find messagecontainers and add it to the bottom. or top.
+                $('#' + string + 'chatcontainer').prepend(p)
+                document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
+            }
+            $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainer' + clientorme).last().get(0).innerHTML += '<br>' + msgcontent   
+        }
     }
     else {
         if (reverse == undefined) {
             reverse = false
         }
-        if (reverse) {
+        if (reverse) {            
             $('#' + string + 'chatcontainer').append(p)
             document.getElementById(string + 'chatcontainer').append(document.createElement('br'))
         }
@@ -776,8 +780,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
         }
         addWaves()
-    }
-    
+    }        
     prevuid = msg.sender
     if (msg.app_preset.startsWith('eonnect-')) {
         prevuid = 'disabled'
