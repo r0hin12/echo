@@ -60,7 +60,7 @@ function unlinktwitter() {
 
 function gotwitter(uid) {
 
-youareleaving('https://twitter.com/intent/user?user_id=1075828370183737344')
+youareleaving('https://twitter.com/intent/user?user_id=' + uid)
 
 }
 

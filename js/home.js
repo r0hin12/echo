@@ -1031,7 +1031,7 @@ async function usermodal(uid) {
                     hs.classList.add('connectionbtn')
                     hs.onclick = function() {
                         $('#userModal').modal('toggle')
-                        gotwitter(doc.data().github.uid)
+                        gogithub(doc.data().github.id)
                     }
                     var customProps = window.getComputedStyle(document.documentElement);
                     hs.innerHTML = '<img class="imginbtn" src="assets/GitHub-Mark-' + customProps.getPropertyValue('--content-primary').replace(/\s/g, '').charAt(0).toUpperCase() + customProps.getPropertyValue('--content-primary').slice(1) + '.png"></img>'
@@ -2214,9 +2214,11 @@ function viewpost(id) {
                 // Check if friends
                 db.collection('users').doc(doc.data()[id].data.uid).get().then((userdoc) => {
                     statusFriends = false
-                    for (let i = 0; i < userdoc.followers.length; i++) { if (userdoc.followers[i] == user.uid) {
+                    if (userdoc.data().followers !== undefined) {
+                        for (let i = 0; i < userdoc.data().followers.length; i++) { if (userdoc.data().followers[i] == user.uid) {
                             statusFriends = true
-                    }}
+                        }}
+                    }
                     if (statusFriends) {
                         thegoahead(id, doc.data()[id], userdoc.data())
                     }
