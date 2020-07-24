@@ -336,7 +336,6 @@ function BUILD_DIRECT_VARIABLES(uid) {
         unreadkey = "unread_" + user.uid
 
         if (doc.data()[unreadkey]) {
-            console.log('a');
             document.getElementById(doc.id + 'notifbadge').innerHTML = "!!"
             checkAllNotifs()
         }
@@ -526,13 +525,11 @@ function BUILD_DIRECT(uid, btnel) {
         });
         string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
         stringvar = this["marker" + string]
-
         if ($('#' + string + 'chatcontainer').is(':empty')){
             // If its empty, build messages
             for (let i = 0; i < stringvar.length; i++) {
                 BUILD_MESSAGE(this["dmcache"+uid].name, stringvar[i], string)
             }
-    
             ScrollBottom()
         }
 
@@ -653,9 +650,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         textContainer = 'msgcontainerother shadow-sm'
     }
     //TIMESTAMP IS msg.timestamp.toDate().toLocaleTimeString().slice(0, msg.timestamp.toDate().toLocaleTimeString().lastIndexOf(":")) + ' ' + msg.timestamp.toDate().toLocaleTimeString().slice(-2)
-
     msgcontent = msg.content
-
 
     if (msg.app_preset == 'eonnect-direct-file') {
         if (msg.sender == user.uid) {
@@ -745,7 +740,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             prevuid = 'NANNANANANOOOOPE TRASH LOSER L'
         }
     }
-
     if (prevuid === msg.sender) {
         try {
             if (msg.sender == user.uid) {
@@ -755,12 +749,15 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
                 clientorme = 'other'
             }
             if (reverse) {
+                if ($('#' + string + 'chatcontainer').children('.messagecontainer').length == 0) {
+                    // error, element doesnt exist so create a container for this at the bottom (prepend cause reversed), then  continue with tryna find messagecontainers and add it to the bottom. or top.
+                    $('#' + string + 'chatcontainer').prepend(p)
+                    document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
+                }
                 $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML
-                console.log('here');
             }
             else {
                 $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainer' + clientorme).last().get(0).innerHTML += '<br>' + msgcontent   
-                console.log('here');
             }
             
         }
@@ -773,12 +770,10 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         if (reverse) {
             $('#' + string + 'chatcontainer').append(p)
             document.getElementById(string + 'chatcontainer').append(document.createElement('br'))
-            console.log('here');
         }
         else {
             $('#' + string + 'chatcontainer').prepend(p)
             document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
-            console.log('here');
         }
         addWaves()
     }
@@ -872,7 +867,6 @@ function ENACT_CHANGES(uid) {
                 
                 ScrollBottom()
                 if ($('#' + string + 'chatcontainer').hasClass('hidden') || sessionStorage.getItem("currentab") !== 'inbox') {
-                    console.log('a');
                     document.getElementById(string + 'notifbadge').innerHTML = '!!'
                     checkAllNotifs()
                     if (sessionStorage.getItem('currentab') !== 'inbox') {
@@ -892,7 +886,6 @@ function ENACT_CHANGES(uid) {
         }
         else {
             // Add a ping because it means you reciveved a message but it is not built
-            console.log('a');
             document.getElementById(string + 'notifbadge').innerHTML = '!!'
             checkAllNotifs()
 

@@ -349,6 +349,11 @@ function preesearch() {
     db.collection('app').doc('details').get().then(function(doc) {
         window.usersearch = doc.data().usernames
         autocomplete(document.getElementById("search-box"), usersearch);
+
+        // Maintanence Mode
+        if (doc.data().maint) {
+            alert('Maintence Mode is Active \n\nFeatures may be corrupt or broken and it is recommended to temporarily reduce usage on Eonnect. \n\nThanks for understanding...')
+        }
     })
 }
 
