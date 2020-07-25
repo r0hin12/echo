@@ -16,7 +16,7 @@ $(window).ready(function () {
     sessionStorage.setItem('first-time-home', 'true')
     sessionStorage.setItem('first-time-account', 'true')
     sessionStorage.setItem('first-time-inbox', 'true')
-    sessionStorage.setItem('first-time-home', 'true')
+    sessionStorage.setItem('first-time-explore', 'true')
     sessionStorage.setItem('first-time-home', 'true')
 
 
@@ -122,6 +122,9 @@ function tabe(tab) {
                     }
                 }, 200);
                 break;
+            case "explore":
+                // Do explore stuff idk
+                console.log('explore');
             case "inbox":
                 // Everything is automatically loaded to enable in-app notifications. Slows down app loading however...
                 intervalinbox = window.setInterval(function () {

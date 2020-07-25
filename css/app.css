@@ -1591,6 +1591,7 @@ custom-control-label::before {
 .postimg {
     max-height: 800px;
     border-radius: 12px;
+    max-width: 90%;
 }
 
 #dividerpostmodal {
