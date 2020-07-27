@@ -1976,8 +1976,17 @@ function newpost() {
             $('#uploadmodal').modal('toggle')
         }
         else {
-            document.getElementById('captioninput').value = ''
+            // Image Tags
+            tags = $("#tagsinput1").tagsinput('items')
+            if (tags.length > 8) {
+                // More than 8 tags
+                error('You have added more than 8 tags.')
+                $('#uploadmodal').modal('toggle')
+                return;
+            }
 
+            document.getElementById('tagsinput1').value = ''
+            document.getElementById('captioninput').value = ''
             var storageRef = firebase.storage().ref();
             var file = document.getElementById('imgInp').files[0]
 
@@ -2003,6 +2012,7 @@ function newpost() {
                                     caption: caption,
                                     likes: ['first'],
                                     url: url,
+                                    tags: tags,
                                     file: filename,
                                     name: user.displayName,
                                     type: document.getElementById('privateinp').checked,
@@ -2144,6 +2154,15 @@ function selecttheme(theme) {
             $('#uploadmodal').modal('toggle')
         }
         else {
+           // Text Tags
+            tags = $("#tagsinput2").tagsinput('items')
+            if (tags.length > 8) {
+               // More than 8 tags
+               error('You have added more than 8 tags.')
+               $('#uploadmodal').modal('toggle')
+               return;
+            }
+            document.getElementById('tagsinput2').value = ''
             document.getElementById('textpostbox').value = ''
             $('#uploadmodal').modal('toggle')
             db.collection('posts').doc('posts').get().then(function (doc) {
@@ -2160,6 +2179,7 @@ function selecttheme(theme) {
                             url_theme: theme,
                             url_content: text,
                             file: 'eonnect-home-text_post',
+                            tags: tags,
                             name: user.displayName,
                             type: document.getElementById('privateinp2').checked,
                             uid: user.uid,
@@ -2269,6 +2289,16 @@ async function thegoahead(id, data, userdata) {
         b = '<img src="' + data.data.url + '" class="postimg shadow" alt="">'
     }
 
-    a = '<div class="row"><div class="col-8"><center>' + b + '</center></div><div class="col-4 sidebarcontentparent"><hr id="dividerpostmodal" class="vertical-divider"><div id="sidebarcontent"> <nav class="navbar animated fadeInDown"> <button onclick="' + userFunc + '"  class="eon-text"> <img src="' + userdata.url + '" class="postmodalpfp" alt="" > ' + userdata.name + ' </button><ul class="navbar-nav mr-auto"></ul> <button onclick="' + commentFunc + '" class="eon-text navbtnicon animated fadeInUp delay1"><i class="material-icons">comment</i></button> <button onclick="' + infoFunc + '" class="eon-text navbtnicon animated fadeInUp delay2"><i class="material-icons">info</i></button> </nav><hr> <br><br><blockquote class="blockquote"><p class="mb-0">' + caption + '</p></blockquote></div></div></div>'
+    tags = data.data.tags
+    if (tags == undefined || tags.length == 0) {
+        tags = []
+    }
+    tagselement = ''
+    for (let i = 0; i < tags.length; i++) {
+        const element = tags[i];
+        tagselement = tagselement + '<span class="badge badge-pill badge-primary">' + tags[i] + '</span>'
+    }
+
+    a = '<div class="row"><div class="col-8 fullpostcontainer"><center>' + b + '</center></div><div class="col-4 sidebarcontentparent"><hr id="dividerpostmodal" class="vertical-divider"><div id="sidebarcontent"> <nav class="navbar animated fadeInDown"> <button onclick="' + userFunc + '"  class="eon-text"> <img src="' + userdata.url + '" class="postmodalpfp" alt="" > ' + userdata.name + ' </button><ul class="navbar-nav mr-auto"></ul> <button onclick="' + commentFunc + '" class="eon-text navbtnicon animated fadeInUp delay1"><i class="material-icons">comment</i></button> <button onclick="' + infoFunc + '" class="eon-text navbtnicon animated fadeInUp delay2"><i class="material-icons">info</i></button> </nav><hr> <br><br><blockquote class="blockquote"><p class="mb-0">' + caption + '</p></blockquote><br>' + tagselement + '</div></div></div>'
     $('#postfull').html(a)
 }

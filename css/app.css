@@ -593,6 +593,7 @@ custom-control-label::before {
     margin: 0px;
 
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-background-clip: text;
     -moz-text-fill-color: transparent;
@@ -1631,4 +1632,51 @@ custom-control-label::before {
 .progress-bar {
     transition: all 0.5s;
     border-bottom: 0.25rem solid var(--eon-primary);
+}
+
+.fullpostcontainer {
+    min-height: 300px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fullpostcontainer center {
+    width: 100%;
+}
+
+.trend_box {
+    margin: 8px;
+    min-width: 100px;
+    padding: 36px;
+    cursor: pointer;
+}
+
+.trend_box .card-body {
+    color: #fff;
+    opacity: 1.0;
+    position: relative;
+
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#trending_build {
+    text-align: center;
+}
+
+.indeterminate_trend::before {
+    content: '';
+    background-color: var(--eon-primary); 
+    background-image: linear-gradient(19deg, var(--eon-primary) 0%, var(--eon-secondary) 100%); 
+    background-size: cover; 
+    background-position: center; 
+    position: absolute; 
+    top: 0px; 
+    right: 0px; 
+    bottom: 0px; 
+    left: 0px; 
+    opacity: 0.50; 
+    border-radius: 15px;
 }

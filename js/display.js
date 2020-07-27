@@ -14,7 +14,7 @@ $(window).on('resize', function () {
 function check(width) {
     if (width < 800) {
         document.getElementById('expand').classList.add('eonnect-main-expanded')
-        document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: 800px; transiton: all 0.5s;} .eonnect-main-expanded {width: 100% !important; transiton: all 0.5s;}'
+        document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: 800px; transition: all 0.5s;} .eonnect-main-expanded {width: 100% !important; transition: all 0.5s;}'
 
         document.getElementById('expandbtn').style.display = 'block'
         if (sessionStorage.getItem('currentab') == 'inbox') {
@@ -44,7 +44,7 @@ function check(width) {
 
         elwidth = width - 275
         document.getElementById('expand').style.width = elwidth + 'px'
-        document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: ' + elwidth + 'px; transiton: all 0.5s;}'
+        document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: ' + elwidth + 'px; transition: all 0.5s;}'
 
     }
 }
@@ -612,7 +612,7 @@ function updategradientui() {
             partfour = '--ripple-primary: rgba(240, 108, 245, 0.3); --ripple-secondary: rgba(240, 108, 245, 0.1); --button-primary: rgb(206, 51, 226);'
             break;
         case 'hotpink':
-            parttwo = '--eon-primary: rgb(226, 51, 159); --eon-secondary: #fc458b; '
+            parttwo = '--eon-primary: rgb(226, 51, 124); --eon-secondary: #ff006a; '
             partfour = '--ripple-primary: rgba(226, 51, 159, 0.3); --ripple-secondary: rgba(226, 51, 159, 0.1); --button-primary: rgb(216, 48, 138); '
             break;
         case 'custom':

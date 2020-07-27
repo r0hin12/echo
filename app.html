@@ -40,6 +40,8 @@
     <link rel="stylesheet" href="css/search.css">
     <!-- Spinner -->
     <link rel="stylesheet" href="css/spinner.css">
+    <!-- Tags Input -->
+    <link rel="stylesheet" href="css/tagsinput.css">
     <!-- Form -->
     <link rel="stylesheet" href="css/form.css">
     <!-- Dyanmic Style #1-->
@@ -54,6 +56,8 @@
     <style id="changelogbamstyle"></style>
     <!-- Dynamic Style #6-->
     <style id="newposttitlestyle6"></style>
+    <!-- Dynamic Style #7-->
+    <style id="explorebgstyle"></style>
 
 
 </head>
@@ -140,21 +144,32 @@
                                 <input class="form-control" id="captioninput" placeholder="Add a Caption" type="text">
                             </div>
                             <br>
-    
-                            <input class="checkbox" type="checkbox" id="privateinp" style="display: none;">
-                            <label for="privateinp" class="check">
-                                <svg width="18px" height="18px" viewBox="0 0 18 18">
-                                    <path
-                                        d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z">
-                                    </path>
-                                    <polyline points="1 9 7 14 15 4"></polyline>
-                                </svg>
-                            </label>
-                            <p class="checklabel">Private Post <a style="display: inline-block;" tabindex="0"
-                                    data-toggle="popover" data-trigger="focus" title="Private Post"
-                                    data-content="Private posts are only visible to your followers. Turn on follow requests in your account settings."><i
-                                        class="material-icons smallicon">info</i></a></p>
-    
+
+                            <div class="row">
+                                <div class="col-sm">
+                                    <br><br><br>
+                                    <input class="checkbox" type="checkbox" id="privateinp" style="display: none;">
+                                    <label for="privateinp" class="check">
+                                        <svg width="18px" height="18px" viewBox="0 0 18 18">
+                                            <path
+                                                d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z">
+                                            </path>
+                                            <polyline points="1 9 7 14 15 4"></polyline>
+                                        </svg>
+                                    </label>
+                                    <p class="checklabel">Private Post</p>
+                                    <br><br><br>
+                                    <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Private Post" data-content="Private posts are only visible to your followers. Turn on follow requests in your account settings."><i class="material-icons smallicon">info</i></a>
+
+                                </div>
+                                <div class="col-sm">
+                                    <br><br><br>
+                                    <input data-role="tagsinput" id="tagsinput1" placeholder="Press enter after each tag." type="text">
+                                    <br><br><br>
+                                    <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Tags" data-content="Help others discover your post by adding tags. Your post will show up in the respective category of each tag. ie: funny, beauty, arts, photography, goals, etc"><i class="material-icons smallicon">info</i></a> 
+                                </div>
+                            </div>
+
                             <br><br>
                             <button onclick="window.setTimeout(function() {newpost()},2500)" class="rocket-button"><div class="default">Upload Post</div><div class="success"> <svg> <use xlink:href="#check"> </svg><div>Uploading...</div></div><div class="animation"><div class="rocket"> <svg> <use xlink:href="#rocket"> </svg></div><div class="smoke"> <i></i><i></i><i></i><i></i><i></i><i></i></div></div> </button> <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"> <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 11" id="check"> <polyline stroke="currentColor" points="1 5.5 5 9.5 12 1.5"></polyline> </symbol> <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" id="rocket"> <path d="M12,0 C18.6666667,8.70175439 19.7777778,19.0350877 15.3333333,31 L8.66666667,31 C4.22222222,19.0350877 5.33333333,8.70175439 12,0 Z" fill="var(--rocket)"></path> <path d="M12,0 C5.33333333,8.70175439 4.22222222,19.0350877 8.66666667,31 C6.72222222,17.9473684 7.83333333,7.61403509 12,0 Z" fill="var(--rocket-shadow-left)"></path> <path d="M12,0 C18.6666667,8.70175439 19.7777778,19.0350877 15.3333333,31 C17.2777778,17.9473684 16.1666667,7.61403509 12,0 Z" fill="var(--rocket-shadow-right)"></path> <path d="M22.2399372,27.25 C21.2403105,25.558628 19.4303122,23.808628 16.21,22 L15,31 L17.6512944,31 C18.2564684,31 18.8216022,31.042427 19.1572924,31.5292747 L21.7379379,35.271956 C22.0515593,35.7267976 22.5795404,36 23.1449294,36 C23.5649145,36 23.9142153,35.7073938 23.9866527,35.3215275 L24,35.146217 L23.9987214,35.1196135 C23.7534506,31.4421183 23.1671892,28.8189138 22.2399372,27.25 Z" fill="var(--rocket-wing-right)"></path> <path d="M1.76006278,27.25 C2.75968951,25.558628 4.56968777,23.808628 7.79,22 L9,31 L6.34870559,31 C5.74353157,31 5.17839777,31.042427 4.84270762,31.5292747 L2.2620621,35.271956 C1.94844071,35.7267976 1.42045963,36 0.855070627,36 C0.435085457,36 0.0857846604,35.7073938 0.0133472633,35.3215275 L0,35.146217 L0.00127855763,35.1196135 C0.24654935,31.4421183 0.832810758,28.8189138 1.76006278,27.25 Z" fill="var(--rocket-wing-left)"></path> <circle fill="var(--rocket-window-shadow)" cx="12" cy="12" r="3"></circle> <circle fill="var(--rocket-window)" cx="12" cy="12" r="2.5"></circle> <path d="M15.6021597,5.99977504 L8.39784027,5.99977504 C8.54788101,5.6643422 8.70496315,5.3309773 8.86908669,4.99968036 L15.1309133,4.99968036 C15.2950369,5.3309773 15.452119,5.6643422 15.6021597,5.99977504 Z" fill-opacity="0.3" fill="var(--rocket-line)"></path> </symbol> </svg>
     
@@ -168,20 +183,33 @@
                                 <textarea class="form-control" id="textpostbox" placeholder="What's happening, broski?" rows="3"></textarea>
                             </div>
                             <br>
-                            <input class="checkbox" type="checkbox" id="privateinp2" style="display: none;">
-                            <label for="privateinp2" class="check">
-                                <svg width="18px" height="18px" viewBox="0 0 18 18">
-                                    <path
-                                        d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z">
-                                    </path>
-                                    <polyline points="1 9 7 14 15 4"></polyline>
-                                </svg>
-                            </label>
-                            <p class="checklabel">Private Post <a style="display: inline-block;" tabindex="0"
-                                    data-toggle="popover" data-trigger="focus" title="Private Post"
-                                    data-content="Private posts are only visible to your followers. Turn on follow requests in your account settings."><i
-                                        class="material-icons smallicon">info</i></a></p>
+
+                            <div class="row">
+                                <div class="col-sm">    
+                                    <br><br><br>
+                                    <input data-role="tagsinput" id="tagsinput2" placeholder="Press enter after each tag." type="text">
+                                    <br><br><br>
+                                    <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Tags" data-content="Help others discover your post by adding tags. Your post will show up in the respective category of each tag. ie: funny, beauty, arts, photography, goals, etc"><i class="material-icons smallicon">info</i></a>
+                                </div>
+                                <div class="col-sm">
+                                    <br><br><br>
+                                    <input class="checkbox" type="checkbox" id="privateinp2" style="display: none;">
+                                    <label for="privateinp2" class="check">
+                                        <svg width="18px" height="18px" viewBox="0 0 18 18">
+                                            <path
+                                                d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z">
+                                            </path>
+                                            <polyline points="1 9 7 14 15 4"></polyline>
+                                        </svg>
+                                    </label>
+                                    <p class="checklabel">Private Post</p>
+                                    <br><br>
+                                    <a style="display: inline-block;" tabindex="0" data-toggle="popover" data-trigger="focus" title="Private Post" data-content="Private posts are only visible to your followers. Turn on follow requests in your account settings."><i class="material-icons smallicon">info</i></a>
+                                </div>
+                            </div>
+
                             <br>
+
                             <button onclick="nexttextstep()" class="eon-contained">next</button>
                         </center>
                         <center class="hidden" id="step2">
@@ -787,8 +815,16 @@
                     </div>
                 </div>
                 <div aria-labelledby="explore-tab" class="tab-pane fade" id="explore" role="tabpanel">
-                    <p>eok</p>
-                </div>
+                    <br>
+                    <h2 class="leader">Explore</h2>
+                    <p>Trending Categories</p>
+                    <br><br>
+                    <div id="trending_tags">
+                        <div id="explore_loader" class="centered"> 
+                            <div class="progress-circular"> <div class="progress-circular-wrapper"> <div class="progress-circular-inner"> <div class="progress-circular-left"> <div class="progress-circular-spinner"></div> </div> <div class="progress-circular-gap"></div> <div class="progress-circular-right"> <div class="progress-circular-spinner"></div></div></div></div></div></div>
+                        </div>
+                        <div id="trending_build"></div>
+                    </div> 
                 <div aria-labelledby="inbox-tab" class="tab-pane fade" id="inbox" role="tabpanel">
                     <div class="inboxsidebar">
                         <div id="calculationheight1">
@@ -1121,9 +1157,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -1139,6 +1173,8 @@
     <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
     <!-- Firebase Storage -->
     <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+    <!-- Firebase Functions -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-functions.js"></script>
 
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -1181,6 +1217,8 @@
     <script src='js/charming.js'></script>
     <!-- JS Color -->
     <script src="js/jscolor.js"></script>
+    <!-- Tags Input -->
+    <script src="js/tagsinput.js"></script>
 
     <!-- Firebase Variables -->
     <script src="js/firebase.js"></script>
@@ -1194,9 +1232,10 @@
     <script src="js/link.js"></script>
     <!-- Home Tab -->
     <script src="js/home.js"></script>
+    <!-- Explore Tab -->
+    <script src="js/explore.js"></script>
     <!-- App -->
     <script src="js/app.js"></script>
 
 </body>
-<!-- Yeah.. there's no confession  :D -->
 </html>

@@ -46,3 +46,7 @@ body {
     color: var(--content-primary);
     font-family: 'Baloo Paaji 2', cursive
 }
+
+.badge-primary {
+    background-color: var(--eon-primary)
+}

@@ -123,8 +123,8 @@ function tabe(tab) {
                 }, 200);
                 break;
             case "explore":
-                // Do explore stuff idk
-                console.log('explore');
+                load_trending_tags()
+                
             case "inbox":
                 // Everything is automatically loaded to enable in-app notifications. Slows down app loading however...
                 intervalinbox = window.setInterval(function () {

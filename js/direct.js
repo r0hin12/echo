@@ -738,7 +738,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             // Make sure dont add msg to previous sent msg
             prevuid = 'NANNANANANOOOOPE TRASH LOSER L'
         }
-        if (el.children().first().hasClass('msgcontainerother')) {
+        if (el.children().first().hasClass('msgcontainerother') && user.uid == msg.sender) {
             // Avoided stupid bug trash
             prevuid = 'THIS BUG WAS SO ANNYOING'
         }
