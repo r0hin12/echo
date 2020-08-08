@@ -78,8 +78,12 @@ $(window).ready(function () {
 })
 
 function tabe(tab) {
-    document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.split(tab.charAt(0))[1] + ' | Eonnect'
+    document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.replace(tab[0], '') + ' | Eonnect'
     sessionStorage.setItem("currentab", tab)
+
+    if (sidebarexpanded) {
+        document.getElementById('expandbtn').click()
+    }
 
     try {
         $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })
@@ -116,7 +120,7 @@ function tabe(tab) {
                         clearInterval(interval)
                         load()
                         window.setTimeout(function() {
-                            loadscrolling()
+                            // loadscrolling()
                             // Hold off a bit before loading infinite scroll as to not interfere with variables and invoke functions too early.
                         }, 3500)
                     }

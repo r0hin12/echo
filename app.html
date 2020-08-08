@@ -447,9 +447,7 @@
                                             <h2 id="usermodaltitle"></h2>
                                         </div>
                                         <p id="usermodalbio"></p>
-
-                                        <button id="followbtn" class="eon-contained">Follow</button>
-                                        <br><br>
+                                        <br>
                                     </div>
                                 </div>
                             </center>
@@ -462,9 +460,6 @@
                                             <div class="col-sm usermodalcolumn">
                                                 <h2 id="userfollowers"></h2>
                                                 <p class="inline">Followers</p><br>
-                                                <button id="viewfollowers" onclick="showfollowers()"
-                                                    class="eon-text">view</button>
-
                                                 <div id="followersbox" class="card animated followersbox">
                                                     <div class="card-body">
                                                         <center>
@@ -478,9 +473,6 @@
                                             <div class="col-sm usermodalcolumn">
                                                 <h2 id="userfollowing"></h2>
                                                 <p class="inline">Following</p><br>
-                                                <button id="viewfollowing" onclick="showfollowing()"
-                                                    class="eon-text">view</button>
-
                                                 <div id="followingbox" class="card animated followingbox">
                                                     <div class="card-body">
                                                         <center>
@@ -490,7 +482,24 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <br>
                                             </div>
+                                        </div>
+                                        <br>
+                                        <button id="followbtn" class="eon-contained">Follow</button>
+                                        <br>
+                                        <br>
+                                        <div id="privatewarning" style="display: none;" class="animated fadeInUp alert alert-primary alert-dismissible fade show" role="alert">
+                                            <strong>This account is private.</strong> Follow this user to see their content.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div id="ownwarning" style="display: none;" class="animated fadeInUp alert alert-primary alert-dismissible fade show" role="alert">
+                                            <strong>This is your account.</strong> Share it with people to gain followers!
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
                                     </center>
                                 </div>
@@ -498,25 +507,11 @@
                         </div>
                     </div>
                     <div>
+                        <br>
                         <center>
                             <h2 id="userrep"></h2><br>
                             <h3 class="inline"><small>Reputation</small></h3>
                         </center>
-                    </div>
-                    <br>
-                    <div id="privatewarning" style="display: none;"
-                        class="animated fadeInUp alert alert-primary alert-dismissible fade show" role="alert">
-                        <strong>This account is private.</strong> Follow this user to see their content.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div id="ownwarning" style="display: none;"
-                        class="animated fadeInUp alert alert-primary alert-dismissible fade show" role="alert">
-                        <strong>This is your account.</strong> Share it with people to gain followers!
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
                     <br>
                     <center><button type="button" class="waves eon-contained" data-dismiss="modal">close</button>
@@ -524,9 +519,40 @@
                     <br>
                     <hr>
                     <br>
-
-                    <div id="usergrid"></div>
-
+                    <ul class="nav nav-justified" id="justifiedTab" role="tablist">
+                        <li class="nav-item">
+                          <a aria-controls="poststab" aria-selected="true" class="eon-text tabbtn" data-toggle="tab" href="#poststab" id="poststab-tab" role="tab">Posts</a>
+                        </li>
+                        <li class="nav-item">
+                          <a onclick="showfollowers()" aria-controls="followerstab" aria-selected="false" class="eon-text tabbtn" data-toggle="tab" href="#followerstab" id="followerstab-tab" role="tab">Followers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a onclick="showfollowing()" aria-controls="followingtab" aria-selected="false" class="eon-text tabbtn" data-toggle="tab" href="#followingtab" id="followingtab-tab" role="tab">Following</a>
+                          </li>
+                      </ul>
+                      <div class="tab-content" id="justifiedTabContent">
+                        <div aria-labelledby="poststab-tab" class="tab-pane fade show active" id="poststab" role="tabpanel">
+                            <h1 class="font-weight-bold">
+                                Posts
+                            </h1>
+                            <br>
+                            <div id="usergrid"></div>
+                        </div>
+                        <div aria-labelledby="followingtab-tab" class="tab-pane fade" id="followingtab" role="tabpanel">
+                            <h1 class="font-weight-bold">
+                                Following
+                            </h1>
+                            <br>
+                            <div id="followingcontainer"></div>
+                        </div>
+                        <div aria-labelledby="followerstab-tab" class="tab-pane fade" id="followerstab" role="tabpanel">
+                            <h1 class="font-weight-bold">
+                                Followers
+                            </h1>
+                            <br>
+                            <div id="followerscontainer"></div>
+                        </div>
+                      </div>
                 </div>
                 <div class="modal-footer"></div>
             </div>
@@ -713,7 +739,7 @@
     </div>
 
     <div class="main">
-        <button id="expandbtn" class="menuham expandbtn waves-effect" onclick="expand();this.classList.toggle('openedham');this.setAttribute('aria-expanded', this.classList.contains('openedham'))" aria-label="Main Menu"> <svg width="32" height="32" viewBox="0 0 100 100"> <path class="lineham line1ham" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" /> <path class="lineham line2ham" d="M 20,50 H 80" /> <path class="lineham line3ham" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" /> </svg> </button>
+        <button id="expandbtn" class="expandbtn waves-effect menuham" onclick="expand();this.classList.toggle('openedham');this.setAttribute('aria-expanded', this.classList.contains('openedham'))" aria-label="Main Menu"> <svg width="32" height="32" viewBox="0 0 100 100"> <path class="lineham line1ham" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" /> <path class="lineham line2ham" d="M 20,50 H 80" /> <path class="lineham line3ham" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" /> </svg> </button>
         
         <div class="buttonunexpanded animated" id="sidebar">
             <center>
@@ -819,6 +845,8 @@
                     <h2 class="leader">Explore</h2>
                     <p>Trending Categories</p>
                     <br><br>
+                    <div id="trending_content">
+                    </div>
                     <div id="trending_tags">
                         <div id="explore_loader" class="centered"> 
                             <div class="progress-circular"> <div class="progress-circular-wrapper"> <div class="progress-circular-inner"> <div class="progress-circular-left"> <div class="progress-circular-spinner"></div> </div> <div class="progress-circular-gap"></div> <div class="progress-circular-right"> <div class="progress-circular-spinner"></div></div></div></div></div></div>
@@ -1230,6 +1258,8 @@
     <script src="js/direct.js"></script>
     <!-- Link Profile -->
     <script src="js/link.js"></script>
+    <!-- Posts -->
+    <script src="js/posts.js"></script>
     <!-- Home Tab -->
     <script src="js/home.js"></script>
     <!-- Explore Tab -->

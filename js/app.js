@@ -88,6 +88,15 @@ function profilesetup2() {
                     usernames: firebase.firestore.FieldValue.arrayUnion(username),
                     map: firebase.firestore.FieldValue.arrayUnion(user.uid)
                 })
+                db.collection('users').doc(user.uid).collection('follow').doc('followers').set({
+                    followers: []
+                })
+                db.collection('users').doc(user.uid).collection('follow').doc('following').set({
+                    following: []
+                })
+                db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
+                    requested: []
+                })
                 db.collection('users').doc(user.uid).update({
                     username: username,
                     name: displayname,
@@ -126,11 +135,16 @@ function hasWhiteSpace(s) {
     return /\s/g.test(s);
 }
 
-function addappcontent() {
+async function addappcontent() {
     document.getElementById('viewprofilebtn').onclick = function() {
         usermodal(user.uid)
     }
     
+    window.userfollowersdoc = await db.collection('users').doc(user.uid).collection('follow').doc('followers').get()
+    window.userfollowingdoc = await db.collection('users').doc(user.uid).collection('follow').doc('following').get()
+    window.userrequesteddoc = await db.collection('users').doc(user.uid).collection('follow').doc('requested').get()
+
+
     db.collection('users').doc(user.uid).get().then(function(doc) {
 
         window.cacheuser = doc.data()

@@ -1,11 +1,11 @@
 // Width Resize
-
 var width = $(window).width();
+window.expanded = true
+window.sidebarexpanded = false
 check(width)
 $(window).on('resize', function () {
     if ($(this).width() !== width) {
         width = $(this).width();
-
         check(width)
     }
 });
@@ -13,6 +13,10 @@ $(window).on('resize', function () {
 
 function check(width) {
     if (width < 800) {
+        // Collapsed
+        window.expanded = false
+        $('.trend_content_container').addClass('trend_content_container_fullwidth')
+
         document.getElementById('expand').classList.add('eonnect-main-expanded')
         document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: 800px; transition: all 0.5s;} .eonnect-main-expanded {width: 100% !important; transition: all 0.5s;}'
 
@@ -30,12 +34,23 @@ function check(width) {
         else {
             document.getElementById('expandbtn').classList.remove('expandedbtnaccount')
         }
+            
+        if (sessionStorage.getItem('currentab') == 'explore') {
+            document.getElementById('expandbtn').classList.add('expandedbtnexplore')
+        }
+        else {
+            document.getElementById('expandbtn').classList.remove('expandedbtnexplore')
+        }
 
     }
     else {
+        // Expanded
+        $('.trend_content_container_fullwidth').removeClass('trend_content_container_fullwidth')
+        window.expanded = true
 
         document.getElementById('expandbtn').style.display = 'none'
         document.getElementById('sidebar').classList.remove('fadeOutLeft')
+        document.getElementById('sidebar').classList.remove('buttonexpanded')
         document.getElementById('sidebar').classList.add('fadeInLeft')
 
         document.getElementById('expand').classList.add('eonnect-main-unexpanded')
@@ -50,13 +65,14 @@ function check(width) {
 }
 
 function expand() {
-
+    window.sidebarexpanded = true
     document.getElementById('sidebar').classList.add('buttonexpanded')
     document.getElementById('sidebar').classList.add('fadeInLeft')
     document.getElementById('sidebar').classList.remove('fadeOutLeft')
 
     document.getElementById('expandbtn').classList.remove('expandedbtnaccount')
     document.getElementById('expandbtn').classList.remove('expandedbtninbox')
+    document.getElementById('expandbtn').classList.remove('expandedbtnexplore')
 
     document.getElementById('expandbtn').classList.add('expandedbtn')
     document.getElementById('expandbtn').onclick = function() {
@@ -68,10 +84,10 @@ function expand() {
 }
 
 function collapse() {
+    window.sidebarexpanded = false
     document.getElementById('sidebar').classList.remove('fadeInLeft')
     document.getElementById('sidebar').classList.add('fadeOutLeft')
     document.getElementById('expandbtn').classList.remove('expandedbtn')
-
     if (sessionStorage.getItem('currentab') == 'inbox') {
         document.getElementById('expandbtn').classList.add('expandedbtninbox')
     }
@@ -84,6 +100,13 @@ function collapse() {
     }
     else {
         document.getElementById('expandbtn').classList.remove('expandedbtnaccount')
+    }
+
+    if (sessionStorage.getItem('currentab') == 'explore') {
+        document.getElementById('expandbtn').classList.add('expandedbtnexplore')
+    }
+    else {
+        document.getElementById('expandbtn').classList.remove('expandedbtnexplore')
     }
 
     document.getElementById('expandbtn').onclick = function() {
@@ -352,7 +375,12 @@ function preesearch() {
 
         // Maintanence Mode
         if (doc.data().maint) {
-            alert('Maintence Mode is Active \n\nFeatures may be corrupt or broken and it is recommended to temporarily reduce usage on Eonnect. \n\nThanks for understanding...')
+            if (user.uid !== 'L5NjKTveedYfrw8JK9AjThahsT13') {
+                alert('Maintence Mode is Active \n\nFeatures may be corrupt or broken so we are temporarily reducing usage on Eonnect. \n\nThanks for understanding...')
+                window.location.replace(`https://gitlab.com/rohin12/eonnect/-/commit/${doc.data().maint_git}`)
+                return;
+            }
+            console.log('--- MAINTENANCE MODE CURRENtLY ON. You have bypassed the kickoff.');
         }
     })
 }
@@ -375,37 +403,41 @@ $( "#userModal" ).scroll(function() {
 
 // SCRLLING INFINITE SCROLL
 
-function loadscrolling() {
-    $(window).scroll(function() {
-        if ($(window).scrollTop() > 300) {
-            document.getElementById('returntotop').setAttribute('style', 'display:block !important');
-            document.getElementById('returntotop').classList.add('fadeInUp')
-            document.getElementById('returntotop').classList.remove('fadeOutDown')
-        }
-        else {
-            document.getElementById('returntotop').classList.add('fadeOutDown')
-            document.getElementById('returntotop').classList.remove('fadeInUp')
-        }
-        docheightminus1 = $(document).height() - 1
-        docheightplus1 = $(document).height() + 1
-        if($(window).scrollTop() + $(window).height() > docheightminus1 && $(window).scrollTop() + $(window).height() < docheightplus1) {
-            if (sessionStorage.getItem('view') == 'all') {
-                build()
-                likeslistener()
-                listenlikes()
-                commentslistener()
-                listencomments()
-            }
-            else {
-                buildrelevant()
-                likeslistenerrelevant()
-                listenlikesrelevant()
-                commentsrelevantlistener()
-                listencommentsrelevant()
-            }
-        }
-     });
-}
+// function loadscrolling() {
+//     $(window).scroll(function() {
+//         if ($(window).scrollTop() > 300) {
+//             document.getElementById('returntotop').setAttribute('style', 'display:block !important');
+//             document.getElementById('returntotop').classList.add('fadeInUp')
+//             document.getElementById('returntotop').classList.remove('fadeOutDown')
+//         }
+//         else {
+//             document.getElementById('returntotop').classList.add('fadeOutDown')
+//             document.getElementById('returntotop').classList.remove('fadeInUp')
+//         }
+//         docheightminus1 = $(document).height() - 1
+//         docheightplus1 = $(document).height() + 1
+//         if($(window).scrollTop() + $(window).height() > docheightminus1 && $(window).scrollTop() + $(window).height() < docheightplus1) {
+//             if (sessionStorage.getItem('view') == 'all') {
+//                 build()
+
+//                 likeslistener()
+//                 listenlikes()
+
+//                 commentslistener()
+//                 listencomments()
+//             }
+//             else {
+//                 buildrelevant()
+
+//                 likeslistener()
+//                 listenlikes()
+
+//                 commentslistener()
+//                 listencomments()
+//             }
+//         }
+//      });
+// }
 
  //ERROR BACKUP WTF
 

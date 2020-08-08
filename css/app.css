@@ -784,6 +784,12 @@ custom-control-label::before {
     right: 25px;
 }
 
+.commentcontent button {
+    right: 25px;
+    height: 35px !important;
+}
+
+
 .commentcard {
     text-align: left;
 }
@@ -991,6 +997,7 @@ custom-control-label::before {
 
     padding: 34px;
     padding-right: 0px;
+    padding-bottom: 0px;
     width: 35%;
     background-color: var(--bg-secondary)
 }
@@ -1055,12 +1062,13 @@ custom-control-label::before {
 }
 
 .searchbarmsg {
-    width: 80%;
+    width: calc(100% - 55px);
+    margin-left: 24px;
     display: inline-block;
 }
 
 .adddmbtn {
-    right: 12px;
+    right: 0px;
     display: inline-block !important;
 }
 
@@ -1121,13 +1129,15 @@ custom-control-label::before {
 .directfooter {
     padding-left: 25px;
     padding-right: 25px;
+    overflow-y: hidden;
+    position: relative;
 }
 
 .postimage {
     opacity: 1;
     margin-top: 0px;
 
-    transition: all 1s;
+    transition: all 0.3s;
 }
 
 .postimage:hover {
@@ -1135,7 +1145,7 @@ custom-control-label::before {
     margin-top: -10px;
     cursor: pointer;
 
-    transition: all 1s;
+    transition: all 0.3s;
 }
 
 .content2 {
@@ -1221,6 +1231,12 @@ custom-control-label::before {
     min-width: 0px !important;
     padding: 12px !important;
 }
+
+.iconbtn {
+    min-width: 0px !important;
+    padding: 12px !important;
+}
+
 
 .messagecontainer {
     width: 100%;
@@ -1353,6 +1369,11 @@ custom-control-label::before {
     top: 11px;
 }
 
+.badge-primary {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
 .checkverifybtn {
     animation-delay: 10s;
 }
@@ -1371,7 +1392,12 @@ custom-control-label::before {
     border: none;
     cursor: pointer;
     display: flex;
-    padding: 0;
+    padding-bottom: 8px !important;
+    min-height: 42px;
+}
+
+.menuham:hover {
+    background-color: rgba(119, 119, 119, 0.171);
 }
 
 .lineham {
@@ -1442,12 +1468,17 @@ custom-control-label::before {
 }
 
 .expandedbtninbox {
-    left: 0px;
+    left: 8px;
 }
 
 .expandedbtnaccount {
     left: 178px;
     top: 50px;
+}
+
+.expandedbtnexplore {
+    left: 168px;
+    top: 32px;
 }
 
 .supportbtn {
@@ -1540,13 +1571,14 @@ custom-control-label::before {
     min-height: 50px;
     cursor: pointer;
     margin: 0px;
-    transition: all 1s;
+    transition: all 0.3s;
 }
 
 .textpostcard:hover {
     margin-top: -10px;
     min-height: 50px;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
 
@@ -1558,7 +1590,7 @@ custom-control-label::before {
     opacity: 1.0;
     margin-top: 0px;
 
-    transition: all 1s;
+    transition: all 0.3s;
 }
 
 .content .card:hover {
@@ -1566,7 +1598,7 @@ custom-control-label::before {
     margin-top: -10px;
     cursor: pointer;
     
-    transition: all 1s;
+    transition: all 0.3s;
 }
 
 .custom-select {
@@ -1651,6 +1683,7 @@ custom-control-label::before {
     min-width: 100px;
     padding: 36px;
     cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .trend_box .card-body {
@@ -1679,4 +1712,55 @@ custom-control-label::before {
     left: 0px; 
     opacity: 0.50; 
     border-radius: 15px;
+}
+
+.trend_content_container {
+    position: fixed;
+    background-color: var(--bg-tertiary);
+    width: calc(100% - 275px);
+    z-index: 3;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    padding: 48px;
+    overflow-y: scroll;
+}
+
+.trend_content_container_fullwidth {
+    width: 100% !important;   
+}
+
+.imagebannertrend {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 12px;
+    opacity: 0.5;
+    background-color: #000;
+}
+
+.trend_content_container h1 {
+    font-weight: 600;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 24px;
+    opacity: 1;
+    z-index: 5;
+}
+
+.trend_buttons {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.trend_buttons button {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.tabbtn {
+    width: 100% !important;
+    display: block !important;
+    margin-bottom: 12px;
 }

@@ -602,6 +602,13 @@ function ADD_MESSAGE(uid) {
             sender: user.uid,
             timestamp: now
         }
+
+        el = $('#' + string + 'chatcontainer').find('.clearfix:first')
+        if (el.children().first().hasClass('msgcontainerother')) {
+            // Avoided stupid bug trash
+            prevuid = 'THIS BUG WAS SO ANNYOING'
+        }
+
         BUILD_MESSAGE(cacheuser.name, tempmsg , string, true)
         ScrollBottom()
 
@@ -737,10 +744,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         if (el.hasClass('systemmessagecontainer')) {
             // Make sure dont add msg to previous sent msg
             prevuid = 'NANNANANANOOOOPE TRASH LOSER L'
-        }
-        if (el.children().first().hasClass('msgcontainerother') && user.uid == msg.sender) {
-            // Avoided stupid bug trash
-            prevuid = 'THIS BUG WAS SO ANNYOING'
         }
 }
     if (prevuid === msg.sender) {
