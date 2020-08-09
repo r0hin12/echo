@@ -131,8 +131,10 @@ function checkUrls() {
     if (post == "null" || post == " " || post == "") {
     }
     else {
-        db.collection('posts').doc('posts').get().then(function(doc) {
-            loadComments(name, doc.data()[post].data.uid)
+        db.collection('new_posts').doc(post).get().then(function(doc) {
+            if (doc.exists) {
+                loadComments(post, doc.data().uid)
+            }
         })
     }
 
