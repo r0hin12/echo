@@ -60,7 +60,7 @@ function profilesetup1() {
 
 }
 
-function profilesetup2() {
+async function profilesetup2() {
 
     username = document.getElementById('usernamefield').value.toLowerCase()
     displayname = document.getElementById('namefield').value
@@ -72,62 +72,52 @@ function profilesetup2() {
     }
     else {
 
-        db.collection('app').doc('details').get().then(function (doc) {
-            for (let i = 0; i < doc.data().usernames.length; i++) {
-                if (username == doc.data().usernames[i]) {
-                    taken = true
-                }
-            }
-            if (taken) {
-                window.location.reload()
-            }
-            else {
+    doc = db.collection('app').doc('details').get()
+    
+    if (doc.data().usernames.includes(username)) {
+        window.location.reload()
+        return;
+    }
 
+    await db.collection('app').doc('details').update({
+        usernames: firebase.firestore.FieldValue.arrayUnion(username),
+        map: firebase.firestore.FieldValue.arrayUnion(user.uid)
+    })
 
-                db.collection('app').doc('details').update({
-                    usernames: firebase.firestore.FieldValue.arrayUnion(username),
-                    map: firebase.firestore.FieldValue.arrayUnion(user.uid)
-                })
-                db.collection('users').doc(user.uid).collection('follow').doc('followers').set({
-                    followers: []
-                })
-                db.collection('users').doc(user.uid).collection('follow').doc('following').set({
-                    following: []
-                })
-                db.collection('users').doc(user.uid).collection('follow').doc('requested').set({
-                    requested: []
-                })
-                db.collection('users').doc(user.uid).update({
-                    username: username,
-                    name: displayname,
-                    emailchange: firebase.firestore.FieldValue.serverTimestamp(),
-                    passchange: firebase.firestore.FieldValue.serverTimestamp(),
-                    direct_active: [],
-                    direct_activity: firebase.firestore.FieldValue.serverTimestamp(),
-                    direct_pending: []
-                }).then(function() {
-                    $('#savebtn').html('confirm (click again)')
-                    document.getElementById('savebtn').onclick = function() {
-                        window.location.reload()
-                    }
-                })
-                user.updateProfile({
-                    displayName: displayname,
-                })
+    await db.collection('follow').doc(user.uid).collection('followers').doc('a').set({
+        status: false,
+    })
+    await db.collection('follow').doc(user.uid).collection('following').doc('a').set({
+        status: false,
+    })
+    await db.collection('follow').doc(user.uid).collection('requested').doc('a').set({
+        status: false,
+    })
+    await db.collection('follow').doc(user.uid).collection('requesting').doc('a').set({
+        status: false,
+    })
+    
+    await db.collection('users').doc(user.uid).update({
+        username: username,
+        name: displayname,
+        type: 'public',
+        emailchange: firebase.firestore.FieldValue.serverTimestamp(),
+        passchange: firebase.firestore.FieldValue.serverTimestamp(),
 
-                // THIS PART MADE SENSE BEFORE - I HAVE NO IDEA WHAT IT DOES BUT ITS PROBABLY IMPORTANT
-                // - rohin
+        // direct_active: [],
+        // direct_activity: firebase.firestore.FieldValue.serverTimestamp(),
+        // direct_pending: []
+    })
 
-                db.collection('users').doc(user.uid).get().then(function (doc) {
-                    if (doc.data().type == undefined) {
-                        db.collection('users').doc(user.uid).update({
-                            type: 'public',
+    await user.updateProfile({
+        displayName: displayname,
+    })
+    
+    showcomplete()
+    window.setTimeout(() => {
+        window.location.reload()
+    }, 1200)
 
-                        })
-                    }
-                })
-            }
-        })
     }
 }
 
@@ -139,12 +129,6 @@ async function addappcontent() {
     document.getElementById('viewprofilebtn').onclick = function() {
         usermodal(user.uid)
     }
-    
-    window.userfollowersdoc = await db.collection('users').doc(user.uid).collection('follow').doc('followers').get()
-    window.userfollowingdoc = await db.collection('users').doc(user.uid).collection('follow').doc('following').get()
-    window.userrequesteddoc = await db.collection('users').doc(user.uid).collection('follow').doc('requested').get()
-
-
     db.collection('users').doc(user.uid).get().then(function(doc) {
 
         window.cacheuser = doc.data()
@@ -217,41 +201,11 @@ async function addappcontent() {
 
         // REPUTATION
 
-        repfirebasedate = doc.data().repcheck.toDate()
-        repcurrentdate = new Date()
-
-        var diffMinutes = parseInt((repcurrentdate - repfirebasedate) / (1000 * 60), 10); 
-        if (diffMinutes > 15) {
-            // Calculate Rep & Upload
-
-            rep = 0
-            db.collection('posts').doc('posts').get().then(function (postdoc) {
-                for (let i = 0; i < postdoc.data().latest + 1; i++) {
-                    if (postdoc.data()[i] == undefined) { } else {
-                        if (postdoc.data()[i].data.uid == user.uid) {
-                            rep = rep + postdoc.data()[i].data.likes.length
-                        }
-                    }
-                }
-
-                    number = doc.data().followers.length
-                    rep = rep + number    
-                    db.collection('users').doc(user.uid).update({
-                        rep: rep,
-                        repcheck: firebase.firestore.FieldValue.serverTimestamp(),
-                    }).then(function() {
-                        document.getElementById('rep1').innerHTML = doc.data().rep
-                    })    
-            })
-        }  
-        else {
-            // USE OLD REP
-            document.getElementById('rep1').innerHTML = doc.data().rep
-        }
+        // Pending algorithm cloud function maybe.
 
 
-        document.getElementById('following1').innerHTML = nFormatter(doc.data().following.length, 1)
-        document.getElementById('followers1').innerHTML = nFormatter(doc.data().followers.length, 1)
+        document.getElementById('following1').innerHTML = nFormatter(doc.data().following, 1)
+        document.getElementById('followers1').innerHTML = nFormatter(doc.data().followers, 1)
 
 
     })

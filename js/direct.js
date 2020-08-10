@@ -582,59 +582,58 @@ function BUILD_DIRECT(uid, btnel) {
 
 }
 
-function ADD_MESSAGE(uid) {
-    content = document.getElementById('newdmmsg').value
+function ADD_MESSAGE(uid, content) {
+    if (!content) {
+        content = document.getElementById('newdmmsg').value
+    }
 
     if (content == "" || content == " " || content == "  " || content == "    " || content.replace(" ", "") == "") {
         return;
     }
 
-    else {
-        document.getElementById('newdmmsg').value = ''
+    document.getElementById('newdmmsg').value = ''
 
-        alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-        string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
-        now = new Date()
+    alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
+    now = new Date()
 
-        tempmsg = {
+    tempmsg = {
+        app_preset: 'none',
+        content: content,
+        sender: user.uid,
+        timestamp: now
+    }
+
+    el = $('#' + string + 'chatcontainer').find('.clearfix:first')
+    if (el.children().first().hasClass('msgcontainerother')) {
+        // Avoided stupid bug trash
+        prevuid = 'THIS BUG WAS SO ANNYOING'
+    }
+
+    BUILD_MESSAGE(cacheuser.name, tempmsg , string, true)
+    ScrollBottom()
+
+
+    unreadkey = 'unread_' + uid
+    db.collection('direct').doc(string).update({
+        [unreadkey]: true,
+        messages: firebase.firestore.FieldValue.arrayUnion({
             app_preset: 'none',
             content: content,
             sender: user.uid,
-            timestamp: now
-        }
-
-        el = $('#' + string + 'chatcontainer').find('.clearfix:first')
-        if (el.children().first().hasClass('msgcontainerother')) {
-            // Avoided stupid bug trash
-            prevuid = 'THIS BUG WAS SO ANNYOING'
-        }
-
-        BUILD_MESSAGE(cacheuser.name, tempmsg , string, true)
-        ScrollBottom()
-
-
-        unreadkey = 'unread_' + uid
-        db.collection('direct').doc(string).update({
-            [unreadkey]: true,
-            messages: firebase.firestore.FieldValue.arrayUnion({
-                app_preset: 'none',
-                content: content,
-                sender: user.uid,
-                timestamp: now,
-            })
-        }).then(function() {
-            sessionStorage.setItem('itwasmesoskip', 'true')
-            ENACT_CHANGES(uid)
+            timestamp: now,
         })
+    }).then(function() {
+        sessionStorage.setItem('itwasmesoskip', 'true')
+        ENACT_CHANGES(uid)
+    })
+    db.collection('directlisteners').doc(uid).update({
+        most_recent_sender: user.uid
+    }).then(function() {
         db.collection('directlisteners').doc(uid).update({
-            most_recent_sender: user.uid
-        }).then(function() {
-            db.collection('directlisteners').doc(uid).update({
-                most_recent_sender: 'none'
-            })
+            most_recent_sender: 'none'
         })
-    }
-
+    })
 }
 
 function BUILD_MESSAGE(name, msg, string, anim, reverse) {
@@ -1395,4 +1394,24 @@ function direct_confirmUpload() {
         })
       });
     });
+}
+
+function showquickreply() {
+    $('#quickreply').removeClass('hidden')
+
+    $('#quickreply').removeClass('fadeOutDown')
+    $('#quickreply').addClass('fadeInUp')
+}
+
+function hidequickreply() {
+    $('#quickreply').addClass('fadeOutDown')
+    $('#quickreply').removeClass('fadeInUp')
+    
+
+    $('#quickreply').css('width', $('#directfooter').width)
+}
+
+function quickreply(msg) {
+    hidequickreply()
+    ADD_MESSAGE(sessionStorage.getItem('active_dm'), msg)
 }

@@ -1189,7 +1189,7 @@ custom-control-label::before {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 70%;
+    width: 65%;
     display: inline-block
 }
 
@@ -1763,4 +1763,55 @@ custom-control-label::before {
     width: 100% !important;
     display: block !important;
     margin-bottom: 12px;
+}
+
+.postbuttons {
+    min-width: 0px !important;
+    color: white !important;
+}
+
+.postbuttons i {
+    margin-right: 4px !important;
+}
+
+.heart {
+    color: red;
+}
+
+.heartactive {
+    color: red !important;
+}
+
+.heartactive i {
+    color: red !important;
+}
+
+.directdrop {
+    padding: 12px;
+}
+
+.directdrop button{
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+#quickreply {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: var(--bg-tertiary);
+    z-index: 5;
+}
+
+#quickreply .row {
+    margin-top: 12px;
+}
+
+.returnquickreplybtn {
+    position: absolute !important;
+    left: 50%;
+    top: 8px;
+    transform: translate(-50%, 0);
 }

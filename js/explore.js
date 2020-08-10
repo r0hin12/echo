@@ -105,9 +105,9 @@ function trend_imageCredit(data) {
 
 async function before_load_trend_content() {
 
-    window.postsdoc = await db.collection('posts').doc('posts').get()
-    window.likesdoc = await db.collection('posts').doc('likes').get()
-    window.commentsdoc = await db.collection('posts').doc('comments').get()
+    // window.postsdoc = await db.collection('posts').doc('posts').get()
+    // window.likesdoc = await db.collection('posts').doc('likes').get()
+    // window.commentsdoc = await db.collection('posts').doc('comments').get()
     trend_data = {}
 
 }

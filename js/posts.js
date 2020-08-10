@@ -138,18 +138,28 @@ async function build_posts_all(query) {
                     return;
             }
 
-            a.innerHTML = `<div class="content"><img style="z-index: 200;" class=""><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfpelurl" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}el" onclick="like('${query[i].id}')" class="postbuttons heart"><i class="material-icons posticon animated">favorite_border</i>0</button><button id="${query[i].id}commentEl" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class=" postbuttons"><i class="material-icons posticon">chat_bubble_outline</i>0</button></nav></div><button id="${query[i].id}infoEl" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
+            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="like('${query[i].id}')" class="eon-text postbuttons heart"><i class="material-icons posticon animated">favorite_border</i> ${query[i].data().likes.length}</button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments} </button></nav></div><button id="${query[i].id}infoBtn" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
             document.getElementById('grid').appendChild(a)
             continue;
         }
 
         a = document.createElement('div')
         a.classList.add('postshell')
-        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}imgelelrelevant" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfpelurlrelevant" src="${query[i].data().photo_url}" data-original-title="View User" style="background-image: linear-gradient(white, white), linear-gradient(45deg, rgb(19, 84, 122), rgb(128, 208, 199));"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul>    <button title="" id="${query[i].id}elcaptionrelevant" class="postbuttons" data-original-title="Wowww"><i class="material-icons posticon animated">subject</i></button>   <button id="${query[i].id}elrelevant" onclick="like('${query[i].id}')" class="postbuttons heart" data-original-title="Liked"><i id="${query[i].id}eliconrelevant" style=" color: red;" class="material-icons posticon animated">favorite</i> 2</button><button id="${query[i].id}commentElrelevant" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class=" postbuttons" data-original-title="View Comments"><i class="material-icons posticon">chat_bubble_outline</i> 1</button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="${query[i].id}infoElrelevant" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
+        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="like('${query[i].id}')" class="eon-text postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">favorite_border</i> ${query[i].data().likes.length}</button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments}</button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="${query[i].id}infoElrelevant" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
         document.getElementById('grid').appendChild(a)
 
     }
+    showall()
 }
+
+async function like(post) {
+
+    // Toggle Like on `post`
+    console.log(post);
+
+}
+
+
 
 async function info(post) {
     doc = await db.collection('new_posts').doc(post).get()
@@ -311,13 +321,16 @@ async function usermodal(uid) {
 
         // FOLLOW STUFF
 
-        followersdoc = await db.collection('users').doc(uid).collection('follow').doc('followers').get()
-        followingdoc = await db.collection('users').doc(uid).collection('follow').doc('following').get()
+        document.getElementById('userfollowing').innerHTML = nFormatter(userdoc.data().following, 1)
+        document.getElementById('userfollowers').innerHTML = nFormatter(userdoc.data().followers, 1)
 
-        document.getElementById('userfollowing').innerHTML = nFormatter(followingdoc.data().following.length, 1)
-        document.getElementById('userfollowers').innerHTML = nFormatter(followersdoc.data().followers.length, 1)
+        followdoc = await db.collection('follow').doc(uid).collection('followers').doc(user.uid).get()
+        isFollow = false
+        if (followdoc.exists && followdoc.data().status) {
+            isFollow = true
+        }
 
-        if (followersdoc.data().followers.filter(e => e.uid === user.uid).length > 0 && user.uid !== uid) {
+        if (isFollow && user.uid !== uid) {
             $('#followbtn').html('unfollow')
             $('#usermodalfollowtext').removeClass('fadeInUp')
             $('#usermodalfollowtext').removeClass('fadeOutDown')
@@ -355,11 +368,13 @@ async function usermodal(uid) {
                 })
 
                 if (userdoc.data().type == 'private') {
-                    requesteddoc = await db.collection('users').doc(uid).collection('follow').doc('requested').get()
-
+                    requesteddoc = await db.collection('follow').doc(uid).collection('requested').doc(user.uid).get()
+                    isRequested = false
+                    if (doc.exists && followdoc.data().status) {
+                        isRequested = true
+                    }
                     $('#privatewarning').css('display', 'block')
-
-                    if (requesteddoc.data().requested.filter(e => e.uid === user.uid).length > 0) {
+                    if (isRequested) {
 
                         $('#usermodalfollowtext').removeClass('fadeInUp')
                         $('#usermodalfollowtext').removeClass('fadeOutDown')
@@ -374,13 +389,13 @@ async function usermodal(uid) {
                         $('#followbtn').html('cancel request')
 
                         document.getElementById('followbtn').onclick = function () {
-                            cancel_request(uid, userdoc.data().username)
+                            cancel_request(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
                         }
                     } else {
                         $('#followbtn').html('request')
 
                         document.getElementById('followbtn').onclick = function () {
-                            request(uid, userdoc.data().username)
+                            request(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
                         }
                     }
                 } else {
@@ -421,73 +436,74 @@ async function follow(uid, username, url, name) {
     $('#userfollowers').html(parseInt($('#userfollowers').html()) + 1)
     // Profile public and boutta follow
 
-    await db.collection('users').doc(user.uid).collection('follow').doc('following').update({
-        following: firebase.firestore.FieldValue.arrayUnion({
-            name: name,
-            uid: uid,
-            username: username,
-            url: url
-        })
+    await db.collection('follow').doc(uid).collection('followers').doc(user.uid).set({
+        status: true,
+        name: cacheuser.name,
+        uid: user.uid,
+        username: cacheuser.username,
+        photo_url: cacheuser.url
     })
-
-    await db.collection('users').doc(uid).collection('follow').doc('followers').update({
-        followers: firebase.firestore.FieldValue.arrayUnion({
-            name: cacheuser.name,
-            uid: user.uid,
-            photo_url: cacheuser.url,
-            username: cacheuser.username
-        })
+    await db.collection('follow').doc(user.uid).collection('following').doc(uid).set({
+        status: true,
+        name: name,
+        uid: uid,
+        username: username,
+        photo_url: url
     })
 
     Snackbar.show({
         pos: 'bottom-center',
         text: `Started following ${name}.`
     })
+
     $('#followbtn').html('unfollow')
+
     document.getElementById('followbtn').onclick = function () {
         unfollow(uid, username, url, name)
     }
+
     $('#usermodalfollowtext').removeClass('fadeInUp')
     $('#usermodalfollowtext').removeClass('fadeOutDown')
     $('#usermodalfollowtext').css('visibility', 'hidden')
+
     window.setTimeout(() => {
         $('#usermodalfollowtext').addClass('fadeInUp')
         $('#usermodalfollowtext').css('visibility', 'visible')
         $('#usermodalfollowtext').html('<i class="material-icons" id="followicon">done</i> Following')
     }, 500)
+
 }
 
 async function unfollow(uid, username, url, name) {
     $('#userfollowers').html(parseInt($('#userfollowers').html()) - 1)
 
-    await db.collection('users').doc(user.uid).collection('follow').doc('following').update({
-        following: firebase.firestore.FieldValue.arrayRemove({
-            name: name,
-            uid: uid,
-            username: username,
-            url: url
-        })
+    await db.collection('follow').doc(uid).collection('followers').doc(user.uid).set({
+        status: false,
+        name: cacheuser.name,
+        uid: user.uid,
+        username: cacheuser.username,
+        photo_url: cacheuser.url
     })
-
-    await db.collection('users').doc(uid).collection('follow').doc('followers').update({
-        followers: firebase.firestore.FieldValue.arrayRemove({
-            name: cacheuser.name,
-            uid: user.uid,
-            photo_url: cacheuser.url,
-            username: cacheuser.username
-        })
+    await db.collection('follow').doc(user.uid).collection('following').doc(uid).set({
+        status: false,
+        name: name,
+        uid: uid,
+        username: username,
+        photo_url: url
     })
-
     Snackbar.show({
         pos: 'bottom-center',
         text: 'Stopped following ' + name + '.'
     })
     $('#followbtn').html('follow')
+
     document.getElementById('followbtn').onclick = function () {
         follow(uid, username, url, name)
     }
+
     $('#usermodalfollowtext').removeClass('fadeInUp')
     $('#usermodalfollowtext').removeClass('fadeOutDown')
+
     window.setTimeout(() => {
         $('#usermodalfollowtext').addClass('fadeOutDown')
         $('#usermodalfollowtext').css('visibility', 'visible')
@@ -497,7 +513,7 @@ async function unfollow(uid, username, url, name) {
 
 }
 
-function request(uid, username) {
+async function request(uid, username) {
 
     db.collection('users').doc(uid).update({
         requested: firebase.firestore.FieldValue.arrayUnion(user.uid)

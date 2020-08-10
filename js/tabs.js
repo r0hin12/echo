@@ -86,7 +86,7 @@ function tabe(tab) {
     }
 
     try {
-        $('#justifiedTab').children('a').each(function () { this.classList.remove('navthing'); })
+        $('.navthing').removeClass('navthing')
         $('.iconactive').each(function(i, obj) {
             obj.classList.remove('iconactive')
         })

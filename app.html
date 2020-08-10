@@ -798,13 +798,6 @@
                     <hr class="hr">
                     <nav class="navbar">
                         <h2 class="leader">Home</h2>
-                        <div class="dropdown">
-                            <button aria-expanded="false" aria-haspopup="true" class="eon-text btn235ws dropdown" data-toggle="dropdown" id="dropdownMenuButton1" type="button">Showing Relevant Posts </button>
-                            <div aria-labelledby="dropdownMenuButton1" class="dropdown-menu menu">
-                                <a onclick="dontshowall()" class="dropdown-item waves-effect waves-button" href="#">Relevant Posts</a>
-                                <a onclick="showall()" class="dropdown-item waves-effect waves-button" href="#">All Posts</a>
-                            </div>
-                        </div>
                         <ul class="navbar-nav mr-auto"></ul>
                         <button id="rereshtbn" class="eon-text refreshbtn" onclick="refresh(this)"><i class="material-icons">refresh</i></button>
                         <button onclick="disablegrid()" id="gridbtn" class="grid-list without-text">
@@ -817,7 +810,6 @@
                     <br><br>
                     <center id="containerhometab">
                         <button onclick="window.scrollTo(0,0);" style="display: none !important;" id="returntotop" class="eon-contained refreshbtn returntoptop animated shadow"><i class="material-icons">keyboard_arrow_up</i></button>
-                        <div style="display: none;" class="grid animated fadeIn" id="gridrelevant"></div>
                         <div style="display: none" id="norelevantstuff">
                             <br><br>
                             <div class="card noitems animated zoomIn">
@@ -967,6 +959,19 @@
 
                         <div id="directfooter" class='directfooter hidden animated fadeInUp'>
                             <hr id="divider2" class="divider2 hidden animated zoomIn slow">
+                            <div id="quickreply" class="hidden animated faster">
+                                <br><br>
+                                <div class="row"><div class="col-sm"><center>
+                                <button onclick="quickreply('lmao')" class="eon-outlined">lmao</button>
+                            </center></div><div class="col-sm"><center>
+                                <button onclick="quickreply('rofl')" class="eon-outlined">rofl</button>
+                            </center></div><div class="col-sm"><center>
+                                <button onclick="quickreply('lol')" class="eon-outlined">lol</button>
+                            </center></div>
+                                </div>
+                                <br>
+                                <button onclick="hidequickreply()" class="eon-text returnquickreplybtn iconbtn"><i class="material-icons">keyboard_arrow_down</i></button>
+                            </div>
                             <input onchange="direct_confirmUpload()" type="file" name="" id="skiddyfileupload">
                             <div id="uploadprogress" class="hidden progress animated fadeIn">
                                 <div id="uploadprogressbar" class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
@@ -975,8 +980,9 @@
                             <div class="relative2">
                                 <div class="btn-group dropup unset">
                                     <button data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="eon-text addfilebtn centeredy"><i class="material-icons">add</i></button>
-                                    <div class="dropdown-menu">
-                                            <button id="addfilebtn" class="eon-outlined block"><i class="material-icons">insert_drive_file</i> file</button>
+                                    <div class="dropdown-menu directdrop">
+                                            <button id="addfilebtn" class="eon-text"><i class="material-icons">insert_drive_file</i> file</button>
+                                            <button onclick="showquickreply()" class="eon-text"><i class="material-icons">quickreply</i> quick-reply</button>
                                     </div>
                                   </div>
                                 <div class="floating-label textfield-box newmsgbox">
@@ -1193,17 +1199,6 @@
     <!-- ===========================--] /Content [=================================== -->
 
     <!---==== JavaScript ====--->
-    <!-- Base Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
-    <!-- Firebase Auth -->
-    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
-    <!-- Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
-    <!-- Firebase Storage -->
-    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
-    <!-- Firebase Functions -->
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-functions.js"></script>
-
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <!-- Popper -->
@@ -1247,6 +1242,19 @@
     <script src="js/jscolor.js"></script>
     <!-- Tags Input -->
     <script src="js/tagsinput.js"></script>
+
+    <!-- Base Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-firestore.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+    <!-- Firebase Functions -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-functions.js"></script>
+    <!-- Firebase Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-analytics.js"></script>
 
     <!-- Firebase Variables -->
     <script src="js/firebase.js"></script>

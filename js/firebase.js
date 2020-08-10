@@ -5,11 +5,13 @@ firebase.initializeApp({
     projectId: "eongram-87169",
     storageBucket: "eongram-87169.appspot.com",
     messagingSenderId: "725793838303",
-    appId: "1:725793838303:web:f23c748b3985225c5c056a"
+    appId: "1:725793838303:web:f23c748b3985225c5c056a",
+    measurementId: "G-RZPV84YFHM"
 });
 
 window.db = firebase.firestore()
 window.storage = firebase.storage();
+firebase.analytics();
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {

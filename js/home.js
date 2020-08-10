@@ -17,28 +17,9 @@ $("#imgInp").change(function(){if(this.files&&this.files[0]){var e=new FileReade
 
 function showall() {
     done_loading()
-    $('#dropdownMenuButton1').html(`Showing All Posts <i class="material-icons">keyboard_arrow_down</i>`)
-    document.getElementById('gridrelevant').setAttribute('style', 'display:none !important');
     document.getElementById('grid').style.removeProperty('display');
-    document.getElementById('norelevantstuff').style.display = 'none'
-
-    resizeAllGridItemsAll()
-    sessionStorage.setItem('view', 'all')
-}
-
-function dontshowall() {
-    done_loading()
-    $('#dropdownMenuButton1').html(`Showing Relevant Posts <i class="material-icons">keyboard_arrow_down</i>`)
-
-    document.getElementById('gridrelevant').style.removeProperty('display');
-    document.getElementById('grid').setAttribute('style', 'display:none !important');
-
-    if( $('#gridrelevant').is(':empty') ) {
-        document.getElementById('norelevantstuff').style.display = 'block'
-    }
-    sessionStorage.setItem('view', 'relevant')
-
     resizeAllGridItems()
+    sessionStorage.setItem('view', 'all')
 }
 
 function done_loading() {
