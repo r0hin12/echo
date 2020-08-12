@@ -18,7 +18,9 @@ $("#imgInp").change(function(){if(this.files&&this.files[0]){var e=new FileReade
 function showall() {
     done_loading()
     document.getElementById('grid').style.removeProperty('display');
-    resizeAllGridItems()
+    window.setTimeout(() => {
+        resizeAllGridItems()
+    }, 250)
     sessionStorage.setItem('view', 'all')
 }
 

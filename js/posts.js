@@ -59,7 +59,7 @@ async function newpost() {
         file_name: filename,
         latest_comment: "null",
         latest_comment_photo: "null",
-        likes: [],
+        likes: 0,
         photo_url: cacheuser.url,
         private: document.getElementById('privateinp').checked,
         tags: tags,
@@ -73,6 +73,10 @@ async function newpost() {
 
     await db.collection('new_posts').doc(doc.id).collection('comments').doc('comments').set({
         comments: []
+    })
+
+    await db.collection('new_posts').doc(doc.id).collection('likes').doc('a').set({
+        status: false,
     })
 
     // Post uploaded.
@@ -137,15 +141,39 @@ async function build_posts_all(query) {
                 default:
                     return;
             }
+            userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
+            if (userlikedoc.exists && userlikedoc.data().status) {
+                desiredLikeAction = 'unlike'
+                desiredLikeAction2 = 'heartactive'
+                desiredLikeAction3 = 'favorite'
+            }
+            else {
+                desiredLikeAction = 'like'
+                desiredLikeAction2 = 'heart'
+                desiredLikeAction3 = 'favorite_border'
+            }
 
-            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="like('${query[i].id}')" class="eon-text postbuttons heart"><i class="material-icons posticon animated">favorite_border</i> ${query[i].data().likes.length}</button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments} </button></nav></div><button id="${query[i].id}infoBtn" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
+            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments} </button></nav></div><button id="${query[i].id}infoBtn" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
             document.getElementById('grid').appendChild(a)
             continue;
         }
 
         a = document.createElement('div')
         a.classList.add('postshell')
-        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="like('${query[i].id}')" class="eon-text postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">favorite_border</i> ${query[i].data().likes.length}</button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments}</button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="${query[i].id}infoElrelevant" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
+
+        userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
+        if (userlikedoc.exists && userlikedoc.data().status) {
+            desiredLikeAction = 'unlike'
+            desiredLikeAction2 = 'heart heartactive'
+            desiredLikeAction3 = 'favorite'
+        }
+        else {
+            desiredLikeAction = 'like'
+            desiredLikeAction2 = 'heart'
+            desiredLikeAction3 = 'favorite_border'
+        }
+
+        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments}</button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="${query[i].id}infoElrelevant" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
         document.getElementById('grid').appendChild(a)
 
     }
@@ -153,13 +181,61 @@ async function build_posts_all(query) {
 }
 
 async function like(post) {
+    document.getElementById(`${post}likebtn`).onclick = () => {
+        $(`#${post}likebtnicon`).addClass('shake')
+        window.setTimeout(() => {
+            $(`#${post}likebtnicon`).removeClass('shake')
+        }, 600)
+    }
 
-    // Toggle Like on `post`
-    console.log(post);
+    $(`#${post}likebtn`).toggleClass('heartactive');
+    $(`#${post}likebtnicon`).html('favorite');
+    $(`#${post}likebtnicon`).addClass('rubberBand')
+    window.setTimeout(() => {
+        $(`#${post}likebtnicon`).removeClass('rubberBand')    
+    }, 600);
+
+    $(`#${post}likeCount`).html(parseInt($(`#${post}likeCount`).html()) + 1)
+    
+    await db.collection('new_posts').doc(post).collection('likes').doc(user.uid).set({
+        status: true,
+    })
+
+    window.setTimeout(() => {
+        document.getElementById(`${post}likebtn`).onclick = () => {
+            unlike(post)
+        }
+    }, 1750);
 
 }
 
+async function unlike(post) {
+    document.getElementById(`${post}likebtn`).onclick = () => {
+        $(`#${post}likebtnicon`).addClass('shake')
+        window.setTimeout(() => {
+            $(`#${post}likebtnicon`).removeClass('shake')
+        }, 600)
+    }
 
+    $(`#${post}likeCount`).html(parseInt($(`#${post}likeCount`).html()) - 1)
+
+    $(`#${post}likebtn`).toggleClass('heartactive')
+    $(`#${post}likebtnicon`).html('favorite_border');
+    $(`#${post}likebtnicon`).addClass('jello')
+    window.setTimeout(() => {
+        $(`#${post}likebtnicon`).removeClass('jello')    
+    }, 600);
+    
+    await db.collection('new_posts').doc(post).collection('likes').doc(user.uid).set({
+        status: false,
+    })
+
+    window.setTimeout(() => {
+        document.getElementById(`${post}likebtn`).onclick = () => {
+            like(post)
+        }
+    }, 1750);
+}
 
 async function info(post) {
     doc = await db.collection('new_posts').doc(post).get()
@@ -321,8 +397,22 @@ async function usermodal(uid) {
 
         // FOLLOW STUFF
 
-        document.getElementById('userfollowing').innerHTML = nFormatter(userdoc.data().following, 1)
-        document.getElementById('userfollowers').innerHTML = nFormatter(userdoc.data().followers, 1)
+        userfollowdoc = await db.collection('follow').doc(uid).get()
+
+        $('#userfollowing').html('0')
+        $('#userfollowers').html('0')
+
+        if (userfollowdoc.exists) {
+            $('#userfollowing').html(nFormatter(userfollowdoc.data().following, 1))
+            $('#userfollowers').html(nFormatter(userfollowdoc.data().followers, 1))
+    
+            if(typeof(userfollowdoc.data().following) !== 'number') {
+                $('#userfollowing').html('0')
+            }
+            if(typeof(userfollowdoc.data().followers) !== 'number') {
+                $('#userfollowers').html('0')
+            }
+        }
 
         followdoc = await db.collection('follow').doc(uid).collection('followers').doc(user.uid).get()
         isFollow = false
@@ -337,9 +427,10 @@ async function usermodal(uid) {
             $('#usermodalfollowtext').css('visiblity', 'hidden')
             window.setTimeout(() => {
                 $('#usermodalfollowtext').addClass('fadeInUp')
+                $('#usermodalfollowtext').removeClass('hidden')
                 $('#usermodalfollowtext').css('visiblity', 'visible')
                 $('#usermodalfollowtext').css('display', 'block')
-            }, 500);
+            }, 50);
 
             document.getElementById('followbtn').onclick = function () {
                 unfollow(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
@@ -357,9 +448,7 @@ async function usermodal(uid) {
                 window.setTimeout(() => {
                     $('#usermodalfollowtext').addClass('fadeInUp')
                     $('#usermodalfollowtext').css('visiblity', 'hidden')
-                }, 500);
-
-                $('#followbtn').html('follow')
+                }, 50);
 
                 $('#followbtn').html('follow')
 
@@ -384,7 +473,7 @@ async function usermodal(uid) {
                             $('#usermodalfollowtext').css('visiblity', 'visible')
                             $('#usermodalfollowtext').css('display', 'block')
                             $('#usermodalfollowtext').html(`<i class="material-icons" id="followicon">access_time</i> Requested`)
-                        }, 500);
+                        }, 50);
 
                         $('#followbtn').html('cancel request')
 
@@ -468,9 +557,10 @@ async function follow(uid, username, url, name) {
 
     window.setTimeout(() => {
         $('#usermodalfollowtext').addClass('fadeInUp')
+        $('#usermodalfollowtext').removeClass('hidden')
         $('#usermodalfollowtext').css('visibility', 'visible')
         $('#usermodalfollowtext').html('<i class="material-icons" id="followicon">done</i> Following')
-    }, 500)
+    }, 50)
 
 }
 
@@ -509,7 +599,7 @@ async function unfollow(uid, username, url, name) {
         $('#usermodalfollowtext').css('visibility', 'visible')
         $('#usermodalfollowtext').html('<i class="material-icons" id="followicon">done</i> Following')
         $('usermodalfollowtext').css('display', 'block')
-    }, 500)
+    }, 50)
 
 }
 
@@ -532,7 +622,7 @@ async function request(uid, username) {
             document.getElementById('usermodalfollowtext').style.display = 'block'
             document.getElementById('usermodalfollowtext').classList.add('fadeInUp')
             document.getElementById('usermodalfollowtext').innerHTML = '<i class="material-icons" id="followicon">access_time</i> Requested'
-        }, 500)
+        }, 50)
 
     })
 }
@@ -581,23 +671,17 @@ async function viewpost(id) {
         doc = await db.collection('new_posts').doc(id).get()
         if (doc.data().private && doc.data().uid !== user.uid) {
             // Post is private, check if friends
-            userdoc = await db.collection('users').doc(doc.data().uid).collection('follow').doc('followers').get()
-
-            statusFriends = false
-            if (userdoc.data().followers.filter(e => e.uid === user.uid).length > 0) {
-                statusFriends = true
-            }
-
-            if (statusFriends) {
+            userdoc = await db.collection('follow').doc(doc.data().uid).collection('followers').doc(user.uid).get()
+            if (userdoc.exists && userdoc.data().status) {
                 approvePost(id, doc.data(), userdoc.data())
-            } else {
-                $('#postfull').html('<p>This post is private and you are not following them o.O</p>')
+                $('#postModal').modal('show')
+                return;
             }
-
+            $('#postfull').html('<p>This post is private and you are not following them o.O</p>')
+            $('#postModal').modal('show')
             return;
-        } else {
-            approvePost(id, doc.data())
-        }
+        } 
+        approvePost(id, doc.data())
         $('#postModal').modal('show')
     }
 }
@@ -681,7 +765,7 @@ async function newTextPost(theme) {
         file: 'eonnect-home-text_post',
         latest_comment: "null",
         latest_comment_photo: "null",
-        likes: [],
+        likes: 0,
         photo_url: cacheuser.url,
         private: document.getElementById('privateinp2').checked,
         tags: tags,
@@ -695,6 +779,10 @@ async function newTextPost(theme) {
 
     await db.collection('new_posts').doc(doc.id).collection('comments').doc('comments').set({
         comments: []
+    })
+
+    await db.collection('new_posts').doc(doc.id).collection('likes').doc('a').set({
+        status: false
     })
 
     Snackbar.show({

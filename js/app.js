@@ -129,86 +129,99 @@ async function addappcontent() {
     document.getElementById('viewprofilebtn').onclick = function() {
         usermodal(user.uid)
     }
-    db.collection('users').doc(user.uid).get().then(function(doc) {
+    
+    doc = await db.collection('users').doc(user.uid).get()
 
-        window.cacheuser = doc.data()
+    window.cacheuser = doc.data()
 
-        document.getElementsByClassName('main-avatar')[0].src = doc.data().url
-        document.getElementById('pfp3').src = doc.data().url
-        document.getElementsByClassName('main-avatar')[0].style.display = 'block'
-        document.getElementById('pfcard').style.display = 'block'
+    document.getElementsByClassName('main-avatar')[0].src = doc.data().url
+    document.getElementById('pfp3').src = doc.data().url
+    document.getElementsByClassName('main-avatar')[0].style.display = 'block'
+    document.getElementById('pfcard').style.display = 'block'
 
-        if (doc.data().name == null || doc.data().name == undefined) {
-            db.collection('users').doc(user.uid).update({
-                name: user.displayName
-            })
+    if (doc.data().name == null || doc.data().name == undefined) {
+        db.collection('users').doc(user.uid).update({
+            name: user.displayName
+        })
+    }
+
+    $('#cardconnections').empty()
+
+    if (doc.data().twitter !== null || doc.data().twitter !== undefined) {
+
+        var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "twitter.com");
+        goFunc = "gotwitter('" + user.providerData[index].uid + "')"
+        document.getElementById('twitterlinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + user.providerData[index].displayName + '</a>.'
+        document.getElementById('twitterlinkbutton').innerHTML = 'unlink twitter ->'
+        document.getElementById('twitterlinkbutton').onclick = function() {
+            unlinktwitter()
         }
-
-        $('#cardconnections').empty()
-        if (doc.data().twitter == null || doc.data().twitter == undefined) {
+        hs = document.createElement('button')
+        hs.classList.add('eon-text')
+        hs.classList.add('connectionbtn')
+        hs.onclick = function() {
+            gotwitter(user.providerData[index].uid)
         }
-        else {
-            var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "twitter.com");
-            goFunc = "gotwitter('" + user.providerData[index].uid + "')"
-            document.getElementById('twitterlinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + user.providerData[index].displayName + '</a>.'
-            document.getElementById('twitterlinkbutton').innerHTML = 'unlink twitter ->'
-            document.getElementById('twitterlinkbutton').onclick = function() {
-                unlinktwitter()
-            }
-            hs = document.createElement('button')
-            hs.classList.add('eon-text')
-            hs.classList.add('connectionbtn')
-            hs.onclick = function() {
-                gotwitter(user.providerData[index].uid)
-            }
-            hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
-            document.getElementById("cardconnections").appendChild(hs)
+        hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
+        document.getElementById("cardconnections").appendChild(hs)
+    }
+
+    if (doc.data().github == null || doc.data().twitter == undefined) {
+    }
+    else {
+        var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "github.com");
+        goFunc = "gogithub('" + user.providerData[index].uid + "')"
+        getgithubprofile(user.providerData[index].uid).then(function(data) {
+            document.getElementById('githublinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + data.login + '</a>.'
+        })
+        document.getElementById('githublinkbutton').innerHTML = 'unlink github ->'
+        document.getElementById('githublinkbutton').onclick = function() {
+            unlinkgithub()
         }
-
-        if (doc.data().github == null || doc.data().twitter == undefined) {
+        hs = document.createElement('button')
+        hs.classList.add('eon-text')
+        hs.classList.add('connectionbtn')
+        hs.onclick = function() {
+            gogithub(user.providerData[index].uid)
         }
-        else {
-            var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "github.com");
-            goFunc = "gogithub('" + user.providerData[index].uid + "')"
-            getgithubprofile(user.providerData[index].uid).then(function(data) {
-                document.getElementById('githublinktext').innerHTML = 'Your account is linked to <a href="#" onclick="' + goFunc + '">' + data.login + '</a>.'
-            })
-            document.getElementById('githublinkbutton').innerHTML = 'unlink github ->'
-            document.getElementById('githublinkbutton').onclick = function() {
-                unlinkgithub()
-            }
-            hs = document.createElement('button')
-            hs.classList.add('eon-text')
-            hs.classList.add('connectionbtn')
-            hs.onclick = function() {
-                gogithub(user.providerData[index].uid)
-            }
-            var customProps = window.getComputedStyle(document.documentElement);
-            hs.innerHTML = '<img class="imginbtn" src="assets/GitHub-Mark-' + customProps.getPropertyValue('--content-primary').replace(/\s/g, '').charAt(0).toUpperCase() + customProps.getPropertyValue('--content-primary').slice(1) + '.png"></img>'
-            document.getElementById("cardconnections").appendChild(hs)
-        }
+        var customProps = window.getComputedStyle(document.documentElement);
+        hs.innerHTML = '<img class="imginbtn" src="assets/GitHub-Mark-' + customProps.getPropertyValue('--content-primary').replace(/\s/g, '').charAt(0).toUpperCase() + customProps.getPropertyValue('--content-primary').slice(1) + '.png"></img>'
+        document.getElementById("cardconnections").appendChild(hs)
+    }
 
-        document.getElementById('sidebarname').innerHTML = user.displayName + '<br><span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
+    document.getElementById('sidebarname').innerHTML = user.displayName + '<br><span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
 
-        document.getElementById('name5').innerHTML = user.displayName
-        if (doc.data().bio == undefined || doc.data().bio == null) {
-            document.getElementById('bio5').innerHTML = 'Your bio is empty.'
-        }
-        else {
-            document.getElementById('bio5').innerHTML = doc.data().bio
-        }
-        
+    document.getElementById('name5').innerHTML = user.displayName
+    if (doc.data().bio == undefined || doc.data().bio == null) {
+        document.getElementById('bio5').innerHTML = 'Your bio is empty.'
+    }
+    else {
+        document.getElementById('bio5').innerHTML = doc.data().bio
+    }
+    
 
-        // REPUTATION
+    // REPUTATION
 
-        // Pending algorithm cloud function maybe.
+    // Pending algorithm cloud function maybe.
 
+    doc = await db.collection('follow').doc(user.uid).get()
+    
+    if(!doc.data().following) {
+            $('#following1').html('0')
+    }
 
-        document.getElementById('following1').innerHTML = nFormatter(doc.data().following, 1)
-        document.getElementById('followers1').innerHTML = nFormatter(doc.data().followers, 1)
+    else {
+        $('#following1').html(nFormatter(doc.data().following, 1))
+    }
 
+    if(!doc.data().followers) {
+        $('#followers1').html('0')
+    }
+    
+    else {
+        $('#followers1').html(nFormatter(doc.data().followers, 1))
+    }
 
-    })
 }
 
 function nFormatter(num, digits) {

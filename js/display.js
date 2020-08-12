@@ -154,43 +154,6 @@ function resizeAllGridItems() {
         resizeGridItem(allItems[x]);
     }
 }
-function resizeAllGridItemsAll() {
-    allItems = document.getElementsByClassName("shell");
-    for (x = 0; x < allItems.length; x++) {
-        resizeGridItemAll(allItems[x]);
-    }
-}
-function resizeGridItemAll(item) {
-    try {
-        grid = document.getElementsByClassName("grid")[1];
-        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
-        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
-        item.style.gridRowEnd = "span " + rowSpan;   
-    } catch (error) {
-        console.log('Display resize error (Likely too fast scrolling)');
-    }
-}
-
-
-function resizeAllGridItemsUser() {
-    allItems = document.getElementsByClassName("usershell");
-    for (x = 0; x < allItems.length; x++) {
-        resizeGridItemUser(allItems[x]);
-    }
-}
-function resizeGridItemUser(item) {
-    try {
-        grid = document.getElementById("usergrid");
-        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
-        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
-        item.style.gridRowEnd = "span " + rowSpan;
-    } catch (error) {
-        console.log('Display resize error (Likely too fast scrolling)');
-
-    }
-}
 
 document.querySelectorAll('.grid-list').forEach(button => button.addEventListener('click', toggle));
 
@@ -234,7 +197,6 @@ function enablegrid() {
             disablegrid()
         }
         resizeAllGridItems()
-        resizeAllGridItemsAll()
     }, 500)
 
 }
@@ -384,13 +346,6 @@ function preesearch() {
         }
     })
 }
-
-window.setInterval(function() {
-    resizeAllGridItems()
-    resizeAllGridItemsAll()
-    resizeAllGridItemsUser()
-    addWaves()
-}, 3500)
 
 $( "#userModal" ).scroll(function() { 
     obj = document.getElementById('userModal')
