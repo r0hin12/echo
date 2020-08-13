@@ -1,9 +1,4 @@
-var functions = firebase.functions();
-var db = firebase.firestore();
-
 function load_trending_tags() {
-    before_load_trend_content()
-
     var trendingTopics = firebase.functions().httpsCallable('trendingTopics');
     trendingTopics().then(function(result) {
         $("#explore_loader").addClass('animated')
@@ -43,15 +38,24 @@ function load_trending_tags() {
             p = document.createElement('div')
             p.innerHTML = ''
             p.id = id + 'contentcontainer'
-            p.classList.add('animated');p.classList.add('fadeIn');p.classList.add('hidden')
+            p.classList.add('animated');p.classList.add('hidden')
             p.classList.add('trend_content_container')
+
             if (!expanded) {
                 p.classList.add('trend_content_container_fullwidth')   
             }
-        
+
             document.getElementById('trending_content').appendChild(p)
             document.getElementById('trending_build').appendChild(k)
             document.getElementById('explorebgstyle').innerHTML = document.getElementById('explorebgstyle').innerHTML + newcss
+
+            var trend = sessionStorage.getItem('viewTrend')
+            if (trend == id) {
+                load_trend(element, id)
+            }
+
+            addWaves()
+
         }
 
 
@@ -69,6 +73,7 @@ function load_trending_tags() {
 
 function load_trend(data, id) {
     container = document.getElementById(`${id}contentcontainer`)
+    window.activeTrend = id
 
     if ( $(`#${id}contentcontainer`).is(':empty') ) {
         // Generate Content
@@ -79,67 +84,186 @@ function load_trend(data, id) {
 
         b = document.createElement('img')
         b.src = data.image
-        b.classList.add('imagebannertrend')
+        b.classList.add('imagebannertrend');b.classList.add('shadow-sm')
         document.getElementById(`${id}contentcontainer`).appendChild(b)
 
         c = document.createElement('div')
-        c.innerHTML = `<button onclick="trend_imageCredit(${data})" class="eon-text iconbtn"><i class="material-icons">portrait</i></button> <button onclick="trend_imageCredit(${data})" class="eon-text iconbtn"><i class="material-icons">more_vert</i></button>`
+        c.innerHTML = `<button onclick="trend_imageCredit()'" class="eon-text iconbtn"><i class="material-icons">portrait</i></button> <button class="eon-text iconbtn"><i class="material-icons">more_vert</i></button> <button onclick="closeTrend()" class="eon-text iconbtn"><i class="material-icons">close</i></button>`
         c.classList.add('container'); c.classList.add('trend_buttons')
         document.getElementById(`${id}contentcontainer`).appendChild(c)
+        f = document.createElement('center')
+        f.classList.add('postgridcontainer')
+        f.innerHTML = `<div class="trend_grid" id="${id}postcontainer"></div>`
+        document.getElementById(`${id}contentcontainer`).appendChild(f)
+
+        $(`#${id}contentcontainer`).addClass('backInUp')
+        $(`#${id}contentcontainer`).addClass('slow')
 
         load_trend_content(id)
 
     }
     else {
+        $(`#${id}contentcontainer`).removeClass('backInUp')
+        $(`#${id}contentcontainer`).removeClass('slow')
+        $(`#${id}contentcontainer`).addClass('fadeInUp')
         // Not generate anything
     }
 
     $('#' + id + 'contentcontainer').removeClass('hidden')
+    $(`#${id}contentcontainer`).removeClass('backOutDown')
+    $('#exploretabcontent').addClass('exploretabcontentinactive')
+    history.pushState(null, "", "?trend=" + id)
+    addWaves()
 
-    Snackbar.show({text: "Feature coming soon..."})
+    // Snackbar.show({text: "Feature coming soon..."})
 }
 
 function trend_imageCredit(data) {
     console.log(data);
 }
 
-async function before_load_trend_content() {
+function closeTrend() {
+    $(`#${activeTrend}contentcontainer`).removeClass('backInUp')
+    $(`#${activeTrend}contentcontainer`).removeClass('fadeInUp')
 
-    // window.postsdoc = await db.collection('posts').doc('posts').get()
-    // window.likesdoc = await db.collection('posts').doc('likes').get()
-    // window.commentsdoc = await db.collection('posts').doc('comments').get()
-    trend_data = {}
+    $(`#${activeTrend}contentcontainer`).addClass('slow')
+    $(`#${activeTrend}contentcontainer`).addClass('backOutDown')
 
+    window.setTimeout(() => {
+        $('#exploretabcontent').removeClass('exploretabcontentinactive')
+    }, 500)
 }
 
-function load_trend_content(id) {
+async function load_trend_content(id) {
 
-    trend_data[id] = []
-    trend_likes[id] = []
+    query = await db.collection('new_posts')
+        .orderBy("timestamp", "desc")
+        .where("tags", "array-contains", id)
+        .limit(5)
+        .get()
 
-    trend_likes = []
+    window.lastTrendVisible = query.docs[query.docs.length - 1]
 
-    for (let i = 0; i < postsdoc.data().latest; i++) {
-        if (postsdoc.data()[i] !== undefined && postsdoc.data()[i].data.tags !== undefined) {
-            if (postsdoc.data()[i].data.tags.includes(id)) {
-                trend_data[id].push(postsdoc.data()[i])
-                trend_likes.push(likesdoc.data()[i].length)
+    build_posts_trend(query.docs, id)
+}
+
+async function loadnext_trend_content(id) {
+    query = await db.collection("new_posts")
+    .orderBy("timestamp", "desc")
+    .where("tags", "array-contains", id)
+    .startAfter(lastVisible)
+    .limit(5)
+    .get()
+
+    window.lastVisible = query.docs[query.docs.length - 1]
+    build_posts_trend(query.docs, id)
+}
+
+async function build_posts_trend(query, id) {
+
+    for (let i = 0; i < query.length; i++) {
+        // query[i].data()
+
+        if (query[i].data().file_url == 'eonnect-home-text_post') {
+            j = document.createElement('div')
+            j.classList.add('shell_trend')
+
+            switch (query[i].data().url_theme) {
+                case 'deep':
+                    textCardClass = 'superdeepcard'
+                    textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + query[i].data().url_content + '</b></p></div>'
+                    break;
+                case 'light':
+                    textCardClass = 'lightcard'
+                    textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                case 'dark':
+                    textCardClass = 'darkcard'
+                    textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                default:
+                    return;
             }
+            userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
+            if (userlikedoc.exists && userlikedoc.data().status) {
+                desiredLikeAction = 'unlike'
+                desiredLikeAction2 = 'heartactive'
+                desiredLikeAction3 = 'favorite'
+            }
+            else {
+                desiredLikeAction = 'like'
+                desiredLikeAction2 = 'heart'
+                desiredLikeAction3 = 'favorite_border'
+            }
+
+            j.innerHTML = `
+            <div class="content">
+                <img style="z-index: 200;">
+                <div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">
+                '${textStuff}'
+                </div>
+                <nav class="navbar navbar-expand-sm">
+                    <img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfptrend" src="${query[i].data().photo_url}">
+                    <h4 class="postname centeredy">${query[i].data().name}</h4>
+                    <ul class="navbar-nav mr-auto"> </ul> 
+                    <button id="${query[i].id}likebtntrend" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart ${query[i].id}likebtntrend">
+                        <i id="${query[i].id}likebtnicontrend" class="material-icons posticon animated ${query[i].id}likebtnicontrend">${desiredLikeAction3}</i> 
+                        <span class="${query[i].id}likeCounttrend" id="${query[i].id}likeCounttrend">${query[i].data().likes}</span>
+                    </button>
+                    <button id="${query[i].id}commentBtntrend" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons">
+                        <i class="material-icons posticon">chat_bubble_outline</i> 
+                        ${query[i].data().comments} 
+                    </button>
+                </nav>
+            </div>
+            <button onclick="info('${query[i].id}')" class="postbuttons postinfo">
+                <i class="material-icons-outlined posticon infobtn">info</i>
+            </button>`
+            document.getElementById(id + 'postcontainer').appendChild(j)
+            continue;
         }
+
+        j = document.createElement('div')
+        j.classList.add('shell_trend')
+
+        userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
+        if (userlikedoc.exists && userlikedoc.data().status) {
+            desiredLikeAction = 'unlike'
+            desiredLikeAction2 = 'heart heartactive'
+            desiredLikeAction3 = 'favorite'
+        }
+        else {
+            desiredLikeAction = 'like'
+            desiredLikeAction2 = 'heart'
+            desiredLikeAction3 = 'favorite_border'
+        }
+
+        j.innerHTML = `
+        <div class="content">
+            <img onclick="viewpost('${query[i].id}')" id="${query[i].id}imgtrend" class="postimage" src="${query[i].data().file_url}">
+            <nav class="navbar navbar-expand-sm">
+                <img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfptrend" src="${query[i].data().photo_url}">
+                <h4 class="postname centeredy">${query[i].data().name}</h4>
+                <ul class="navbar-nav mr-auto"> </ul> 
+                <button id="${query[i].id}likebtntrend" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart ${query[i].id}likebtntrend">
+                    <i id="${query[i].id}likebtnicontrend" class="material-icons posticon animated ${query[i].id}likebtnicontrend">${desiredLikeAction3}</i> 
+                    <span class="${query[i].id}likeCounttrend" id="${query[i].id}likeCounttrend">${query[i].data().likes}</span>
+                </button> 
+                <button id="${query[i].id}commentbtntrend" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons">
+                    <i class="material-icons posticon">chat_bubble_outline</i> 
+                    ${query[i].data().comments}
+                </button>
+            </nav>
+            <button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen">
+                <i class="material-icons">fullscreen</i>
+            </button>
+            <button onclick="info('${query[i].id}')" class="postbuttons postinfo">
+                <i class="material-icons-outlined posticon infobtn">info</i>
+            </button>
+        </div>`
+        document.getElementById(id + 'postcontainer').appendChild(j)
     }
 
-    var list = [];
-    for (var j = 0; j < trend_likes.length; j++) 
-    list.push({'likes': trend_likes[j], 'data': trend_data[id][j]});
-
-    list.sort(function(a, b) {
-        return ((a.likes < b.likes) ? -1 : ((a.likes == b.likes) ? 0 : 1));
+    $(`#${id}postcontainer`).imagesLoaded(() => {
+        resizeAllGridItemsTrend(id)
     });
 
-    for (var k = 0; k < list.length; k++) {
-        trend_data[id][k] = list[k].data;
-        trend_likes[id][k] = list[k].likes
-    }
-
-    // Sorted by likes
 }

@@ -1,6 +1,3 @@
-storageRef = firebase.storage().ref();
-db = firebase.firestore()
-
 async function load() {
 
     // Clear past posts on first load
@@ -71,8 +68,8 @@ async function newpost() {
         name: cacheuser.name
     })
 
-    await db.collection('new_posts').doc(doc.id).collection('comments').doc('comments').set({
-        comments: []
+    await db.collection('new_posts').doc(doc.id).collection('comments').doc('a').set({
+        status: false,
     })
 
     await db.collection('new_posts').doc(doc.id).collection('likes').doc('a').set({
@@ -125,7 +122,7 @@ async function build_posts_all(query) {
 
         if (query[i].data().file_url == 'eonnect-home-text_post') {
             a = document.createElement('div')
-            a.classList.add('postshell')
+            a.classList.add('shell')
 
             switch (query[i].data().url_theme) {
                 case 'deep':
@@ -153,13 +150,13 @@ async function build_posts_all(query) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments} </button></nav></div><button id="${query[i].id}infoBtn" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
+            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments} </button></nav></div><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
             document.getElementById('grid').appendChild(a)
             continue;
         }
 
         a = document.createElement('div')
-        a.classList.add('postshell')
+        a.classList.add('shell')
 
         userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
         if (userlikedoc.exists && userlikedoc.data().status) {
@@ -173,7 +170,7 @@ async function build_posts_all(query) {
             desiredLikeAction3 = 'favorite_border'
         }
 
-        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments}</button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="${query[i].id}infoElrelevant" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button><hr></div>`
+        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> ${query[i].data().comments}</button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button id="${query[i].id}infoElrelevant" onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
         document.getElementById('grid').appendChild(a)
 
     }
@@ -181,20 +178,42 @@ async function build_posts_all(query) {
 }
 
 async function like(post) {
-    document.getElementById(`${post}likebtn`).onclick = () => {
-        $(`#${post}likebtnicon`).addClass('shake')
-        window.setTimeout(() => {
-            $(`#${post}likebtnicon`).removeClass('shake')
-        }, 600)
-    }
 
+    likebtns = document.getElementsByClassName(post + 'likebtntrend')
+    for (var i = 0; i < likebtns.length; i++) {
+        // likebtns[i] is element
+        likebtns[i].onclick = () => {
+            $(`.${post}likebtnicontrend`).addClass('shake')
+            window.setTimeout(() => {
+                $(`.${post}likebtnicontrend`).removeClass('shake')
+            }, 600)
+        }
+    }
+    try {
+        document.getElementById(post + 'likebtn').onclick = () => {
+            $(`#${post}likebtnicon`).addClass('shake')
+            window.setTimeout(() => {
+                $(`#${post}likebtnicon`).removeClass('shake')
+            }, 600)
+        }
+    } catch (error) { }
+    
+
+    $(`.${post}likebtntrend`).toggleClass('heartactive')
     $(`#${post}likebtn`).toggleClass('heartactive');
+
+    $(`.${post}likebtnicontrend`).html('favorite')
     $(`#${post}likebtnicon`).html('favorite');
+
+    $(`.${post}likebtnicontrend`).addClass('rubberBand')
     $(`#${post}likebtnicon`).addClass('rubberBand')
+
     window.setTimeout(() => {
+        $(`.${post}likebtnicontrend`).removeClass('rubberBand')
         $(`#${post}likebtnicon`).removeClass('rubberBand')    
     }, 600);
 
+    $(`.${post}likeCounttrend`).html(parseInt($(`.${post}likeCounttrend`).html()) + 1)
     $(`#${post}likeCount`).html(parseInt($(`#${post}likeCount`).html()) + 1)
     
     await db.collection('new_posts').doc(post).collection('likes').doc(user.uid).set({
@@ -202,38 +221,79 @@ async function like(post) {
     })
 
     window.setTimeout(() => {
-        document.getElementById(`${post}likebtn`).onclick = () => {
-            unlike(post)
+        likebtns = document.getElementsByClassName(post + 'likebtntrend')
+        for (var i = 0; i < likebtns.length; i++) {
+            likebtns[i].onclick = () => {
+                unlike(post)
+            }
         }
+
+        try {
+            document.getElementById(post + 'likebtn').onclick = () => {
+                unlike(post)
+            }
+        } catch (error) { }
+        
     }, 1750);
 
 }
 
 async function unlike(post) {
-    document.getElementById(`${post}likebtn`).onclick = () => {
-        $(`#${post}likebtnicon`).addClass('shake')
-        window.setTimeout(() => {
-            $(`#${post}likebtnicon`).removeClass('shake')
-        }, 600)
+
+    likebtns = document.getElementsByClassName(post + 'likebtntrend')
+    for (var i = 0; i < likebtns.length; i++) {
+        // likebtns[i] is element
+        likebtns[i].onclick = () => {
+            $(`.${post}likebtnicontrend`).addClass('shake')
+            window.setTimeout(() => {
+                $(`.${post}likebtnicontrend`).removeClass('shake')
+            }, 600)
+        }
     }
+    try {
+        document.getElementById(post + 'likebtn').onclick = () => {
+            $(`#${post}likebtnicon`).addClass('shake')
+            window.setTimeout(() => {
+                $(`#${post}likebtnicon`).removeClass('shake')
+            }, 600)
+        }
+    } catch (error) { }
 
-    $(`#${post}likeCount`).html(parseInt($(`#${post}likeCount`).html()) - 1)
+    $(`.${post}likebtntrend`).toggleClass('heartactive')
+    $(`#${post}likebtn`).toggleClass('heartactive');
 
-    $(`#${post}likebtn`).toggleClass('heartactive')
+    $(`.${post}likebtnicontrend`).html('favorite_border')
     $(`#${post}likebtnicon`).html('favorite_border');
+
+    $(`.${post}likebtnicontrend`).addClass('jello')
     $(`#${post}likebtnicon`).addClass('jello')
+
     window.setTimeout(() => {
+        $(`.${post}likebtnicontrend`).removeClass('jello')
         $(`#${post}likebtnicon`).removeClass('jello')    
     }, 600);
+    
+    
+    $(`.${post}likeCounttrend`).html(parseInt($(`.${post}likeCounttrend`).html()) - 1)
+    $(`#${post}likeCount`).html(parseInt($(`#${post}likeCount`).html()) - 1)
     
     await db.collection('new_posts').doc(post).collection('likes').doc(user.uid).set({
         status: false,
     })
 
     window.setTimeout(() => {
-        document.getElementById(`${post}likebtn`).onclick = () => {
-            like(post)
+        likebtns = document.getElementsByClassName(post + 'likebtntrend')
+        for (var i = 0; i < likebtns.length; i++) {
+            likebtns[i].onclick = () => {
+                like(post)
+            }
         }
+
+        try {
+            document.getElementById(post + 'likebtn').onclick = () => {
+                like(post)
+            }
+        } catch (error) { }
     }, 1750);
 }
 
@@ -631,27 +691,57 @@ function cancel_request(uid, username) {
 
 }
 
-function showfollowers() {
+async function showfollowers() {
     uid = sessionStorage.getItem('currentlyviewinguser')
 
     if ($('#followerscontainer').is(':empty')) {
-        for (let i = 0; i < followersdoc.data().followers.length; i++) {
-            u = document.createElement("div")
-            u.innerHTML = followersdoc.data().followers[i].name
+        doc = await db.collection('follow').doc(uid).collection('followers').where("status", "==", true).limit(12).get()
+
+        for (let i = 0; i < doc.docs.length; i++) {
+            u = document.createElement('div');
+            u.innerHTML = `
+            <img class="followCardPFP" src="${doc.docs[i].data().photo_url}">
+            <div class="followCardText">
+                <h4 class="bold">${doc.docs[i].data().name}</h4>
+                <span class="chip">@${doc.docs[i].data().username}</span>
+            </div>
+            <div class="followCardActions">
+                <button onclick="$('#userModal').modal('hide');window.setTimeout(() => {sessionStorage.setItem('skiponce123', 'true'); usermodal('${doc.docs[i].data().uid}')}, 900)" class="eon-text">view profile</button>
+            </div>
+            `
+            u.classList.add('userFollowCard')
             document.getElementById('followerscontainer').appendChild(u)
         }
+
+        addWaves()
+
     }
 }
 
-function showfollowing() {
+async function showfollowing() {
     uid = sessionStorage.getItem('currentlyviewinguser')
 
     if ($('#followingcontainer').is(':empty')) {
-        for (let i = 0; i < followingdoc.data().following.length; i++) {
-            u = document.createElement("div")
-            u.innerHTML = followingdoc.data().following[i].name
+        doc = await db.collection('follow').doc(uid).collection('following').where("status", "==", true).limit(12).get()
+
+        for (let i = 0; i < doc.docs.length; i++) {
+            u = document.createElement('div');
+            u.innerHTML = `
+            <img class="followCardPFP" src="${doc.docs[i].data().photo_url}">
+            <div class="followCardText">
+                <h4 class="bold">${doc.docs[i].data().name}</h4>
+                <span class="chip">@${doc.docs[i].data().username}</span>
+            </div>
+            <div class="followCardActions">
+                <button onclick="$('#userModal').modal('hide');window.setTimeout(() => {sessionStorage.setItem('skiponce123', 'true'); usermodal('${doc.docs[i].data().uid}')}, 900)" class="eon-text">view profile</button>
+            </div>
+            `
+            u.classList.add('userFollowCard')
             document.getElementById('followingcontainer').appendChild(u)
         }
+
+        addWaves()
+
     }
 }
 
@@ -800,27 +890,9 @@ async function newTextPost(theme) {
     // $('#rereshtbn').click()
 }
 
-
-function unnewcomment() {
-    $('#addcommentbtn').removeAttr('style')
-    $('#addcommentbtn').removeClass('fadeOutUp')
-    $('#addcommentbtn').addClass('fadeInDown')
-    $('#addcommentbtn').css('display', 'none')
-}
-
-function newcomment() {
-    $('#addcommentbtn').removeClass('fadeInDown')
-    $('#addcommentbtn').addClass('fadeOutUp')
-    $('#newcommentbox').css('display', 'block')
-
-    window.setTimeout(function() {
-        document.getElementById('addcommentbtn').setAttribute('style', 'display:none !important');
-    }, 800)
-}
-
 async function addComment(id) {
     text = document.getElementById('commentbox').value
-    sessionStorage.setItem('wasitme', 'true')
+
     if (text == "" || text == " " || text == "  ") {
         Snackbar.show({showAction: false,pos: 'bottom-center', text: 'You must include content.' })
         return;
@@ -835,113 +907,132 @@ async function addComment(id) {
     // Approved. Add comment.
 
     document.getElementById('commentbox').value = ''
+    $('#nocomments').addClass('hidden')
     updatechars()
-    await db.collection('new_posts').doc(id).collection('comments').doc('comments').update({
-        comments: firebase.firestore.FieldValue.arrayUnion({
-            content: text,
-            likes: [],
-            replies: [],
-            name: cacheuser.name,
-            uid: user.uid,
-            photo_url: cacheuser.url,
-            username: cacheuser.username
-        })
+
+    doc = await db.collection('new_posts').doc(id).collection('comments').add({
+        content: text,
+        name: cacheuser.name,
+        uid: user.uid,
+        photo_url: cacheuser.url,
+        username: cacheuser.username,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        likes: 0,
+        replies: 0,
+        status: true,
     })
+
+    query = await db.collection('new_posts').doc(id)
+    .collection('comments')
+    .orderBy('timestamp', 'desc')
+    .where('uid', '==', user.uid)
+    .limit(1)
+    .get()
+    build_comments(query.docs, true)
+
+    await db.collection('new_posts').doc(id).collection('comments').doc(doc.id).collection('likes').doc('a').set({status: false})
+    await db.collection('new_posts').doc(id).collection('comments').doc(doc.id).collection('replies').doc('a').set({status: false})
 }
 
-
+function updatechars() { window.setTimeout(()=>{length=document.getElementById('commentbox').value.length;document.getElementById('charcount').innerHTML='Post Comment ('+length+'/200 characters)';if(length>200){$('#charcount').removeClass('btn-eon-one');$('#charcount').addClass('btn-eon-four');$('#charcount').removeClass('yellow');$('#charcount').addClass('shake');$('#charcount').removeClass('infinite');} else{if(length>=190){$('#charcount').removeClass('btn-eon-one');$('#charcount').addClass('yellow');$('#charcount').removeClass('btn-eon-four');$('#charcount').addClass('pulse');$('#charcount').removeClass('shake');$('#charcount').addClass('infinite');} else{if(length>=180){$('#charcount').removeClass('btn-eon-one');$('#charcount').addClass('yellow');$('#charcount').removeClass('btn-eon-four');$('#charcount').addClass('pulse');$('#charcount').removeClass('shake');$('#charcount').removeClass('infinite');} else{$('#charcount').addClass('btn-eon-one');$('#charcount').removeClass('btn-eon-four');$('#charcount').removeClass('shake');$('#charcount').removeClass('yellow');$('#charcount').removeClass('infinite');}}}},10);    }
 
 async function loadComments(id, poster) {
+
+    if (id == sessionStorage.getItem('viewing')) {
+        // Already loaded, stop and just turn on modal.
+        $('#commentModal').modal('toggle');
+        return;
+    }
 
     document.getElementById('returntouser').onclick = function () {
         sessionStorage.setItem('skiponce123', 'true')
         usermodal(poster)
     }
+
     document.getElementById('returntopost').onclick = function () {
         sessionStorage.setItem('skiponce123', 'true')
         viewpost(id)
     }
+
     document.getElementById('charcount').onclick = function () {
         addComment(id)
     }
 
-    document.getElementById('readonlychip').setAttribute('style', 'display:none !important');
-    document.getElementById('addcommentbtn').setAttribute('style', 'display:none !important');
     sessionStorage.setItem('viewing', id)
+
     $('#commentsbox').empty()
 
-    unnewcomment()
-    
-    doc = await db.collection('new_posts').doc(id).collection('comments').doc('comments').get()
-    
-    comments = doc.data().comments
+    query = await db.collection('new_posts').doc(id)
+    .collection('comments')
+    .where('status', '==', true)
+    .limit(8)
+    .get()
+    window.lastVisibleComment = query.docs[query.docs.length - 1]
+    build_comments(query.docs, false)
 
-    if (comments.length == 0) {
-        h = document.createElement('div')
-        h.innerHTML = '<div class="alert alert-info alert-dismissible fade show" role="alert"><strong><i class="material-icons">notification_important</i></strong> Be the first to add a comment.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
-        document.getElementById('commentsbox').appendChild(h)
-    }
-
-    document.getElementById('addcommentbtn').setAttribute('style', 'display:block !important');
-
-    // FEATURE: ADD COMMENT LIMIT PICKER
-    if (comments.length >= 1200) {
-        document.getElementById('readonlychip').setAttribute('style', 'display:inline-fullscreen_exit !important');
-    }
-    
-    for (let i = 0; i < comments.length; i++) {
-
-        comments[i]
-        o = document.createElement('div')
-        o.innerHTML = comments[i].content + ' by ' + comments[i].name
-        document.getElementById('commentsbox').appendChild(o)
-
-        // buildcomment(element, id, i, cachelikes, false)
-        // sortUsingNestedText($('#commentsbox'), "div.card", "div.inline")
-    }   
-            
     history.pushState(null, "", "?comments=" + id)
     $('#commentModal').modal('toggle')
 }
 
+async function load_next_comments() {
+    query = await db.collection('new_posts').doc(id)
+    .collection('comments')
+    .where('status', '==', true)
+    .startAfter(lastVisible)
+    .limit(8)
+    .get()
+    window.lastVisibleComment = query.docs[query.docs.length - 1]
+    build_comments(query.docs, false)
+}
+  
+async function build_comments(query, self) {
 
-function updatechars() {
-    window.setTimeout(() => {
-        length = document.getElementById('commentbox').value.length
-        document.getElementById('charcount').innerHTML = 'Post Comment (' + length + '/200 characters)'
-        if (length > 200) {
-            $('#charcount').removeClass('btn-eon-one')
-            $('#charcount').addClass('btn-eon-four')
-            $('#charcount').removeClass('yellow')
-            $('#charcount').addClass('shake')
-            $('#charcount').removeClass('infinite')
+    for (let i = 0; i < query.length; i++) {
+
+        y = document.createElement('div');
+        y.classList.add('top_level_comment');
+
+        timeFormatted = timeago.format(query[i].data().timestamp.toDate(), 'en_US');
+
+        y.innerHTML = `
+        <div class="content">
+            <img class="comment_pfp" src="${query[i].data().photo_url}"></img>
+            <div class="comment_text"><span>${query[i].data().name}</span><br>${timeFormatted}</div>
+            <div class="comment_meta">
+                <div class="dropdown">
+                    <button aria-expanded="false" aria-haspopup="true" class="eon-text iconbtn" data-toggle="dropdown"><i class="material-icons">more_vert</i></button>
+                    <div class="dropdown-menu menu accmanagedropdown">
+                    <center>
+                        <a class="eon-text blockk" href="#"><i class="material-icons">content_copy</i></a>
+                        <a class="eon-text blockk" href="#"><i class="material-icons">report</i></a>
+                    </center>
+                    </div>
+                </div>
+            </div>
+            <div class="comment_content">${query[i].data().content}</div>
+        </div>`
+
+        if (self) {
+            y.classList.add('animated');
+            y.classList.add('zoomIn');
+            document.getElementById('commentsbox').prepend(y)
         }
         else {
-            if (length >= 190) {
-                $('#charcount').removeClass('btn-eon-one')
-                $('#charcount').addClass('yellow')
-                $('#charcount').removeClass('btn-eon-four')
-                $('#charcount').addClass('pulse')
-                $('#charcount').removeClass('shake')
-                $('#charcount').addClass('infinite')
-            }
-            else {
-                if (length >= 180) {
-                    $('#charcount').removeClass('btn-eon-one')
-                    $('#charcount').addClass('yellow')
-                    $('#charcount').removeClass('btn-eon-four')
-                    $('#charcount').addClass('pulse')
-                    $('#charcount').removeClass('shake')
-                    $('#charcount').removeClass('infinite')
-                }
-                else {
-                    $('#charcount').addClass('btn-eon-one')
-                    $('#charcount').removeClass('btn-eon-four')
-                    $('#charcount').removeClass('shake')
-                    $('#charcount').removeClass('yellow')
-                    $('#charcount').removeClass('infinite')
-                }
-            }
+            document.getElementById('commentsbox').appendChild(y)
         }
-    }, 10);
+    }
+
+    $('#commentsbox').imagesLoaded( () => {
+        console.log('Status: All comments loaded.\n');
+        addWaves()
+        window.setTimeout(() => {
+            // Wait for modal to finish opening.
+            resizeCommentGridItems()
+            window.setTimeout(() => {
+                // Backup
+                resizeCommentGridItems()
+            }, 525)
+        }, 325)
+    })
+
 }

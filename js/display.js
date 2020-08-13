@@ -149,11 +149,48 @@ function resizeGridItem(item) {
 }
 
 function resizeAllGridItems() {
-    allItems = document.getElementsByClassName("postshell");
+    allItems = document.getElementsByClassName("shell");
     for (x = 0; x < allItems.length; x++) {
         resizeGridItem(allItems[x]);
     }
 }
+
+function resizeGridItemTrend(item, trend) {
+    try {
+        grid = document.getElementById(trend + 'postcontainer');
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+        item.style.gridRowEnd = "span " + rowSpan;   
+    } catch (error) {
+        console.log('Display resize error (Likely too fast scrolling)');
+    }
+}
+
+function resizeAllGridItemsTrend(trend) {
+    allItems = document.getElementsByClassName("shell_trend");
+    for (x = 0; x < allItems.length; x++) {
+        resizeGridItem(allItems[x], trend);
+    }
+}
+
+function commandGridItemResizeSingular(item){
+    grid = document.getElementById("commentsbox");
+    rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+    rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+    rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
+      item.style.gridRowEnd = "span "+rowSpan;
+  }
+  
+function resizeCommentGridItems(){
+    allItems = document.getElementsByClassName("top_level_comment");
+    for(x=0;x<allItems.length;x++){
+        commandGridItemResizeSingular(allItems[x]);
+    }
+}
+
+
+
 
 document.querySelectorAll('.grid-list').forEach(button => button.addEventListener('click', toggle));
 
@@ -350,9 +387,7 @@ function preesearch() {
 $( "#userModal" ).scroll(function() { 
     obj = document.getElementById('userModal')
     if( obj.scrollTop === (obj.scrollHeight - obj.offsetHeight)) {
-
-        builduser()
-
+        // Inf scroll
     }
 });
 

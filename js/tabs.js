@@ -3,6 +3,7 @@ $(window).ready(function () {
         document.getElementById('colorthemeinp').value = localStorage.getItem('theme_name')
     }
 
+    sessionStorage.removeItem('viewTrend')
     sessionStorage.removeItem('viewComments')
     sessionStorage.removeItem('viewInfo')
     sessionStorage.removeItem('fullInfo')
@@ -51,10 +52,18 @@ $(window).ready(function () {
         sessionStorage.setItem('viewUser', urlParams.get('user'))
         sessionStorage.setItem('viewPost', urlParams.get('post'))
         sessionStorage.setItem('currenDM', urlParams.get('dm'))
+        sessionStorage.setItem('viewTrend', urlParams.get('trend'))
         
         if (urlParams.get('dm') !== null) {
             // A DM is active so don't load home and go straight to DMs
             tabe('inbox')
+            return;
+        }
+
+        if (urlParams.get('trend') !== null) {
+            // A trend is active so don't load home and go straight to explore tab.
+            tabe('explore')
+            return;
         }
 
         if (urlParams.get('info') == null && 

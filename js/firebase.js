@@ -16,6 +16,10 @@ firebase.analytics();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
 
+        window.functions = firebase.functions();
+        window.storageRef = firebase.storage().ref();
+        window.db = firebase.firestore()
+
         console.log('Personal Token: ' + user.uid);
 
         window.user = firebase.auth().currentUser

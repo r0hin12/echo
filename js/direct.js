@@ -1,4 +1,3 @@
-db = firebase.firestore()
 prevuid = 'na'
 abritaryindex = 0
 abritarysecondindex = 0

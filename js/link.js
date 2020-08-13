@@ -9,8 +9,6 @@ function functiontofindIndexByKeyValue(arraytosearch, key, valuetosearch) {
     return null;
 }
 
-db = firebase.firestore()
-
 function linktwitter() {
     var provider = new firebase.auth.TwitterAuthProvider();
     firebase.auth().currentUser.linkWithPopup(provider).then(function(result) {

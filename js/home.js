@@ -1,6 +1,3 @@
-storageRef = firebase.storage().ref();
-db = firebase.firestore()
-
 sessionStorage.setItem('fullscreenon', 'no')
 sessionStorage.setItem('view', 'relevant')
 sessionStorage.setItem('viewing', 'stoplookinghere')
@@ -17,10 +14,14 @@ $("#imgInp").change(function(){if(this.files&&this.files[0]){var e=new FileReade
 
 function showall() {
     done_loading()
+
     document.getElementById('grid').style.removeProperty('display');
-    window.setTimeout(() => {
+
+    $('#grid').imagesLoaded( function() {
+        console.log('Status: All photos loaded.\n');
         resizeAllGridItems()
-    }, 250)
+      });
+ 
     sessionStorage.setItem('view', 'all')
 }
 
