@@ -91,6 +91,13 @@ async function newpost() {
     document.getElementById('captionel').style.display = 'none'
 
     // document.getElementById('rereshtbn').click()
+    query = await db.collection('new_posts')
+    .orderBy("timestamp", "desc")
+    .where("uid", '==', user.uid)
+    .limit(1)
+    .get()
+
+    build_posts_all(query.docs, true)
 }
 
 async function load_posts_all() {
@@ -115,7 +122,7 @@ async function load_next_all() {
     build_posts_all(query.docs)
 }
 
-async function build_posts_all(query) {
+async function build_posts_all(query, self) {
     // Query array contains documents
     for (let i = 0; i < query.length; i++) {
         // query[i].data()
@@ -151,6 +158,15 @@ async function build_posts_all(query) {
             }
 
             a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+            if (self) {
+                a.classList.add('animated')    
+                a.classList.add('backInDown')   
+                document.getElementById('grid').prepend(a) 
+                window.setTimeout(() => {
+                    showall();
+                }, 1200)
+                return;
+            }
             document.getElementById('grid').appendChild(a)
             continue;
         }
@@ -172,6 +188,15 @@ async function build_posts_all(query) {
 
         a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
         document.getElementById('grid').appendChild(a)
+        if (self) {
+            a.classList.add('animated')    
+            a.classList.add('backInDown')    
+            document.getElementById('grid').prepend(a)    
+            window.setTimeout(() => {
+                showall();
+            }, 1200)
+            return;
+        }
 
     }
     showall()
@@ -753,31 +778,71 @@ async function unfollow(uid, username, url, name) {
 
 }
 
-async function request(uid, username) {
+async function request(uid, username, url, name) {
 
-    db.collection('users').doc(uid).update({
-        requested: firebase.firestore.FieldValue.arrayUnion(user.uid)
-    }).then(function () {
-
-        document.getElementById('followbtn').innerHTML = 'cancel request'
-        document.getElementById('followbtn').onclick = function () {
-            unrequest(uid, username)
-        }
-
-        document.getElementById('usermodalfollowtext').classList.remove('fadeInUp')
-        document.getElementById('usermodalfollowtext').classList.remove('fadeOutDown')
-        document.getElementById('usermodalfollowtext').style.visibility = 'hidden'
-        window.setTimeout(function () {
-            document.getElementById('usermodalfollowtext').style.visibility = 'visible';
-            document.getElementById('usermodalfollowtext').style.display = 'block'
-            document.getElementById('usermodalfollowtext').classList.add('fadeInUp')
-            document.getElementById('usermodalfollowtext').innerHTML = '<i class="material-icons" id="followicon">access_time</i> Requested'
-        }, 50)
-
+    await db.collection('follow').doc(uid).collection('requested').doc(user.uid).set({
+        status: true,
+        name: cacheuser.name,
+        uid: user.uid,
+        username: cacheuser.username,
+        photo_url: cacheuser.url
     })
+    await db.collection('follow').doc(user.uid).collection('requesting').doc(uid).set({
+        status: true,
+        name: name,
+        uid: uid,
+        username: username,
+        photo_url: url
+    })
+
+    $('#followbtn').html('cancel request')
+
+    document.getElementById('followbtn').onclick = () => {
+        cancel_request(uid, username, url, name)
+    }
+
+    $('#usermodalfollowtext').removeClass('fadeInUp');
+    $('#usermodalfollowtext').removeClass('fadeOutDown');
+    $('#usermodalfollowtext').css('visibility', 'hidden');
+    window.setTimeout(() => {
+        $('#usermodalfollowtext').css('visibility', 'visible');
+        $('#usermodalfollowtext').css('display', 'block');
+        $('#usermodalfollowtext').addClass('fadeInUp');
+        $('#usermodalfollowtext').html('<i class="material-icons" id="followicon">access_time</i> Requested');
+    }, 50)
+
 }
 
-function cancel_request(uid, username) {
+async function cancel_request(uid, username, url, name) {
+
+    await db.collection('follow').doc(uid).collection('requested').doc(user.uid).set({
+        status: false,
+        name: cacheuser.name,
+        uid: user.uid,
+        username: cacheuser.username,
+        photo_url: cacheuser.url
+    })
+
+    await db.collection('follow').doc(user.uid).collection('requesting').doc(uid).set({
+        status: false,
+        name: name,
+        uid: uid,
+        username: username,
+        photo_url: url
+    })
+
+    $('#followbtn').html('request');
+
+    document.getElementById('followbtn').onclick = () => {
+        follow(uid, username)
+    }
+    $('#usermodalfollowtext').removeClass('fadeInUp');
+    $('#usermodalfollowtext').removeClass('fadeOutDown');
+    window.setTimeout(() => {
+        $('#usermodalfollowtext').addClass('fadeOutDown')
+        $('#usermodalfollowtext').css('visibility', 'visible')
+        $('#usermodalfollowtext').css('display', 'block')
+    }, 50)
 
 }
 

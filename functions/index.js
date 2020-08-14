@@ -14,6 +14,10 @@ exports.aggregateLikes = functions.firestore
 
     const likeDoc = change.after
 
+    if (likeId == 'a') {
+        return;
+    }
+
     if (likeDoc.data().status) {
         // increment likes
         return await db.collection('new_posts').doc(postId).update({

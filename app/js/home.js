@@ -9,7 +9,6 @@ sessionStorage.setItem('skiponce3', 'false')
 sessionStorage.setItem('skiponce123', 'false')
 sessionStorage.setItem('skiponce1234', 'false')
 
-
 $("#imgInp").change(function(){if(this.files&&this.files[0]){var e=new FileReader;e.onload=function(e){$("#blah").attr("src",e.target.result)},e.readAsDataURL(this.files[0])}document.getElementById("blah").style.display="block",document.getElementById("captionel").style.display="block",document.getElementById("captionelel").style.display="block"});
 
 function showall() {
