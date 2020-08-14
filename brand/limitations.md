@@ -1,0 +1,2 @@
+### Direct Messages Limitation
+The database structure used for posts, comments, replies, likes which allowed for millions of each will not be ported to direct messages. This is due to the extremely frequent reads and writes send to the database in a given conversation. Thus, on average, only ~700 messages of average length can be supported at once. This means that once a chat history has surpassed ~700 messages, deletion is required. We will manage such deletion automatically likely in batches of 100 for sufficient padding. 
