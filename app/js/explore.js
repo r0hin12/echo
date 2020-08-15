@@ -164,7 +164,7 @@ async function build_posts_trend(query, id) {
     for (let i = 0; i < query.length; i++) {
         // query[i].data()
 
-        if (query[i].data().file_url == 'eonnect-home-text_post') {
+        if (query[i].data().file_url == 'echo-home-text_post') {
             j = document.createElement('div')
             j.classList.add('shell_trend')
 

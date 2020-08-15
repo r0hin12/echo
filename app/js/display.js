@@ -17,8 +17,8 @@ function check(width) {
         window.expanded = false
         $('.trend_content_container').addClass('trend_content_container_fullwidth')
 
-        document.getElementById('expand').classList.add('eonnect-main-expanded')
-        document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: 800px; transition: all 0.5s;} .eonnect-main-expanded {width: 100% !important; transition: all 0.5s;}'
+        document.getElementById('expand').classList.add('echo-main-expanded')
+        document.getElementById('animatedsidebar').innerHTML = '.echo-main-unexpanded {width: 800px; transition: all 0.5s;} .echo-main-expanded {width: 100% !important; transition: all 0.5s;}'
 
         document.getElementById('expandbtn').style.display = 'block'
         if (sessionStorage.getItem('currentab') == 'inbox') {
@@ -53,13 +53,13 @@ function check(width) {
         document.getElementById('sidebar').classList.remove('buttonexpanded')
         document.getElementById('sidebar').classList.add('fadeInLeft')
 
-        document.getElementById('expand').classList.add('eonnect-main-unexpanded')
-        document.getElementById('expand').classList.remove('eonnect-main-expanded')
+        document.getElementById('expand').classList.add('echo-main-unexpanded')
+        document.getElementById('expand').classList.remove('echo-main-expanded')
         document.getElementById('expand').classList.remove('buttonunexpanded')
 
         elwidth = width - 275
         document.getElementById('expand').style.width = elwidth + 'px'
-        document.getElementById('animatedsidebar').innerHTML = '.eonnect-main-unexpanded {width: ' + elwidth + 'px; transition: all 0.5s;}'
+        document.getElementById('animatedsidebar').innerHTML = '.echo-main-unexpanded {width: ' + elwidth + 'px; transition: all 0.5s;}'
 
     }
 }
@@ -118,7 +118,7 @@ function collapse() {
 
 
 
-console.log("%cEonnect Developer Tools", "background: white; color: purple; font-size: x-large");
+console.log("%cEcho Developer Tools", "background: white; color: purple; font-size: x-large");
 console.log('Do not mess around with console as your account could get destroyed. We do not offer support to those who run unofficial JavaScript.')
 console.log('If you have any questions or need help with something, please contact us. Report errors below this line')
 console.log("%c-----------------", "background: black; color: white;");
@@ -394,8 +394,8 @@ function preesearch() {
         // Maintanence Mode
         if (doc.data().maint) {
             if (user.uid !== 'L5NjKTveedYfrw8JK9AjThahsT13') {
-                alert('Maintence Mode is Active \n\nFeatures may be corrupt or broken so we are temporarily reducing usage on Eonnect. \n\nThanks for understanding...')
-                window.location.replace(`https://gitlab.com/rohin12/eonnect/-/commit/${doc.data().maint_git}`)
+                alert('Maintence Mode is Active \n\nFeatures may be corrupt or broken so we are temporarily reducing usage on Echo. \n\nThanks for understanding...')
+                window.location.replace(`https://gitlab.com/rohin12/echo/-/commit/${doc.data().maint_git}`)
                 return;
             }
             console.log('--- MAINTENANCE MODE CURRENtLY ON. You have bypassed the kickoff.');
@@ -682,6 +682,10 @@ function updategradientui() {
     $('#themeinjection').html(':root {' + partone + parttwo + partthree + partfour + '}')
     localStorage.setItem('theme', ':root {' + partone + parttwo + partthree + partfour + '}' )
     localStorage.setItem('theme_name', color)
+
+    $('img[src="assets/logo.png"]').each(function() {this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
+    $('img[src="assets/logoblack.png"]').each(function() {this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
+    $('img[src="assets/logowhite.png"]').each(function() {this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
 }
 
 function proceedcustomui() {
@@ -713,5 +717,11 @@ function proceedcustomui() {
     $('#themeinjection').html(':root {' + partone + parttwo + partthree + partfour + '}')
     localStorage.setItem('theme', ':root {' + partone + parttwo + partthree + partfour + '}' )
     localStorage.setItem('theme_name', 'custom')
+    $('img[src="assets/logo.png"]').each(function() {this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
+    $('img[src="assets/logoblack.png"]').each(function() {this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
+    $('img[src="assets/logowhite.png"]').each(function() {this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
 }
 
+$('img[src="assets/logo.png"]').each(function() {this.classList.remove('hidden'); this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
+$('img[src="assets/logoblack.png"]').each(function() {this.classList.remove('hidden'); this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})
+$('img[src="assets/logowhite.png"]').each(function() {this.classList.remove('hidden'); this.src = 'assets/logo' + window.getComputedStyle(document.documentElement).getPropertyValue('--content-primary').split(" ").pop() + '.png'})

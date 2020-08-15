@@ -87,7 +87,7 @@ $(window).ready(function () {
 })
 
 function tabe(tab) {
-    document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.replace(tab[0], '') + ' | Eonnect'
+    document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.replace(tab[0], '') + ' | Echo'
     sessionStorage.setItem("currentab", tab)
 
     if (sidebarexpanded) {

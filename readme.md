@@ -1,7 +1,7 @@
-## 🚀 Eonnect
+## 🚀 Echo
 ### Ultimate Social Media
 
-This repository is intended for the developent of the Eonnect software. We encourage contributions through pull requests.
+This repository is intended for the developent of the Echo software. We encourage contributions through pull requests.
 
 
 Want to support me?

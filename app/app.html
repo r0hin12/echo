@@ -13,7 +13,7 @@
     <!---==== Meta ====--->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="assets/logo.png" />
+    <link rel="icon" type="image/png" href="assets/logowhite.png" />
     <title id="title">Document</title>
 
     <!---==== CSS ====-->
@@ -32,8 +32,8 @@
     <!-- Snackbar -->
     <link rel="stylesheet" href="daemonite/snackbar.min.css">
 
-    <!-- Eonnect Base -->
-    <link rel="stylesheet" href="css/eonnect.css">
+    <!-- Echo Base -->
+    <link rel="stylesheet" href="css/echo.css">
     <!-- App -->
     <link rel="stylesheet" href="css/app.css">
     <!-- Search -->
@@ -728,8 +728,8 @@
         
         <div class="buttonunexpanded animated" id="sidebar">
             <center>
-                <img src="assets/logo.png" id="mainLogo" alt="">
-                <h3 id="logoSupportingText">Eonnect</h3>
+                <img class="hidden animated zoomIn" src="assets/logo.png" id="mainLogo" alt="">
+                <h3 id="logoSupportingText">Echo</h3>
             </center>
             <br><br><br>
             <center>
@@ -765,7 +765,7 @@
             </div>
         </div>
 
-        <div id="expand" class="eonnect-main-unexpanded">
+        <div id="expand" class="echo-main-unexpanded">
             <div class="tab-content" id="justifiedTabContent">
                 <div aria-labelledby="home-tab" class="tab-pane fade" id="home" role="tabpanel">
                     <nav class="navbar navbar-expand-sm">
@@ -881,15 +881,15 @@
                             <br>
                         </div>
                         <div id="messagelist">
-                            <div onclick="showEonnectNews()" class="messagelistbox animated shadow-sm fadeInUp" id="eonnectNewschatsidebarboxel">
-                                <img src="assets/logo.png" class="msgimg centeredy" alt="">
+                            <div onclick="showEchoNews()" class="messagelistbox animated shadow-sm fadeInUp" id="echoNewschatsidebarboxel">
+                                <img class="hidden animated zoomIn" src="assets/logo.png" class="msgimg centeredy" alt="">
                                 <div class="boxtext centeredy">
                                     <h4 class="heavy">What's New?</h4>
                                     <br>
-                                    <p id="eonnectNewsrecenttextel" class="grey nolineheight">Eonnect v0.5.x</p>
+                                    <p id="echoNewsrecenttextel" class="grey nolineheight">Echo v0.5.x</p>
                                 </div>
                                 <div class="boxtext2 centeredy">
-                                    <span id="eonnectNewsnotifbadge" class="badge badge-pill notifbadge badge-secondary animated jello infinite"></span>
+                                    <span id="echoNewsnotifbadge" class="badge badge-pill notifbadge badge-secondary animated jello infinite"></span>
                                 </div>
                             </div>
                             <br>
@@ -932,13 +932,13 @@
                         </div>
 
                         <div id="messagecontent">
-                            <div class="hidden animated fadeIn" id='eonnectNewsContent'>
+                            <div class="hidden animated fadeIn" id='echoNewsContent'>
                                 <center>
                                     <br><br>
-                                    <span class="chip"><span id="eonnect-dm-version">loading</span></span>
+                                    <span class="chip"><span id="echo-dm-version">loading</span></span>
                                     <br><br>
                                     <h3>Changelog</h3>
-                                    <p id="eonnect-dm-latest"></p>
+                                    <p id="echo-dm-latest"></p>
                                 </center>
                             </div>
                         </div>
@@ -1072,7 +1072,7 @@
                                     </a>
                                     <div class="collapse" data-parent="#socials" id="collapseTwitter">
                                         <div class="expansion-panel-body">
-                                            <p id="twitterlinktext">Link your Twitter account to Eonnect. You will have the option to show or hide your Twitter on your profile!</p>
+                                            <p id="twitterlinktext">Link your Twitter account to Echo. You will have the option to show or hide your Twitter on your profile!</p>
                                             <center>
                                                 <button id="twitterlinkbutton" onclick="linktwitter()" class="eon-outlined">Link Twitter -></button>
                                             </center>
@@ -1088,7 +1088,7 @@
                                     </a>
                                     <div class="collapse" data-parent="#socials" id="collapseGitHub">
                                         <div class="expansion-panel-body">
-                                            <p id="githublinktext">Link your GitHub account to Eonnect. You will have the option to show or hide your GitHub on your profile!</p>
+                                            <p id="githublinktext">Link your GitHub account to Echo. You will have the option to show or hide your GitHub on your profile!</p>
                                             <center>
                                                 <button id="githublinkbutton" onclick="linkgithub()" class="eon-outlined">Link GitHub -></button>
                                             </center>
@@ -1101,7 +1101,7 @@
                                 <div class="card-body">
                                     <center>
                                         <h4>Customize UI</h4> <span class="badge badge-pill badge-primary">Beta</span>
-                                        <button data-toggle="popover" title="Personalize UI" data-content="Customize Eonnect by selecting a theme. You can choose a dark or light version to choose what's best for you. This applies to this browser only!" class="eon-text gradicon">what is this?</button>
+                                        <button data-toggle="popover" title="Personalize UI" data-content="Customize Echo by selecting a theme. You can choose a dark or light version to choose what's best for you. This applies to this browser only!" class="eon-text gradicon">what is this?</button>
                                         <br><br>
                                         <input class="checkbox" type="checkbox" id="themeinp" style="display: none;">
                                         <label for="themeinp" class="check"> <svg width="18px" height="18px" viewBox="0 0 18 18"> <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z"></path><polyline points="1 9 7 14 15 4"></polyline></svg> </label>

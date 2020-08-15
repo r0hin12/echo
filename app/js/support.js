@@ -124,7 +124,7 @@ function signinnow() {
 function dubby() {
     window.setTimeout(function() {
         document.getElementById('emailbtn').onclick = function() {
-            alert('Feel free to email us at: \n\nincoming+rohin12-eonnect-16896350-issue-@incoming.gitlab.com')
+            alert('Feel free to email us at: \n\nincoming+rohin12-echo-16896350-issue-@incoming.gitlab.com')
         }
         document.getElementById('emailbtn').href = '#'
     }, 1000)

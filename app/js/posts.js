@@ -127,7 +127,7 @@ async function build_posts_all(query, self) {
     for (let i = 0; i < query.length; i++) {
         // query[i].data()
 
-        if (query[i].data().file_url == 'eonnect-home-text_post') {
+        if (query[i].data().file_url == 'echo-home-text_post') {
             a = document.createElement('div')
             a.classList.add('shell')
 
@@ -208,7 +208,7 @@ async function build_posts_user(query) {
     for (let i = 0; i < query.length; i++) {
         // query[i].data()
 
-        if (query[i].data().file_url == 'eonnect-home-text_post') {
+        if (query[i].data().file_url == 'echo-home-text_post') {
             w = document.createElement('div')
             w.classList.add('usershell')
 
@@ -943,7 +943,7 @@ async function approvePost(id, data, ) {
         caption = data.url_content
     }
 
-    if (data.file_url == 'eonnect-home-text_post') {
+    if (data.file_url == 'echo-home-text_post') {
         // Text post
         if (data.url_theme == 'deep') {
             textCardClass = 'superdeepcard'
@@ -1004,10 +1004,10 @@ async function newTextPost(theme) {
 
     doc = await db.collection('new_posts').add({
         comments: 0,
-        file_url: 'eonnect-home-text_post',
+        file_url: 'echo-home-text_post',
         url_theme: theme,
         url_content: text,
-        file: 'eonnect-home-text_post',
+        file: 'echo-home-text_post',
         latest_comment: "null",
         latest_comment_photo: "null",
         likes: 0,

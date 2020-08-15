@@ -42,7 +42,7 @@ function unlinktwitter() {
         db.collection('users').doc(user.uid).update({
             twitter: firebase.firestore.FieldValue.delete()
         }).then(function() {
-            document.getElementById('twitterlinktext').innerHTML = 'Link your Twitter account to Eonnect. You will have the option to show or hide your Twitter on your profile!'
+            document.getElementById('twitterlinktext').innerHTML = 'Link your Twitter account to Echo. You will have the option to show or hide your Twitter on your profile!'
             document.getElementById('twitterlinkbutton').innerHTML = 'link twitter ->'
             document.getElementById('twitterlinkbutton').onclick = function() {
                 linktwitter()
@@ -95,7 +95,7 @@ function unlinkgithub() {
         db.collection('users').doc(user.uid).update({
             github: firebase.firestore.FieldValue.delete()
         }).then(function() {
-            document.getElementById('githublinktext').innerHTML = 'Link your GitHub account to Eonnect. You will have the option to show or hide your GitHub on your profile!'
+            document.getElementById('githublinktext').innerHTML = 'Link your GitHub account to Echo. You will have the option to show or hide your GitHub on your profile!'
             document.getElementById('githublinkbutton').innerHTML = 'link github ->'
             document.getElementById('githublinkbutton').onclick = function() {
                 linkgithub()

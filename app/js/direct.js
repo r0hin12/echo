@@ -46,7 +46,7 @@ function newdm() {
                         messages: [
                             {
                                 sender: user.uid,
-                                app_preset: 'eonnect-direct-invitation',
+                                app_preset: 'echo-direct-invitation',
                                 content: 'Invitation',
                                 timestamp: now,
 
@@ -147,7 +147,7 @@ function reject(uid) {
 
     db.collection('direct').doc(string).update({
         messages: firebase.firestore.FieldValue.arrayUnion({
-            app_preset: "eonnect-direct-rejection",
+            app_preset: "echo-direct-rejection",
             content: "Rejection",
             sender: user.uid,
             timestamp: now,
@@ -191,7 +191,7 @@ function approve(uid) {
 
     db.collection('direct').doc(string).update({
         messages: firebase.firestore.FieldValue.arrayUnion({
-            app_preset: "eonnect-direct-approval",
+            app_preset: "echo-direct-approval",
             content: "Approved",
             sender: user.uid,
             timestamp: now,
@@ -210,7 +210,7 @@ function approve(uid) {
         }, 1000)
         refreshactive()
         db.collection('directlisteners').doc(uid).update({
-            most_recent_sender: 'eonnect_direct_approverq_' + user.uid
+            most_recent_sender: 'echo_direct_approverq_' + user.uid
         })
     })
 
@@ -241,8 +241,8 @@ function refreshactive() {
 }
 
 function loadactive() {
-    if (sessionStorage.getItem('currenDM') == 'eonnect-news') {
-        showEonnectNews()
+    if (sessionStorage.getItem('currenDM') == 'echo-news') {
+        showEchoNews()
         window.setTimeout(function() {
             $('#changelogbamstyle').html('#messagecontent {height: calc(100%) !important;  margin-top: 0px; overflow-y: scroll; transition: all 1s;}')
         }, 600)
@@ -350,7 +350,7 @@ function BUILD_DIRECT(uid, btnel) {
     sessionStorage.setItem('active_dm', uid)
     infScroll_enable()
 
-    $('#eonnectNewsContent').addClass('hidden')
+    $('#echoNewsContent').addClass('hidden')
     $('#changelogbamstyle').html('')
     document.getElementById('newdmmsg').click()
     document.getElementById('unselectedconten').classList.remove('fadeInDown')
@@ -657,7 +657,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
     //TIMESTAMP IS msg.timestamp.toDate().toLocaleTimeString().slice(0, msg.timestamp.toDate().toLocaleTimeString().lastIndexOf(":")) + ' ' + msg.timestamp.toDate().toLocaleTimeString().slice(-2)
     msgcontent = msg.content
 
-    if (msg.app_preset == 'eonnect-direct-file') {
+    if (msg.app_preset == 'echo-direct-file') {
         if (msg.sender == user.uid) {
             msgcontent = `<h3><i class="material-icons gradicon2">attach_file</i>File</h3>You sent a file: ${msg.content}<br><br><button onclick="window.open('${msg.app_preset_data}')" class="eon-contained">view</button><br>`
             if (msg.content.endsWith('.png') || msg.content.endsWith('.jpg') || msg.content.endsWith('.jpeg') || msg.content.endsWith('.gif')) {
@@ -680,7 +680,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             }
         }
     }
-    if (msg.app_preset == 'eonnect-direct-purge_request') {
+    if (msg.app_preset == 'echo-direct-purge_request') {
         if (msg.sender == user.uid) {
             msgcontent = '<h3><i class="material-icons gradicon">delete_sweep</i>Purge Request</h3>You requested to purge your chat history with ' + name + '.' 
         }
@@ -689,10 +689,10 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             msgcontent = '<h3><i class="material-icons gradicon">delete_sweep</i>Purge Request</h3>' + name + ' requested to purge your chat history with them.<br><br><a onclick="' + purgeFunc + '" class="eon-contained">confirm</a>' 
         }
     }
-    if (msg.app_preset == 'eonnect-direct-purge_approval') {
+    if (msg.app_preset == 'echo-direct-purge_approval') {
         msgcontent = '<h3><i class="material-icons gradicon">insights</i>Time to start fresh!</h3>This is the beggining of your new chat history.' 
     }    
-    if (msg.app_preset == 'eonnect-direct-invitation') {
+    if (msg.app_preset == 'echo-direct-invitation') {
         if (msg.sender == user.uid) {
             msgcontent = '<h3><i class="material-icons gradicon">question_answer</i>Invitation to ' + name + '</h3>You requested to message ' + name + '.' 
         }
@@ -700,7 +700,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             msgcontent = '<h3><i class="material-icons gradicon">question_answer</i>Invitation from ' + name + '</h3>' + name + ' requested to message you.' 
         }
     }
-    if (msg.app_preset == 'eonnect-direct-rejection') {
+    if (msg.app_preset == 'echo-direct-rejection') {
         if (msg.sender == user.uid) {
             msgcontent = '<h3><i class="material-icons gradicon">close</i>You declied ' + name + ".</h3>You rejected " + name + "'s request to message you."
         }
@@ -708,7 +708,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             msgcontent = '<h3><i class="material-icons gradicon">close</i>' + name + ' declied you.</h3>' + name + ' rejected your request to message them.'
         }
     }
-    if (msg.app_preset == 'eonnect-direct-approval') {
+    if (msg.app_preset == 'echo-direct-approval') {
         if (msg.sender == user.uid) {
             msgcontent = '<h3><i class="material-icons gradicon">check</i>You approved ' + name + ".</h3>You accepted " + name + "'s request to message you."
         }
@@ -716,7 +716,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             msgcontent = '<h3><i class="material-icons gradicon">check</i>' + name + ' approved you.</h3>' + name + ' accepted your request to message them.'
         }
     }
-    if (msg.app_preset == 'eonnect-direct-call') {
+    if (msg.app_preset == 'echo-direct-call') {
         if (msg.sender == user.uid) {
             msgcontent = '<h3><i class="material-icons gradicon">phone</i>You started a call with ' + name + ".</h3>"
         }
@@ -725,7 +725,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             msgcontent = '<h3><i class="material-icons gradicon">phone</i>' + name + ' started a call.</h3><center><button onclick="' + goFunc1 + '" class="eon-text">join</button></center>'
         }
     }
-    if (msg.app_preset == 'eonnect-direct-video') {
+    if (msg.app_preset == 'echo-direct-video') {
         if (msg.sender == user.uid) {
             msgcontent = '<h3><i class="material-icons gradicon">videocam</i>You started a video call with ' + name + ".</h3>"
         }
@@ -735,7 +735,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         }
     }
 
-    if (msg.app_preset.startsWith('eonnect-direct')) {
+    if (msg.app_preset.startsWith('echo-direct')) {
         p.classList.remove('messagecontainer')
         p.classList.add('systemmessagecontainer')
         textContainer = 'msgcontainerapp shadow-lg'
@@ -790,7 +790,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         addWaves()
     }        
     prevuid = msg.sender
-    if (msg.app_preset.startsWith('eonnect-')) {
+    if (msg.app_preset.startsWith('echo-')) {
         prevuid = 'disabled'
     }
 }
@@ -813,7 +813,7 @@ function PREPARE_LISTEN_MESSAGES() {
 function LISTEN_MESSAGES() {
     db.collection('directlisteners').doc(user.uid).onSnapshot(function(doc) {
         changed_dm = doc.data().most_recent_sender
-        if (changed_dm.startsWith('eonnect_direct_purge_approval_')) {
+        if (changed_dm.startsWith('echo_direct_purge_approval_')) {
             db.collection('directlisteners').doc(user.uid).update({
                 most_recent_sender: 'none'
             }).then(function() {
@@ -827,7 +827,7 @@ function LISTEN_MESSAGES() {
                 
             })
         }
-        if (changed_dm.startsWith('eonnect_direct_approverq_')) {
+        if (changed_dm.startsWith('echo_direct_approverq_')) {
             userid = changed_dm.split('rq_')[1]
             db.collection('users').doc(userid).get().then(function(doc) {
                 Snackbar.show({showAction: false,pos: 'bottom-center',text: doc.data().name + ' approved your request!'})
@@ -963,7 +963,7 @@ function sendCallMsg(uid) {
     db.collection('direct').doc(string).update({
         [unreadkey]: true,
         messages: firebase.firestore.FieldValue.arrayUnion({
-            app_preset: 'eonnect-direct-call',
+            app_preset: 'echo-direct-call',
             content: 'Call',
             sender: user.uid,
             timestamp: now,
@@ -989,7 +989,7 @@ function sendVideoMsg(uid) {
     db.collection('direct').doc(string).update({
         [unreadkey]: true,
         messages: firebase.firestore.FieldValue.arrayUnion({
-            app_preset: 'eonnect-direct-video',
+            app_preset: 'echo-direct-video',
             content: 'Video Call',
             sender: user.uid,
             timestamp: now,
@@ -1184,15 +1184,15 @@ function userInfo(uid) {
     $('#conversationInfo').modal('toggle')
 }
 
-function showEonnectNews() {
-    sessionStorage.setItem('active_dm', 'eonnectnews')
+function showEchoNews() {
+    sessionStorage.setItem('active_dm', 'echonews')
 
     $('.messagelistboxactive').removeClass('messagelistboxactive')
-    $('#eonnectNewschatsidebarboxel').addClass('messagelistboxactive')
+    $('#echoNewschatsidebarboxel').addClass('messagelistboxactive')
     $('.chatcontainer').addClass('hidden')   
     $('#chatnav').removeClass('hidden')
 
-    $('#eonnectNewsContent').removeClass('hidden')
+    $('#echoNewsContent').removeClass('hidden')
     window.setTimeout(function() {
         $('#chatnav').removeClass('fadeIn')
         window.setTimeout(function() {
@@ -1205,18 +1205,18 @@ function showEonnectNews() {
     $('#divider1').addClass('fadeOutUp')
     $('#directfooter').removeClass('fadeInUp')
     $('#directfooter').addClass('fadeOutDown')
-    history.pushState(null, '', 'app.html?tab=inbox&dm=eonnect-news');
+    history.pushState(null, '', 'app.html?tab=inbox&dm=echo-news');
 
-    if ($('#eonnect-dm-version').html() !== 'loading') {
+    if ($('#echo-dm-version').html() !== 'loading') {
         ScrollTop()
         return false;
     }
     // Have to build
     $.getJSON("https://gitlab.com/api/v4/projects/16896350/repository/commits", function( data ) {
-        $('#eonnect-dm-version').html(data[0].title)
+        $('#echo-dm-version').html(data[0].title)
         for (let i = 0; i < data.length; i++) {
-            newupdatehtml = '<div class="card updatecard"><div class="card-body"><p><b>' + data[i].title + '</b> commited by ' + data[i].author_name + '</p><div class="commentmsg">' + data[i].message.split(data[i].title)[1].replace(new RegExp("-", "g"), '<br>').replace(new RegExp("Eonnect 🔥", "g"), "<br><br><i>Eonnect 🔥</i>") + '</div><br><p>' + data[i].authored_date + ' | <a href="' + data[i].web_url + '" target="_blank">view commit</a></p></div></div>'
-            document.getElementById('eonnect-dm-latest').innerHTML = document.getElementById('eonnect-dm-latest').innerHTML + newupdatehtml
+            newupdatehtml = '<div class="card updatecard"><div class="card-body"><p><b>' + data[i].title + '</b> commited by ' + data[i].author_name + '</p><div class="commentmsg">' + data[i].message.split(data[i].title)[1].replace(new RegExp("-", "g"), '<br>').replace(new RegExp("Echo 🔥", "g"), "<br><br><i>Echo 🔥</i>") + '</div><br><p>' + data[i].authored_date + ' | <a href="' + data[i].web_url + '" target="_blank">view commit</a></p></div></div>'
+            document.getElementById('echo-dm-latest').innerHTML = document.getElementById('echo-dm-latest').innerHTML + newupdatehtml
         }
     });
     ScrollTop()
@@ -1233,7 +1233,7 @@ function purgemessages(uid) {
     
         db.collection('direct').doc(string).update({
             messages: firebase.firestore.FieldValue.arrayUnion({
-                app_preset: "eonnect-direct-purge_request",
+                app_preset: "echo-direct-purge_request",
                 content: "Purge Request",
                 sender: user.uid,
                 timestamp: now,
@@ -1304,7 +1304,7 @@ function purge_agree_complete(uid, name, string, messages, now) {
         }).then(function() {
             db.collection('direct').doc(string).update({
                 messages: firebase.firestore.FieldValue.arrayUnion({
-                    app_preset: "eonnect-direct-purge_approval",
+                    app_preset: "echo-direct-purge_approval",
                     content: "Purge Approved",
                     sender: user.uid,
                     timestamp: now,
@@ -1312,7 +1312,7 @@ function purge_agree_complete(uid, name, string, messages, now) {
             }).then(function() {
                 Snackbar.show({text: "Chat history cleared. Reloading..."})
                 db.collection('directlisteners').doc(uid).update({
-                    most_recent_sender: 'eonnect_direct_purge_approval_' + user.uid
+                    most_recent_sender: 'echo_direct_purge_approval_' + user.uid
                 }).then(function() {
                     db.collection('directlisteners').doc(uid).update({
                         most_recent_sender: 'none'
@@ -1335,7 +1335,7 @@ function leavedm() {
     $('#directfooter').addClass('hidden')
     $('#unselectedconten').removeClass('fadeOutUp')
     $('#unselectedconten').addClass('fadeInDown')
-    $('#eonnectNewsContent').addClass('hidden')
+    $('#echoNewsContent').addClass('hidden')
     history.pushState(null, '', 'app.html?tab=inbox')   
 }
 
@@ -1382,7 +1382,7 @@ function direct_confirmUpload() {
         db.collection('direct').doc(string).update({
             [unreadkey]: true,
             messages: firebase.firestore.FieldValue.arrayUnion({
-                app_preset: 'eonnect-direct-file',
+                app_preset: 'echo-direct-file',
                 app_preset_data: url,
                 content: file.name,
                 sender: user.uid,

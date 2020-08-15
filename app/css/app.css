@@ -42,7 +42,7 @@ custom-control-label::before {
     background-color: darkorange;
 }
 
-.eonnect-main-unexpanded {
+.echo-main-unexpanded {
     top: 0px;
     right: 0px;
     position: absolute;
@@ -53,7 +53,7 @@ custom-control-label::before {
 
 }
 
-.eonnect-main-expanded {
+.echo-main-expanded {
     top: 0px;
     right: 0px;
     position: absolute;

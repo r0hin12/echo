@@ -354,25 +354,25 @@ function receiveda(exp, sent) {
   }
 
   switch (exp) {
-    case 'eonnect-code-mute':
+    case 'echo-code-mute':
         document.getElementById('theirs').muted = true
         $('#mutethem').removeClass('hidden')
         $('#mutethem').addClass('zoomIn')
         $('#mutethem').removeClass('zoomOut')
       break;
-    case 'eonnect-code-unmute':
+    case 'echo-code-unmute':
       $('#mutethem').removeClass('hidden')
       $('#mutethem').addClass('zoomOut')
       $('#mutethem').removeClass('zoomIn')
       document.getElementById('theirs').muted = false
       break;
-    case 'eonnect-code-deafen':
+    case 'echo-code-deafen':
         $('#deafenthem').removeClass('hidden')
         $('#deafenthem').addClass('zoomIn')
         $('#deafenthem').removeClass('zoomOut')
         document.getElementById('theirs').muted = true
       break;
-    case 'eonnect-code-undeafen':
+    case 'echo-code-undeafen':
       $('#deafenthem').removeClass('hidden')
       $('#deafenthem').addClass('zoomOut')
       $('#deafenthem').removeClass('zoomIn')
@@ -385,7 +385,7 @@ function receiveda(exp, sent) {
 }
 
 function sent(exp) {
-  if (exp !== 'eonnect-code-unmute' && exp !== 'eonnect-code-mute' && exp !== 'eonnect-code-undeafen' && exp !== 'eonnect-code-deafen') {
+  if (exp !== 'echo-code-unmute' && exp !== 'echo-code-mute' && exp !== 'echo-code-undeafen' && exp !== 'echo-code-deafen') {
     console.log('ECP | Sent expression: ' + exp);
     Snackbar.show({showAction: false,pos: 'bottom-center',text: "You sent expression: " + exp.charAt(0).toUpperCase() + exp.slice(1)})
     receiveda(exp, true)
@@ -410,7 +410,7 @@ function togglemute(hide, fromdeafen) {
     sessionStorage.setItem('muted', 'false') 
     if (!fromdeafen) {
       db.collection('rtc').doc(string + type).update({
-        sent: 'eonnect-code-unmute'
+        sent: 'echo-code-unmute'
       }).then(function() {
         console.log('ECP | Unmuted client'); 
       })
@@ -426,7 +426,7 @@ function togglemute(hide, fromdeafen) {
     sessionStorage.setItem('muted', 'true') 
     if (!fromdeafen) {
       db.collection('rtc').doc(string + type).update({
-        sent: 'eonnect-code-mute'
+        sent: 'echo-code-mute'
       }).then(function() {
         console.log('ECP | Muted client'); 
       })
@@ -454,7 +454,7 @@ function toggledeafen(hide) {
 
     sessionStorage.setItem('justsent', 'true');
     db.collection('rtc').doc(string + type).update({
-      sent: 'eonnect-code-undeafen'
+      sent: 'echo-code-undeafen'
     })
   }
   else {
@@ -473,7 +473,7 @@ function toggledeafen(hide) {
     }
     sessionStorage.setItem('justsent', 'true');
     db.collection('rtc').doc(string + type).update({
-      sent: 'eonnect-code-deafen'
+      sent: 'echo-code-deafen'
     })
   }
 }
