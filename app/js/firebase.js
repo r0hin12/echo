@@ -24,7 +24,6 @@ firebase.auth().onAuthStateChanged(function (user) {
 
         window.user = firebase.auth().currentUser
         checkfirsttime()
-        addappcontent()
         preesearch()
 
     } else {

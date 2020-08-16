@@ -5,14 +5,6 @@ infScrollEnabled = false
 sessionStorage.setItem('itwasmesoskip', 'false')
 sessionStorage.setItem('active_dm', 'false')
 
-interval2 = window.setInterval(function () {
-    if (typeof (user) != "undefined" && typeof (user) != null) {
-        clearInterval(interval2)
-        loaddirect()
-        updateStatus()
-    }
-}, 200);
-
 function newdm() {
     username = document.getElementById('newdmfield').value
 
@@ -803,6 +795,8 @@ function PREPARE_LISTEN_MESSAGES() {
         else {
             db.collection('directlisteners').doc(user.uid).set({
                 most_recent_sender: 'none'
+            }).then(() => {
+                LISTEN_MESSAGES()
             })
         }
     })
@@ -1215,7 +1209,7 @@ function showEchoNews() {
     $.getJSON("https://gitlab.com/api/v4/projects/16896350/repository/commits", function( data ) {
         $('#echo-dm-version').html(data[0].title)
         for (let i = 0; i < data.length; i++) {
-            newupdatehtml = '<div class="card updatecard"><div class="card-body"><p><b>' + data[i].title + '</b> commited by ' + data[i].author_name + '</p><div class="commentmsg">' + data[i].message.split(data[i].title)[1].replace(new RegExp("-", "g"), '<br>').replace(new RegExp("Echo 🔥", "g"), "<br><br><i>Echo 🔥</i>") + '</div><br><p>' + data[i].authored_date + ' | <a href="' + data[i].web_url + '" target="_blank">view commit</a></p></div></div>'
+            newupdatehtml = '<div class="card updatecard"><div class="card-body"><p><b>' + data[i].title + '</b> commited by ' + data[i].author_name + '</p><div class="commentmsg">' + data[i].message.split(data[i].title)[1].replace(new RegExp("-", "g"), '<br>').replace(new RegExp("⚡️ Echo ⚡", "g"), "<br><br><i>⚡️ Echo ⚡</i>") + '</div><br><p>' + data[i].authored_date + ' | <a href="' + data[i].web_url + '" target="_blank">view commit</a></p></div></div>'
             document.getElementById('echo-dm-latest').innerHTML = document.getElementById('echo-dm-latest').innerHTML + newupdatehtml
         }
     });

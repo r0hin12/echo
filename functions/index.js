@@ -1,12 +1,138 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-var getJSON = require('get-json');
+const getJSON = require('get-json');
 const cors = require('cors')({origin: true});
 
+const mkdirp = require('mkdirp');
+const spawn = require('child-process-promise').spawn;
+const path = require('path');
+const os = require('os');
+const tmpdir = os.tmpdir();
+const fs = require('fs')
+const request = require('request');
 
 admin.initializeApp();
 
-exports.aggregateLikes = functions.firestore
+const JPEG_EXTENSION = '.png';
+
+// Saves a message to the Firebase Realtime Database but sanitizes the text by removing swearwords.
+exports.createAccount = functions.https.onCall(async (data, context) => {
+    
+    const uid = context.auth.uid;
+    const name = data.displayname;
+    const username = data.username
+    const db = admin.firestore()
+
+    function hasWhiteSpace(s) {
+        return /\s/g.test(s);
+    }
+
+    // Username verification
+    if (hasWhiteSpace(username) || username == "") {
+        return {data: false};
+    }
+
+    doc = await db.collection('app').doc('details').get()
+    
+    if (doc.data().usernames.includes(username)) {
+        return {data: false};
+    }
+
+    // Approved, create account.
+
+    await db.collection('app').doc('details').update({
+        usernames: admin.firestore.FieldValue.arrayUnion(data.username),
+        map: admin.firestore.FieldValue.arrayUnion(uid)
+    })
+
+    await db.collection('follow').doc(uid).collection('followers').doc('a').set({
+        status: false,
+    })
+
+    await db.collection('follow').doc(uid).collection('following').doc('a').set({
+        status: false,
+    })
+    await db.collection('follow').doc(uid).collection('requested').doc('a').set({
+        status: false,
+    })
+    await db.collection('follow').doc(uid).collection('requesting').doc('a').set({
+        status: false,
+    })
+
+    await db.collection('follow').doc(uid).set({
+        following: 0,
+        followers: 0,
+        requested: 0,
+        requesting: 0,
+    })
+    
+    await db.collection('users').doc(uid).set({
+        username: username,
+        name: name,
+        enabled: true,
+        type: 'public',
+        emailchange: admin.firestore.FieldValue.serverTimestamp(),
+        passchange: admin.firestore.FieldValue.serverTimestamp(),
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        repcheck: admin.firestore.FieldValue.serverTimestamp(),
+        url: 'https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2F' + uid + '.png?alt=media',
+        rep: 0,
+        direct_active: [],
+        direct_pending: [],
+        direct_activity: admin.firestore.FieldValue.serverTimestamp(),
+    }, {merge: true})
+    
+    // Upload Profile Photo
+
+    return request("https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/app%2Flogo.png?alt=media").pipe(fs.createWriteStream(path.join(tmpdir,'default.png'))).on('close', async () => {
+        const bucket = admin.storage().bucket();
+        
+        await bucket.upload(path.join(tmpdir,'default.png'), {
+            destination: `logos/${uid}.png`,
+        });
+
+        fs.unlink(path.join(tmpdir,'default.png'), () => {
+            return {data: true};
+        })
+    });
+        
+});
+
+exports.imageToJPG = functions.storage.object().onFinalize(async (object) => {
+    const filePath = object.name;
+    const baseFileName = path.basename(filePath, path.extname(filePath));
+    const fileDir = path.dirname(filePath);
+    const JPEGFilePath = path.normalize(path.format({dir: fileDir, name: baseFileName, ext: JPEG_EXTENSION}));
+    const tempLocalFile = path.join(os.tmpdir(), filePath);
+    const tempLocalDir = path.dirname(tempLocalFile);
+    const tempLocalJPEGFile = path.join(os.tmpdir(), JPEGFilePath);
+
+    if (filePath.includes('logos/')) {
+        console.log(filePath);
+        if (object.contentType.startsWith('image/png')) {
+            console.log('Already a PNG.');
+            return null;
+        }
+
+        const bucket = admin.storage().bucket(object.bucket);
+
+        await mkdirp(tempLocalDir);
+
+        await bucket.file(filePath).download({destination: tempLocalFile});
+
+        await spawn('convert', [tempLocalFile, tempLocalJPEGFile]);
+
+        await bucket.upload(tempLocalJPEGFile, {destination: JPEGFilePath});
+
+        await bucket.upload(tempLocalJPEGFile, {destination: JPEGFilePath});
+
+        fs.unlinkSync(tempLocalJPEGFile);
+        fs.unlinkSync(tempLocalFile);;
+        functions.logger.log("Converted Image")
+    }
+})
+
+exports.EaggregateLikes = functions.firestore
 .document('new_posts/{postId}/likes/{likeId}').onWrite(async (change, context) => {
     const likeId = context.params.likeId;
     const postId = context.params.postId;
@@ -33,7 +159,7 @@ exports.aggregateLikes = functions.firestore
 
 })
 
-exports.aggregateCommentsLikes = functions.firestore
+exports.EaggregateCommentsLikes = functions.firestore
   .document('new_posts/{postId}/comments/{commentId}/likes/{likeId}')
   .onWrite(async (change, context) => {
    
@@ -75,7 +201,7 @@ exports.aggregateCommentsLikes = functions.firestore
     }
 })
 
-exports.aggregateCommentsReplies = functions.firestore
+exports.EaggregateCommentsReplies = functions.firestore
   .document('new_posts/{postId}/comments/{commentId}/replies/{replyId}')
   .onCreate(async (change, context) => {
     
@@ -98,7 +224,7 @@ exports.aggregateCommentsReplies = functions.firestore
 
 })
 
-exports.aggregateComments = functions.firestore
+exports.EaggregateComments = functions.firestore
   .document('new_posts/{postId}/comments/{commentId}')
   .onCreate(async (change, context) => {
     
@@ -120,7 +246,7 @@ exports.aggregateComments = functions.firestore
 
 })
 
-exports.aggregateFollowers = functions.firestore
+exports.EaggregateFollowers = functions.firestore
   .document('follow/{followId}/followers/{userId}')
   .onWrite(async (change, context) => {
 
@@ -132,6 +258,10 @@ exports.aggregateFollowers = functions.firestore
     // IF IT WAS QUERY.size it could get thousands of reads per action
 
     const doc = change.after
+
+    if (userId == "a") {
+        return;
+    }
 
     if (doc.data().status) {
         // Following
@@ -147,7 +277,7 @@ exports.aggregateFollowers = functions.firestore
     }
 })
 
-exports.aggregateFollowing = functions.firestore
+exports.EaggregateFollowing = functions.firestore
   .document('follow/{followId}/following/{userId}')
   .onWrite(async (change, context) => {
 
@@ -156,6 +286,11 @@ exports.aggregateFollowing = functions.firestore
     const userId = context.params.userId
 
     const doc = change.after
+
+    if (userId == "a") {
+        return;
+    }
+
     if (doc.data().status) {
         // Following
 
@@ -170,7 +305,7 @@ exports.aggregateFollowing = functions.firestore
     }
 })
 
-exports.trendingTopics = functions.https.onRequest(async (req, res) => {
+exports.EtrendingTopics = functions.https.onRequest(async (req, res) => {
     db = admin.firestore()
     doc = await db.collection('functions').doc("trending").get()
     firebasedate = doc.data().last_accessed.toDate()

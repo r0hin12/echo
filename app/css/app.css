@@ -1966,7 +1966,6 @@ custom-control-label::before {
     height: 25px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 8px;
 }
 
 .comment_reply span {

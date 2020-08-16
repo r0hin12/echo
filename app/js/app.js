@@ -10,6 +10,12 @@ function checkfirsttime() {
         document.getElementById('doemail').style.display = 'block'
         document.getElementById('doprofile').style.display = 'none'
     }
+
+    if (user.displayName && user.emailVerified) {
+        addappcontent()
+        loaddirect()
+        updateStatus()
+    }
 }
 
 
@@ -30,95 +36,52 @@ function checkverification() {
         }, 1000)
 }
 
-function profilesetup1() {
+async function profilesetup1() {
     username = document.getElementById('usernamefield').value
     taken = false
 
     if (hasWhiteSpace(username) || username == "") {
         document.getElementById('usernametaken').style.display = 'inline-block'
         document.getElementById('usernametaken').innerHTML = 'Your username contains whitespace.'
+        return;
     }
-    else {
-
-        db.collection('app').doc('details').get().then(function (doc) {
-            for (let i = 0; i < doc.data().usernames.length; i++) {
-                if (username == doc.data().usernames[i]) {
-                    taken = true
-                }
-            }
-            if (taken) {
-                document.getElementById('usernametaken').style.display = 'inline-block'
-                document.getElementById('usernametaken').innerHTML = 'This username already taken.'
-            }
-            else {
-                document.getElementById('profilesetup1').classList.remove('fadeIn')
-                document.getElementById('profilesetup1').classList.add('fadeOut')
-                document.getElementById('profilesetup2').style.display = 'block'
-            }
-        })
+    doc = await db.collection('app').doc('details').get()
+    
+    if (doc.data().usernames.includes(username)) {
+        document.getElementById('usernametaken').style.display = 'inline-block'
+        document.getElementById('usernametaken').innerHTML = 'This username already taken.'
+        return;
     }
-
+        
+    document.getElementById('profilesetup1').classList.remove('fadeIn')    
+    document.getElementById('profilesetup1').classList.add('fadeOut')
+    document.getElementById('profilesetup2').style.display = 'block'
 }
 
 async function profilesetup2() {
+    toggleloader()
 
     username = document.getElementById('usernamefield').value.toLowerCase()
     displayname = document.getElementById('namefield').value
-    taken = false
-
-    if (hasWhiteSpace(username) || username == "") {
-        document.getElementById('usernametaken').style.display = 'inline-block'
-        document.getElementById('usernametaken').innerHTML = 'Your username contains whitespace.'
-    }
-    else {
-
-    doc = db.collection('app').doc('details').get()
-    
-    if (doc.data().usernames.includes(username)) {
-        window.location.reload()
-        return;
-    }
-
-    await db.collection('app').doc('details').update({
-        usernames: firebase.firestore.FieldValue.arrayUnion(username),
-        map: firebase.firestore.FieldValue.arrayUnion(user.uid)
-    })
-
-    await db.collection('follow').doc(user.uid).collection('followers').doc('a').set({
-        status: false,
-    })
-    await db.collection('follow').doc(user.uid).collection('following').doc('a').set({
-        status: false,
-    })
-    await db.collection('follow').doc(user.uid).collection('requested').doc('a').set({
-        status: false,
-    })
-    await db.collection('follow').doc(user.uid).collection('requesting').doc('a').set({
-        status: false,
-    })
-    
-    await db.collection('users').doc(user.uid).update({
-        username: username,
-        name: displayname,
-        type: 'public',
-        emailchange: firebase.firestore.FieldValue.serverTimestamp(),
-        passchange: firebase.firestore.FieldValue.serverTimestamp(),
-
-        // direct_active: [],
-        // direct_activity: firebase.firestore.FieldValue.serverTimestamp(),
-        // direct_pending: []
-    })
 
     await user.updateProfile({
         displayName: displayname,
     })
-    
-    showcomplete()
-    window.setTimeout(() => {
-        window.location.reload()
-    }, 1200)
 
-    }
+    var createAccount = firebase.functions().httpsCallable('createAccount');
+    createAccount({username: username, displayname: displayname}).then((result) => {
+        if (result.data) {
+            toggleloader()
+            showcomplete()
+            window.setTimeout(() => {
+                window.location.reload()
+            }, 1200)
+        }
+        else {
+            alert('Error occured.')
+            window.location.replace('404.html')
+        }
+    })
 }
 
 function hasWhiteSpace(s) {
@@ -147,7 +110,7 @@ async function addappcontent() {
 
     $('#cardconnections').empty()
 
-    if (doc.data().twitter !== null || doc.data().twitter !== undefined) {
+    if (doc.data().twitter !== null && doc.data().twitter !== undefined) {
 
         var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "twitter.com");
         goFunc = "gotwitter('" + user.providerData[index].uid + "')"
@@ -166,7 +129,7 @@ async function addappcontent() {
         document.getElementById("cardconnections").appendChild(hs)
     }
 
-    if (doc.data().github == null || doc.data().twitter == undefined) {
+    if (doc.data().github == null && doc.data().twitter == undefined) {
     }
     else {
         var index = functiontofindIndexByKeyValue(user.providerData, "providerId", "github.com");
@@ -473,35 +436,26 @@ function preparenpicchange() {
     $('#newpicel').click()
 }
 
-function changepfp() {
+async function changepfp() {
+    
     toggleloader()
     file = document.getElementById('newpicel').files[0]
-    var storageRef = firebase.storage().ref();
-    var fileRef = storageRef.child('logos/' + file.name);
+    ext = file.name.split('.').pop()
 
-    fileRef.put(file).then(function() {
-        db.collection('users').doc(user.uid).get().then(function(doc) {
-            if (doc.data().filename !== 'example') {
-                // Delete old pfp
-                deleteRef = storageRef.child('logos/' + doc.data().filename + '.' + doc.data().filetype)
-                deleteRef.delete()
-            }
-            storageRef.child('logos/' + file.name).getDownloadURL().then(function (url) {
-                db.collection("users").doc(user.uid).update({
-                    url: url,
-                    filetype: file.name.split('.').pop(),
-                    filename: file.name.split('.').slice(0, -1).join('.')
-                }).then(function() {
-                    window.setTimeout(() => {
-                        addappcontent()
-                        toggleloader()
-                        showcomplete()
-                    }, 500);
-                    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Profile picture was successfully updated."})
-                })
-            })
-        })
-    })
+    var storageRef = firebase.storage().ref();
+    var fileRef = storageRef.child(`logos/${user.uid}.${ext}`);
+
+    await fileRef.put(file)
+
+    window.setTimeout(() => {
+        toggleloader()
+        showcomplete()
+
+        // Change existing records
+        document.getElementById('mainphoto').src = "https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2F" + user.uid + ".png?alt=media&" + new Date().getTime();
+        document.getElementById('pfp3').src = "https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2F" + user.uid + ".png?alt=media&" + new Date().getTime();
+
+    }, 800)
 
     $('#newpicel').remove()
 }

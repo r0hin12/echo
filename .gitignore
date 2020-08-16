@@ -3,3 +3,4 @@ node_modules
 firebase.json
 .firebaserc
 .firebase
+ui-debug.log

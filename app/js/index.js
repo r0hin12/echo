@@ -53,16 +53,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         else {
 
             db.collection("users").doc(user.uid).set({
-                uid: user.uid,
-                type: 'public',
-                filename: 'example',
-                created: firebase.firestore.FieldValue.serverTimestamp(),
-                repcheck: firebase.firestore.FieldValue.serverTimestamp(),
-                following: [],
-                followers: [],
-                filetype: 'png',
-                url: 'https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2Fexample.png?alt=media&token=2f3c4769-b40e-4f76-a9ec-f43d934353a6',
-                rep: 0,
+                status: false,
             })
 
         }
