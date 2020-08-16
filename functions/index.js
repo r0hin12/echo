@@ -132,7 +132,7 @@ exports.imageToJPG = functions.storage.object().onFinalize(async (object) => {
     }
 })
 
-exports.EaggregateLikes = functions.firestore
+exports.aggregateLikes = functions.firestore
 .document('new_posts/{postId}/likes/{likeId}').onWrite(async (change, context) => {
     const likeId = context.params.likeId;
     const postId = context.params.postId;
@@ -159,7 +159,7 @@ exports.EaggregateLikes = functions.firestore
 
 })
 
-exports.EaggregateCommentsLikes = functions.firestore
+exports.aggregateCommentsLikes = functions.firestore
   .document('new_posts/{postId}/comments/{commentId}/likes/{likeId}')
   .onWrite(async (change, context) => {
    
@@ -201,7 +201,7 @@ exports.EaggregateCommentsLikes = functions.firestore
     }
 })
 
-exports.EaggregateCommentsReplies = functions.firestore
+exports.aggregateCommentsReplies = functions.firestore
   .document('new_posts/{postId}/comments/{commentId}/replies/{replyId}')
   .onCreate(async (change, context) => {
     
@@ -224,7 +224,7 @@ exports.EaggregateCommentsReplies = functions.firestore
 
 })
 
-exports.EaggregateComments = functions.firestore
+exports.aggregateComments = functions.firestore
   .document('new_posts/{postId}/comments/{commentId}')
   .onCreate(async (change, context) => {
     
@@ -246,7 +246,7 @@ exports.EaggregateComments = functions.firestore
 
 })
 
-exports.EaggregateFollowers = functions.firestore
+exports.aggregateFollowers = functions.firestore
   .document('follow/{followId}/followers/{userId}')
   .onWrite(async (change, context) => {
 
@@ -277,7 +277,7 @@ exports.EaggregateFollowers = functions.firestore
     }
 })
 
-exports.EaggregateFollowing = functions.firestore
+exports.aggregateFollowing = functions.firestore
   .document('follow/{followId}/following/{userId}')
   .onWrite(async (change, context) => {
 
@@ -305,7 +305,7 @@ exports.EaggregateFollowing = functions.firestore
     }
 })
 
-exports.EtrendingTopics = functions.https.onRequest(async (req, res) => {
+exports.trendingTopics = functions.https.onRequest(async (req, res) => {
     db = admin.firestore()
     doc = await db.collection('functions').doc("trending").get()
     firebasedate = doc.data().last_accessed.toDate()
