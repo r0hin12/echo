@@ -15,7 +15,11 @@ admin.initializeApp();
 
 const JPEG_EXTENSION = '.png';
 
-// Saves a message to the Firebase Realtime Database but sanitizes the text by removing swearwords.
+
+exports.aggregatePosts = functions.firestore.document('new_posts/{postId}').onCreate(async (change, context)) {
+    
+}
+
 exports.createAccount = functions.https.onCall(async (data, context) => {
     
     const uid = context.auth.uid;
@@ -65,6 +69,10 @@ exports.createAccount = functions.https.onCall(async (data, context) => {
         requested: 0,
         requesting: 0,
     })
+
+    await db.collection('timelines').doc(uid).collection('posts').doc('a').set({
+        status: false,
+    })
     
     await db.collection('users').doc(uid).set({
         username: username,
@@ -98,7 +106,7 @@ exports.createAccount = functions.https.onCall(async (data, context) => {
         
 });
 
-exports.imageToJPG = functions.storage.object().onFinalize(async (object) => {
+exports.profilePhoto = functions.storage.object().onFinalize(async (object) => {
     const filePath = object.name;
     const baseFileName = path.basename(filePath, path.extname(filePath));
     const fileDir = path.dirname(filePath);
@@ -132,8 +140,7 @@ exports.imageToJPG = functions.storage.object().onFinalize(async (object) => {
     }
 })
 
-exports.aggregateLikes = functions.firestore
-.document('new_posts/{postId}/likes/{likeId}').onWrite(async (change, context) => {
+exports.aggregateLikes = functions.firestore.document('new_posts/{postId}/likes/{likeId}').onWrite(async (change, context) => {
     const likeId = context.params.likeId;
     const postId = context.params.postId;
     const db = admin.firestore()
@@ -159,9 +166,7 @@ exports.aggregateLikes = functions.firestore
 
 })
 
-exports.aggregateCommentsLikes = functions.firestore
-  .document('new_posts/{postId}/comments/{commentId}/likes/{likeId}')
-  .onWrite(async (change, context) => {
+exports.aggregateCommentsLikes = functions.firestore.document('new_posts/{postId}/comments/{commentId}/likes/{likeId}').onWrite(async (change, context) => {
    
     const postId = context.params.postId;
     const commentId = context.params.commentId;
@@ -201,9 +206,7 @@ exports.aggregateCommentsLikes = functions.firestore
     }
 })
 
-exports.aggregateCommentsReplies = functions.firestore
-  .document('new_posts/{postId}/comments/{commentId}/replies/{replyId}')
-  .onCreate(async (change, context) => {
+exports.aggregateCommentsReplies = functions.firestore.document('new_posts/{postId}/comments/{commentId}/replies/{replyId}').onCreate(async (change, context) => {
     
     const postId = context.params.postId;
     const commentId = context.params.commentId;
@@ -224,9 +227,7 @@ exports.aggregateCommentsReplies = functions.firestore
 
 })
 
-exports.aggregateComments = functions.firestore
-  .document('new_posts/{postId}/comments/{commentId}')
-  .onCreate(async (change, context) => {
+exports.aggregateComments = functions.firestore.document('new_posts/{postId}/comments/{commentId}').onCreate(async (change, context) => {
     
     const postId = context.params.postId;
     const commentId = context.params.commentId;
@@ -246,9 +247,7 @@ exports.aggregateComments = functions.firestore
 
 })
 
-exports.aggregateFollowers = functions.firestore
-  .document('follow/{followId}/followers/{userId}')
-  .onWrite(async (change, context) => {
+exports.aggregateFollowers = functions.firestore.document('follow/{followId}/followers/{userId}').onWrite(async (change, context) => {
 
     db = admin.firestore()
     const followId = context.params.followId
@@ -277,9 +276,7 @@ exports.aggregateFollowers = functions.firestore
     }
 })
 
-exports.aggregateFollowing = functions.firestore
-  .document('follow/{followId}/following/{userId}')
-  .onWrite(async (change, context) => {
+exports.aggregateFollowing = functions.firestore.document('follow/{followId}/following/{userId}').onWrite(async (change, context) => {
 
     db = admin.firestore()
     const followId = context.params.followId

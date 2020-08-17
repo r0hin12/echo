@@ -953,11 +953,11 @@
                             <div id="quickreply" class="hidden animated faster">
                                 <br><br>
                                 <div class="row"><div class="col-sm"><center>
-                                <button onclick="quickreply('lmao')" class="eon-outlined">lmao</button>
+                                <button id="qr-1btn" onclick="quickreply('lmao')" class="eon-outlined">lmao</button>
                             </center></div><div class="col-sm"><center>
-                                <button onclick="quickreply('rofl')" class="eon-outlined">rofl</button>
+                                <button id="qr-2btn" onclick="quickreply('rofl')" class="eon-outlined">rofl</button>
                             </center></div><div class="col-sm"><center>
-                                <button onclick="quickreply('lol')" class="eon-outlined">lol</button>
+                                <button id="qr-3btn" onclick="quickreply('lol')" class="eon-outlined">lol</button>
                             </center></div>
                                 </div>
                                 <br>
@@ -1152,13 +1152,28 @@
                                 </div>
                             </div>
                             <br><br>
-                            <h4>Need Help?</h4>
+                            <h4>Direct Messages</h4>
                             <br>
                             <div class="card animated fadeInUp block">
                                 <div class="card-body">
-                                    <center>
-                                        <a class='eon-text' target="_blank" href="support.html">Get Support <i class="material-icons">open_in_new</i></a>
-                                    </center>
+                                    <p>Quick-reply Replies</p>
+                                    <br>
+                                    <div class="floating-label textfield-box has-value">
+                                        <label for="reply1box">Reply #1</label>
+                                        <input class="form-control" id="reply1box" value="lmao" type="text">
+                                    </div>
+                                    <br>
+                                    <div class="floating-label textfield-box has-value">
+                                        <label for="reply2box">Reply #2</label>
+                                        <input class="form-control" id="reply2box" value="rofl" type="text">
+                                    </div>
+                                    <br>
+                                    <div class="floating-label textfield-box has-value">
+                                        <label for="reply3box">Reply #3</label>
+                                        <input class="form-control" id="reply3box" value="lol" type="text">
+                                    </div>
+                                    <br>
+                                    <button onclick="updateReplies()" class="eon-contained">save</button>
                                 </div>
                             </div>
                         </div>

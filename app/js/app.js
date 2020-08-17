@@ -97,6 +97,27 @@ async function addappcontent() {
 
     window.cacheuser = doc.data()
 
+    // Quick replies
+
+    if (doc.data().quickreplies !== undefined) {
+        $('#reply1box').attr('value', doc.data().quickreplies[0])
+        $('#reply2box').attr('value', doc.data().quickreplies[1])
+        $('#reply3box').attr('value', doc.data().quickreplies[2])
+
+        $('#qr-1btn').html(doc.data().quickreplies[0])
+        $('#qr-1btn').get(0).onclick = () => {
+            quickreply(doc.data().quickreplies[0])
+        }
+        $('#qr-2btn').html(doc.data().quickreplies[1])
+        $('#qr-2btn').get(0).onclick = () => {
+            quickreply(doc.data().quickreplies[1])
+        }
+        $('#qr-3btn').html(doc.data().quickreplies[2])
+        $('#qr-3btn').get(0).onclick = () => {
+            quickreply(doc.data().quickreplies[2])
+        }
+    }
+
     document.getElementsByClassName('main-avatar')[0].src = doc.data().url
     document.getElementById('pfp3').src = doc.data().url
     document.getElementsByClassName('main-avatar')[0].style.display = 'block'
@@ -458,4 +479,29 @@ async function changepfp() {
     }, 800)
 
     $('#newpicel').remove()
+}
+
+async function updateReplies() {
+    a = $('#reply1box').val()
+    b = $('#reply2box').val()
+    c = $('#reply3box').val()
+
+    await db.collection('users').doc(user.uid).set({
+        quickreplies: [a,b,c]
+    }, {merge: true})
+
+    $('#qr-1btn').html(a)
+    $('#qr-1btn').get(0).onclick = () => {
+        quickreply(a)
+    }
+    $('#qr-2btn').html(b)
+    $('#qr-2btn').get(0).onclick = () => {
+        quickreply(b)
+    }
+    $('#qr-3btn').html(c)
+    $('#qr-3btn').get(0).onclick = () => {
+        quickreply(c)
+    }
+
+    Snackbar.show({text: "Quick replies updated."})
 }
