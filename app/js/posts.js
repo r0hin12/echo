@@ -931,7 +931,7 @@ async function viewpost(id) {
     }
 }
 
-async function approvePost(id, data, ) {
+async function approvePost(id, data) {
     // Get user details
     commentFunc = "loadComments('" + id + "', '" + data.uid + "'); sessionStorage.setItem('skiponce1234', 'true'); $('#postModal').modal('hide')"
     infoFunc = "info('" + id + "'); sessionStorage.setItem('skiponce1234', 'true'); $('#postModal').modal('hide')"
@@ -965,8 +965,47 @@ async function approvePost(id, data, ) {
     for (let i = 0; i < tags.length; i++) {
         tagselement = tagselement + '<span class="badge badge-pill badge-primary">' + tags[i] + '</span>'
     }
+    commentPreview = ''
+    if (data.latest_comment_content !== undefined && data.latest_comment_content !== null && data.latest_comment_name !== undefined && data.latest_comment_name && data.latest_comment_photo !== undefined && data.latest_comment_photo) {
+        // Cloud function works as intended;
+        commentPreview = `
+        <p><b>Latest Comment</b></p><br>
+        <div class="top_level_comment">
+            <div class="content">
+                <img class="comment_pfp" src="${data.latest_comment_photo}"></img>
+                <div class="comment_text"><span>${data.latest_comment_name}</span></div>
+                <div class="comment_meta">
+                    <div class="dropdown">
+                        <button aria-expanded="false" aria-haspopup="true" class="eon-text iconbtn" data-toggle="dropdown"><i class="material-icons">more_vert</i></button>
+                        <div class="dropdown-menu menu accmanagedropdown">
+                        <center>
+                            <a class="eon-text blockk" href="#"><i class="material-icons">content_copy</i></a>
+                            <a class="eon-text blockk" href="#"><i class="material-icons">report</i></a>
+                        </center>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment_content">${data.latest_comment_content}</div>
+                <div class="comment_footer">
+                    <button onclick="${commentFunc}" class="eon-text repliesbtn">
+                        <i class="material-icons">expand_more</i>
+                        View All Comments (${data.comments})
+                    </button>
+                </div>
+            </div>
+        </div>
+        `
+    }
 
-    a = '<div class="row"><div class="col-8 fullpostcontainer"><center>' + b + '</center></div><div class="col-4 sidebarcontentparent"><hr id="dividerpostmodal" class="vertical-divider"><div id="sidebarcontent"> <nav class="navbar animated fadeInDown"> <button onclick="' + userFunc + '"  class="eon-text"> <img src="' + data.photo_url + '" class="postmodalpfp" alt="" > ' + data.name + ' </button><ul class="navbar-nav mr-auto"></ul> <button onclick="' + commentFunc + '" class="eon-text navbtnicon animated fadeInUp delay1"><i class="material-icons">comment</i></button> <button onclick="' + infoFunc + '" class="eon-text navbtnicon animated fadeInUp delay2"><i class="material-icons">info</i></button> </nav><hr> <br><br><blockquote class="blockquote"><p class="mb-0">' + caption + '</p></blockquote><br>' + tagselement + '</div></div></div>'
+    share = `
+        <center id="btnSharePost">
+            <input type="text" value="Hello World" class="hidden" id="clipboardInput">
+
+            <button onclick="var cT = document.getElementById('clipboardInput');cT.classList.remove('hidden');cT.value=window.location.href;cT.select();cT.setSelectionRange(0, 99999);document.execCommand('copy');cT.classList.add('hidden');Snackbar.show({text: "Copied link to clipboard."})" class="eon-text iconbtn"><i class="material-icons">link</i></button>
+        </center>
+    `
+
+    a = '<div class="row"><div class="col-8 fullpostcontainer"><center>' + b + share + '</center></div><div class="col-4 sidebarcontentparent"><hr id="dividerpostmodal" class="vertical-divider"><div id="sidebarcontent"> <nav class="navbar animated fadeInDown"> <button onclick="' + userFunc + '"  class="eon-text"> <img src="' + data.photo_url + '" class="postmodalpfp" alt="" > ' + data.name + ' </button><ul class="navbar-nav mr-auto"></ul> <button onclick="' + commentFunc + '" class="eon-text navbtnicon posticonnavbtn animated fadeInUp delay1"><i class="material-icons">comment</i> <span>' + data.comments + '<span></button> <button onclick="' + infoFunc + '" class="eon-text navbtnicon animated fadeInUp delay2"><i class="material-icons">info</i></button> </nav><hr> <br><br><blockquote class="blockquote"><p class="mb-0">' + caption + '</p></blockquote><br>' + tagselement + '<br><br>' + commentPreview + '</div></div></div>'
     $('#postfull').html(a)
     addWaves()
 }

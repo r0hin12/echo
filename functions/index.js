@@ -16,9 +16,7 @@ admin.initializeApp();
 const JPEG_EXTENSION = '.png';
 
 
-exports.aggregatePosts = functions.firestore.document('new_posts/{postId}').onCreate(async (change, context)) {
-    
-}
+// exports.aggregatePosts = functions.firestore.document('new_posts/{postId}').onCreate(async (change, context) 
 
 exports.createAccount = functions.https.onCall(async (data, context) => {
     

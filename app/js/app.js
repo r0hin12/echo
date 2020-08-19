@@ -106,15 +106,15 @@ async function addappcontent() {
 
         $('#qr-1btn').html(doc.data().quickreplies[0])
         $('#qr-1btn').get(0).onclick = () => {
-            quickreply(doc.data().quickreplies[0])
+            quickreply(`${doc.data().quickreplies[0]}`)
         }
         $('#qr-2btn').html(doc.data().quickreplies[1])
         $('#qr-2btn').get(0).onclick = () => {
-            quickreply(doc.data().quickreplies[1])
+            quickreply(`${doc.data().quickreplies[1]}`)
         }
         $('#qr-3btn').html(doc.data().quickreplies[2])
         $('#qr-3btn').get(0).onclick = () => {
-            quickreply(doc.data().quickreplies[2])
+            quickreply(`${doc.data().quickreplies[2]}`)
         }
     }
 
@@ -492,15 +492,15 @@ async function updateReplies() {
 
     $('#qr-1btn').html(a)
     $('#qr-1btn').get(0).onclick = () => {
-        quickreply(a)
+        quickreply(`${a}`)
     }
     $('#qr-2btn').html(b)
     $('#qr-2btn').get(0).onclick = () => {
-        quickreply(b)
+        quickreply(`${b}`)
     }
     $('#qr-3btn').html(c)
     $('#qr-3btn').get(0).onclick = () => {
-        quickreply(c)
+        quickreply(`${c}`)
     }
 
     Snackbar.show({text: "Quick replies updated."})

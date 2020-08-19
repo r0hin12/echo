@@ -1559,14 +1559,18 @@ custom-control-label::before {
 }
 
 #sidebarcontent {
-    position: sticky;
+    position: absolute;
     top: 50%;
-    transform: translate(0,-50%);
+    transform: translate(0, -50%);
+    left: 0px;
+    width: calc(100% - 20px);
+    display: block;
 }
 
 .sidebarcontentparent {
-    position: relative !important;
+    position: relative;
     padding-left: 0px;
+    width: 100%;
 }
 
 .postfullcard {
@@ -1988,4 +1992,14 @@ custom-control-label::before {
     padding-left: 32px;
     padding-right: 32px;
     width: 400px;
+}
+
+.posticonnavbtn span {
+    margin-left: 6px;
+    margin-right: 6px;
+    width: 0px;
+}
+
+#btnSharePost {
+    margin-top: 12px;
 }
