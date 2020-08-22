@@ -1,206 +1,13 @@
-async function load() {
-
-    // Clear past posts on first load
-    $('#grid').empty()
-    $('#gridrelevant').empty()
-
-    load_posts_all()
-}
-
-async function newpost() {
-
-    var caption = document.getElementById('captioninput').value
-
-    if (caption == '' || caption == " " || caption == null) {
-        error('You must include a caption.')
-        $('#uploadmodal').modal('toggle')
-        return;
-    }
-
-    if (document.getElementById('captioninput').value.length > 100) {
-        error('Caption contains more than 100 characters.')
-        $('#uploadmodal').modal('toggle')
-        return;
-    }
-
-    // Image Tags
-    tags = $("#tagsinput1").tagsinput('items')
-
-    if (tags.length > 8) {
-        error('You have added more than 8 tags.')
-        $('#uploadmodal').modal('toggle')
-        return;
-    }
-
-    // Approved, create records.
-
-    document.getElementById('tagsinput1').value = ''
-    document.getElementById('captioninput').value = ''
-
-    file = document.getElementById('imgInp').files[0]
-    filenoext = file.name.replace(/\.[^/.]+$/, "")
-    ext = file.name.split('.').pop();
-    valuedate = new Date().valueOf()
-    filename = filenoext + valuedate + '.' + ext
-
-    var fileRef = storageRef.child('users/' + user.uid + '/' + filename);
-
-    await fileRef.put(file)
-
-    url = await fileRef.getDownloadURL()
-
-    doc = await db.collection('new_posts').add({
-        caption: caption,
-        comments: 0,
-        file_url: url,
-        file_name: filename,
-        latest_comment: "null",
-        latest_comment_photo: "null",
-        likes: 0,
-        photo_url: cacheuser.url,
-        private: document.getElementById('privateinp').checked,
-        tags: tags,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        uid: user.uid,
-        username: cacheuser.username,
-        reported: false,
-        report_weight: 0,
-        name: cacheuser.name
-    })
-
-    await db.collection('new_posts').doc(doc.id).collection('comments').doc('a').set({
-        status: false,
-    })
-
-    await db.collection('new_posts').doc(doc.id).collection('likes').doc('a').set({
-        status: false,
-    })
-
-    // Post uploaded.
-
-    Snackbar.show({
-        showAction: false,
-        pos: 'bottom-center',
-        text: 'Your photo was uploaded.'
-    })
-
-    $('#uploadmodal').modal('toggle')
-
-    document.getElementById('captionel').style.display = 'none'
-    document.getElementById('blah').style.display = 'none'
-    document.getElementById('captionel').style.display = 'none'
-
-    // document.getElementById('rereshtbn').click()
-    query = await db.collection('new_posts')
-    .orderBy("timestamp", "desc")
-    .where("uid", '==', user.uid)
-    .limit(1)
-    .get()
-
-    build_posts_all(query.docs, true)
-}
-
-async function load_posts_all() {
-
-    query = await db.collection('new_posts')
-        .orderBy("timestamp", "desc")
-        .limit(5)
-        .get()
-
-    window.lastVisible = query.docs[query.docs.length - 1]
-    build_posts_all(query.docs)
-}
-
-async function load_next_all() {
-    query = await db.collection("new_posts")
-        .orderBy("timestamp", "desc")
-        .startAfter(lastVisible)
-        .limit(8)
-        .get()
-
-    window.lastVisible = query.docs[query.docs.length - 1]
-    build_posts_all(query.docs)
-}
-
-async function build_posts_all(query, self) {
-    // Query array contains documents
-    for (let i = 0; i < query.length; i++) {
-        // query[i].data()
-
-        if (query[i].data().file_url == 'echo-home-text_post') {
-            a = document.createElement('div')
-            a.classList.add('shell')
-
-            switch (query[i].data().url_theme) {
-                case 'deep':
-                    textCardClass = 'superdeepcard'
-                    textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + query[i].data().url_content + '</b></p></div>'
-                    break;
-                case 'light':
-                    textCardClass = 'lightcard'
-                    textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
-                case 'dark':
-                    textCardClass = 'darkcard'
-                    textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
-                default:
-                    return;
-            }
-            userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
-            if (userlikedoc.exists && userlikedoc.data().status) {
-                desiredLikeAction = 'unlike'
-                desiredLikeAction2 = 'heartactive'
-                desiredLikeAction3 = 'favorite'
-            }
-            else {
-                desiredLikeAction = 'like'
-                desiredLikeAction2 = 'heart'
-                desiredLikeAction3 = 'favorite_border'
-            }
-
-            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
-            if (self) {
-                a.classList.add('animated')    
-                a.classList.add('backInDown')   
-                document.getElementById('grid').prepend(a) 
-                window.setTimeout(() => {
-                    showall();
-                }, 1200)
-                return;
-            }
-            document.getElementById('grid').appendChild(a)
-            continue;
-        }
-
-        a = document.createElement('div')
-        a.classList.add('shell')
-
-        userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
-        if (userlikedoc.exists && userlikedoc.data().status) {
-            desiredLikeAction = 'unlike'
-            desiredLikeAction2 = 'heart heartactive'
-            desiredLikeAction3 = 'favorite'
-        }
-        else {
-            desiredLikeAction = 'like'
-            desiredLikeAction2 = 'heart'
-            desiredLikeAction3 = 'favorite_border'
-        }
-
-        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
-        document.getElementById('grid').appendChild(a)
-        if (self) {
-            a.classList.add('animated')    
-            a.classList.add('backInDown')    
-            document.getElementById('grid').prepend(a)    
-            window.setTimeout(() => {
-                showall();
-            }, 1200)
-            return;
-        }
-
-    }
-    showall()
-}
+sessionStorage.setItem('fullscreenon', 'no')
+sessionStorage.setItem('view', 'relevant')
+sessionStorage.setItem('viewing', 'stoplookinghere')
+sessionStorage.setItem('currentlyviewinguser', 'uwu')
+sessionStorage.setItem('currentlyviewingpost', 'owooo ❤️')
+sessionStorage.setItem('skiponce', 'false')
+sessionStorage.setItem('skiponce2', 'false')
+sessionStorage.setItem('skiponce3', 'false')
+sessionStorage.setItem('skiponce123', 'false')
+sessionStorage.setItem('skiponce1234', 'false')
 
 async function build_posts_user(query) {
     
@@ -1010,79 +817,6 @@ async function approvePost(id, data) {
     addWaves()
 }
 
-async function newTextPost(theme) {
-    text = document.getElementById('textpostbox').value
-
-    if (text == '' || text == " " || text == null || text == undefined) {
-        error('You must include a caption.')
-        $('#uploadmodal').modal('toggle')
-        return;
-    }
-
-    if (document.getElementById('textpostbox').value.length > 320) {
-        error('Your text contains more than 320 characters.')
-        $('#uploadmodal').modal('toggle')
-        return
-    }
-
-    // Text Tags
-    tags = $("#tagsinput2").tagsinput('items')
-    if (tags.length > 8) {
-        // More than 8 tags
-        error('You have added more than 8 tags.')
-        $('#uploadmodal').modal('toggle')
-        return;
-    }
-
-    // All good
-
-    document.getElementById('tagsinput2').value = ''
-    document.getElementById('textpostbox').value = ''
-
-    $('#uploadmodal').modal('toggle')
-
-    doc = await db.collection('new_posts').add({
-        comments: 0,
-        file_url: 'echo-home-text_post',
-        url_theme: theme,
-        url_content: text,
-        file: 'echo-home-text_post',
-        latest_comment: "null",
-        latest_comment_photo: "null",
-        likes: 0,
-        photo_url: cacheuser.url,
-        private: document.getElementById('privateinp2').checked,
-        tags: tags,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        uid: user.uid,
-        username: cacheuser.username,
-        reported: false,
-        report_weight: 0,
-        name: cacheuser.name
-    })
-
-    await db.collection('new_posts').doc(doc.id).collection('comments').doc('comments').set({
-        comments: []
-    })
-
-    await db.collection('new_posts').doc(doc.id).collection('likes').doc('a').set({
-        status: false
-    })
-
-    Snackbar.show({
-        showAction: false,
-        pos: 'bottom-center',
-        text: 'Your text was uploaded.'
-    })
-    edittext()
-    newpost_back()
-    $('#selecttext').addClass('hidden')
-
-    $('#captionel').css('display', 'none')
-    $('#blah').css('display', 'none')
-    $('#captionel').css('display', 'none')
-    // $('#rereshtbn').click()
-}
 
 async function addComment(id) {
     text = document.getElementById('commentbox').value
@@ -1416,3 +1150,78 @@ async function showNext(id) {
     // #${id}_comment_replies
     // Last visible window["lastVisible" + id]
 }
+
+$('#postModal').on('hidden.bs.modal', function () {
+    if (sessionStorage.getItem('skiponce1234') == "true") {
+        sessionStorage.setItem('skiponce1234', "false")
+    }
+    else {
+
+        if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
+            window.history.pushState(null, '', 'app.html')
+        }
+        else {
+            window.history.pushState(null, '', 'app.html?tab=' + sessionStorage.getItem('currentab'));
+        }
+    }
+
+});
+
+$('#commentModal').on('hidden.bs.modal', function () {
+    if (sessionStorage.getItem('skiponce123') == "true") {
+        sessionStorage.setItem('skiponce123', "false")
+    }
+    else {
+
+        if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
+            window.history.pushState(null, '', 'app.html')
+        }
+        else {
+            window.history.pushState(null, '', 'app.html?tab=' + sessionStorage.getItem('currentab'));
+        }
+    }
+
+});
+
+$('#userModal').on('hidden.bs.modal', function () {
+    if (sessionStorage.getItem('skiponce3') == "true") {
+        sessionStorage.setItem('skiponce3', "false")
+    }
+    else {
+
+        if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
+            window.history.pushState(null, '', 'app.html')
+        }
+        else {
+            window.history.pushState(null, '', 'app.html?tab=' + sessionStorage.getItem('currentab'));
+        }
+    }
+});
+
+$('#infoModal').on('hidden.bs.modal', function () {
+    x = sessionStorage.getItem('tocomments')
+    if (x == "true") {
+        sessionStorage.setItem('tocomments', false)
+    }
+    else {
+        x = sessionStorage.getItem('touser')
+        if (x == "true") {
+            sessionStorage.setItem('touser', false)
+        }
+        else {
+            if (sessionStorage.getItem('currentab') == null || sessionStorage.getItem('currentab') == "null") {
+                window.history.pushState(null, '', 'app.html')
+            }
+            else {
+                window.history.pushState(null, '', 'app.html?tab=' + sessionStorage.getItem('currentab'));
+            }
+        }
+    }
+
+});
+
+$(function () {
+    $(".heart").on("click", function () {
+        $(this).toggleClass("is-active");
+    });
+});

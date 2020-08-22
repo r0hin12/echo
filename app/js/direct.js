@@ -1206,10 +1206,10 @@ function showEchoNews() {
         return false;
     }
     // Have to build
-    $.getJSON("https://gitlab.com/api/v4/projects/16896350/repository/commits", function( data ) {
-        $('#echo-dm-version').html(data[0].title)
+    $.getJSON("https://api.github.com/repos/r0hin12/echo/commits", function( data ) {
+        $('#echo-dm-version').html(data[0].commit.message.split('\n\n')[0])
         for (let i = 0; i < data.length; i++) {
-            newupdatehtml = '<div class="card updatecard"><div class="card-body"><p><b>' + data[i].title + '</b> commited by ' + data[i].author_name + '</p><div class="commentmsg">' + data[i].message.split(data[i].title)[1].replace(new RegExp("-", "g"), '<br>').replace(new RegExp("⚡️ Echo ⚡", "g"), "<br><br><i>⚡️ Echo ⚡</i>") + '</div><br><p>' + data[i].authored_date + ' | <a href="' + data[i].web_url + '" target="_blank">view commit</a></p></div></div>'
+            newupdatehtml = '<div class="card updatecard"><div class="card-body"><p><b>' + data[i].commit.message.split('\n\n')[0] + '</b> commited by ' + data[i].commit.committer.name + '</p><div class="commentmsg">' + data[i].commit.message.replace(data[i].commit.message.split('\n\n')[0], '').replace('\n\n', '').replace(/\n/gi, "<br>"); + '</div><br><p>' + data[i].commit.committer.date + ' | <a href="' + data[i].commit.url + '" target="_blank">view commit</a></p></div></div>'
             document.getElementById('echo-dm-latest').innerHTML = document.getElementById('echo-dm-latest').innerHTML + newupdatehtml
         }
     });

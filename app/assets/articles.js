@@ -14,7 +14,7 @@ window.articles = [
     {
         title: 'Contributions',
         updated: 'Aguest 6th, 2020',
-        subtitle: "Feeling helpful? You can help us out by contributing to the Echo code on GitLab.",
+        subtitle: "Feeling helpful? You can help us out by contributing to the Echo code on GitHub.",
         id: 'contribute'
     },
 ]

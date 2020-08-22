@@ -124,6 +124,9 @@ function tabe(tab) {
 
         switch (tab) {
             case "home":
+                break;
+            case "explore":
+                load_trending_tags()
                 interval = window.setInterval(function () {
                     if (typeof (user) != "undefined" && typeof (user) != null) {
                         clearInterval(interval)
@@ -134,9 +137,6 @@ function tabe(tab) {
                         }, 3500)
                     }
                 }, 200);
-                break;
-            case "explore":
-                load_trending_tags()
                 
             case "inbox":
                 // Everything is automatically loaded to enable in-app notifications. Slows down app loading however...

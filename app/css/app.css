@@ -314,7 +314,7 @@ custom-control-label::before {
 .grid {
     display: grid;
     justify-items: center;
-    grid-gap: 0px;
+    grid-gap: 18px;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     grid-auto-rows: 10px;
 }
@@ -323,6 +323,7 @@ custom-control-label::before {
     position: relative;
     padding-left: 32px;
     padding-right: 32px;
+    margin-top: 24px;
     width: 400px;
 }
 
@@ -1069,6 +1070,7 @@ custom-control-label::before {
 
     transition: all 0.2s;
 }
+
 
 .content2 {
     padding-bottom: 12px;
@@ -2002,4 +2004,8 @@ custom-control-label::before {
 
 #btnSharePost {
     margin-top: 12px;
+}
+
+.white {
+    color: white;
 }

@@ -395,7 +395,7 @@ function preesearch() {
         if (doc.data().maint) {
             if (user.uid !== 'L5NjKTveedYfrw8JK9AjThahsT13' && user.uid !== 'NCiD7spjywPJR2FiNeSfWhiQ8Jw1') {
                 alert('Maintence Mode is Active \n\nFeatures may be corrupt or broken so we are temporarily reducing usage on Echo. \n\nThanks for understanding...')
-                window.location.replace(`https://gitlab.com/rohin12/echo/-/commit/${doc.data().maint_git}`)
+                window.location.replace(`https://github.com/r0hin12/echo/commit/${doc.data().maint_git}`)
                 return;
             }
             console.log('--- MAINTENANCE MODE CURRENtLY ON. You have bypassed the kickoff.');

@@ -505,3 +505,34 @@ async function updateReplies() {
 
     Snackbar.show({text: "Quick replies updated."})
 }
+
+async function checkUrls() {
+    if (sessionStorage.getItem('viewComments') !== 'null') {
+        doc = db.collection('new_posts').doc(sessionStorage.getItem('viewComments')).get()
+        if (doc.exists) {
+            loadComments(sessionStorage.getItem('viewComments'), doc.data().uid)
+        }
+    }
+
+    if (sessionStorage.getItem('fullInfo') !== 'null') {
+        showcomplete()
+        fullscreen(sessionStorage.getItem('fullInfo'))
+    }
+
+    if (sessionStorage.getItem('viewInfo') !== 'null') {
+        info(sessionStorage.getItem('viewInfo'))
+    }
+
+    if (sessionStorage.getItem('viewUser') !== 'null') {
+        window.setTimeout(() => {
+            usermodal(sessionStorage.getItem('viewUser'))
+        }, 1000)
+    }
+
+    if (sessionStorage.getItem('viewPost') !== 'null') {
+        window.setTimeout(() => {
+            viewpost(sessionStorage.getItem('viewPost'))
+        }, 1000)
+    }
+    
+}
