@@ -56,9 +56,7 @@ function unlinktwitter() {
 }
 
 function gotwitter(uid) {
-
-youareleaving('https://twitter.com/intent/user?user_id=' + uid)
-
+    youareleaving('https://twitter.com/intent/user?user_id=' + uid)
 }
 
 function linkgithub() {

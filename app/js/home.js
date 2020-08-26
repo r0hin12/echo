@@ -183,7 +183,7 @@ async function load_rel() {
     .doc(user.uid)
     .collection('posts')
     .orderBy("timestamp", "desc")
-    .limit(5)
+    .limit(8)
     .get()
 
     window.lastVisibleRel = query.docs[query.docs.length - 1]

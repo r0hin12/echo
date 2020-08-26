@@ -302,6 +302,11 @@ async function unlike(post) {
 }
 
 async function info(post) {
+    loader = $('#infoLoader')
+    loader.removeClass('fadeOut');
+    loader.removeClass('hidden');
+
+    $('#infoModal').modal('toggle')
     doc = await db.collection('new_posts').doc(post).get()
 
     $('#infoa').html(doc.data().file_name)
@@ -354,8 +359,13 @@ async function info(post) {
         }
     }
 
-    $('#infoModal').modal('toggle')
     window.history.pushState(null, '', 'app.html?info=' + post);
+
+    loader.addClass('fadeOut');
+    window.setTimeout(() => {
+        loader.addClass('hidden');
+    }, 450)
+    
 
 }
 
@@ -391,199 +401,213 @@ function unfullscreen() {
 
 async function usermodal(uid) {
 
+    loader = $('#userLoader');
+    loader.removeClass('fadeOut');
+    loader.removeClass('hidden');
+
     previousview = sessionStorage.getItem("currentlyviewinguser")
 
     if (previousview == uid) {
         $('#userModal').modal('show')
+        addWaves()
+        
+        loader.addClass('fadeOut');
+        window.setTimeout(() => {
+            loader.addClass('hidden');
+        }, 450)
         window.history.pushState(null, '', 'app.html?user=' + uid);
+        return;
+    } 
+
+    sessionStorage.setItem('currentlyviewinguser', uid)
+    window.history.pushState(null, '', 'app.html?user=' + uid);
+
+    $('#followerscontainer').empty()
+    $('#followingcontainer').empty()
+    $('#usergrid').empty()
+    $('#userModal').modal('show')
+    $('#connections').empty()
+
+    doc = await db.collection('users').doc(uid).get()
+    userdoc = doc
+    document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
+    document.getElementById('usermodalpfp').src = doc.data().url
+
+    if (doc.data().gradient == undefined) {
+        document.getElementById('usermodalpfp').classList.remove('customgradientprofileimg')
     } else {
+        document.getElementById('usermodalpfp').classList.add('customgradientprofileimg')
+        document.getElementById('dynamicstyle3').innerHTML = '.customgradientprofileimg {background-image: linear-gradient(white, white), linear-gradient(45deg, #' + doc.data().gradient.a + ', #' + doc.data().gradient.b + ') !important}'
+    }
 
-        sessionStorage.setItem('currentlyviewinguser', uid)
-        window.history.pushState(null, '', 'app.html?user=' + uid);
+    if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") {
+        document.getElementById('usermodalbio').innerHTML = ""
+    } else {
+        document.getElementById('usermodalbio').innerHTML = doc.data().bio
+    }
 
-        $('#followerscontainer').empty()
-        $('#followingcontainer').empty()
-        $('#usergrid').empty()
-        $('#userModal').modal('show')
-        $('#connections').empty()
-
-        doc = await db.collection('users').doc(uid).get()
-        userdoc = doc
-        document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
-        document.getElementById('usermodalpfp').src = doc.data().url
-
-        if (doc.data().gradient == undefined) {
-            document.getElementById('usermodalpfp').classList.remove('customgradientprofileimg')
-        } else {
-            document.getElementById('usermodalpfp').classList.add('customgradientprofileimg')
-            document.getElementById('dynamicstyle3').innerHTML = '.customgradientprofileimg {background-image: linear-gradient(white, white), linear-gradient(45deg, #' + doc.data().gradient.a + ', #' + doc.data().gradient.b + ') !important}'
-        }
-
-        if (doc.data().bio == undefined || doc.data().bio == null || doc.data().bio == "" || doc.data().bio == " ") {
-            document.getElementById('usermodalbio').innerHTML = ""
-        } else {
-            document.getElementById('usermodalbio').innerHTML = doc.data().bio
-        }
-
-        document.getElementById('userrep').innerHTML = doc.data().rep
+    document.getElementById('userrep').innerHTML = doc.data().rep
 
 
-        // Connections -> Twitter
-        if (doc.data().twitter !== undefined) {
-            if (doc.data().twitter.enabled) {
-                hs = document.createElement('button')
-                hs.classList.add('eon-text')
-                hs.classList.add('connectionbtn')
-                hs.onclick = function () {
-                    $('#userModal').modal('toggle')
-                    gotwitter(doc.data().twitter.id)
-                }
-                hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
-                document.getElementById("connections").appendChild(hs)
+    // Connections -> Twitter
+    if (doc.data().twitter !== undefined) {
+        if (doc.data().twitter.enabled) {
+            hs = document.createElement('button')
+            hs.classList.add('eon-text')
+            hs.classList.add('connectionbtn')
+            hs.onclick = function () {
+                $('#userModal').modal('toggle')
+                gotwitter(doc.data().twitter.id)
             }
-        }
-
-        // Connections -> GitHub
-        if (doc.data().github !== undefined) {
-            if (doc.data().github.enabled) {
-                hs = document.createElement('button')
-                hs.classList.add('eon-text')
-                hs.classList.add('connectionbtn')
-                hs.onclick = function () {
-                    $('#userModal').modal('toggle')
-                    gogithub(doc.data().github.id)
-                }
-                var customProps = window.getComputedStyle(document.documentElement);
-                hs.innerHTML = '<img class="imginbtn" src="assets/GitHub-Mark-' + customProps.getPropertyValue('--content-primary').replace(/\s/g, '').charAt(0).toUpperCase() + customProps.getPropertyValue('--content-primary').slice(1) + '.png"></img>'
-                document.getElementById("connections").appendChild(hs)
-            }
-        }
-
-        // FOLLOW STUFF
-
-        userfollowdoc = await db.collection('follow').doc(uid).get()
-
-        $('#userfollowing').html('0')
-        $('#userfollowers').html('0')
-
-        if (userfollowdoc.exists) {
-            $('#userfollowing').html(nFormatter(userfollowdoc.data().following, 1))
-            $('#userfollowers').html(nFormatter(userfollowdoc.data().followers, 1))
-    
-            if(typeof(userfollowdoc.data().following) !== 'number') {
-                $('#userfollowing').html('0')
-            }
-            if(typeof(userfollowdoc.data().followers) !== 'number') {
-                $('#userfollowers').html('0')
-            }
-        }
-
-        followdoc = await db.collection('follow').doc(uid).collection('followers').doc(user.uid).get()
-        isFollow = false
-        if (followdoc.exists && followdoc.data().status) {
-            isFollow = true
-        }
-
-        if (isFollow && user.uid !== uid) {
-            $('#followbtn').html('unfollow')
-            $('#usermodalfollowtext').removeClass('fadeInUp')
-            $('#usermodalfollowtext').removeClass('fadeOutDown')
-            $('#usermodalfollowtext').css('visiblity', 'hidden')
-            window.setTimeout(() => {
-                $('#usermodalfollowtext').addClass('fadeInUp')
-                $('#usermodalfollowtext').removeClass('hidden')
-                $('#usermodalfollowtext').css('visiblity', 'visible')
-                $('#usermodalfollowtext').css('display', 'block')
-            }, 50);
-
-            document.getElementById('followbtn').onclick = function () {
-                unfollow(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
-            }
-
-            load_posts_user(uid)
-        } else {
-            if (user.uid !== uid) {
-                // Not following
-
-                $('#usermodalfollowtext').removeClass('fadeInUp')
-                $('#usermodalfollowtext').removeClass('fadeOutDown')
-
-                window.setTimeout(() => {
-                    $('#usermodalfollowtext').addClass('fadeInUp')
-                    $('#usermodalfollowtext').css('visiblity', 'hidden')
-                }, 50);
-
-                $('#followbtn').html('follow')
-
-                document.getElementById('followbtn').onclick = (() => {
-                    follow(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
-                })
-
-                if (userdoc.data().type == 'private') {
-                    requesteddoc = await db.collection('follow').doc(uid).collection('requested').doc(user.uid).get()
-                    isRequested = false
-                    if (doc.exists && followdoc.exists && followdoc.data().status) {
-                        if (followdoc.data().status) {
-                            isRequested = true
-                        }
-                    }
-                    $('#privatewarning').css('display', 'block')
-                    if (isRequested) {
-
-                        $('#usermodalfollowtext').removeClass('fadeInUp')
-                        $('#usermodalfollowtext').removeClass('fadeOutDown')
-
-                        window.setTimeout(() => {
-                            $('#usermodalfollowtext').addClass('fadeInUp')
-                            $('#usermodalfollowtext').css('visiblity', 'visible')
-                            $('#usermodalfollowtext').css('display', 'block')
-                            $('#usermodalfollowtext').html(`<i class="material-icons" id="followicon">access_time</i> Requested`)
-                        }, 50);
-
-                        $('#followbtn').html('cancel request')
-
-                        document.getElementById('followbtn').onclick = function () {
-                            cancel_request(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
-                        }
-                    } else {
-                        $('#followbtn').html('request')
-
-                        document.getElementById('followbtn').onclick = function () {
-                            request(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
-                        }
-                    }
-                } else {
-                    // User is not private, and you are not following
-                    if (user.uid !== uid) {
-                        load_posts_user(uid)
-                    }
-                }
-            }
-        }
-
-        try {
-            if (user.uid == uid) {
-                $('#ownwarning').css('display', 'block')
-                $('#followbtn').html('unfollow')
-                document.getElementById('followbtn').onclick = function () {
-                    // Why they tryna unfollow themselves
-                    $('#followbtn').addClass('animated')
-                    $('#followbtn').addClass('heartBeat')
-                    window.setTimeout(() => {
-                        $('#followbtn').removeClass('heartBeat')
-                        $('#followbtn').removeClass('heartBeat')
-                    }, 800);
-                }
-
-                load_posts_user(uid)
-            }
-        } catch {
-            // USER IS NOT DEFINED
+            hs.innerHTML = '<img class="imginbtn" src="assets/Twitter_Logo_Blue.png"></img>'
+            document.getElementById("connections").appendChild(hs)
         }
     }
 
+    // Connections -> GitHub
+    if (doc.data().github !== undefined) {
+        if (doc.data().github.enabled) {
+            hs = document.createElement('button')
+            hs.classList.add('eon-text')
+            hs.classList.add('connectionbtn')
+            hs.onclick = function () {
+                $('#userModal').modal('toggle')
+                gogithub(doc.data().github.id)
+            }
+            var customProps = window.getComputedStyle(document.documentElement);
+            hs.innerHTML = '<img class="imginbtn" src="assets/GitHub-Mark-' + customProps.getPropertyValue('--content-primary').replace(/\s/g, '').charAt(0).toUpperCase() + customProps.getPropertyValue('--content-primary').slice(1) + '.png"></img>'
+            document.getElementById("connections").appendChild(hs)
+        }
+    }
+
+    // FOLLOW STUFF
+
+    userfollowdoc = await db.collection('follow').doc(uid).get()
+
+    $('#userfollowing').html('0')
+    $('#userfollowers').html('0')
+
+    if (userfollowdoc.exists) {
+        $('#userfollowing').html(nFormatter(userfollowdoc.data().following, 1))
+        $('#userfollowers').html(nFormatter(userfollowdoc.data().followers, 1))
+
+        if(typeof(userfollowdoc.data().following) !== 'number') {
+            $('#userfollowing').html('0')
+        }
+        if(typeof(userfollowdoc.data().followers) !== 'number') {
+            $('#userfollowers').html('0')
+        }
+    }
+
+    followdoc = await db.collection('follow').doc(uid).collection('followers').doc(user.uid).get()
+    isFollow = false
+    if (followdoc.exists && followdoc.data().status) {
+        isFollow = true
+    }
+
+    if (isFollow && user.uid !== uid) {
+        $('#followbtn').html('unfollow')
+        $('#usermodalfollowtext').removeClass('fadeInUp')
+        $('#usermodalfollowtext').removeClass('fadeOutDown')
+        $('#usermodalfollowtext').css('visiblity', 'hidden')
+        window.setTimeout(() => {
+            $('#usermodalfollowtext').addClass('fadeInUp')
+            $('#usermodalfollowtext').removeClass('hidden')
+            $('#usermodalfollowtext').css('visiblity', 'visible')
+            $('#usermodalfollowtext').css('display', 'block')
+        }, 50);
+
+        document.getElementById('followbtn').onclick = function () {
+            unfollow(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
+        }
+
+        load_posts_user(uid)
+    } else {
+        if (user.uid !== uid) {
+            // Not following
+
+            $('#usermodalfollowtext').removeClass('fadeInUp')
+            $('#usermodalfollowtext').removeClass('fadeOutDown')
+
+            window.setTimeout(() => {
+                $('#usermodalfollowtext').addClass('fadeInUp')
+                $('#usermodalfollowtext').css('visiblity', 'hidden')
+            }, 50);
+
+            $('#followbtn').html('follow')
+
+            document.getElementById('followbtn').onclick = (() => {
+                follow(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
+            })
+
+            if (userdoc.data().type == 'private') {
+                requesteddoc = await db.collection('follow').doc(uid).collection('requested').doc(user.uid).get()
+                isRequested = false
+                if (doc.exists && followdoc.exists && followdoc.data().status) {
+                    if (followdoc.data().status) {
+                        isRequested = true
+                    }
+                }
+                $('#privatewarning').css('display', 'block')
+                if (isRequested) {
+
+                    $('#usermodalfollowtext').removeClass('fadeInUp')
+                    $('#usermodalfollowtext').removeClass('fadeOutDown')
+
+                    window.setTimeout(() => {
+                        $('#usermodalfollowtext').addClass('fadeInUp')
+                        $('#usermodalfollowtext').css('visiblity', 'visible')
+                        $('#usermodalfollowtext').css('display', 'block')
+                        $('#usermodalfollowtext').html(`<i class="material-icons" id="followicon">access_time</i> Requested`)
+                    }, 50);
+
+                    $('#followbtn').html('cancel request')
+
+                    document.getElementById('followbtn').onclick = function () {
+                        cancel_request(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
+                    }
+                } else {
+                    $('#followbtn').html('request')
+
+                    document.getElementById('followbtn').onclick = function () {
+                        request(uid, userdoc.data().username, userdoc.data().url, userdoc.data().name)
+                    }
+                }
+            } else {
+                // User is not private, and you are not following
+                if (user.uid !== uid) {
+                    load_posts_user(uid)
+                }
+            }
+        }
+    }
+
+    try {
+        if (user.uid == uid) {
+            $('#ownwarning').css('display', 'block')
+            $('#followbtn').html('unfollow')
+            document.getElementById('followbtn').onclick = function () {
+                // Why they tryna unfollow themselves
+                $('#followbtn').addClass('animated')
+                $('#followbtn').addClass('heartBeat')
+                window.setTimeout(() => {
+                    $('#followbtn').removeClass('heartBeat')
+                    $('#followbtn').removeClass('heartBeat')
+                }, 800);
+            }
+
+            load_posts_user(uid)
+        }
+    } catch {
+        // USER IS NOT DEFINED
+    }
     addWaves()
     $('#poststab-tab').get(0).click()
+
+    loader.addClass('fadeOut');
+    window.setTimeout(() => {
+        loader.addClass('hidden');
+    }, 450)
 }
 
 async function follow(uid, username, url, name) {
@@ -960,9 +984,14 @@ grid_rel
 
 async function loadComments(id, poster) {
 
+    loader = $('#commentLoader');
+    loader.removeClass('fadeOut');
+    loader.removeClass('hidden');
+
+    $('#commentModal').modal('toggle')
+
     if (id == sessionStorage.getItem('viewing')) {
         // Already loaded, stop and just turn on modal.
-        $('#commentModal').modal('toggle');
         return;
     }
 
@@ -993,7 +1022,11 @@ async function loadComments(id, poster) {
     build_comments(query.docs, false)
 
     history.pushState(null, "", "?comments=" + id)
-    $('#commentModal').modal('toggle')
+
+    loader.addClass('fadeOut');
+    window.setTimeout(() => {
+        loader.addClass('hidden');
+    }, 450)
 }
 
 async function load_next_comments() {

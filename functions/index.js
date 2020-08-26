@@ -10,6 +10,8 @@ const os = require('os');
 const tmpdir = os.tmpdir();
 const fs = require('fs')
 const request = require('request');
+const { linkPreview } = require(`link-preview-node`);
+
 
 admin.initializeApp();
 
@@ -450,3 +452,23 @@ exports.trendingTopics = functions.https.onRequest(async (req, res) => {
         });
     }
 })
+
+exports.previewLink = functions.https.onCall(async (data, context) => {
+    
+    const uid = context.auth.uid;
+    const url = data.url;
+    const db = admin.firestore()
+
+    if (!uid) {
+        return;
+    }
+
+    // Approved, generate preview.
+
+    return linkPreview(url).then(resp => {
+        return {data: resp}
+    }).catch(err => {
+        return {data: false, err: err}
+    });
+        
+});

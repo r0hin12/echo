@@ -588,6 +588,23 @@ function ADD_MESSAGE(uid, content) {
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
     now = new Date()
 
+    if (content.includes('https')) {
+        contentbc = content
+        var matches = contentbc.match(/\bhttps?:\/\/\S+/gi);
+        for (let i = 0; i < matches.length; i++) {
+            contentbc = contentbc.replace(matches[i], '')
+        }
+        if (contentbc == '') {
+            // Only contains a link, so ommit sending message only containing link:
+            checkLinks(content, uid)
+            return;
+        }
+        else {
+            // Otherwise do not return and send a subsequent message containing link preview
+            checkLinks(content, uid)
+        }
+    }
+
     tempmsg = {
         app_preset: 'none',
         content: content,
@@ -719,6 +736,23 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         else {
             goFunc1 = "window.open('rtc.html?type=av&target=" + msg.sender + "')"
             msgcontent = '<h3><i class="material-icons gradicon">phone</i>' + name + ' started a video call.</h3><center><button onclick="' + goFunc1 + '" class="eon-text">join</button></center>'
+        }
+    }
+
+    if (msg.app_preset == 'echo-direct-link') {
+        p.classList.add('systemmessagecontainerlink');
+        msgcontent = `
+            <img src="${msg.app_preset_data.image}" class="dm_link_img"></img>
+            <p class="bold">${msg.app_preset_data.title}</p>
+            <span><p class="light">${msg.app_preset_data.description}</p></span>
+            <button onclick="youareleaving('${msg.app_preset_data.link}')" class="eon-text dm_link_btn">visit</button>
+            <div><small>${msg.app_preset_data.link}</small></div>
+        `
+        if (msg.sender == user.uid) {
+            p.classList.add('systemmessagecontainerlinkright');
+        }
+        else {
+            p.classList.add('systemmessagecontainerlinkleft');
         }
     }
 
@@ -1421,4 +1455,39 @@ function hidequickreply() {
 function quickreply(msg) {
     hidequickreply()
     ADD_MESSAGE(sessionStorage.getItem('active_dm'), msg)
+}
+
+function checkLinks(content, uid) {
+    var matches = content.match(/\bhttps?:\/\/\S+/gi);
+    var previewLink = firebase.functions().httpsCallable('previewLink');
+
+    for (let i = 0; i < matches.length; i++) {
+        // Add message with content from URL: matches[i]
+        previewLink({url: matches[i]}).then((result) =>{
+            now = new Date()
+            unreadkey = 'unread_' + uid
+    
+            db.collection('direct').doc(string).update({
+                [unreadkey]: true,
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                    app_preset: 'echo-direct-link',
+                    app_preset_data: result.data.data,
+                    content: result.data.data.title,
+                    sender: user.uid,
+                    timestamp: now,
+                })
+            }).then(function() {
+                ENACT_CHANGES(uid)
+            })
+            db.collection('directlisteners').doc(uid).update({
+                most_recent_sender: user.uid
+            }).then(function() {
+                db.collection('directlisteners').doc(uid).update({
+                    most_recent_sender: 'none'
+                })
+            })
+
+        })        
+
+    }
 }
