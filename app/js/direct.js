@@ -267,7 +267,6 @@ function loadactive() {
                 q.classList.add('hidden')
                 q.id = element + 'chatsidebarboxel'
                 document.getElementById('messagelist').appendChild(q)
-                document.getElementById('messagelist').appendChild(document.createElement('br'))
                 addsidebarcardcontent(element, verification)
 
                 if (element == sessionStorage.getItem('currenDM')) {
@@ -521,6 +520,7 @@ function BUILD_DIRECT(uid, btnel) {
             for (let i = 0; i < stringvar.length; i++) {
                 BUILD_MESSAGE(this["dmcache"+uid].name, stringvar[i], string)
             }
+            prevuid = 'na'
             ScrollBottom()
         }
 
@@ -628,13 +628,8 @@ function ADD_MESSAGE(uid, content) {
 }
 
 function BUILD_MESSAGE(name, msg, string, anim, reverse) {
+
     p = document.createElement('div')
-
-    if (anim == true) {
-        p.classList.add('animated')
-        p.classList.add('fadeIn')
-    }
-
     p.classList.add('messagecontainer')
     p.classList.add('clearfix')
 
@@ -735,7 +730,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
     }
 
     p.innerHTML = '<div class="' + textContainer + '">' + msgcontent + '</div>'
-    if (prevuid === msg.sender) {
+    if (prevuid === msg.sender && anim) {
         // Check if bottommost msg is a system msg
         el = $('#' + string + 'chatcontainer').find('.clearfix:first')
         if (el.hasClass('systemmessagecontainer')) {
@@ -754,7 +749,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             if ($('#' + string + 'chatcontainer').children('.messagecontainer').length == 0) {
                 // error, element doesnt exist so create a container for this at the bottom (prepend cause reversed), then  continue with tryna find messagecontainers and add it to the bottom. or top.
                 $('#' + string + 'chatcontainer').prepend(p)
-                document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
             }
             $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML = msgcontent + '<br>' + $('#' + string + 'chatcontainer').children('.messagecontainer').last().children('.msgcontainer' + clientorme).first().get(0).innerHTML
         }
@@ -762,7 +756,6 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
             if ($('#' + string + 'chatcontainer').children('.messagecontainer').length == 0) {
                 // error, element doesnt exist so create a container for this at the bottom (prepend cause reversed), then  continue with tryna find messagecontainers and add it to the bottom. or top.
                 $('#' + string + 'chatcontainer').prepend(p)
-                document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
             }
             $('#' + string + 'chatcontainer').children('.messagecontainer').first().children('.msgcontainer' + clientorme).last().get(0).innerHTML += '<br>' + msgcontent   
         }
@@ -773,18 +766,35 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         }
         if (reverse) {            
             $('#' + string + 'chatcontainer').append(p)
-            document.getElementById(string + 'chatcontainer').append(document.createElement('br'))
         }
         else {
             $('#' + string + 'chatcontainer').prepend(p)
-            document.getElementById(string + 'chatcontainer').prepend(document.createElement('br'))
         }
         addWaves()
-    }        
+    }
+    
+    // Something definitely appended, so invoke the animations now:
+    // Latest Message: $('#' + string + 'chatcontainer').children()[1]
+    // Only run if you're explicitly sending the message in this session
+    if (anim && prevuid !== msg.sender) {
+        console.log('Animated Message');
+        default_height = $($('#' + string + 'chatcontainer').children()[0]).height()
+        $($('#' + string + 'chatcontainer').children()[0]).addClass('unanimated_msg')
+        window.setTimeout(() => {
+            $('#' + string + 'chatcontainer').children()[0].style.height = default_height + 'px'
+            $('#' + string + 'chatcontainer').children()[0].style.marginTop = '16px'
+        }, 50)
+    }
+    if (prevuid == msg.sender) {
+        $('#' + string + 'chatcontainer').children()[0].removeAttribute("style");
+        $($('#' + string + 'chatcontainer').children()[0]).removeClass('unanimated_msg')
+    }
+
     prevuid = msg.sender
     if (msg.app_preset.startsWith('echo-')) {
         prevuid = 'disabled'
     }
+
 }
 
 function PREPARE_LISTEN_MESSAGES() {
@@ -864,7 +874,7 @@ function ENACT_CHANGES(uid) {
         if( $('#' + string + 'chatcontainer').length ) {
             db.collection('users').doc(uid).get().then(function(doc) {
                 if (sessionStorage.getItem('itwasmesoskip') !== 'true') {
-                    BUILD_MESSAGE(doc.data().name, msg, string)
+                    BUILD_MESSAGE(doc.data().name, msg, string, true)
                 }
                 else {
                     sessionStorage.setItem('itwasmesoskip', 'false')
@@ -1160,6 +1170,8 @@ function buildInfScroll() {
         BUILD_MESSAGE(array[i].name, array[i].stringvar,array[i].string, false, true)
     }
 
+    prevuid = 'na'
+
     // update current scroll count
     this['currentScrollCount' + activedm] = this['currentScrollCount' + activedm] + infiniteScrollCount
 
@@ -1185,6 +1197,8 @@ function showEchoNews() {
     $('#echoNewschatsidebarboxel').addClass('messagelistboxactive')
     $('.chatcontainer').addClass('hidden')   
     $('#chatnav').removeClass('hidden')
+    $('#unselectedconten').removeClass('fadeInDown')
+    $('#unselectedconten').addClass('fadeOutUp')
 
     $('#echoNewsContent').removeClass('hidden')
     window.setTimeout(function() {
@@ -1264,18 +1278,11 @@ function purge_agree(uid, name) {
         db.collection('direct').doc(string).get().then(function(doc) {
             messages = doc.data().messages
             db.collection('app').doc('archive').collection('pending_deletion_transcripts').doc(string).get().then(function(doc) {
-                if (doc.exists) {
-                    // Do nothing
-                    purge_agree_complete(uid, name, string, messages, now)            
-                }
-                else {
-                    // Make it something
-                    db.collection('app').doc('archive').collection('pending_deletion_transcripts').doc(string).set({
-                        messages: []
-                    }).then(function() {
-                        purge_agree_complete(uid, name, string, messages, now)                    
-                    })
-                }
+                db.collection('app').doc('archive').collection('pending_deletion_transcripts').doc(string).set({
+                    [new Date().toString()]: messages
+                }).then(function() {
+                    purge_agree_complete(uid, name, string, messages, now)                    
+                })
             })
         })
 

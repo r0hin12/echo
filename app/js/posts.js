@@ -31,7 +31,7 @@ async function build_posts_user(query) {
                     textCardClass = 'darkcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
                 default:
-                    return;
+                    break;
             }
             userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
             if (userlikedoc.exists && userlikedoc.data().status) {
@@ -45,7 +45,7 @@ async function build_posts_user(query) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            w.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img class="postpfp" id="${query[i].id}userpfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button><button id="${query[i].id}usercommentBtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true');loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}usercommentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+            w.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img class="postpfp" id="${query[i].id}userpfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button><button id="${query[i].id}usercommentBtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true');loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}usercommentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
             document.getElementById('usergrid').appendChild(w)
             continue;
         }
@@ -120,24 +120,51 @@ async function like(post) {
             }, 600)
         }
     } catch (error) { }
+
+    try {
+        document.getElementById(post + 'userlikebtn').onclick = () => {
+            $(`#${post}userlikebtnicon`).addClass('shake')
+            window.setTimeout(() => {
+                $(`#${post}userlikebtnicon`).removeClass('shake')
+            }, 600)
+        }
+    } catch (error) { }
+    try {
+        document.getElementById(post + 'userlikebtn').onclick = () => {
+            $(`#${post}likebtniconrel`).addClass('shake')
+            window.setTimeout(() => {
+                $(`#${post}likebtniconrel`).removeClass('shake')
+            }, 600)
+        }
+    } catch (error) { }
     
 
     $(`.${post}likebtntrend`).toggleClass('heartactive')
     $(`#${post}likebtn`).toggleClass('heartactive');
+    $(`#${post}likebtnrel`).toggleClass('heartactive');
+    $(`#${post}userlikebtn`).toggleClass('heartactive');
 
     $(`.${post}likebtnicontrend`).html('favorite')
     $(`#${post}likebtnicon`).html('favorite');
+    $(`#${post}likebtniconrel`).html('favorite');
+    $(`#${post}userlikebtnicon`).html('favorite');
 
     $(`.${post}likebtnicontrend`).addClass('rubberBand')
     $(`#${post}likebtnicon`).addClass('rubberBand')
+    $(`#${post}likebtniconrel`).addClass('rubberBand')
+    $(`#${post}userlikebtnicon`).addClass('rubberBand')
 
     window.setTimeout(() => {
         $(`.${post}likebtnicontrend`).removeClass('rubberBand')
-        $(`#${post}likebtnicon`).removeClass('rubberBand')    
+        $(`#${post}likebtnicon`).removeClass('rubberBand')
+        $(`#${post}likebtniconrel`).removeClass('rubberBand')        
+        $(`#${post}userlikebtnicon`).removeClass('rubberBand')   
     }, 600);
 
     $(`.${post}likeCounttrend`).html(parseInt($(`.${post}likeCounttrend`).html()) + 1)
     $(`#${post}likeCount`).html(parseInt($(`#${post}likeCount`).html()) + 1)
+    $(`#${post}likeCountrel`).html(parseInt($(`#${post}likeCountrel`).html()) + 1)
+    $(`#${post}userlikeCount`).html(parseInt($(`#${post}userlikeCount`).html()) + 1)
     
     await db.collection('new_posts').doc(post).collection('likes').doc(user.uid).set({
         status: true,
@@ -153,6 +180,19 @@ async function like(post) {
 
         try {
             document.getElementById(post + 'likebtn').onclick = () => {
+                unlike(post)
+            }
+        } catch (error) { }
+
+
+        try {
+            document.getElementById(post + 'userlikebtn').onclick = () => {
+                unlike(post)
+            }
+        } catch (error) { }
+
+        try {
+            document.getElementById(post + 'likebtnrel').onclick = () => {
                 unlike(post)
             }
         } catch (error) { }
@@ -182,23 +222,52 @@ async function unlike(post) {
         }
     } catch (error) { }
 
+    try {
+        document.getElementById(post + 'userlikebtn').onclick = () => {
+            $(`#${post}userlikebtnicon`).addClass('shake')
+            window.setTimeout(() => {
+                $(`#${post}userlikebtnicon`).removeClass('shake')
+            }, 600)
+        }
+    } catch (error) { }
+
+
+    try {
+        document.getElementById(post + 'likebtnrel').onclick = () => {
+            $(`#${post}likebtniconrel`).addClass('shake')
+            window.setTimeout(() => {
+                $(`#${post}likebtniconrel`).removeClass('shake')
+            }, 600)
+        }
+    } catch (error) { }
+
     $(`.${post}likebtntrend`).toggleClass('heartactive')
     $(`#${post}likebtn`).toggleClass('heartactive');
+    $(`#${post}likebtnrel`).toggleClass('heartactive');
+    $(`#${post}userlikebtn`).toggleClass('heartactive');
 
     $(`.${post}likebtnicontrend`).html('favorite_border')
     $(`#${post}likebtnicon`).html('favorite_border');
+    $(`#${post}likebtniconrel`).html('favorite_border');
+    $(`#${post}userlikebtnicon`).html('favorite_border');
 
     $(`.${post}likebtnicontrend`).addClass('jello')
     $(`#${post}likebtnicon`).addClass('jello')
+    $(`#${post}likebtniconrel`).addClass('jello')
+    $(`#${post}userlikebtnicon`).addClass('jello')
 
     window.setTimeout(() => {
         $(`.${post}likebtnicontrend`).removeClass('jello')
-        $(`#${post}likebtnicon`).removeClass('jello')    
+        $(`#${post}likebtnicon`).removeClass('jello')  
+        $(`#${post}likebtniconrel`).removeClass('jello')  
+        $(`#${post}userlikebtnicon`).removeClass('jello')    
     }, 600);
     
     
     $(`.${post}likeCounttrend`).html(parseInt($(`.${post}likeCounttrend`).html()) - 1)
     $(`#${post}likeCount`).html(parseInt($(`#${post}likeCount`).html()) - 1)
+    $(`#${post}likeCountrel`).html(parseInt($(`#${post}likeCountrel`).html()) - 1)
+    $(`#${post}userlikeCount`).html(parseInt($(`#${post}likeCount`).html()) - 1)
     
     await db.collection('new_posts').doc(post).collection('likes').doc(user.uid).set({
         status: false,
@@ -214,6 +283,18 @@ async function unlike(post) {
 
         try {
             document.getElementById(post + 'likebtn').onclick = () => {
+                like(post)
+            }
+        } catch (error) { }
+
+        try {
+            document.getElementById(post + 'userlikebtn').onclick = () => {
+                like(post)
+            }
+        } catch (error) { }
+
+        try {
+            document.getElementById(post + 'userlikebtnrel').onclick = () => {
                 like(post)
             }
         } catch (error) { }
@@ -441,8 +522,10 @@ async function usermodal(uid) {
                 if (userdoc.data().type == 'private') {
                     requesteddoc = await db.collection('follow').doc(uid).collection('requested').doc(user.uid).get()
                     isRequested = false
-                    if (doc.exists && followdoc.data().status) {
-                        isRequested = true
+                    if (doc.exists && followdoc.exists && followdoc.data().status) {
+                        if (followdoc.data().status) {
+                            isRequested = true
+                        }
                     }
                     $('#privatewarning').css('display', 'block')
                     if (isRequested) {
@@ -808,7 +891,7 @@ async function approvePost(id, data) {
         <center id="btnSharePost">
             <input type="text" value="Hello World" class="hidden" id="clipboardInput">
 
-            <button onclick="var cT = document.getElementById('clipboardInput');cT.classList.remove('hidden');cT.value=window.location.href;cT.select();cT.setSelectionRange(0, 99999);document.execCommand('copy');cT.classList.add('hidden');Snackbar.show({text: "Copied link to clipboard."})" class="eon-text iconbtn"><i class="material-icons">link</i></button>
+            <button onclick="var cT = document.getElementById('clipboardInput');cT.classList.remove('hidden');cT.value=window.location.href;cT.select();cT.setSelectionRange(0, 99999);document.execCommand('copy');cT.classList.add('hidden');Snackbar.show({text: 'Copied link to clipboard.'})" class="eon-text iconbtn"><i class="material-icons">link</i></button>
         </center>
     `
 
@@ -870,8 +953,10 @@ function updatechars() {
 function updatecommentbtns(id) {
     $(`#${id}commentCount`).html(parseInt($(`#${id}commentCount`).html()) + 1);
     $(`#${id}usercommentCount`).html(parseInt($(`#${id}usercommentCount`).html()) + 1);
-    $(`#${id}commentCounttrend`).html(parseInt($(`#${id}commentCounttrend`).html()) + 1);
+    $(`.${id}commentCounttrend`).html(parseInt($(`#${id}commentCount`).html()) + 1);
+    $(`#${id}commentCountrel`).html(parseInt($(`#${id}commentCountrel`).html()) + 1);
 }
+grid_rel
 
 async function loadComments(id, poster) {
 

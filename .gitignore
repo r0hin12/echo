@@ -4,3 +4,4 @@ firebase.json
 .firebaserc
 .firebase
 ui-debug.log
+firestore-debug.log

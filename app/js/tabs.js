@@ -26,19 +26,19 @@ $(window).ready(function () {
 
     switch (tab) {
         case "returnstatusemail":
-            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You email was successfully changed."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your email was successfully changed."})
             tab = 'account'
             break;
         case "returnstatuspass":
-            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You password was successfully changed."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your password was successfully changed."})
             tab = 'account'
             break;
         case "returnstatusprivate":
-            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You visibility was successfully changed to private."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your visibility was successfully changed to private."})
             tab = 'account'
             break;
         case "returnstatuspublic":
-            Snackbar.show({showAction: false,pos: 'bottom-center',text: "You password was successfully changed to public."})
+            Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your visibility was successfully changed to public."})
             tab = 'account'
             break;
         default:
@@ -113,6 +113,26 @@ function tabe(tab) {
     val = sessionStorage.getItem('first-time-' + tab)
     if (val == 'false') {
         switch (tab) {
+            case "home":
+                window.setTimeout(() => {
+                    addWaves()
+                    document.getElementById('grid_rel').style.removeProperty('display');
+                    $('#grid_rel').imagesLoaded( function() {
+                        resizeAllRelGridItems()
+                    });
+                    sessionStorage.setItem('viewrel', 'all')
+                }, 200)
+                break;
+            case "explore":
+                window.setTimeout(() => {
+                    addWaves()
+                    document.getElementById('grid_rel').style.removeProperty('display');
+                    $('#grid_rel').imagesLoaded( function() {
+                        resizeAllGridItems()
+                    });
+                    sessionStorage.setItem('view', 'all')
+                }, 200)
+                break;
             case "inbox":
                 leavedm()
                 // Run when its not first time
@@ -124,6 +144,15 @@ function tabe(tab) {
 
         switch (tab) {
             case "home":
+                interval = window.setInterval(function () {
+                    if (typeof (user) != "undefined" && typeof (user) != null) {
+                        clearInterval(interval)
+                        load_rel()
+                        window.setTimeout(function() {
+                            loadscrolling_rel()
+                        }, 3500)
+                    }
+                }, 200);
                 break;
             case "explore":
                 load_trending_tags()
@@ -132,8 +161,7 @@ function tabe(tab) {
                         clearInterval(interval)
                         load()
                         window.setTimeout(function() {
-                            // loadscrolling()
-                            // Hold off a bit before loading infinite scroll as to not interfere with variables and invoke functions too early.
+                            loadscrolling()
                         }, 3500)
                     }
                 }, 200);

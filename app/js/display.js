@@ -80,7 +80,7 @@ function expand() {
         this.classList.toggle('openedham');
         this.setAttribute('aria-expanded', this.classList.contains('openedham'))
     }
-
+    fixdisplayheight()
 }
 
 function collapse() {
@@ -114,6 +114,7 @@ function collapse() {
         this.classList.toggle('openedham');
         this.setAttribute('aria-expanded', this.classList.contains('openedham'))
     }
+    fixdisplayheight()
 }
 
 
@@ -121,7 +122,7 @@ function collapse() {
 console.log("%cEcho Developer Tools", "background: white; color: purple; font-size: x-large");
 console.log('Do not mess around with console as your account could get destroyed. We do not offer support to those who run unofficial JavaScript.')
 console.log('If you have any questions or need help with something, please contact us. Report errors below this line')
-console.log("%c-----------------", "background: black; color: white;");
+console.log("%c--------------------------", "background: black; color: white;");
 
 
 //Tooltips
@@ -189,7 +190,26 @@ function resizeGridItemTrend(item, trend) {
 function resizeAllGridItemsTrend(trend) {
     allItems = document.getElementsByClassName("shell_trend");
     for (x = 0; x < allItems.length; x++) {
-        resizeGridItem(allItems[x], trend);
+        resizeGridItemTrend(allItems[x], trend);
+    }
+}
+
+function resizeRelGridItem(item) {
+    try {
+        grid = document.getElementById('grid_rel');
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+        item.style.gridRowEnd = "span " + rowSpan;   
+    } catch (error) {
+        console.log('Display resize error (Likely too fast scrolling)');
+    }
+}
+
+function resizeAllRelGridItems() {
+    allItems = document.getElementsByClassName("shell_rel");
+    for (x = 0; x < allItems.length; x++) {
+        resizeRelGridItem(allItems[x]);
     }
 }
 
@@ -224,15 +244,15 @@ function toggle() {
 
 
 function disablegrid() {
-    document.getElementById('togglegrid').innerHTML = '.grid {display: block !important; width: 80% !important} .postshell {width: 100% !important;} .shell {width: 100% !important;} .postimage {max-height: 2400px !important;}'
-    document.getElementById('containerhometab').classList.add('animated')
-    document.getElementById('containerhometab').classList.add('fadeIn')
+    document.getElementById('togglegrid').innerHTML = '.grid {display: block !important; width: 80% !important} .shell {width: 100% !important;} .postimage {max-height: 2400px !important;}'
+    document.getElementById('containerexploretab').classList.add('animated')
+    document.getElementById('containerexploretab').classList.add('fadeIn')
     document.getElementById('gridbtn').onclick = function () {
 
     }
     window.setTimeout(function () {
-        document.getElementById('containerhometab').classList.remove('animated')
-        document.getElementById('containerhometab').classList.remove('fadeIn')
+        document.getElementById('containerexploretab').classList.remove('animated')
+        document.getElementById('containerexploretab').classList.remove('fadeIn')
         document.getElementById('gridbtn').onclick = function () {
             enablegrid()
         }
@@ -241,18 +261,52 @@ function disablegrid() {
 
 function enablegrid() {
     document.getElementById('togglegrid').innerHTML = ''
+    document.getElementById('containerexploretab').classList.add('animated')
+    document.getElementById('containerexploretab').classList.add('fadeIn')
+    document.getElementById('gridbtn').onclick = function () {
+
+    }
+    window.setTimeout(function () {
+        document.getElementById('containerexploretab').classList.remove('animated')
+        document.getElementById('containerexploretab').classList.remove('fadeIn')
+        document.getElementById('gridbtn').onclick = function () {
+            disablegrid()
+        }
+        resizeAllGridItems()
+    }, 500)
+
+}
+
+function disablegrid_rel() {
+    document.getElementById('togglegrid2').innerHTML = '#grid_rel {display: block !important; width: 80% !important} .shell_rel {width: 100% !important;} .postimagerel {max-height: 2400px !important;}'
     document.getElementById('containerhometab').classList.add('animated')
     document.getElementById('containerhometab').classList.add('fadeIn')
-    document.getElementById('gridbtn').onclick = function () {
+    document.getElementById('gridbtnrel').onclick = function () {
 
     }
     window.setTimeout(function () {
         document.getElementById('containerhometab').classList.remove('animated')
         document.getElementById('containerhometab').classList.remove('fadeIn')
-        document.getElementById('gridbtn').onclick = function () {
-            disablegrid()
+        document.getElementById('gridbtnrel').onclick = function () {
+            enablegrid_rel()
         }
-        resizeAllGridItems()
+    }, 500)
+}
+
+function enablegrid_rel() {
+    document.getElementById('togglegrid2').innerHTML = ''
+    document.getElementById('containerhometab').classList.add('animated')
+    document.getElementById('containerhometab').classList.add('fadeIn')
+    document.getElementById('gridbtnrel').onclick = function () {
+
+    }
+    window.setTimeout(function () {
+        document.getElementById('containerhometab').classList.remove('animated')
+        document.getElementById('containerhometab').classList.remove('fadeIn')
+        document.getElementById('gridbtnrel').onclick = function () {
+            disablegrid_rel()
+        }
+        resizeAllRelGridItems()
     }, 500)
 
 }
@@ -412,43 +466,65 @@ $( "#userModal" ).scroll(function() {
 
 // SCRLLING INFINITE SCROLL
 
-// function loadscrolling() {
-//     $(window).scroll(function() {
-//         if ($(window).scrollTop() > 300) {
-//             document.getElementById('returntotop').setAttribute('style', 'display:block !important');
-//             document.getElementById('returntotop').classList.add('fadeInUp')
-//             document.getElementById('returntotop').classList.remove('fadeOutDown')
-//         }
-//         else {
-//             document.getElementById('returntotop').classList.add('fadeOutDown')
-//             document.getElementById('returntotop').classList.remove('fadeInUp')
-//         }
-//         docheightminus1 = $(document).height() - 1
-//         docheightplus1 = $(document).height() + 1
-//         if($(window).scrollTop() + $(window).height() > docheightminus1 && $(window).scrollTop() + $(window).height() < docheightplus1) {
-//             if (sessionStorage.getItem('view') == 'all') {
-//                 build()
+function loadscrolling() {
+    $(window).scroll(() => {
+        // 
+        tab = sessionStorage.getItem('currentab')
+        if (tab == 'explore')  {
+            if ($(window).scrollTop() > 300) {
+                document.getElementById('returntotop').setAttribute('style', 'display:block !important');
+                document.getElementById('returntotop').classList.add('fadeInUp')
+                document.getElementById('returntotop').classList.remove('fadeOutDown')
+            }
+            else {
+                document.getElementById('returntotop').classList.add('fadeOutDown')
+                document.getElementById('returntotop').classList.remove('fadeInUp')
+            }
 
-//                 likeslistener()
-//                 listenlikes()
+            docheightminus1 = $(document).height() - 1
+            docheightplus1 = $(document).height() + 1
 
-//                 commentslistener()
-//                 listencomments()
-//             }
-//             else {
-//                 buildrelevant()
+            if ( 
+                $(window).scrollTop() + $(window).height() > docheightminus1 && 
+                $(window).scrollTop() + $(window).height() < docheightplus1) {
+                if (sessionStorage.getItem('view') == 'all') {
+                    load_next_all()
+                }
+            }
+        }
+        
+     });
+}
 
-//                 likeslistener()
-//                 listenlikes()
+function loadscrolling_rel() {
+    $(window).scroll(() => {
+        // 
+        tab = sessionStorage.getItem('currentab')
+        if (tab == 'home')  {
+            if ($(window).scrollTop() > 300) {
+                document.getElementById('returntotoprel').setAttribute('style', 'display:block !important');
+                document.getElementById('returntotoprel').classList.add('fadeInUp')
+                document.getElementById('returntotoprel').classList.remove('fadeOutDown')
+            }
+            else {
+                document.getElementById('returntotoprel').classList.add('fadeOutDown')
+                document.getElementById('returntotoprel').classList.remove('fadeInUp')
+            }
 
-//                 commentslistener()
-//                 listencomments()
-//             }
-//         }
-//      });
-// }
+            docheightminus1 = $(document).height() - 1
+            docheightplus1 = $(document).height() + 1
 
- //ERROR BACKUP WTF
+            if ( 
+                $(window).scrollTop() + $(window).height() > docheightminus1 && 
+                $(window).scrollTop() + $(window).height() < docheightplus1) {
+                if (sessionStorage.getItem('view') == 'all') {
+                    load_next_rel()
+                }
+            }
+        }
+        
+     });
+}
 
  function error(msg) {
     document.getElementById('erorrModalMsg').innerHTML = msg

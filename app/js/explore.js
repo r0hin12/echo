@@ -209,7 +209,7 @@ async function build_posts_trend(query, id) {
             <div class="content">
                 <img style="z-index: 200;">
                 <div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">
-                '${textStuff}'
+                ${textStuff}
                 </div>
                 <nav class="navbar navbar-expand-sm">
                     <img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfptrend" src="${query[i].data().photo_url}">
@@ -297,7 +297,7 @@ async function load_posts_all() {
         .get()
 
     window.lastVisible = query.docs[query.docs.length - 1]
-    build_posts_all(query.docs)
+    build_posts_all(query.docs, false)
 }
 
 async function load_next_all() {
@@ -307,8 +307,10 @@ async function load_next_all() {
         .limit(8)
         .get()
 
-    window.lastVisible = query.docs[query.docs.length - 1]
-    build_posts_all(query.docs)
+    if (query.docs.length !== 0) {
+        window.lastVisible = query.docs[query.docs.length - 1]
+        build_posts_all(query.docs, false)
+    }
 }
 
 async function build_posts_all(query, self) {
@@ -332,7 +334,7 @@ async function build_posts_all(query, self) {
                     textCardClass = 'darkcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
                 default:
-                    return;
+                    break;
             }
             userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
             if (userlikedoc.exists && userlikedoc.data().status) {
@@ -346,23 +348,23 @@ async function build_posts_all(query, self) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">'${textStuff}'</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
             if (self) {
                 a.classList.add('animated')    
-                a.classList.add('backInDown')   
-                document.getElementById('grid').prepend(a) 
+                a.classList.add('backInDown')  
+                
                 window.setTimeout(() => {
                     addWaves()
-
                     document.getElementById('grid').style.removeProperty('display');
-                
                     $('#grid').imagesLoaded( function() {
                         console.log('Status: All photos loaded.\n');
                         resizeAllGridItems()
                     });
-                 
+                    
                     sessionStorage.setItem('view', 'all')
-                }, 1200)
+                }, 1200) 
+
+                document.getElementById('grid').prepend(a) 
                 return;
             }
             document.getElementById('grid').appendChild(a)
@@ -385,27 +387,26 @@ async function build_posts_all(query, self) {
         }
 
         a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
-        document.getElementById('grid').appendChild(a)
         if (self) {
             a.classList.add('animated')    
-            a.classList.add('backInDown')    
-            document.getElementById('grid').prepend(a)    
+            a.classList.add('backInDown')  
             window.setTimeout(() => {
                 addWaves()
-
                 document.getElementById('grid').style.removeProperty('display');
-            
                 $('#grid').imagesLoaded( function() {
                     console.log('Status: All photos loaded.\n');
                     resizeAllGridItems()
                 });
-             
+                
                 sessionStorage.setItem('view', 'all')
-            }, 1200)
+            }, 1200)   
+            document.getElementById('grid').prepend(a)    
             return;
         }
-
+        document.getElementById('grid').appendChild(a)
+        continue;
     }
+
     addWaves()
 
     document.getElementById('grid').style.removeProperty('display');

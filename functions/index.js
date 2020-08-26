@@ -16,7 +16,32 @@ admin.initializeApp();
 const JPEG_EXTENSION = '.png';
 
 
-// exports.aggregatePosts = functions.firestore.document('new_posts/{postId}').onCreate(async (change, context) 
+exports.aggregatePosts = functions.firestore.document('new_posts/{postId}').onCreate(async (change, context) => {
+
+    const db = admin.firestore();
+    const postId = context.params.postId;
+
+    // Copy to own ID
+
+    db.collection('timelines').doc(change.data().uid).collection('posts').doc(change.id).set({
+        uid: change.data().uid,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        id: change.id
+     })
+
+    console.log(change.data());
+    querySnapshot = await db.collection('follow').doc(change.data().uid).collection('followers').where("status", '==', true).get()
+
+    for (let i = 0; i < querySnapshot.docs.length; i++) {
+
+        await db.collection('timelines').doc(querySnapshot.docs[i].data().uid).collection('posts').doc(change.id).set({
+           uid: change.data().uid,
+           timestamp: admin.firestore.FieldValue.serverTimestamp(),
+           id: change.id
+        })
+
+    }
+})
 
 exports.createAccount = functions.https.onCall(async (data, context) => {
     
@@ -262,10 +287,10 @@ exports.aggregateFollowers = functions.firestore.document('follow/{followId}/fol
 
     if (doc.data().status) {
         // Following
-
         return db.collection('follow').doc(followId).set({
             followers: admin.firestore.FieldValue.increment(1)
         }, {merge: true})
+
     }
     else {
         return db.collection('follow').doc(followId).set({
@@ -288,12 +313,28 @@ exports.aggregateFollowing = functions.firestore.document('follow/{followId}/fol
 
     if (doc.data().status) {
         // Following
+        // On start following, copy latest 16 post of folowee to follower timeline
+        query = await db.collection('new_posts').where('uid', '==', userId).limit(16).get()
+        for (let i = 0; i < query.docs.length; i++) {
+            await db.collection('timelines').doc(followId).collection('posts').doc(query.docs[i].id).set({
+                uid: query.docs[i].data().uid,
+                timestamp:  query.docs[i].data().timestamp,
+                id: query.docs[i].id,
+            })
+        }
 
         return db.collection('follow').doc(followId).set({
             following: admin.firestore.FieldValue.increment(1)
         }, {merge: true})
     }
     else {
+
+        // Remove all instances of userId of followerId's feed
+        query = await db.collection('timelines').doc(followId).collection('posts').where('uid', '==', userId).get()
+        for (let i = 0; i < query.docs.length; i++) {
+            await db.collection('timelines').doc(followId).collection('posts').doc(query.docs[i].id).delete()
+        }
+
         return db.collection('follow').doc(followId).set({
             following: admin.firestore.FieldValue.increment(-1)
         }, {merge: true})

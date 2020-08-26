@@ -58,6 +58,8 @@
     <style id="newposttitlestyle6"></style>
     <!-- Dynamic Style #7-->
     <style id="explorebgstyle"></style>
+    <!-- Dyanmic Style #8-->
+    <style id="togglegrid2"></style>
 
 
 </head>
@@ -768,6 +770,7 @@
         <div id="expand" class="echo-main-unexpanded">
             <div class="tab-content" id="justifiedTabContent">
                 <div aria-labelledby="home-tab" class="tab-pane fade" id="home" role="tabpanel">
+                    <button onclick="window.scrollTo(0,0);" style="display: none !important;" id="returntotoprel" class="eon-contained refreshbtn returntoptop animated shadow"><i class="material-icons">keyboard_arrow_up</i></button>
                     <nav class="navbar navbar-expand-sm">
                         <div style="display: inline-block">
                             <form class="search-container">
@@ -782,45 +785,24 @@
                     </nav>
                     <hr class="hr">
                     <nav class="navbar">
-                        <h2 class="leader">Home</h2>
+                        <p class="white">Posts</p>
                         <ul class="navbar-nav mr-auto"></ul>
-                        <button onclick="disablegrid()" id="gridbtn" class="grid-list without-text">
+                        <button onclick="disablegrid_rel()" id="gridbtnrel" class="grid-list without-text">
                             <div class="icon">
                                 <div class="dots"><i></i><i></i><i></i><i></i></div>
                                 <div class="lines"><i></i><i></i><i></i><i></i></div>
                             </div>
                         </button>
                     </nav>
-                    <br><br>
+                    <br>
                     <center id="containerhometab">
-                        <button onclick="window.scrollTo(0,0);" style="display: none !important;" id="returntotop" class="eon-contained refreshbtn returntoptop animated shadow"><i class="material-icons">keyboard_arrow_up</i></button>
-                        <div style="display: none" id="norelevantstuff">
-                            <br><br>
-                            <div class="card noitems animated zoomIn">
-                                <div class="card-body">
-                                    <i class="material-icons iconactive noitemsicon">perm_media</i>
-                                    <br><br>
-                                    <h4>You find yourself in a strange place</h4>
-                                    <p>So empty... 😳</p>
-                                </div>
-                            </div>
-                            <br><br>
-                        </div>
-                        <div style="display: none;" class="grid animated fadeIn" id="grid"></div>
-                    </center>
-
-                    <div class="animated faster centered" id="loading">
-                        <center>
-                            <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-                             </svg>
-                             <br>
-                        </center>
-                    </div>
-
-                    <br><br><br>
+                        <div style="display: none;" class="animated fadeIn" id="grid_rel"></div>
+                        <br><br>
+                    </center>    
+                    
                 </div>
                 <div aria-labelledby="explore-tab" class="tab-pane fade" id="explore" role="tabpanel">
+                    <button onclick="window.scrollTo(0,0);" style="display: none !important;" id="returntotop" class="eon-contained refreshbtn returntoptop animated shadow"><i class="material-icons">keyboard_arrow_up</i></button>
                     <div class="exploretabcontentactive" id="exploretabcontent">
                         <br>
                         <h2 class="leader">Explore</h2>
@@ -831,6 +813,22 @@
                                 <div class="progress-circular"> <div class="progress-circular-wrapper"> <div class="progress-circular-inner"> <div class="progress-circular-left"> <div class="progress-circular-spinner"></div> </div> <div class="progress-circular-gap"></div> <div class="progress-circular-right"> <div class="progress-circular-spinner"></div></div></div></div></div></div>
                             </div>
                             <div id="trending_build"></div>
+
+                            <nav class="navbar">
+                                <p class="white">Posts</p>
+                                <ul class="navbar-nav mr-auto"></ul>
+                                <button onclick="disablegrid()" id="gridbtn" class="grid-list without-text">
+                                    <div class="icon">
+                                        <div class="dots"><i></i><i></i><i></i><i></i></div>
+                                        <div class="lines"><i></i><i></i><i></i><i></i></div>
+                                    </div>
+                                </button>
+                            </nav>
+
+                            <center id="containerexploretab">
+                                <div style="display: none;" class="grid animated fadeIn" id="grid"></div>
+                                <br><br>
+                            </center>                    
                         </div> 
                         
                         <div id="trending_content"> </div>
@@ -891,7 +889,7 @@
                                 <div class="boxtext centeredy">
                                     <h4 class="heavy">What's New?</h4>
                                     <br>
-                                    <p id="echoNewsrecenttextel" class="grey nolineheight">Echo v0.5.x</p>
+                                    <p id="echoNewsrecenttextel" class="grey nolineheight">Echo v0.6.x</p>
                                 </div>
                                 <div class="boxtext2 centeredy">
                                     <span id="echoNewsnotifbadge" class="badge badge-pill notifbadge badge-secondary animated jello infinite"></span>

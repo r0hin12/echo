@@ -91,6 +91,7 @@ async function newpost() {
     .get()
 
     build_posts_all(query.docs, true)
+    build_posts_rel(query.docs, true)
 }
 
 async function newTextPost(theme) {
@@ -144,8 +145,8 @@ async function newTextPost(theme) {
         name: cacheuser.name
     })
 
-    await db.collection('new_posts').doc(doc.id).collection('comments').doc('comments').set({
-        comments: []
+    await db.collection('new_posts').doc(doc.id).collection('comments').doc('a').set({
+        status: false
     })
 
     await db.collection('new_posts').doc(doc.id).collection('likes').doc('a').set({
@@ -157,12 +158,186 @@ async function newTextPost(theme) {
         pos: 'bottom-center',
         text: 'Your text was uploaded.'
     })
+
     edittext()
     newpost_back()
-    $('#selecttext').addClass('hidden')
 
+    $('#selecttext').addClass('hidden')
     $('#captionel').css('display', 'none')
     $('#blah').css('display', 'none')
     $('#captionel').css('display', 'none')
-    // $('#rereshtbn').click()
+
+    // document.getElementById('rereshtbn').click()
+    query = await db.collection('new_posts')
+    .orderBy("timestamp", "desc")
+    .where("uid", '==', user.uid)
+    .limit(1)
+    .get()
+
+    build_posts_all(query.docs, true)
+    build_posts_rel(query.docs, true)
+}
+
+async function load_rel() {
+    query = await db.collection('timelines')
+    .doc(user.uid)
+    .collection('posts')
+    .orderBy("timestamp", "desc")
+    .limit(5)
+    .get()
+
+    window.lastVisibleRel = query.docs[query.docs.length - 1]
+    build_posts_rel(query.docs, false)
+}
+
+async function load_next_rel() {
+    query = await db.collection("timelines")
+    .doc(user.uid)
+    .collection('posts')
+    .orderBy("timestamp", "desc")
+    .startAfter(lastVisibleRel)
+    .limit(8)
+    .get()
+
+    if (query.docs.length !== 0) {
+        window.lastVisibleRel = query.docs[query.docs.length - 1]
+        build_posts_rel(query.docs, false)
+    }
+}
+
+async function build_posts_rel(query, self) {
+    if (self) {
+        savedQuery = query;
+        query = ['peepeepoopoomenou']
+    }
+    for (let i = 0; i < query.length; i++) {
+        // Query array contains documents with references to original posts
+
+        if (query[i] !== 'peepeepoopoomenou') {
+            doc = await db.collection('new_posts').doc(query[i].data().id).get()
+        }
+        else {
+            doc = savedQuery[0]
+        }
+        
+        
+        if (doc.data().file_url == 'echo-home-text_post') {
+            a = document.createElement('div')
+            a.classList.add('shell_rel')
+            
+            switch (doc.data().url_theme) {
+                case 'deep':
+                    textCardClass = 'superdeepcard'
+                    textStuff = '<div class="card-body"><p class="relative""><b class="posttextclass">' + doc.data().url_content + '</b></p></div>'
+                    break;
+                case 'light':
+                    textCardClass = 'lightcard'
+                    textStuff = '<div class="card-body"><h5 class="posttextclass">' + doc.data().url_content + '</h5></div>'
+                case 'dark':
+                    textCardClass = 'darkcard'
+                    textStuff = '<div class="card-body"><h5 class="posttextclass">' + doc.data().url_content + '</h5></div>'
+                default:
+                    break;
+            }
+
+            userlikedoc = await db.collection('new_posts').doc(doc.id).collection('likes').doc(user.uid).get()
+
+            if (userlikedoc.exists && userlikedoc.data().status) {
+                desiredLikeAction = 'unlike'
+                desiredLikeAction2 = 'heartactive'
+                desiredLikeAction3 = 'favorite'
+            }
+
+            else {
+                desiredLikeAction = 'like'
+                desiredLikeAction2 = 'heart'
+                desiredLikeAction3 = 'favorite_border'
+            }
+
+            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${doc.id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${doc.data().uid}')" class="postpfp" id="${doc.id}pfp" src="${doc.data().photo_url}"><h4 class="postname centeredy">${doc.data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${doc.id}likebtnrel" onclick="${desiredLikeAction}('${doc.id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${doc.id}likebtniconrel" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${doc.id}likeCountrel">${doc.data().likes}</span></button><button id="${doc.id}commentBtnrel" onclick="loadComments('${doc.id}', '${doc.data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${doc.id}commentCountrel">${doc.data().comments}</span> </button></nav></div><button onclick="info('${doc.id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+                            
+            if (self) {
+                a.classList.add('animated')    
+                a.classList.add('backInDown')   
+
+
+                window.setTimeout(() => {
+                    addWaves()
+                    document.getElementById('grid_rel').style.removeProperty('display');
+                    $('#grid_rel').imagesLoaded( function() {
+                        console.log('Status: All relevant photos loaded.\n');
+                        resizeAllRelGridItems()
+                    });
+                    
+                    sessionStorage.setItem('viewrel', 'all')
+                }, 1200)
+
+                document.getElementById('grid_rel').prepend(a)                 
+                return;
+            }
+
+            document.getElementById('grid_rel').appendChild(a)
+            continue;
+        }
+
+        a = document.createElement('div')
+        a.classList.add('shell_rel')
+
+        userlikedoc = await db.collection('new_posts').doc(doc.id).collection('likes').doc(user.uid).get()
+            
+        if (userlikedoc.exists && userlikedoc.data().status) {
+            desiredLikeAction = 'unlike'
+            desiredLikeAction2 = 'heart heartactive'
+            desiredLikeAction3 = 'favorite'
+        }
+        else {
+            desiredLikeAction = 'like'
+            desiredLikeAction2 = 'heart'
+            desiredLikeAction3 = 'favorite_border'
+        }
+
+        a.innerHTML = `<div class="content"><img onclick="viewpost('${doc.id}')" id="${doc.id}img" class="postimagerel" src="${doc.data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${doc.data().uid}')" class="postpfp" id="${doc.id}pfp" src="${doc.data().photo_url}"><h4 class="postname centeredy">${doc.data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${doc.id}likebtnrel" onclick="${desiredLikeAction}('${doc.id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${doc.id}likebtniconrel" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${doc.id}likeCountrel">${doc.data().likes}</span></button> <button id="${doc.id}commentbtnrel" onclick="loadComments('${doc.id}', '${doc.data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${doc.id}commentCountrel">${doc.data().comments}</span></button></nav><button onclick="fullscreen('${doc.id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${doc.id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+
+        document.getElementById('grid_rel').appendChild(a)
+
+        if (self) {
+            a.classList.add('animated')    
+            a.classList.add('backInDown')    
+            window.setTimeout(() => {
+                addWaves()
+                document.getElementById('grid_rel').style.removeProperty('display');
+                $('#grid_rel').imagesLoaded( function() {
+                    console.log('Status: All relevant photos loaded.\n');
+                    resizeAllRelGridItems()
+                });
+                
+                sessionStorage.setItem('viewrel', 'all')
+            }, 1200)
+            document.getElementById('grid_rel').prepend(a)    
+            return;
+        }
+
+        addWaves()
+
+        document.getElementById('grid_rel').style.removeProperty('display');
+
+        $('#grid_rel').imagesLoaded( function() {
+            console.log('Status: All photos loaded.\n');
+            resizeAllRelGridItems()
+        });
+
+        sessionStorage.setItem('viewrel', 'all')
+
+    }
+
+    window.setTimeout(() => {
+        addWaves()
+        document.getElementById('grid_rel').style.removeProperty('display');
+        $('#grid_rel').imagesLoaded( function() {
+            console.log('Status: All photos loaded.\n');
+            resizeAllRelGridItems()
+        });
+        
+        sessionStorage.setItem('viewrel', 'all')
+    }, 200)
 }
