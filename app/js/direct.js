@@ -596,12 +596,12 @@ function ADD_MESSAGE(uid, content) {
         }
         if (contentbc == '') {
             // Only contains a link, so ommit sending message only containing link:
-            checkLinks(content, uid)
+            checkLinks(content, uid, true)
             return;
         }
         else {
             // Otherwise do not return and send a subsequent message containing link preview
-            checkLinks(content, uid)
+            checkLinks(content, uid, false)
         }
     }
 
@@ -811,14 +811,28 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
     // Latest Message: $('#' + string + 'chatcontainer').children()[1]
     // Only run if you're explicitly sending the message in this session
     if (anim && prevuid !== msg.sender) {
-        console.log('Animated Message');
-        default_height = $($('#' + string + 'chatcontainer').children()[0]).height()
-        $($('#' + string + 'chatcontainer').children()[0]).addClass('unanimated_msg')
-        window.setTimeout(() => {
-            $('#' + string + 'chatcontainer').children()[0].style.height = default_height + 'px'
-            $('#' + string + 'chatcontainer').children()[0].style.marginTop = '16px'
-        }, 50)
+        // Display message rise animation:
+
+        // Clone element and copy text from there.
+        $($('#' + string + 'chatcontainer').children()[0]).appendTo( "#dimensions_calculations_box" );
+        $('#dimensions_calculations_box').imagesLoaded(() => {
+            default_height = $($('#dimensions_calculations_box').children()[0]).height()  
+            $($('#dimensions_calculations_box').children()[0]).prependTo('#' + string + 'chatcontainer')
+            $($('#' + string + 'chatcontainer').children()[0]).addClass('unanimated_msg')
+
+            console.log('Message preview is loaded. Display animation');
+
+            window.setTimeout(() => {
+                $('#' + string + 'chatcontainer').children()[0].style.height = default_height + 'px'
+                $('#' + string + 'chatcontainer').children()[0].style.marginTop = '16px'
+                window.setTimeout(() => {
+                    $('#' + string + 'chatcontainer').children()[0].removeAttribute('style')
+                    $('#' + string + 'chatcontainer').children()[0].classList.remove('unanimated_msg')
+                }, 1200)
+            }, 50)
+        })
     }
+
     if (prevuid == msg.sender) {
         $('#' + string + 'chatcontainer').children()[0].removeAttribute("style");
         $($('#' + string + 'chatcontainer').children()[0]).removeClass('unanimated_msg')
@@ -1457,7 +1471,7 @@ function quickreply(msg) {
     ADD_MESSAGE(sessionStorage.getItem('active_dm'), msg)
 }
 
-function checkLinks(content, uid) {
+function checkLinks(content, uid, onlyLink) {
     var matches = content.match(/\bhttps?:\/\/\S+/gi);
     var previewLink = firebase.functions().httpsCallable('previewLink');
 
@@ -1487,7 +1501,14 @@ function checkLinks(content, uid) {
                 })
             })
 
-        })        
+        })
+        .catch((err) => {
+            // 'err' happened 
+            if (onlyLink) {
+            ADD_MESSAGE(sessionStorage.getItem('active_dm'), `<a onclick="youareleaving('${content}')" style="color: white !important;" href="#">${content}</a>`)
+            }
+            
+        })   
 
     }
 }
