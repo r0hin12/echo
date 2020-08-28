@@ -248,6 +248,7 @@ exports.aggregateCommentsReplies = functions.firestore.document('new_posts/{post
         latest_reply_content: change.data().content,
         latest_reply_photo: change.data().photo_url,
         latest_reply_name: change.data().name,
+        latest_reply_uid: change.data().uid,
     })
 
 })
@@ -268,6 +269,7 @@ exports.aggregateComments = functions.firestore.document('new_posts/{postId}/com
         latest_comment_content: change.data().content,
         latest_comment_photo: change.data().photo_url,
         latest_comment_name: change.data().name,
+        latest_comment_uid: change.data().uid,
     })
 
 })

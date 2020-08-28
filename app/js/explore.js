@@ -1,3 +1,15 @@
+async function load() {
+
+    // Load explore posts.
+
+    // Clear past posts on first load
+    $('#grid').empty()
+
+    load_posts_all()
+    load_trending_tags()
+}
+
+
 function load_trending_tags() {
     var trendingTopics = firebase.functions().httpsCallable('trendingTopics');
     trendingTopics().then(function(result) {
@@ -205,6 +217,13 @@ async function build_posts_trend(query, id) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
+
+            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            if (cacheverify.includes(query[i].data().uid)) {
+                verify = verifySnippet
+            }
+
             j.innerHTML = `
             <div class="content">
                 <img style="z-index: 200;">
@@ -213,7 +232,7 @@ async function build_posts_trend(query, id) {
                 </div>
                 <nav class="navbar navbar-expand-sm">
                     <img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfptrend" src="${query[i].data().photo_url}">
-                    <h4 class="postname centeredy">${query[i].data().name}</h4>
+                    <h4 class="postname centeredy">${query[i].data().name}${verify}</h4>
                     <ul class="navbar-nav mr-auto"> </ul> 
                     <button id="${query[i].id}likebtntrend" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart ${query[i].id}likebtntrend">
                         <i id="${query[i].id}likebtnicontrend" class="material-icons posticon animated ${query[i].id}likebtnicontrend">${desiredLikeAction3}</i> 
@@ -247,12 +266,18 @@ async function build_posts_trend(query, id) {
             desiredLikeAction3 = 'favorite_border'
         }
 
+        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        if (cacheverify.includes(query[i].data().uid)) {
+            verify = verifySnippet
+        }
+        
         j.innerHTML = `
         <div class="content">
             <img onclick="viewpost('${query[i].id}')" id="${query[i].id}imgtrend" class="postimage" src="${query[i].data().file_url}">
             <nav class="navbar navbar-expand-sm">
                 <img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfptrend" src="${query[i].data().photo_url}">
-                <h4 class="postname centeredy">${query[i].data().name}</h4>
+                <h4 class="postname centeredy">${query[i].data().name}${verify}</h4>
                 <ul class="navbar-nav mr-auto"> </ul> 
                 <button id="${query[i].id}likebtntrend" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart ${query[i].id}likebtntrend">
                     <i id="${query[i].id}likebtnicontrend" class="material-icons posticon animated ${query[i].id}likebtnicontrend">${desiredLikeAction3}</i> 
@@ -275,21 +300,18 @@ async function build_posts_trend(query, id) {
 
     $(`#${id}postcontainer`).imagesLoaded(() => {
         resizeAllGridItemsTrend(id)
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     });
 
 }
 
-async function load() {
-
-    // Load explore posts.
-
-    // Clear past posts on first load
-    $('#grid').empty()
-
-    load_posts_all()
-}
-
 async function load_posts_all() {
+
+    doc = await db.collection('app').doc('verified').get()
+    window.cacheverify = doc.data().verified
+    window.verifySnippet = doc.data().verifiedSnippet
 
     query = await db.collection('new_posts')
         .orderBy("timestamp", "desc")
@@ -348,7 +370,13 @@ async function build_posts_all(query, self) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            if (cacheverify.includes(query[i].data().uid)) {
+                verify = verifySnippet
+            }
+
+            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}${verify}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button><button id="${query[i].id}commentBtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
             if (self) {
                 a.classList.add('animated')    
                 a.classList.add('backInDown')  
@@ -359,6 +387,9 @@ async function build_posts_all(query, self) {
                     $('#grid').imagesLoaded( function() {
                         console.log('Status: All photos loaded.\n');
                         resizeAllGridItems()
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        })
                     });
                     
                     sessionStorage.setItem('view', 'all')
@@ -386,7 +417,14 @@ async function build_posts_all(query, self) {
             desiredLikeAction3 = 'favorite_border'
         }
 
-        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+
+        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        if (cacheverify.includes(query[i].data().uid)) {
+            verify = verifySnippet
+        }
+
+        a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}${verify}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
         if (self) {
             a.classList.add('animated')    
             a.classList.add('backInDown')  
@@ -396,6 +434,9 @@ async function build_posts_all(query, self) {
                 $('#grid').imagesLoaded( function() {
                     console.log('Status: All photos loaded.\n');
                     resizeAllGridItems()
+                    $(function () {
+                        $('[data-toggle="tooltip"]').tooltip()
+                    })
                 });
                 
                 sessionStorage.setItem('view', 'all')
@@ -414,6 +455,9 @@ async function build_posts_all(query, self) {
     $('#grid').imagesLoaded( function() {
         console.log('Status: All photos loaded.\n');
         resizeAllGridItems()
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     });
  
     sessionStorage.setItem('view', 'all')

@@ -490,19 +490,6 @@ custom-control-label::before {
     outline: none;
 }
 
-.verified {
-    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
-    padding: 6px;
-    font-size: 24px;
-    margin-top: -15px;
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-background-clip: text;
-    -moz-text-fill-color: transparent;
-}
-
 .usermodal-dialog {
     min-width: 90%;
 }
@@ -2118,4 +2105,14 @@ custom-control-label::before {
 
 #dimensions_calculations_box {
     visibility: none;
+}
+
+.verifiedbadge {
+    background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary));
+    padding: 6px;
+    font-size: 24px;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
 }

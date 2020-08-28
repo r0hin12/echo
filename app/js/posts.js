@@ -33,6 +33,8 @@ async function build_posts_user(query) {
                 default:
                     break;
             }
+
+           
             userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
             if (userlikedoc.exists && userlikedoc.data().status) {
                 desiredLikeAction = 'unlike'
@@ -45,7 +47,7 @@ async function build_posts_user(query) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            w.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img class="postpfp" id="${query[i].id}userpfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button><button id="${query[i].id}usercommentBtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true');loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}usercommentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+            w.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}usercommentBtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true');loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}usercommentCount">${query[i].data().comments}</span> </button></nav></div><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
             document.getElementById('usergrid').appendChild(w)
             continue;
         }
@@ -65,7 +67,7 @@ async function build_posts_user(query) {
             desiredLikeAction3 = 'favorite_border'
         }
 
-        w.innerHTML = `<div class="content"><img onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" id="${query[i].id}userimg" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img class="postpfp" id="${query[i].id}userpfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}usercommentbtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i><span id="${query[i].id}usercommentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+        w.innerHTML = `<div class="content"><img onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" id="${query[i].id}userimg" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}usercommentbtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i><span id="${query[i].id}usercommentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
         document.getElementById('usergrid').appendChild(w)
 
     }
@@ -73,6 +75,7 @@ async function build_posts_user(query) {
         addWaves()
         resizeUserGridItems()
     })
+
 }
 
 async function load_posts_user(uid) {
@@ -430,7 +433,14 @@ async function usermodal(uid) {
 
     doc = await db.collection('users').doc(uid).get()
     userdoc = doc
-    document.getElementById('usermodaltitle').innerHTML = doc.data().name + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
+
+    verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+    if (cacheverify.includes(doc.data().uid)) {
+        verify = verifySnippet
+    }
+
+    document.getElementById('usermodaltitle').innerHTML = doc.data().name + verify + '<span class="badge badge-dark userbadge">@' + doc.data().username + '</span>'
     document.getElementById('usermodalpfp').src = doc.data().url
 
     if (doc.data().gradient == undefined) {
@@ -479,6 +489,10 @@ async function usermodal(uid) {
             document.getElementById("connections").appendChild(hs)
         }
     }
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 
     // FOLLOW STUFF
 
@@ -766,12 +780,18 @@ async function showfollowers() {
     if ($('#followerscontainer').is(':empty')) {
         doc = await db.collection('follow').doc(uid).collection('followers').where("status", "==", true).limit(12).get()
 
+
         for (let i = 0; i < doc.docs.length; i++) {
+            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            if (cacheverify.includes(doc.docs[i].data().uid)) {
+                verify = verifySnippet
+            }
             u = document.createElement('div');
             u.innerHTML = `
             <img class="followCardPFP" src="${doc.docs[i].data().photo_url}">
             <div class="followCardText">
-                <h4 class="bold">${doc.docs[i].data().name}</h4>
+                <h4 class="bold">${doc.docs[i].data().name}${verify}</h4>
                 <span class="chip">@${doc.docs[i].data().username}</span>
             </div>
             <div class="followCardActions">
@@ -781,7 +801,9 @@ async function showfollowers() {
             u.classList.add('userFollowCard')
             document.getElementById('followerscontainer').appendChild(u)
         }
-
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
         addWaves()
 
     }
@@ -794,11 +816,16 @@ async function showfollowing() {
         doc = await db.collection('follow').doc(uid).collection('following').where("status", "==", true).limit(12).get()
 
         for (let i = 0; i < doc.docs.length; i++) {
+            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            if (cacheverify.includes(doc.docs[i].data().uid)) {
+                verify = verifySnippet
+            }
             u = document.createElement('div');
             u.innerHTML = `
             <img class="followCardPFP" src="${doc.docs[i].data().photo_url}">
             <div class="followCardText">
-                <h4 class="bold">${doc.docs[i].data().name}</h4>
+                <h4 class="bold">${doc.docs[i].data().name}${verify}</h4>
                 <span class="chip">@${doc.docs[i].data().username}</span>
             </div>
             <div class="followCardActions">
@@ -808,7 +835,9 @@ async function showfollowing() {
             u.classList.add('userFollowCard')
             document.getElementById('followingcontainer').appendChild(u)
         }
-
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
         addWaves()
 
     }
@@ -843,6 +872,9 @@ async function viewpost(id) {
         approvePost(id, doc.data())
         $('#postModal').modal('show')
     }
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 }
 
 async function approvePost(id, data) {
@@ -882,12 +914,17 @@ async function approvePost(id, data) {
     commentPreview = ''
     if (data.latest_comment_content !== undefined && data.latest_comment_content !== null && data.latest_comment_name !== undefined && data.latest_comment_name && data.latest_comment_photo !== undefined && data.latest_comment_photo) {
         // Cloud function works as intended;
+        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        if (cacheverify.includes(data.latest_comment_uid)) {
+            verify = verifySnippet
+        }
         commentPreview = `
         <p><b>Latest Comment</b></p><br>
         <div class="top_level_comment">
             <div class="content">
                 <img class="comment_pfp" src="${data.latest_comment_photo}"></img>
-                <div class="comment_text"><span>${data.latest_comment_name}</span></div>
+                <div class="comment_text"><span>${data.latest_comment_name}${verify}</span></div>
                 <div class="comment_meta">
                     <div class="dropdown">
                         <button aria-expanded="false" aria-haspopup="true" class="eon-text iconbtn" data-toggle="dropdown"><i class="material-icons">more_vert</i></button>
@@ -919,7 +956,13 @@ async function approvePost(id, data) {
         </center>
     `
 
-    a = '<div class="row"><div class="col-8 fullpostcontainer"><center>' + b + share + '</center></div><div class="col-4 sidebarcontentparent"><hr id="dividerpostmodal" class="vertical-divider"><div id="sidebarcontent"> <nav class="navbar animated fadeInDown"> <button onclick="' + userFunc + '"  class="eon-text"> <img src="' + data.photo_url + '" class="postmodalpfp" alt="" > ' + data.name + ' </button><ul class="navbar-nav mr-auto"></ul> <button onclick="' + commentFunc + '" class="eon-text navbtnicon posticonnavbtn animated fadeInUp delay1"><i class="material-icons">comment</i> <span>' + data.comments + '<span></button> <button onclick="' + infoFunc + '" class="eon-text navbtnicon animated fadeInUp delay2"><i class="material-icons">info</i></button> </nav><hr> <br><br><blockquote class="blockquote"><p class="mb-0">' + caption + '</p></blockquote><br>' + tagselement + '<br><br>' + commentPreview + '</div></div></div>'
+    verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+    if (cacheverify.includes(data.uid)) {
+        verify = verifySnippet
+    }
+    
+    a = '<div class="row"><div class="col-8 fullpostcontainer"><center>' + b + share + '</center></div><div class="col-4 sidebarcontentparent"><hr id="dividerpostmodal" class="vertical-divider"><div id="sidebarcontent"> <nav class="navbar animated fadeInDown"> <button onclick="' + userFunc + '"  class="eon-text"> <img src="' + data.photo_url + '" class="postmodalpfp" alt="" > ' + data.name + verify + ' </button><ul class="navbar-nav mr-auto"></ul> <button onclick="' + commentFunc + '" class="eon-text navbtnicon posticonnavbtn animated fadeInUp delay1"><i class="material-icons">comment</i> <span>' + data.comments + '<span></button> <button onclick="' + infoFunc + '" class="eon-text navbtnicon animated fadeInUp delay2"><i class="material-icons">info</i></button> </nav><hr> <br><br><blockquote class="blockquote"><p class="mb-0">' + caption + '</p></blockquote><br>' + tagselement + '<br><br>' + commentPreview + '</div></div></div>'
     $('#postfull').html(a)
     addWaves()
 }
@@ -1070,11 +1113,15 @@ async function build_comments(query, self) {
         //     desiredBookAction2 = 'heart'
         //     desiredBookAction3 = 'favorite_border'
         // }
-
+        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        if (cacheverify.includes(query[i].data().uid)) {
+            verify = verifySnippet
+        }
         y.innerHTML = `
         <div class="content">
             <img class="comment_pfp" src="${query[i].data().photo_url}"></img>
-            <div class="comment_text"><span>${query[i].data().name}</span><br>${timeFormatted}</div>
+            <div class="comment_text"><span>${query[i].data().name}${verify}</span><br>${timeFormatted}</div>
             <div class="comment_meta">
                 <div class="dropdown">
                     <button aria-expanded="false" aria-haspopup="true" class="eon-text iconbtn" data-toggle="dropdown"><i class="material-icons">more_vert</i></button>
@@ -1118,6 +1165,9 @@ async function build_comments(query, self) {
     $('#commentsbox').imagesLoaded( () => {
         console.log('Status: All comments loaded.\n');
         addWaves()
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
         window.setTimeout(() => {
             // Wait for modal to finish opening.
             resizeCommentGridItems()
@@ -1211,9 +1261,14 @@ async function addReply(id, val) {
     })
 }
 
-function build_reply(doc, id, self) {
+async function build_reply(doc, id, self) {
     g = document.createElement("div");
     g.classList.add('comment_reply')
+    verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+    if (cacheverify.includes(doc.uid)) {
+        verify = verifySnippet
+    }
     g.innerHTML = `
         <img src="${doc.photo_url}">
         <span>${doc.content}</span>
@@ -1261,6 +1316,9 @@ async function showMore(id) {
         build_reply(query.docs[i].data(), id, false)
     }
     addWaves()
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
     resizeCommentGridItems()
 }
 

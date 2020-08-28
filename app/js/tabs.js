@@ -155,7 +155,6 @@ function tabe(tab) {
                 }, 200);
                 break;
             case "explore":
-                load_trending_tags()
                 interval = window.setInterval(function () {
                     if (typeof (user) != "undefined" && typeof (user) != null) {
                         clearInterval(interval)

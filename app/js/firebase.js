@@ -13,7 +13,7 @@ window.db = firebase.firestore()
 window.storage = firebase.storage();
 firebase.analytics();
 
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
 
         window.functions = firebase.functions();
@@ -23,8 +23,13 @@ firebase.auth().onAuthStateChanged(function (user) {
         console.log('Personal Token: ' + user.uid);
 
         window.user = firebase.auth().currentUser
+
         checkfirsttime()
         preesearch()
+
+        doc = await db.collection('app').doc('verified').get()
+        window.cacheverify = doc.data().verified
+        window.verifySnippet = doc.data().verifiedSnippet
 
     } else {
         transfer('index.html?return=' + window.location.href)

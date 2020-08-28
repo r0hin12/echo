@@ -179,6 +179,10 @@ async function newTextPost(theme) {
 }
 
 async function load_rel() {
+    doc = await db.collection('app').doc('verified').get()
+    window.cacheverify = doc.data().verified
+    window.verifySnippet = doc.data().verifiedSnippet
+
     query = await db.collection('timelines')
     .doc(user.uid)
     .collection('posts')
@@ -254,7 +258,13 @@ async function build_posts_rel(query, self) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${doc.id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${doc.data().uid}')" class="postpfp" id="${doc.id}pfp" src="${doc.data().photo_url}"><h4 class="postname centeredy">${doc.data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${doc.id}likebtnrel" onclick="${desiredLikeAction}('${doc.id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${doc.id}likebtniconrel" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${doc.id}likeCountrel">${doc.data().likes}</span></button><button id="${doc.id}commentBtnrel" onclick="loadComments('${doc.id}', '${doc.data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${doc.id}commentCountrel">${doc.data().comments}</span> </button></nav></div><button onclick="info('${doc.id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            if (cacheverify.includes(doc.data().uid)) {
+                verify = verifySnippet
+            }
+
+            a.innerHTML = `<div class="content"><img style="z-index: 200;"><div onclick="viewpost('${doc.id}')" class="card ${textCardClass}">${textStuff}</div><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${doc.data().uid}')" class="postpfp" id="${doc.id}pfp" src="${doc.data().photo_url}"><h4 class="postname centeredy">${doc.data().name}${verify}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${doc.id}likebtnrel" onclick="${desiredLikeAction}('${doc.id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${doc.id}likebtniconrel" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${doc.id}likeCountrel">${doc.data().likes}</span></button><button id="${doc.id}commentBtnrel" onclick="loadComments('${doc.id}', '${doc.data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${doc.id}commentCountrel">${doc.data().comments}</span> </button></nav></div><button onclick="info('${doc.id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
                             
             if (self) {
                 a.classList.add('animated')    
@@ -267,6 +277,9 @@ async function build_posts_rel(query, self) {
                     $('#grid_rel').imagesLoaded( function() {
                         console.log('Status: All relevant photos loaded.\n');
                         resizeAllRelGridItems()
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        })
                     });
                     
                     sessionStorage.setItem('viewrel', 'all')
@@ -296,7 +309,13 @@ async function build_posts_rel(query, self) {
             desiredLikeAction3 = 'favorite_border'
         }
 
-        a.innerHTML = `<div class="content"><img onclick="viewpost('${doc.id}')" id="${doc.id}img" class="postimagerel" src="${doc.data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${doc.data().uid}')" class="postpfp" id="${doc.id}pfp" src="${doc.data().photo_url}"><h4 class="postname centeredy">${doc.data().name}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${doc.id}likebtnrel" onclick="${desiredLikeAction}('${doc.id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${doc.id}likebtniconrel" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${doc.id}likeCountrel">${doc.data().likes}</span></button> <button id="${doc.id}commentbtnrel" onclick="loadComments('${doc.id}', '${doc.data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${doc.id}commentCountrel">${doc.data().comments}</span></button></nav><button onclick="fullscreen('${doc.id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${doc.id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        if (cacheverify.includes(doc.data().uid)) {
+            verify = verifySnippet
+        }
+
+        a.innerHTML = `<div class="content"><img onclick="viewpost('${doc.id}')" id="${doc.id}img" class="postimagerel" src="${doc.data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${doc.data().uid}')" class="postpfp" id="${doc.id}pfp" src="${doc.data().photo_url}"><h4 class="postname centeredy">${doc.data().name}${verify}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${doc.id}likebtnrel" onclick="${desiredLikeAction}('${doc.id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${doc.id}likebtniconrel" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${doc.id}likeCountrel">${doc.data().likes}</span></button> <button id="${doc.id}commentbtnrel" onclick="loadComments('${doc.id}', '${doc.data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${doc.id}commentCountrel">${doc.data().comments}</span></button></nav><button onclick="fullscreen('${doc.id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${doc.id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
 
         document.getElementById('grid_rel').appendChild(a)
 
@@ -309,6 +328,9 @@ async function build_posts_rel(query, self) {
                 $('#grid_rel').imagesLoaded( function() {
                     console.log('Status: All relevant photos loaded.\n');
                     resizeAllRelGridItems()
+                    $(function () {
+                        $('[data-toggle="tooltip"]').tooltip()
+                    })
                 });
                 
                 sessionStorage.setItem('viewrel', 'all')
@@ -320,14 +342,6 @@ async function build_posts_rel(query, self) {
         addWaves()
 
         document.getElementById('grid_rel').style.removeProperty('display');
-
-        $('#grid_rel').imagesLoaded( function() {
-            console.log('Status: All photos loaded.\n');
-            resizeAllRelGridItems()
-        });
-
-        sessionStorage.setItem('viewrel', 'all')
-
     }
 
     window.setTimeout(() => {
@@ -336,6 +350,9 @@ async function build_posts_rel(query, self) {
         $('#grid_rel').imagesLoaded( function() {
             console.log('Status: All photos loaded.\n');
             resizeAllRelGridItems()
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
         });
         
         sessionStorage.setItem('viewrel', 'all')
