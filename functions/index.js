@@ -320,7 +320,11 @@ exports.aggregateFollowing = functions.firestore.document('follow/{followId}/fol
     if (doc.data().status) {
         // Following
         // On start following, copy latest 16 post of folowee to follower timeline
-        query = await db.collection('new_posts').where('uid', '==', userId).limit(16).get()
+        query = await db.collection('new_posts')
+        .where('status', '==', true)
+        .where('uid', '==', userId)
+        .limit(16)
+        .get()
         for (let i = 0; i < query.docs.length; i++) {
             await db.collection('timelines').doc(followId).collection('posts').doc(query.docs[i].id).set({
                 uid: query.docs[i].data().uid,
@@ -408,7 +412,10 @@ exports.trendingTopics = functions.https.onRequest(async (req, res) => {
 
     if (diffMinutes > 12) {
 
-        query = await db.collection('new_posts').orderBy("timestamp", "desc").limit(12).get()
+        query = await db.collection('new_posts')
+        .orderBy("timestamp", "desc")
+        .where('status', '==', true)
+        .limit(12).get()
 
         top = []
         for (let i = 0; i < query.docs.length; i++) {

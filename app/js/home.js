@@ -58,7 +58,8 @@ async function newpost() {
         username: cacheuser.username,
         reported: false,
         report_weight: 0,
-        name: cacheuser.name
+        name: cacheuser.name,
+        status: true,
     })
 
     await db.collection('new_posts').doc(doc.id).collection('comments').doc('a').set({
@@ -86,6 +87,7 @@ async function newpost() {
     // document.getElementById('rereshtbn').click()
     query = await db.collection('new_posts')
     .orderBy("timestamp", "desc")
+    .where('status', '==', true)
     .where("uid", '==', user.uid)
     .limit(1)
     .get()
@@ -142,7 +144,8 @@ async function newTextPost(theme) {
         username: cacheuser.username,
         reported: false,
         report_weight: 0,
-        name: cacheuser.name
+        name: cacheuser.name,
+        status: false,
     })
 
     await db.collection('new_posts').doc(doc.id).collection('comments').doc('a').set({
@@ -170,6 +173,7 @@ async function newTextPost(theme) {
     // document.getElementById('rereshtbn').click()
     query = await db.collection('new_posts')
     .orderBy("timestamp", "desc")
+    .where('status', '==', true)
     .where("uid", '==', user.uid)
     .limit(1)
     .get()
@@ -216,8 +220,6 @@ async function load_next_rel() {
 
 async function build_posts_rel(query, self) {
 
-    postsLoaded = 0
-
     console.log(query);
 
     if (self) {
@@ -236,8 +238,6 @@ async function build_posts_rel(query, self) {
         else {
             doc = savedQuery[0]
         }
-
-        postsLoaded = postsLoaded + 1
         
         if (doc.data().file_url == 'echo-home-text_post') {
             a = document.createElement('div')
@@ -360,11 +360,6 @@ async function build_posts_rel(query, self) {
         document.getElementById('grid_rel').style.removeProperty('display');
     }
 
-    if (postsLoaded < 5 && query.length > 6) {
-        // Few posts were loaded, load some more:
-        console.log('Few posts were loaded. Load some more.');
-        load_next_rel()
-    }
 
     window.setTimeout(() => {
         addWaves()

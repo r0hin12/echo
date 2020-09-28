@@ -84,6 +84,7 @@ async function load_posts_user(uid) {
 
     query = await db.collection('new_posts')
     .orderBy("timestamp", "desc")
+    .where('status', '==', true)
     .where('uid', '==', uid)
     .limit(8)
     .get()
@@ -1423,7 +1424,9 @@ async function deletepost(id, credentials) {
     document.getElementById('deletebtnfrominfo').classList.add('deletebtnexpandeddone')
     document.getElementById('deletebtnfrominfo').classList.add('fadeOutUp')
 
-    await db.collection('new_posts').doc(id).delete()
+    await db.collection('new_posts').doc(id).update({
+        status: false,
+    })
 
     // Apply hinge effect to random elements.
 

@@ -165,6 +165,7 @@ async function load_trend_content(id, unmodifiedname) {
     query = await db.collection('new_posts')
         .orderBy("timestamp", "desc")
         .where("tags", "array-contains", unmodifiedname)
+        .where('status', '==', true)
         .limit(5)
         .get()
 
@@ -321,6 +322,7 @@ async function load_posts_all() {
     window.verifySnippet = doc.data().verifiedSnippet
 
     query = await db.collection('new_posts')
+        .where('status', '==', true)
         .orderBy("timestamp", "desc")
         .limit(5)
         .get()
