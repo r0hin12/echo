@@ -295,8 +295,6 @@ async function build_posts_rel(query, self) {
                         $(function () {
                             $('[data-toggle="tooltip"]').tooltip()
                         })
-                        cosha({ className: 'postimage_rel' });
-                        console.log('Status: Loading cosha colorful shadows.');
                     });
                 }, 1200)
 
@@ -347,8 +345,6 @@ async function build_posts_rel(query, self) {
                     $(function () {
                         $('[data-toggle="tooltip"]').tooltip()
                     })
-                    cosha({ className: 'postimage_rel' });
-                    console.log('Status: Loading cosha colorful shadows.');
                 });
             }, 1200)
             document.getElementById('grid_rel').prepend(a)    
@@ -370,8 +366,6 @@ async function build_posts_rel(query, self) {
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
-            cosha({ className: 'postimage_rel' });
-            console.log('Status: Loading cosha colorful shadows.');
         });
     }, 200)
 }

@@ -309,8 +309,6 @@ async function build_posts_trend(query, id) {
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-        cosha({ className: 'postimage' });
-        console.log('Status: Loading cosha colorful shadows.');
     });
 
 }
@@ -407,8 +405,6 @@ async function build_posts_all(query, self) {
                         $(function () {
                             $('[data-toggle="tooltip"]').tooltip()
                         })
-                        cosha({ className: 'postimage' });
-                        console.log('Status: Loading cosha colorful shadows.');
                     });
                     
                     sessionStorage.setItem('view', 'all')
@@ -457,8 +453,6 @@ async function build_posts_all(query, self) {
                     $(function () {
                         $('[data-toggle="tooltip"]').tooltip()
                     })
-                    cosha({ className: 'postimage' });
-                    console.log('Status: Loading cosha colorful shadows.');
                 });
                 
                 sessionStorage.setItem('view', 'all')
@@ -480,8 +474,6 @@ async function build_posts_all(query, self) {
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-        cosha({ className: 'postimage' });
-        console.log('Status: Loading cosha colorful shadows.');
     });
  
     sessionStorage.setItem('view', 'all')
