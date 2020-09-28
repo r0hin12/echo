@@ -147,6 +147,7 @@ function closeTrend() {
         $('#exploretabcontent').removeClass('exploretabcontentinactive')
         window.setTimeout(() => {
             resizeAllGridItems()
+            $('.trend_content_container').addClass('hidden')
         }, 800);
     }, 500)
 
@@ -192,6 +193,7 @@ async function build_posts_trend(query, id) {
         if (query[i].data().file_url == 'echo-home-text_post') {
             j = document.createElement('div')
             j.classList.add('shell_trend')
+            j.classList.add(query[i].id + 'shell')
 
             switch (query[i].data().url_theme) {
                 case 'deep':
@@ -255,6 +257,7 @@ async function build_posts_trend(query, id) {
 
         j = document.createElement('div')
         j.classList.add('shell_trend')
+        j.classList.add(query[i].id + 'shell')
 
         userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
         if (userlikedoc.exists && userlikedoc.data().status) {
@@ -327,6 +330,12 @@ async function load_posts_all() {
 }
 
 async function load_next_all() {
+
+    if (typeof(lastVisible) == 'undefined') {
+        // Auto scroll happened before regular load
+        return;
+    }
+
     query = await db.collection("new_posts")
         .orderBy("timestamp", "desc")
         .startAfter(lastVisible)
@@ -347,6 +356,7 @@ async function build_posts_all(query, self) {
         if (query[i].data().file_url == 'echo-home-text_post') {
             a = document.createElement('div')
             a.classList.add('shell')
+            a.classList.add(query[i].id + 'shell')
 
             switch (query[i].data().url_theme) {
                 case 'deep':
@@ -411,6 +421,7 @@ async function build_posts_all(query, self) {
 
         a = document.createElement('div')
         a.classList.add('shell')
+        a.classList.add(query[i].id + 'shell')
 
         userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
         if (userlikedoc.exists && userlikedoc.data().status) {

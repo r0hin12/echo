@@ -18,6 +18,7 @@ async function build_posts_user(query) {
         if (query[i].data().file_url == 'echo-home-text_post') {
             w = document.createElement('div')
             w.classList.add('usershell')
+            w.classList.add(query[i].id + 'shell')
 
             switch (query[i].data().url_theme) {
                 case 'deep':
@@ -54,6 +55,7 @@ async function build_posts_user(query) {
 
         w = document.createElement('div')
         w.classList.add('usershell')
+        w.classList.add(query[i].id + 'shell')
 
         userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
         if (userlikedoc.exists && userlikedoc.data().status) {
@@ -343,7 +345,7 @@ async function info(post) {
             document.getElementById('deletebtnfrominfo').classList.add('deletebtnexpanded')
             document.getElementById('deletebtnfrominfo').classList.add('fadeIn')
             document.getElementById('deletebtnfrominfo').onclick = function () {
-                deletepost(post, doc.data().uid)
+                deletepost(`${post}`, `${doc.data().uid}`)
             }
         }
         document.getElementById('deletebtnfrominfo').style.display = 'inline-block'
@@ -1408,3 +1410,83 @@ $(function () {
         $(this).toggleClass("is-active");
     });
 });
+
+async function deletepost(id, credentials) {
+    if (credentials !== user.uid) {
+        alert('Suspicious activity detected. Your account has been flagged.')
+        reportUser(user.uid)
+        return;
+    }
+
+    document.getElementById('deletebtnfrominfo').classList.remove('fadeIn')
+    document.getElementById('deletebtnfrominfo').innerHTML = '<i class="material-icons gradicon">restore_from_trash</i> deleting...';
+    document.getElementById('deletebtnfrominfo').classList.add('deletebtnexpandeddone')
+    document.getElementById('deletebtnfrominfo').classList.add('fadeOutUp')
+
+    await db.collection('new_posts').doc(id).delete()
+
+    // Apply hinge effect to random elements.
+
+    $('#infomodallist').children().each(function(i, el) {
+        randomnum = Math.floor(Math.random() * 3)
+        if (randomnum == 0 || randomnum == 1) {
+            el.classList.add('animated'); el.classList.add('hinge'); el.classList.add('slower')
+            bam = Math.floor(Math.random() * 3); el.style.animationDelay = bam + 's'
+        }
+    })
+    
+    $('#infobtngroup').children().each(function(i, el) {
+        randomnum = Math.floor(Math.random() * 3)
+        if (randomnum == 0 || randomnum == 1) {
+            el.classList.add('animated'); el.classList.add('hinge'); el.classList.add('slower')
+            bam = Math.floor(Math.random() * 3); el.style.animationDelay = bam + 's'
+        }
+    })
+
+    // After 5 seconds, remove all hinge effect from the elements
+
+
+    window.setTimeout(function() {
+        $('#infobtngroup').children().each(function(index) {
+            this.classList.remove('animated')
+            this.classList.remove('hinge')
+            this.classList.remove('slower')
+        })
+
+        $('#infomodallist').children().each(function(index) {
+            this.classList.remove('animated')
+            this.classList.remove('hinge')
+            this.classList.remove('slower')
+        })
+    }, 5000)
+
+    window.setTimeout(function() {
+        $('#infoModal').modal('hide')
+
+        Snackbar.show({showAction: false,pos: 'bottom-center', text: 'Your post was deleted.' })
+
+        $(`.${id}shell`).addClass('animated')
+        $(`.${id}shell`).addClass('zoomOut')
+
+        window.setTimeout(() => {
+            $(`.${id}shell`).remove()
+        }, 500)
+
+        localStorage.removeItem('currentlyviewinguser')
+
+        document.getElementById('deletebtnfrominfo').onclick = function () {
+            document.getElementById('deletebtnfrominfo').innerHTML = '<i class="material-icons gradicon">delete_forever</i> confirm';
+            document.getElementById('deletebtnfrominfo').classList.add('deletebtnexpanded')
+            document.getElementById('deletebtnfrominfo').classList.add('fadeIn')
+            document.getElementById('deletebtnfrominfo').onclick = function() {
+                deletepost(post, doc.data().uid)
+            }
+        }
+
+        document.getElementById('deletebtnfrominfo').innerHTML = '<i class="material-icons gradicon">delete</i>'
+        document.getElementById('deletebtnfrominfo').classList.remove('deletebtnexpanded')
+        document.getElementById('deletebtnfrominfo').classList.remove('deletebtnexpandeddone')
+
+    }, 4000)
+
+}

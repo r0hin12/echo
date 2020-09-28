@@ -3,6 +3,11 @@ $(window).ready(function () {
         document.getElementById('colorthemeinp').value = localStorage.getItem('theme_name')
     }
 
+    window.setTimeout(function() {
+        // LOAD SCROLLING REGARDLESS OF TAB
+        loadscrolling()
+    }, 3500)
+
     sessionStorage.removeItem('viewTrend')
     sessionStorage.removeItem('viewComments')
     sessionStorage.removeItem('viewInfo')
@@ -11,8 +16,8 @@ $(window).ready(function () {
     sessionStorage.removeItem('viewPost')
     sessionStorage.removeItem('currenDM')
 
-        var urlParams = new URLSearchParams(window.location.search);
-        sessionStorage.setItem('currenDM', urlParams.get('dm'))
+    var urlParams = new URLSearchParams(window.location.search);
+    sessionStorage.setItem('currenDM', urlParams.get('dm'))
 
     sessionStorage.setItem('first-time-home', 'true')
     sessionStorage.setItem('first-time-account', 'true')
@@ -90,6 +95,12 @@ $(window).ready(function () {
 })
 
 function tabe(tab) {
+
+    try {
+         // Remove active trend view
+    closeTrend()   
+    } catch (error) { }
+
     document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.replace(tab[0], '') + ' | Echo'
     sessionStorage.setItem("currentab", tab)
 
@@ -123,7 +134,7 @@ function tabe(tab) {
                     $('#grid_rel').imagesLoaded( function() {
                         resizeAllRelGridItems()
                     });
-                    sessionStorage.setItem('viewrel', 'all')
+                    sessionStorage.setItem('view', 'rel')
                 }, 200)
                 break;
             case "explore":
@@ -162,9 +173,6 @@ function tabe(tab) {
                     if (typeof (user) != "undefined" && typeof (user) != null) {
                         clearInterval(interval)
                         load()
-                        window.setTimeout(function() {
-                            loadscrolling()
-                        }, 3500)
                     }
                 }, 200);
                 

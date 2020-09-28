@@ -1,3 +1,5 @@
+sessionStorage.setItem('scrollcooldown', 'false')
+
 // Width Resize
 var width = $(window).width();
 window.expanded = true
@@ -145,7 +147,6 @@ function resizeGridItem(item) {
         rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
         item.style.gridRowEnd = "span " + rowSpan;   
     } catch (error) {
-        console.log('Display resize error (Likely too fast scrolling)');
     }
 }
 
@@ -164,7 +165,6 @@ function resizeUserGridItem(item) {
         rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
         item.style.gridRowEnd = "span " + rowSpan;   
     } catch (error) {
-        console.log('Display resize error (Likely too fast scrolling)');
     }
 }
 
@@ -182,8 +182,7 @@ function resizeGridItemTrend(item, trend) {
         rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
         rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
         item.style.gridRowEnd = "span " + rowSpan;   
-    } catch (error) {
-        console.log('Display resize error (Likely too fast scrolling)');
+    } catch (error) {;
     }
 }
 
@@ -202,7 +201,6 @@ function resizeRelGridItem(item) {
         rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
         item.style.gridRowEnd = "span " + rowSpan;   
     } catch (error) {
-        console.log('Display resize error (Likely too fast scrolling)');
     }
 }
 
@@ -468,8 +466,11 @@ $( "#userModal" ).scroll(function() {
 
 function loadscrolling() {
     $(window).scroll(() => {
-        // 
+
+        docheightminus1 = $(document).height() - 1
+        docheightplus1 = $(document).height() + 1
         tab = sessionStorage.getItem('currentab')
+
         if (tab == 'explore')  {
             if ($(window).scrollTop() > 300) {
                 document.getElementById('returntotop').setAttribute('style', 'display:block !important');
@@ -481,15 +482,36 @@ function loadscrolling() {
                 document.getElementById('returntotop').classList.remove('fadeInUp')
             }
 
-            docheightminus1 = $(document).height() - 1
-            docheightplus1 = $(document).height() + 1
+        }
 
-            if ( 
-                $(window).scrollTop() + $(window).height() > docheightminus1 && 
-                $(window).scrollTop() + $(window).height() < docheightplus1) {
-                if (sessionStorage.getItem('view') == 'all') {
-                    load_next_all()
+        if ( 
+            $(window).scrollTop() + $(window).height() > docheightminus1 && 
+            $(window).scrollTop() + $(window).height() < docheightplus1) {
+            if (sessionStorage.getItem('view') == 'all') {
+                if (sessionStorage.getItem('scrollcooldown') == 'true') {
+                    // Hold on a bit lol
+                    return;
                 }
+
+                load_next_all()
+                sessionStorage.setItem('scrollcooldown', 'true')
+                window.setTimeout(() => {
+                    sessionStorage.setItem('scrollcooldown', 'false')
+                }, 1000)
+                console.log('Loading next batch of posts (all)');
+            }
+            else if (sessionStorage.getItem('view') == 'rel') {
+                if (sessionStorage.getItem('scrollcooldown') == 'true') {
+                    // Hold on a bit lol
+                    return;
+                }
+
+                load_next_rel()
+                sessionStorage.setItem('scrollcooldown', 'true')
+                window.setTimeout(() => {
+                    sessionStorage.setItem('scrollcooldown', 'false')
+                }, 1000)
+                console.log('Loading next batch of posts (rel)');
             }
         }
         

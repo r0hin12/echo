@@ -195,6 +195,11 @@ async function load_rel() {
 }
 
 async function load_next_rel() {
+    if (typeof(lastVisibleRel) == 'undefined') {
+        // Auto scroll happened before regular load
+        return;
+    }
+
     query = await db.collection("timelines")
     .doc(user.uid)
     .collection('posts')
@@ -210,6 +215,11 @@ async function load_next_rel() {
 }
 
 async function build_posts_rel(query, self) {
+
+    postsLoaded = 0
+
+    console.log(query);
+
     if (self) {
         savedQuery = query;
         query = ['peepeepoopoomenou']
@@ -219,15 +229,20 @@ async function build_posts_rel(query, self) {
 
         if (query[i] !== 'peepeepoopoomenou') {
             doc = await db.collection('new_posts').doc(query[i].data().id).get()
+            if (!doc.exists) {
+                continue;
+            }
         }
         else {
             doc = savedQuery[0]
         }
-        
+
+        postsLoaded = postsLoaded + 1
         
         if (doc.data().file_url == 'echo-home-text_post') {
             a = document.createElement('div')
             a.classList.add('shell_rel')
+            a.classList.add(doc.id + 'shell')
             
             switch (doc.data().url_theme) {
                 case 'deep':
@@ -283,8 +298,6 @@ async function build_posts_rel(query, self) {
                         cosha({ className: 'postimage_rel' });
                         console.log('Status: Loading cosha colorful shadows.');
                     });
-                    
-                    sessionStorage.setItem('viewrel', 'all')
                 }, 1200)
 
                 document.getElementById('grid_rel').prepend(a)                 
@@ -297,6 +310,7 @@ async function build_posts_rel(query, self) {
 
         a = document.createElement('div')
         a.classList.add('shell_rel')
+        a.classList.add(doc.id + 'shell')
 
         userlikedoc = await db.collection('new_posts').doc(doc.id).collection('likes').doc(user.uid).get()
             
@@ -336,7 +350,6 @@ async function build_posts_rel(query, self) {
                     cosha({ className: 'postimage_rel' });
                     console.log('Status: Loading cosha colorful shadows.');
                 });
-                sessionStorage.setItem('viewrel', 'all')
             }, 1200)
             document.getElementById('grid_rel').prepend(a)    
             return;
@@ -345,6 +358,12 @@ async function build_posts_rel(query, self) {
         addWaves()
 
         document.getElementById('grid_rel').style.removeProperty('display');
+    }
+
+    if (postsLoaded < 5 && query.length > 6) {
+        // Few posts were loaded, load some more:
+        console.log('Few posts were loaded. Load some more.');
+        load_next_rel()
     }
 
     window.setTimeout(() => {
@@ -359,7 +378,5 @@ async function build_posts_rel(query, self) {
             cosha({ className: 'postimage_rel' });
             console.log('Status: Loading cosha colorful shadows.');
         });
-        
-        sessionStorage.setItem('viewrel', 'all')
     }, 200)
 }
