@@ -258,8 +258,8 @@ async function build_posts_rel(query, self) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
             if (cacheverify.includes(doc.data().uid)) {
                 verify = verifySnippet
             }
@@ -280,6 +280,8 @@ async function build_posts_rel(query, self) {
                         $(function () {
                             $('[data-toggle="tooltip"]').tooltip()
                         })
+                        cosha({ className: 'postimage_rel' });
+                        console.log('Status: Loading cosha colorful shadows.');
                     });
                     
                     sessionStorage.setItem('viewrel', 'all')
@@ -309,8 +311,8 @@ async function build_posts_rel(query, self) {
             desiredLikeAction3 = 'favorite_border'
         }
 
-        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
         if (cacheverify.includes(doc.data().uid)) {
             verify = verifySnippet
         }
@@ -331,8 +333,9 @@ async function build_posts_rel(query, self) {
                     $(function () {
                         $('[data-toggle="tooltip"]').tooltip()
                     })
+                    cosha({ className: 'postimage_rel' });
+                    console.log('Status: Loading cosha colorful shadows.');
                 });
-                
                 sessionStorage.setItem('viewrel', 'all')
             }, 1200)
             document.getElementById('grid_rel').prepend(a)    
@@ -353,6 +356,8 @@ async function build_posts_rel(query, self) {
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
+            cosha({ className: 'postimage_rel' });
+            console.log('Status: Loading cosha colorful shadows.');
         });
         
         sessionStorage.setItem('viewrel', 'all')

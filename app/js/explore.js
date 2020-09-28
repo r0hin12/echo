@@ -27,11 +27,13 @@ function load_trending_tags() {
             k.classList.add('animated')
             k.classList.add('fadeInUp')
             k.classList.add('trend_box')
+            unmodifiedname = element.name
             id = element.name.replace(/[\W_]+/g," ").replace(/\s+/g, '-').toLowerCase();
             k.onclick = function() {
-                load_trend(element, this.id)
+                load_trend(element, this.id, this.getAttribute('skiddyname'))
             }
 
+            k.setAttribute('skiddyname', unmodifiedname)
             k.id = id
             k.innerHTML = '<div class="card-body">' + element.name + '</div>'
 
@@ -63,7 +65,7 @@ function load_trending_tags() {
 
             var trend = sessionStorage.getItem('viewTrend')
             if (trend == id) {
-                load_trend(element, id)
+                load_trend(element, id, unmodifiedname)
             }
 
             addWaves()
@@ -83,7 +85,7 @@ function load_trending_tags() {
     })
 }
 
-function load_trend(data, id) {
+function load_trend(data, id, unmodifiedname) {
     container = document.getElementById(`${id}contentcontainer`)
     window.activeTrend = id
 
@@ -91,7 +93,7 @@ function load_trend(data, id) {
         // Generate Content
 
         a = document.createElement('h1')
-        a.innerHTML = id
+        a.innerHTML = unmodifiedname
         document.getElementById(`${id}contentcontainer`).appendChild(a)
 
         b = document.createElement('img')
@@ -100,7 +102,7 @@ function load_trend(data, id) {
         document.getElementById(`${id}contentcontainer`).appendChild(b)
 
         c = document.createElement('div')
-        c.innerHTML = `<button onclick="trend_imageCredit()'" class="eon-text iconbtn"><i class="material-icons">portrait</i></button> <button class="eon-text iconbtn"><i class="material-icons">more_vert</i></button> <button onclick="closeTrend()" class="eon-text iconbtn"><i class="material-icons">close</i></button>`
+        c.innerHTML = `<button onclick="trend_imageCredit()" class="eon-text iconbtn"><i class="material-icons">portrait</i></button> <button class="eon-text iconbtn"><i class="material-icons">more_vert</i></button> <button onclick="closeTrend()" class="eon-text iconbtn"><i class="material-icons">close</i></button>`
         c.classList.add('container'); c.classList.add('trend_buttons')
         document.getElementById(`${id}contentcontainer`).appendChild(c)
         f = document.createElement('center')
@@ -111,7 +113,7 @@ function load_trend(data, id) {
         $(`#${id}contentcontainer`).addClass('backInUp')
         $(`#${id}contentcontainer`).addClass('slow')
 
-        load_trend_content(id)
+        load_trend_content(id, unmodifiedname)
 
     }
     else {
@@ -157,11 +159,11 @@ function closeTrend() {
 
 }
 
-async function load_trend_content(id) {
+async function load_trend_content(id, unmodifiedname) {
 
     query = await db.collection('new_posts')
         .orderBy("timestamp", "desc")
-        .where("tags", "array-contains", id)
+        .where("tags", "array-contains", unmodifiedname)
         .limit(5)
         .get()
 
@@ -174,11 +176,11 @@ async function loadnext_trend_content(id) {
     query = await db.collection("new_posts")
     .orderBy("timestamp", "desc")
     .where("tags", "array-contains", id)
-    .startAfter(lastVisible)
+    .startAfter(lastTrendVisible)
     .limit(5)
     .get()
 
-    window.lastVisible = query.docs[query.docs.length - 1]
+    window.lastTrendVisible = query.docs[query.docs.length - 1]
     build_posts_trend(query.docs, id)
 }
 
@@ -218,8 +220,8 @@ async function build_posts_trend(query, id) {
             }
 
 
-            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
             if (cacheverify.includes(query[i].data().uid)) {
                 verify = verifySnippet
             }
@@ -266,8 +268,8 @@ async function build_posts_trend(query, id) {
             desiredLikeAction3 = 'favorite_border'
         }
 
-        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
         if (cacheverify.includes(query[i].data().uid)) {
             verify = verifySnippet
         }
@@ -303,6 +305,8 @@ async function build_posts_trend(query, id) {
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+        cosha({ className: 'postimage' });
+        console.log('Status: Loading cosha colorful shadows.');
     });
 
 }
@@ -370,8 +374,9 @@ async function build_posts_all(query, self) {
                 desiredLikeAction3 = 'favorite_border'
             }
 
-            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+            window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
+
             if (cacheverify.includes(query[i].data().uid)) {
                 verify = verifySnippet
             }
@@ -390,6 +395,8 @@ async function build_posts_all(query, self) {
                         $(function () {
                             $('[data-toggle="tooltip"]').tooltip()
                         })
+                        cosha({ className: 'postimage' });
+                        console.log('Status: Loading cosha colorful shadows.');
                     });
                     
                     sessionStorage.setItem('view', 'all')
@@ -418,8 +425,8 @@ async function build_posts_all(query, self) {
         }
 
 
-        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
         if (cacheverify.includes(query[i].data().uid)) {
             verify = verifySnippet
         }
@@ -437,6 +444,8 @@ async function build_posts_all(query, self) {
                     $(function () {
                         $('[data-toggle="tooltip"]').tooltip()
                     })
+                    cosha({ className: 'postimage' });
+                    console.log('Status: Loading cosha colorful shadows.');
                 });
                 
                 sessionStorage.setItem('view', 'all')
@@ -458,6 +467,8 @@ async function build_posts_all(query, self) {
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+        cosha({ className: 'postimage' });
+        console.log('Status: Loading cosha colorful shadows.');
     });
  
     sessionStorage.setItem('view', 'all')

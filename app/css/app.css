@@ -1029,6 +1029,10 @@ custom-control-label::before {
     border-radius: 50%;
 }
 
+#dmreqstatus, #frreqstatus {
+    padding-right: 0px;
+}
+
 .reject {
     display: inline-block;
     margin-right: 0px;
@@ -1737,11 +1741,14 @@ custom-control-label::before {
 }
 
 .trend_content_container h1 {
+    width: 100%;
+    font-size: 28px;
+    text-align: center;
     font-weight: 600;
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    margin-top: 24px;
+    margin-top: 36px;
     opacity: 1;
     z-index: 5;
 }
@@ -1872,6 +1879,7 @@ custom-control-label::before {
     padding: 24px;
     margin-top: 18px;
     margin-bottom: 18px;
+    text-align: left;
 }
 
 .followCardPFP {
@@ -2113,6 +2121,27 @@ custom-control-label::before {
     font-size: 24px;
 
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-text-fill-color: transparent;
+}
+
+.dm_request_container {
+    padding: 24px;
+    text-align: center;
+}
+
+.relativ {
+    position: relative;
+    text-align: left;
+}
+
+.acceptbtn {
+    margin-right: 4px;
+    border: 2px solid lime !important;
+}
+
+.rejectbtn {
+    margin-left: 4px;
+    border: 2px solid red !important;
 }

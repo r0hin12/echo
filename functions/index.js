@@ -87,6 +87,9 @@ exports.createAccount = functions.https.onCall(async (data, context) => {
     await db.collection('follow').doc(uid).collection('requesting').doc('a').set({
         status: false,
     })
+    await db.collection('follow').doc(uid).collection('direct').doc('a').set({
+        status: false,
+    })
 
     await db.collection('follow').doc(uid).set({
         following: 0,
@@ -111,7 +114,6 @@ exports.createAccount = functions.https.onCall(async (data, context) => {
         url: 'https://firebasestorage.googleapis.com/v0/b/eongram-87169.appspot.com/o/logos%2F' + uid + '.png?alt=media',
         rep: 0,
         direct_active: [],
-        direct_pending: [],
         direct_activity: admin.firestore.FieldValue.serverTimestamp(),
     }, {merge: true})
     
@@ -341,6 +343,58 @@ exports.aggregateFollowing = functions.firestore.document('follow/{followId}/fol
 
         return db.collection('follow').doc(followId).set({
             following: admin.firestore.FieldValue.increment(-1)
+        }, {merge: true})
+    }
+})
+
+exports.aggregateRequesters = functions.firestore.document('follow/{followId}/requested/{userId}').onWrite(async (change, context) => {
+
+    db = admin.firestore()
+    const followId = context.params.followId
+    const userId = context.params.userId
+
+    const doc = change.after
+
+    if (userId == "a") {
+        return;
+    }
+
+    if (doc.data().status) {
+        // Requested. On start requested
+        return db.collection('follow').doc(followId).set({
+            requested: admin.firestore.FieldValue.increment(1)
+        }, {merge: true})
+    }
+    else {
+
+        return db.collection('follow').doc(followId).set({
+            requested: admin.firestore.FieldValue.increment(-1)
+        }, {merge: true})
+    }
+})
+
+exports.aggregateRequesting = functions.firestore.document('follow/{followId}/requesting/{userId}').onWrite(async (change, context) => {
+
+    db = admin.firestore()
+    const followId = context.params.followId
+    const userId = context.params.userId
+
+    const doc = change.after
+
+    if (userId == "a") {
+        return;
+    }
+
+    if (doc.data().status) {
+        // Requesting. On start requesting
+        return db.collection('follow').doc(followId).set({
+            requesting: admin.firestore.FieldValue.increment(1)
+        }, {merge: true})
+    }
+    else {
+
+        return db.collection('follow').doc(followId).set({
+            requesting: admin.firestore.FieldValue.increment(-1)
         }, {merge: true})
     }
 })

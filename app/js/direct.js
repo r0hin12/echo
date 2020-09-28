@@ -1,71 +1,13 @@
-prevuid = 'na'
+dprevuid = 'na'
 abritaryindex = 0
 abritarysecondindex = 0
 infScrollEnabled = false
 sessionStorage.setItem('itwasmesoskip', 'false')
 sessionStorage.setItem('active_dm', 'false')
 
-function newdm() {
-    username = document.getElementById('newdmfield').value
-
-    db.collection('app').doc('details').get().then(function(doc) {
-        index = doc.data().usernames.indexOf(username)
-        if (index == -1) {Snackbar.show({showAction: false,pos: 'bottom-center',text: "This username does not exist in our records."})}
-        else {
-            dmuid = doc.data().map[index]
-            alphabeticalized = []
-            alphabeticalized.push(user.uid)
-            alphabeticalized.push(dmuid)
-
-            alphabeticalized.sort(function(a, b) {
-                var textA = a.toUpperCase();
-                var textB = b.toUpperCase();
-                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-            });
-
-            string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
-            db.collection('direct').doc(string).get().then(function(doc) {
-                if (doc.exists) {
-                    // DM already exists
-                } 
-                else {
-                    var now = new Date()
-                    db.collection('direct').doc(string).set({
-                        info: {
-                            start_date: firebase.firestore.FieldValue.serverTimestamp(),
-                            start_user: user.uid,
-                        },
-                        messages: [
-                            {
-                                sender: user.uid,
-                                app_preset: 'echo-direct-invitation',
-                                content: 'Invitation',
-                                timestamp: now,
-
-                            }
-                        ]
-                    })
-                    db.collection('users').doc(user.uid).update({
-                        direct_active: firebase.firestore.FieldValue.arrayUnion(dmuid)
-                    }).then(function() {
-                        refreshactive()
-                    })
-                    db.collection('users').doc(dmuid).update({
-                        direct_pending: firebase.firestore.FieldValue.arrayUnion(user.uid)
-                    })
-                }
-            })
-        }
-    })
-
-}
-
-function loaddirectclick() {
-    loadpending()
-}
-
 function loaddirect() {
     loadactive()
+    loadpendingfr()
     PREPARE_LISTEN_MESSAGES()
 
     document.getElementById("newdmmsg").addEventListener("keyup", function(event) {
@@ -76,139 +18,365 @@ function loaddirect() {
     })
 }
 
-function loadpending() {
-    document.getElementById('skiddpypo').onclick = function() {
-        Snackbar.show({showAction: false,pos: 'bottom-center',text: 'You are doing this too much!'})
+// Request to DM someone
+async function newdm() {
+    username = document.getElementById('newdmfield').value
+
+    doc = await db.collection('app').doc('details').get()
+    index = doc.data().usernames.indexOf(username)
+    if (index == -1) {
+        // Username does not exist
+        Snackbar.show({showAction: false,pos: 'bottom-center',text: "This username does not exist."})
+        return;
+    }
+    
+    dmuid = doc.data().map[index]
+    alphabeticalized = []
+    alphabeticalized.push(user.uid)
+    alphabeticalized.push(dmuid)
+
+    alphabeticalized.sort(function(a, b) {
+        var textA = a.toUpperCase();
+        var textB = b.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+
+    string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
+    doc = await db.collection('direct').doc(string).get()
+    
+    if (doc.exists) {
+        Snackbar.show({text: "DM already exists."})
+    } 
+                
+    else {
+        var now = new Date()
+        db.collection('direct').doc(string).set({
+            info: {
+                start_date: firebase.firestore.FieldValue.serverTimestamp(),
+                start_user: user.uid,
+            },
+            
+            messages: [{
+                sender: user.uid,
+                app_preset: 'echo-direct-invitation',
+                content: 'Invitation',
+                timestamp: now,
+            }]
+        })
+
+        await db.collection('users').doc(user.uid).update({
+            direct_active: firebase.firestore.FieldValue.arrayUnion(dmuid)
+        })
+
+        refreshactive()
+
+        await db.collection('follow').doc(dmuid).collection('direct').doc(user.uid).set({
+            name: cacheuser.name,
+            photo_url: cacheuser.url,
+            username: cacheuser.username,
+            uid: user.uid,
+            status: true,
+        })
+    }
+}
+
+async function buildDirectItem(data) {
+    m = document.createElement('div')
+    m.classList.add('userFollowCard')
+    verify = ''; 
+    if (typeof(cacheverify) == 'undefined') {
+        verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; 
+        window.verifySnippet = verifyDoc.data().verifiedSnippet}
+    if (cacheverify.includes(data.uid)) {
+        verify = verifySnippet
+    }
+    m.id = data.uid + 'dmrqitem'
+    m.innerHTML = `
+        <div class="relativ">
+            <img class="followCardPFP" src="${data.photo_url}">
+            <div class="followCardText">
+                <h4 class="bold">${data.name}${verify}</h4>
+                <span class="chip">@${data.username}</span>
+            </div>
+            <div class="followCardActions">
+                <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
+            </div>
+        </div>
+        <br>
+        <hr>
+        <center>
+            <button onclick='acceptDirect(${JSON.stringify(data)})' class="eon-text iconbtn acceptbtn">
+                <i class="material-icons">done</i>
+            </button>
+
+            <button onclick='rejectDirect(${JSON.stringify(data)})' class="eon-text iconbtn rejectbtn">
+                <i class="material-icons">close</i>
+            </button>
+        </center>
+    `
+    $('#dm_rq').get(0).appendChild(m)
+    $('#dm_rq').get(0).appendChild(document.createElement('br')); $('#dm_rq').get(0).appendChild(document.createElement('br'))
+    $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) + 1)
+}
+
+// DM requests
+
+async function acceptDirect(data) {
+    // Remove requests
+    await db.collection('follow').doc(user.uid).collection('direct').doc(data.uid).update({
+        status: false
+    })
+
+    // Add direct message
+    await db.collection('users').doc(user.uid).update({
+        direct_active: firebase.firestore.FieldValue.arrayUnion(data.uid)
+    })
+
+
+    alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(data.uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
+    now = new Date()
+
+    // Send the approval message
+
+    await db.collection('direct').doc(string).update({
+        [unreadkey]: true,
+        messages: firebase.firestore.FieldValue.arrayUnion({
+            app_preset: 'echo-direct-approval',
+            content: 'Approved',
+            sender: user.uid,
+            timestamp: now,
+        })
+    })
+
+    $(`#${data.uid}dmrqitem`).addClass('animated')
+    $(`#${data.uid}dmrqitem`).addClass('zoomOut')
+    $(`#${data.uid}dmrqitem`).addClass('faster')
+
+    window.setTimeout(() => {
+        $(`#${data.uid}dmrqitem`).remove()
+        $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) - 1)
+        refreshactive()
+    }, 600)
+}
+
+async function rejectDirect(data) {
+
+    x = confirm('Are you sure you would like to decline ' + data.name + '. This action is permanent and cannot easily be reversed.')
+    if (!x) {
+        Snackbar.show({text: "Cancelled; Nothing changed."})
+        return;
     }
 
-    window.setTimeout(function() {
-        document.getElementById('skiddpypo').onclick = function() {
-            loadpending()
-            Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'})
-        } 
-    }, 3000)
-    db.collection('users').doc(user.uid).get().then(function(doc) {
-        db.collection('app').doc("verified").get().then(function(verifieddoc) {
-            verifiedlist = verifieddoc.data().verified 
-            loadpendingfr(doc.data(), verifiedlist)
-
-            pending = doc.data().direct_pending 
-
-            document.getElementById('dmreqstatus').innerHTML = pending.length
-            if (pending.length == 0) {
-                document.getElementById('dmreqstatus').innerHTML = ''
-            }
-            if (pending.length > 0) {
-                document.getElementById('dmreqstatus').classList.add('jello')
-                document.getElementById('clickybtnshowdmreq').click()
-                document.getElementById('skiddpypo').classList.add('hidden')
-            }
-            else {
-                document.getElementById('skiddpypo').classList.remove('hidden')
-            }
-
-            for (let i = 0; i < pending.length; i++) {
-                const element = pending[i];
-                u = document.createElement('div')
-                u.classList.add('card')
-                u.id = element + 'pendingcardel'
-                u.classList.add('pendingcard')
-                document.getElementById('dmreqlist').appendChild(u)
-                addpendingcardcontent(element, verifiedlist)
-            }
-        })
-    })
-}
-
-function reject(uid) {
-
-    db.collection('users').doc(user.uid).update({
-        direct_pending: firebase.firestore.FieldValue.arrayRemove(uid)
+    // Remove requests
+    await db.collection('follow').doc(user.uid).collection('direct').doc(data.uid).update({
+        status: false
     })
 
-    alphabeticalized = []
-    alphabeticalized.push(user.uid)
-    alphabeticalized.push(uid)
-    alphabeticalized.sort(function(a, b) {
-        var textA = a.toUpperCase();
-        var textB = b.toUpperCase();
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    });
+    // Do not add direct message and send a message saying declined.
+
+    alphabeticalized = [];alphabeticalized.push(user.uid);alphabeticalized.push(data.uid);alphabeticalized.sort(function(a, b) {var textA = a.toUpperCase();var textB = b.toUpperCase();return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
     string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
-    var now = new Date()
+    now = new Date()
 
-    db.collection('direct').doc(string).update({
+    await db.collection('direct').doc(string).update({
+        [unreadkey]: true,
         messages: firebase.firestore.FieldValue.arrayUnion({
-            app_preset: "echo-direct-rejection",
-            content: "Rejection",
+            app_preset: 'echo-direct-rejection',
+            content: 'Declined',
             sender: user.uid,
             timestamp: now,
         })
-    }).then(function() {
-        document.getElementById(uid + 'pendingcardel').classList.add('animated')
-        document.getElementById(uid + 'pendingcardel').classList.add('zoomOutUp')
-        window.setTimeout(function() {
-            $('#' + uid + 'pendingcardel').remove()
-            newnum = parseInt(document.getElementById('dmreqstatus').innerHTML) - 1
-            document.getElementById('dmreqstatus').innerHTML = newnum
-            if (newnum == 0) {
-                document.getElementById('dmreqstatus').innerHTML = ''
-                document.getElementById('skiddpypo').classList.remove('hidden')
-            }
-        }, 1000)
-        
     })
+
+    $(`#${data.uid}dmrqitem`).addClass('animated')
+    $(`#${data.uid}dmrqitem`).addClass('zoomOut')
+    $(`#${data.uid}dmrqitem`).addClass('faster')
+
+    window.setTimeout(() => {
+        $(`#${data.uid}dmrqitem`).remove()
+        $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) - 1)
+    }, 600)
+
 }
 
-function approve(uid) {
+async function loadpending() {
+    query = await db.collection('follow').doc(user.uid).collection('direct').where('status', '==', true).limit(8).get()
+    for (let i = 0; i < query.docs.length; i++) {
+        const doc = query.docs[i];
+        buildDirectItem(doc.data())
+    }
 
-    db.collection('users').doc(user.uid).update({
-        direct_pending: firebase.firestore.FieldValue.arrayRemove(uid)
+    if (query.docs.length == 0) {
+        $('#nodmrq').removeClass('hidden')
+        return;
+    }
+
+    if (query.docs.length == 8) {
+        n = document.createElement('div')
+        n.innerHTML = `<center><button id="loadmoredrbtn" onclick="loadnextpendingdr()" class="eon-text">Load More</button></center>`
+        document.getElementById('potentailmorebtn2').appendChild(n)
+    }
+
+    window.lastVisibleDr = query.docs[query.docs.length - 1]
+}
+
+async function loadnextpendingdr() {
+    query = await db.collection('follow').doc(user.uid).collection('direct').where('status', '==', true)
+    .startAfter(lastVisibleDr)
+    .limit(8)
+    .get()
+    window.lastVisibleDr = query.docs[query.docs.length - 1]
+    for (let i = 0; i < query.docs.length; i++) {
+        const doc = query.docs[i];
+        buildDirectItem(doc.data())
+    }
+
+    if (query.docs.length < 8) {
+        $('#loadmoredrbtn').addClass('hidden')
+        Snackbar.show({text: "No more requests."})
+    }
+}
+
+// Follow Requests
+async function loadpendingfr() {
+    query = await db.collection('follow').doc(user.uid).collection('requested').where('status', '==', true).limit(8).get()
+    for (let i = 0; i < query.docs.length; i++) {
+        const doc = query.docs[i];
+        buildFollowItem(doc.data())
+    }
+
+    if (query.docs.length == 0) {
+        $('#nofollowrq').removeClass('hidden')
+        return;
+    }
+
+    if (query.docs.length == 8) {
+        n = document.createElement('div')
+        n.innerHTML = `<center><button id="loadmorefrbtn" onclick="loadnextpendingfr()" class="eon-text">Load More</button></center>`
+        document.getElementById('potentailmorebtn').appendChild(n)
+    }
+
+    window.lastVisibleFr = query.docs[query.docs.length - 1]
+}
+
+async function loadnextpendingfr() {
+    query = await db.collection('follow').doc(user.uid).collection('requested').where('status', '==', true)
+    .startAfter(lastVisibleFr)
+    .limit(8)
+    .get()
+    window.lastVisibleFr = query.docs[query.docs.length - 1]
+    for (let i = 0; i < query.docs.length; i++) {
+        const doc = query.docs[i];
+        buildFollowItem(doc.data())
+    }
+
+    if (query.docs.length < 8) {
+        $('#loadmorefrbtn').addClass('hidden')
+        Snackbar.show({text: "No more requests."})
+    }
+
+}
+
+async function buildFollowItem(data) {
+
+    m = document.createElement('div')
+    m.classList.add('userFollowCard')
+    verify = ''; 
+    if (typeof(cacheverify) == 'undefined') {
+        verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; 
+        window.verifySnippet = verifyDoc.data().verifiedSnippet}
+    if (cacheverify.includes(data.uid)) {
+        verify = verifySnippet
+    }
+    m.id = data.uid + 'followrqitem'
+    m.innerHTML = `
+        <div class="relativ">
+            <img class="followCardPFP" src="${data.photo_url}">
+            <div class="followCardText">
+                <h4 class="bold">${data.name}${verify}</h4>
+                <span class="chip">@${data.username}</span>
+            </div>
+            <div class="followCardActions">
+                <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
+            </div>
+        </div>
+        <br>
+        <hr>
+        <center>
+            <button onclick='acceptFollow(${JSON.stringify(data)})' class="eon-text iconbtn acceptbtn">
+                <i class="material-icons">done</i>
+            </button>
+
+            <button onclick='rejectFollow(${JSON.stringify(data)})' class="eon-text iconbtn rejectbtn">
+                <i class="material-icons">close</i>
+            </button>
+        </center>
+    `
+    $('#follow_req').get(0).appendChild(m)
+    $('#follow_req').get(0).appendChild(document.createElement('br')); $('#follow_req').get(0).appendChild(document.createElement('br'))
+    $('#frreqstatus').html(parseInt($('#frreqstatus').html()) + 1)
+}
+
+async function acceptFollow(data) {
+
+    // Remove requests
+    await db.collection('follow').doc(user.uid).collection('requested').doc(data.uid).update({
+        status: false
     })
 
-    db.collection('users').doc(user.uid).update({
-        direct_active: firebase.firestore.FieldValue.arrayUnion(uid)
+    await db.collection('follow').doc(data.uid).collection('requesting').doc(user.uid).update({
+        status: false
     })
 
-    alphabeticalized = []
-    alphabeticalized.push(user.uid)
-    alphabeticalized.push(uid)
-    alphabeticalized.sort(function(a, b) {
-        var textA = a.toUpperCase();
-        var textB = b.toUpperCase();
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    });
-    string = alphabeticalized[0].toString() + alphabeticalized[1].toString()
-    var now = new Date()
-
-    db.collection('direct').doc(string).update({
-        messages: firebase.firestore.FieldValue.arrayUnion({
-            app_preset: "echo-direct-approval",
-            content: "Approved",
-            sender: user.uid,
-            timestamp: now,
-        })
-    }).then(function() {
-        document.getElementById(uid + 'pendingcardel').classList.add('animated')
-        document.getElementById(uid + 'pendingcardel').classList.add('fadeOutUp')
-        window.setTimeout(function() {
-            $('#' + uid + 'pendingcardel').remove()
-            newnum = parseInt(document.getElementById('dmreqstatus').innerHTML) - 1
-            document.getElementById('dmreqstatus').innerHTML = newnum
-            if (newnum == 0) {
-                document.getElementById('dmreqstatus').innerHTML = ''
-                document.getElementById('skiddpypo').classList.remove('hidden')
-            }
-        }, 1000)
-        refreshactive()
-        db.collection('directlisteners').doc(uid).update({
-            most_recent_sender: 'echo_direct_approverq_' + user.uid
-        })
+    // Add follow
+    await db.collection('follow').doc(user.uid).collection('followers').doc(data.uid).update({
+        name: data.name,
+        uid: data.uid,
+        photo_url: data.photo_url,
+        status: true,
+        username: data.username,
     })
 
+    await db.collection('follow').doc(data.uid).collection('following').doc(user.uid).update({
+        name: cacheuser.name,
+        uid: user.uid,
+        photo_url: cacheuser.url,
+        status: true,
+        username: cacheuser.username,
+    })
 
+    $(`#${data.uid}followrqitem`).addClass('animated')
+    $(`#${data.uid}followrqitem`).addClass('zoomOut')
+    $(`#${data.uid}followrqitem`).addClass('faster')
 
+    window.setTimeout(() => {
+        $(`#${data.uid}followrqitem`).remove()
+        $('#frreqstatus').html(parseInt($('#frreqstatus').html()) - 1)
+    }, 600)
+    
+}
 
+async function rejectFollow(data) {
+    // Remove requests
+    await db.collection('follow').doc(user.uid).collection('requested').doc(data.uid).update({
+        status: false
+    })
+
+    await db.collection('follow').doc(data.uid).collection('requesting').doc(user.uid).update({
+        status: false
+    })
+
+    $(`#${data.uid}followrqitem`).addClass('animated')
+    $(`#${data.uid}followrqitem`).addClass('zoomOut')
+    $(`#${data.uid}followrqitem`).addClass('faster')
+
+    window.setTimeout(() => {
+        $(`#${data.uid}followrqitem`).remove()
+        $('#frreqstatus').html(parseInt($('#frreqstatus').html()) - 1)
+    }, 600)
 }
 
 function addpendingcardcontent(element, verification) {
@@ -646,6 +814,11 @@ function ADD_MESSAGE(uid, content) {
 
 function BUILD_MESSAGE(name, msg, string, anim, reverse) {
 
+    if (typeof(prevuid) == 'undefined') {
+        // Set it something random
+        prevuid = 'skiddypeepee'
+    }
+
     p = document.createElement('div')
     p.classList.add('messagecontainer')
     p.classList.add('clearfix')
@@ -742,7 +915,7 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
     if (msg.app_preset == 'echo-direct-link') {
         p.classList.add('systemmessagecontainerlink');
         msgcontent = `
-            <img src="${msg.app_preset_data.image}" class="dm_link_img"></img>
+            <img src="${msg.app_preset_data.image}" onerror="this.style.display='none'" class="dm_link_img"></img>
             <p class="bold">${msg.app_preset_data.title}</p>
             <span><p class="light">${msg.app_preset_data.description}</p></span>
             <button onclick="youareleaving('${msg.app_preset_data.link}')" class="eon-text dm_link_btn">visit</button>
@@ -1073,56 +1246,6 @@ function checkAllNotifs() {
     }
 }
 
-// Follow Requests
-
-function loadpendingfr(user, verified) {
-    document.getElementById('skiddpypofr').onclick = function() {
-        Snackbar.show({showAction: false,pos: 'bottom-center',text: 'You are doing this too much!'})
-    }
-
-    window.setTimeout(function() {
-        document.getElementById('skiddpypofr').onclick = function() {
-            db.collection('users').doc(user.uid).get().then(function(doc) {
-                db.collection('app').doc("verified").get().then(function(verifieddoc) {
-                    verifiedlist = verifieddoc.data().verified 
-                    loadpendingfr(doc.data(), verifiedlist)
-                })
-            }).then(function() {
-                Snackbar.show({showAction: false,pos: 'bottom-center',text: 'Refreshing...'})
-            })
-        } 
-    }, 6000)
-
-    requests = user.requested
-
-    if (user.requests == undefined) {
-        requests = []
-    }
-
-    document.getElementById('frreqstatus').innerHTML = requests.length
-
-    if (requests.length == 0) {
-        document.getElementById('frreqstatus').innerHTML = ''
-    }
-    if (requests.length > 0) {
-        document.getElementById('frreqstatus').classList.add('jello')
-        document.getElementById('clickybtnshowfrreq').click()
-        document.getElementById('skiddpypofr').classList.add('hidden')
-    }
-    else {
-        document.getElementById('skiddpypofr').classList.remove('hidden')
-    }
-    for (let i = 0; i < requests.length; i++) {
-        const element = requests[i];
-        u = document.createElement('div')
-        u.classList.add('card')
-        u.id = element + 'pendingcardelfr'
-        u.classList.add('pendingcard')
-        document.getElementById('frreqlist').appendChild(u)
-        addpendingcardcontentfr(element, verified)
-    }
-}
-
 function addpendingcardcontentfr(element, verification) {
     db.collection('users').doc(element).get().then(function(doc) {
         verified = ''
@@ -1238,6 +1361,75 @@ function userInfo(uid) {
     $('#conversationInfo').modal('toggle')
 }
 
+function showdmrq() {
+    // Show DM requests
+    sessionStorage.removeItem('active_dm')
+    history.pushState(null, '', 'app.html?tab=inbox');
+    leavedm()
+
+    $('.messagelistboxactive').removeClass('messagelistboxactive')
+    $('.chatcontainer').addClass('hidden')   
+    $('#chatnav').removeClass('hidden')
+
+    $('#unselectedconten').removeClass('fadeInDown')
+    $('#unselectedconten').addClass('fadeOutUp')
+
+    $('#echoDMRequests').removeClass('hidden')
+    $('#echoFollowRequests').addClass('hidden')
+    $('#echoNewsContent').addClass('hidden')
+
+    window.setTimeout(function() {
+        $('#chatnav').removeClass('fadeIn')
+        window.setTimeout(function() {
+            $('#changelogbamstyle').html('#messagecontent {height: calc(100%) !important;  margin-top: -107px; overflow-y: scroll; transition: all 1s;}')
+        }, 500)
+    }, 250)
+
+    $('#chatnav').removeClass('fadeIn')
+    $('#chatnav').addClass('fadeOutUp')
+    $('#divider1').removeClass('zoomIn')
+    $('#divider1').addClass('fadeOutUp')
+    $('#directfooter').removeClass('fadeInUp')
+    $('#directfooter').addClass('fadeOutDown')
+
+    ScrollTop()
+}
+
+function showfrq() {
+    
+    // Show follow requests
+    sessionStorage.removeItem('active_dm')
+    history.pushState(null, '', 'app.html?tab=inbox');
+    leavedm()
+
+    $('.messagelistboxactive').removeClass('messagelistboxactive')
+    $('.chatcontainer').addClass('hidden')   
+    $('#chatnav').removeClass('hidden')
+
+    $('#unselectedconten').removeClass('fadeInDown')
+    $('#unselectedconten').addClass('fadeOutUp')
+
+    $('#echoDMRequests').addClass('hidden')
+    $('#echoNewsContent').addClass('hidden')
+    $('#echoFollowRequests').removeClass('hidden')
+
+    window.setTimeout(function() {
+        $('#chatnav').removeClass('fadeIn')
+        window.setTimeout(function() {
+            $('#changelogbamstyle').html('#messagecontent {height: calc(100%) !important;  margin-top: -107px; overflow-y: scroll; transition: all 1s;}')
+        }, 500)
+    }, 250)
+
+    $('#chatnav').removeClass('fadeIn')
+    $('#chatnav').addClass('fadeOutUp')
+    $('#divider1').removeClass('zoomIn')
+    $('#divider1').addClass('fadeOutUp')
+    $('#directfooter').removeClass('fadeInUp')
+    $('#directfooter').addClass('fadeOutDown')
+
+    ScrollTop()
+}
+
 function showEchoNews() {
     sessionStorage.setItem('active_dm', 'echonews')
 
@@ -1248,7 +1440,10 @@ function showEchoNews() {
     $('#unselectedconten').removeClass('fadeInDown')
     $('#unselectedconten').addClass('fadeOutUp')
 
+    $('#echoDMRequests').addClass('hidden')
+    $('#echoFollowRequests').addClass('hidden')
     $('#echoNewsContent').removeClass('hidden')
+    
     window.setTimeout(function() {
         $('#chatnav').removeClass('fadeIn')
         window.setTimeout(function() {
@@ -1474,6 +1669,10 @@ function quickreply(msg) {
 function checkLinks(content, uid, onlyLink) {
     var matches = content.match(/\bhttps?:\/\/\S+/gi);
     var previewLink = firebase.functions().httpsCallable('previewLink');
+
+    if (matches.length > 0) {
+        Snackbar.show({text: "Generating link preview..."})
+    }
 
     for (let i = 0; i < matches.length; i++) {
         // Add message with content from URL: matches[i]

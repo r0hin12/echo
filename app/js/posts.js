@@ -434,8 +434,12 @@ async function usermodal(uid) {
     doc = await db.collection('users').doc(uid).get()
     userdoc = doc
 
-    verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+    verify = ''; 
+    if (typeof(cacheverify) == 'undefined') {
+        verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified;
+        window.verifySnippet = doc.data().verifiedSnippet;
+    }
     if (cacheverify.includes(doc.data().uid)) {
         verify = verifySnippet
     }
@@ -782,8 +786,11 @@ async function showfollowers() {
 
 
         for (let i = 0; i < doc.docs.length; i++) {
-            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            verify = ''; 
+            if (typeof(cacheverify) == 'undefined') {
+                verifyDoc = await db.collection('app').doc('verified').get()
+                window.cacheverify = verifyDoc.data().verified; 
+                window.verifySnippet = verifyDoc.data().verifiedSnippet}
             if (cacheverify.includes(doc.docs[i].data().uid)) {
                 verify = verifySnippet
             }
@@ -816,8 +823,8 @@ async function showfollowing() {
         doc = await db.collection('follow').doc(uid).collection('following').where("status", "==", true).limit(12).get()
 
         for (let i = 0; i < doc.docs.length; i++) {
-            verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+            verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
             if (cacheverify.includes(doc.docs[i].data().uid)) {
                 verify = verifySnippet
             }
@@ -914,8 +921,8 @@ async function approvePost(id, data) {
     commentPreview = ''
     if (data.latest_comment_content !== undefined && data.latest_comment_content !== null && data.latest_comment_name !== undefined && data.latest_comment_name && data.latest_comment_photo !== undefined && data.latest_comment_photo) {
         // Cloud function works as intended;
-        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
         if (cacheverify.includes(data.latest_comment_uid)) {
             verify = verifySnippet
         }
@@ -956,8 +963,8 @@ async function approvePost(id, data) {
         </center>
     `
 
-    verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+    verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
     if (cacheverify.includes(data.uid)) {
         verify = verifySnippet
     }
@@ -1113,8 +1120,8 @@ async function build_comments(query, self) {
         //     desiredBookAction2 = 'heart'
         //     desiredBookAction3 = 'favorite_border'
         // }
-        verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+        verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
         if (cacheverify.includes(query[i].data().uid)) {
             verify = verifySnippet
         }
@@ -1264,8 +1271,8 @@ async function addReply(id, val) {
 async function build_reply(doc, id, self) {
     g = document.createElement("div");
     g.classList.add('comment_reply')
-    verify = ''; if (!cacheverify) {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = doc.data().verifiedSnippet}
+    verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
+        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
     if (cacheverify.includes(doc.uid)) {
         verify = verifySnippet
     }

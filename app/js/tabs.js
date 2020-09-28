@@ -78,7 +78,10 @@ $(window).ready(function () {
             else {
                 tabe("Waiting...")
                 $('#notab').removeClass('hidden')
-                checkUrls()
+                Snackbar.show({text: "Checking link..."})
+                window.setTimeout(() => {
+                    checkUrls()
+                }, 1200)
             }   
     }
     else {
@@ -170,7 +173,7 @@ function tabe(tab) {
                 intervalinbox = window.setInterval(function () {
                     if (typeof (user) != "undefined" && typeof (user) != null) {
                         clearInterval(intervalinbox)
-                        loaddirectclick()
+                        loadpending()
                     }
                 }, 200);
                 window.setTimeout(function() {
