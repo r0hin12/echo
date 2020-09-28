@@ -2145,3 +2145,8 @@ custom-control-label::before {
     margin-left: 4px;
     border: 2px solid red !important;
 }
+
+.msgcontainerapp audio {
+    width: 95%;
+    outline: none;
+}

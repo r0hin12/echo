@@ -99,22 +99,22 @@ async function addappcontent() {
 
     // Quick replies
 
-    if (doc.data().quickreplies !== undefined) {
-        $('#reply1box').attr('value', doc.data().quickreplies[0])
-        $('#reply2box').attr('value', doc.data().quickreplies[1])
-        $('#reply3box').attr('value', doc.data().quickreplies[2])
+    if (cacheuser.quickreplies !== undefined) {
+        $('#reply1box').attr('value', cacheuser.quickreplies[0])
+        $('#reply2box').attr('value', cacheuser.quickreplies[1])
+        $('#reply3box').attr('value', cacheuser.quickreplies[2])
 
-        $('#qr-1btn').html(doc.data().quickreplies[0])
+        $('#qr-1btn').html(cacheuser.quickreplies[0])
         $('#qr-1btn').get(0).onclick = () => {
-            quickreply(`${doc.data().quickreplies[0]}`)
+            quickreply(`${cacheuser.quickreplies[0]}`)
         }
-        $('#qr-2btn').html(doc.data().quickreplies[1])
+        $('#qr-2btn').html(cacheuser.quickreplies[1])
         $('#qr-2btn').get(0).onclick = () => {
-            quickreply(`${doc.data().quickreplies[1]}`)
+            quickreply(`${cacheuser.quickreplies[1]}`)
         }
-        $('#qr-3btn').html(doc.data().quickreplies[2])
+        $('#qr-3btn').html(cacheuser.quickreplies[2])
         $('#qr-3btn').get(0).onclick = () => {
-            quickreply(`${doc.data().quickreplies[2]}`)
+            quickreply(`${cacheuser.quickreplies[2]}`)
         }
     }
 
