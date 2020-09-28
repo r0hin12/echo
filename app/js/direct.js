@@ -81,43 +81,45 @@ async function newdm() {
 }
 
 async function buildDirectItem(data) {
-    m = document.createElement('div')
-    m.classList.add('userFollowCard')
-    verify = ''; 
-    if (typeof(cacheverify) == 'undefined') {
-        verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; 
-        window.verifySnippet = verifyDoc.data().verifiedSnippet}
-    if (cacheverify.includes(data.uid)) {
-        verify = verifySnippet
-    }
-    m.id = data.uid + 'dmrqitem'
-    m.innerHTML = `
-        <div class="relativ">
-            <img class="followCardPFP" src="${data.photo_url}">
-            <div class="followCardText">
-                <h4 class="bold">${data.name}${verify}</h4>
-                <span class="chip">@${data.username}</span>
+    return new Promise(async (resolve, reject) => {
+        p = document.createElement('div')
+        p.classList.add('userFollowCard')
+        verify = ''; 
+        if (typeof(cacheverify) == 'undefined') {
+            verifyDoc = await db.collection('app').doc('verified').get()
+            window.cacheverify = verifyDoc.data().verified; 
+            window.verifySnippet = verifyDoc.data().verifiedSnippet}
+        if (cacheverify.includes(data.uid)) {
+            verify = verifySnippet
+        }
+        p.id = data.uid + 'dmrqitem'
+        p.innerHTML = `
+            <div class="relativ">
+                <img class="followCardPFP" src="${data.photo_url}">
+                <div class="followCardText">
+                    <h4 class="bold">${data.name}${verify}</h4>
+                    <span class="chip">@${data.username}</span>
+                </div>
+                <div class="followCardActions">
+                    <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
+                </div>
             </div>
-            <div class="followCardActions">
-                <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
-            </div>
-        </div>
-        <br>
-        <hr>
-        <center>
-            <button onclick='acceptDirect(${JSON.stringify(data)})' class="eon-text iconbtn acceptbtn">
-                <i class="material-icons">done</i>
-            </button>
-
-            <button onclick='rejectDirect(${JSON.stringify(data)})' class="eon-text iconbtn rejectbtn">
-                <i class="material-icons">close</i>
-            </button>
-        </center>
-    `
-    $('#dm_rq').get(0).appendChild(m)
-    $('#dm_rq').get(0).appendChild(document.createElement('br')); $('#dm_rq').get(0).appendChild(document.createElement('br'))
-    $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) + 1)
+            <br>
+            <hr>
+            <center>
+                <button onclick='acceptDirect(${JSON.stringify(data)})' class="eon-text iconbtn acceptbtn">
+                    <i class="material-icons">done</i>
+                </button>
+    
+                <button onclick='rejectDirect(${JSON.stringify(data)})' class="eon-text iconbtn rejectbtn">
+                    <i class="material-icons">close</i>
+                </button>
+            </center>
+        `
+        $('#dm_rq').get(0).appendChild(p)
+        $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) + 1)
+        resolve()
+    })
 }
 
 // DM requests
@@ -157,6 +159,7 @@ async function acceptDirect(data) {
     window.setTimeout(() => {
         $(`#${data.uid}dmrqitem`).remove()
         $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) - 1)
+        Snackbar.show({text: "Accepted message request from " + data.name})
         refreshactive()
     }, 600)
 }
@@ -197,43 +200,44 @@ async function rejectDirect(data) {
     window.setTimeout(() => {
         $(`#${data.uid}dmrqitem`).remove()
         $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) - 1)
+        Snackbar.show({text: "Rejected message request from " + data.name})
     }, 600)
 
 }
 
 async function loadpending() {
-    query = await db.collection('follow').doc(user.uid).collection('direct').where('status', '==', true).limit(8).get()
-    for (let i = 0; i < query.docs.length; i++) {
-        const doc = query.docs[i];
-        buildDirectItem(doc.data())
+    directquery = await db.collection('follow').doc(user.uid).collection('direct').where('status', '==', true).limit(8).get()
+    for (let i = 0; i < directquery.docs.length; i++) {
+        const doc = directquery.docs[i];
+        await buildDirectItem(doc.data())
     }
 
-    if (query.docs.length == 0) {
+    if (directquery.docs.length == 0) {
         $('#nodmrq').removeClass('hidden')
         return;
     }
 
-    if (query.docs.length == 8) {
+    if (directquery.docs.length == 8) {
         n = document.createElement('div')
         n.innerHTML = `<center><button id="loadmoredrbtn" onclick="loadnextpendingdr()" class="eon-text">Load More</button></center>`
         document.getElementById('potentailmorebtn2').appendChild(n)
     }
 
-    window.lastVisibleDr = query.docs[query.docs.length - 1]
+    window.lastVisibleDr = directquery.docs[directquery.docs.length - 1]
 }
 
 async function loadnextpendingdr() {
-    query = await db.collection('follow').doc(user.uid).collection('direct').where('status', '==', true)
+    directquery = await db.collection('follow').doc(user.uid).collection('direct').where('status', '==', true)
     .startAfter(lastVisibleDr)
     .limit(8)
     .get()
-    window.lastVisibleDr = query.docs[query.docs.length - 1]
-    for (let i = 0; i < query.docs.length; i++) {
-        const doc = query.docs[i];
+    window.lastVisibleDr = directquery.docs[directquery.docs.length - 1]
+    for (let i = 0; i < directquery.docs.length; i++) {
+        const doc = directquery.docs[i];
         buildDirectItem(doc.data())
     }
 
-    if (query.docs.length < 8) {
+    if (directquery.docs.length < 8) {
         $('#loadmoredrbtn').addClass('hidden')
         Snackbar.show({text: "No more requests."})
     }
@@ -241,38 +245,38 @@ async function loadnextpendingdr() {
 
 // Follow Requests
 async function loadpendingfr() {
-    query = await db.collection('follow').doc(user.uid).collection('requested').where('status', '==', true).limit(8).get()
-    for (let i = 0; i < query.docs.length; i++) {
-        const doc = query.docs[i];
-        buildFollowItem(doc.data())
+    followquery = await db.collection('follow').doc(user.uid).collection('requested').where('status', '==', true).limit(8).get()
+    for (let i = 0; i < followquery.docs.length; i++) {
+        const doc = followquery.docs[i];
+        await buildFollowItem(doc.data())
     }
 
-    if (query.docs.length == 0) {
+    if (followquery.docs.length == 0) {
         $('#nofollowrq').removeClass('hidden')
         return;
     }
 
-    if (query.docs.length == 8) {
+    if (followquery.docs.length == 8) {
         n = document.createElement('div')
         n.innerHTML = `<center><button id="loadmorefrbtn" onclick="loadnextpendingfr()" class="eon-text">Load More</button></center>`
         document.getElementById('potentailmorebtn').appendChild(n)
     }
 
-    window.lastVisibleFr = query.docs[query.docs.length - 1]
+    window.lastVisibleFr = followquery.docs[followquery.docs.length - 1]
 }
 
 async function loadnextpendingfr() {
-    query = await db.collection('follow').doc(user.uid).collection('requested').where('status', '==', true)
+    followquery = await db.collection('follow').doc(user.uid).collection('requested').where('status', '==', true)
     .startAfter(lastVisibleFr)
     .limit(8)
     .get()
-    window.lastVisibleFr = query.docs[query.docs.length - 1]
-    for (let i = 0; i < query.docs.length; i++) {
-        const doc = query.docs[i];
+    window.lastVisibleFr = followquery.docs[followquery.docs.length - 1]
+    for (let i = 0; i < followquery.docs.length; i++) {
+        const doc = followquery.docs[i];
         buildFollowItem(doc.data())
     }
 
-    if (query.docs.length < 8) {
+    if (followquery.docs.length < 8) {
         $('#loadmorefrbtn').addClass('hidden')
         Snackbar.show({text: "No more requests."})
     }
@@ -280,44 +284,49 @@ async function loadnextpendingfr() {
 }
 
 async function buildFollowItem(data) {
+    return new Promise(async (resolve, reject) => {
 
-    m = document.createElement('div')
-    m.classList.add('userFollowCard')
-    verify = ''; 
-    if (typeof(cacheverify) == 'undefined') {
-        verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; 
-        window.verifySnippet = verifyDoc.data().verifiedSnippet}
-    if (cacheverify.includes(data.uid)) {
-        verify = verifySnippet
-    }
-    m.id = data.uid + 'followrqitem'
-    m.innerHTML = `
-        <div class="relativ">
-            <img class="followCardPFP" src="${data.photo_url}">
-            <div class="followCardText">
-                <h4 class="bold">${data.name}${verify}</h4>
-                <span class="chip">@${data.username}</span>
+        m = document.createElement('div')
+        m.classList.add('userFollowCard')
+        verify = ''; 
+        if (typeof(cacheverify) == 'undefined') {
+            verifyDoc = await db.collection('app').doc('verified').get()
+            window.cacheverify = verifyDoc.data().verified; 
+            window.verifySnippet = verifyDoc.data().verifiedSnippet}
+        if (cacheverify.includes(data.uid)) {
+            verify = verifySnippet
+        }
+        m.id = data.uid + 'followrqitem'
+        m.innerHTML = `
+            <div class="relativ">
+                <img class="followCardPFP" src="${data.photo_url}">
+                <div class="followCardText">
+                    <h4 class="bold">${data.name}${verify}</h4>
+                    <span class="chip">@${data.username}</span>
+                </div>
+                <div class="followCardActions">
+                    <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
+                </div>
             </div>
-            <div class="followCardActions">
-                <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
-            </div>
-        </div>
-        <br>
-        <hr>
-        <center>
-            <button onclick='acceptFollow(${JSON.stringify(data)})' class="eon-text iconbtn acceptbtn">
-                <i class="material-icons">done</i>
-            </button>
+            <br>
+            <hr>
+            <center>
+                <button onclick='acceptFollow(${JSON.stringify(data)})' class="eon-text iconbtn acceptbtn">
+                    <i class="material-icons">done</i>
+                </button>
 
-            <button onclick='rejectFollow(${JSON.stringify(data)})' class="eon-text iconbtn rejectbtn">
-                <i class="material-icons">close</i>
-            </button>
-        </center>
-    `
-    $('#follow_req').get(0).appendChild(m)
-    $('#follow_req').get(0).appendChild(document.createElement('br')); $('#follow_req').get(0).appendChild(document.createElement('br'))
-    $('#frreqstatus').html(parseInt($('#frreqstatus').html()) + 1)
+                <button onclick='rejectFollow(${JSON.stringify(data)})' class="eon-text iconbtn rejectbtn">
+                    <i class="material-icons">close</i>
+                </button>
+            </center>
+        `
+        console.log(data.username);
+        console.log(m);
+        $('#follow_req').get(0).appendChild(m)
+        $('#frreqstatus').html(parseInt($('#frreqstatus').html()) + 1)
+
+        resolve()
+    })
 }
 
 async function acceptFollow(data) {
@@ -332,7 +341,7 @@ async function acceptFollow(data) {
     })
 
     // Add follow
-    await db.collection('follow').doc(user.uid).collection('followers').doc(data.uid).update({
+    await db.collection('follow').doc(user.uid).collection('followers').doc(data.uid).set({
         name: data.name,
         uid: data.uid,
         photo_url: data.photo_url,
@@ -340,7 +349,7 @@ async function acceptFollow(data) {
         username: data.username,
     })
 
-    await db.collection('follow').doc(data.uid).collection('following').doc(user.uid).update({
+    await db.collection('follow').doc(data.uid).collection('following').doc(user.uid).set({
         name: cacheuser.name,
         uid: user.uid,
         photo_url: cacheuser.url,
@@ -355,6 +364,7 @@ async function acceptFollow(data) {
     window.setTimeout(() => {
         $(`#${data.uid}followrqitem`).remove()
         $('#frreqstatus').html(parseInt($('#frreqstatus').html()) - 1)
+        Snackbar.show({text: "Approved follow request from " + data.name})
     }, 600)
     
 }
@@ -376,6 +386,7 @@ async function rejectFollow(data) {
     window.setTimeout(() => {
         $(`#${data.uid}followrqitem`).remove()
         $('#frreqstatus').html(parseInt($('#frreqstatus').html()) - 1)
+        Snackbar.show({text: "Declined follow request from " + data.name})
     }, 600)
 }
 

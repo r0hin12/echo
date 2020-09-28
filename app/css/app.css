@@ -2139,11 +2139,13 @@ custom-control-label::before {
 .acceptbtn {
     margin-right: 4px;
     border: 2px solid lime !important;
+    border-radius: 24px !important;
 }
 
 .rejectbtn {
     margin-left: 4px;
     border: 2px solid red !important;
+    border-radius: 24px !important;
 }
 
 .msgcontainerapp audio {
