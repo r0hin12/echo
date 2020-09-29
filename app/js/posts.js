@@ -1033,7 +1033,6 @@ function updatecommentbtns(id) {
     $(`.${id}commentCounttrend`).html(parseInt($(`#${id}commentCount`).html()) + 1);
     $(`#${id}commentCountrel`).html(parseInt($(`#${id}commentCountrel`).html()) + 1);
 }
-grid_rel
 
 async function loadComments(id, poster) {
 
