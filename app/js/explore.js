@@ -111,14 +111,14 @@ function load_trend(data, id, unmodifiedname) {
         document.getElementById(`${id}contentcontainer`).appendChild(f)
 
         $(`#${id}contentcontainer`).addClass('backInUp')
-        $(`#${id}contentcontainer`).addClass('slow')
+        $(`#${id}contentcontainer`).addClass('fast')
 
         load_trend_content(id, unmodifiedname)
 
     }
     else {
         $(`#${id}contentcontainer`).removeClass('backInUp')
-        $(`#${id}contentcontainer`).removeClass('slow')
+        $(`#${id}contentcontainer`).removeClass('fast')
         $(`#${id}contentcontainer`).addClass('fadeInUp')
         // Not generate anything
     }
@@ -140,7 +140,7 @@ function closeTrend() {
     $(`#${activeTrend}contentcontainer`).removeClass('backInUp')
     $(`#${activeTrend}contentcontainer`).removeClass('fadeInUp')
 
-    $(`#${activeTrend}contentcontainer`).addClass('slow')
+    $(`#${activeTrend}contentcontainer`).addClass('fast')
     $(`#${activeTrend}contentcontainer`).addClass('backOutDown')
 
     window.setTimeout(() => {
