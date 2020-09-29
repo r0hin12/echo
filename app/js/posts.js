@@ -922,7 +922,7 @@ async function approvePost(id, data) {
         tagselement = tagselement + '<span class="badge badge-pill badge-primary">' + tags[i] + '</span>'
     }
     commentPreview = ''
-    if (data.latest_comment_content !== undefined && data.latest_comment_content !== null && data.latest_comment_name !== undefined && data.latest_comment_name && data.latest_comment_photo !== undefined && data.latest_comment_photo) {
+    if (data.latest_comment_content && data.latest_comment_name && data.latest_comment_photo) {
         // Cloud function works as intended;
         verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
         window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
@@ -999,6 +999,8 @@ async function addComment(id) {
     updatechars()
     updatecommentbtns(id)
 
+    console.log(id);
+
     doc = await db.collection('new_posts').doc(id).collection('comments').add({
         content: text,
         name: cacheuser.name,
@@ -1043,7 +1045,13 @@ async function loadComments(id, poster) {
     $('#commentModal').modal('toggle')
 
     if (id == sessionStorage.getItem('viewing')) {
-        // Already loaded, stop and just turn on modal.
+        // Already loaded, stop and just turn on modal (stop loading as well).
+        loader.addClass('fadeOut');
+        sessionStorage.setItem('viewing', id)
+        window.setTimeout(() => {
+            loader.addClass('hidden');
+            history.pushState(null, "", "?comments=" + id)
+        }, 450)
         return;
     }
 
@@ -1092,6 +1100,16 @@ async function load_next_comments() {
     build_comments(query.docs, false)
 }
   
+async function deleteComment(comment, post) {
+    // Safe to have delete logic here because by design users have delete permission to their own documents.
+    await db.collection('new_posts').doc(post).collection('comments').doc(comment).delete()
+    $('#commentitem' + comment).addClass('animated'); $('#commentitem' + comment).addClass('zoomOut');
+    window.setTimeout(() => {
+        $('#commentitem' + comment).remove()
+        resizeCommentGridItems()
+        Snackbar.show({text: "Comment was deleted."})
+    }, 800)
+}
 async function build_comments(query, self) {
 
     for (let i = 0; i < query.length; i++) {
@@ -1127,6 +1145,18 @@ async function build_comments(query, self) {
         if (cacheverify.includes(query[i].data().uid)) {
             verify = verifySnippet
         }
+
+        if (query[i].data().uid == user.uid) {
+            deleteButton = `<a onclick="deleteComment('${query[i].id}', '${sessionStorage.getItem('viewing')}')" class="eon-text blockk" href="#"><i class="material-icons">delete</i></a>`
+            reportButton = ''
+        }
+        else {
+            deleteButton = ''
+            reportButton = `<a class="eon-text blockk" href="#"><i class="material-icons">report</i></a>`
+        }
+
+        y.id = 'commentitem' + query[i].id
+
         y.innerHTML = `
         <div class="content">
             <img class="comment_pfp" src="${query[i].data().photo_url}"></img>
@@ -1137,7 +1167,8 @@ async function build_comments(query, self) {
                     <div class="dropdown-menu menu accmanagedropdown">
                     <center>
                         <a class="eon-text blockk" href="#"><i class="material-icons">content_copy</i></a>
-                        <a class="eon-text blockk" href="#"><i class="material-icons">report</i></a>
+                        ${reportButton}
+                        ${deleteButton}
                     </center>
                     </div>
                 </div>
@@ -1283,10 +1314,12 @@ async function build_reply(doc, id, self) {
         <span>${doc.content}</span>
     `
     if (self) {
-        $(`#${id}_comment_replies_self`).get(0).prepend(g)    
+        $(`#${id}_comment_replies_self`).get(0).prepend(g)  
+        resizeCommentGridItems()  
         return;
     }
     $(`#${id}_comment_replies`).get(0).appendChild(g)
+    resizeCommentGridItems()
 }
 
 function showReplies(id) {

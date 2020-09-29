@@ -276,6 +276,27 @@ exports.aggregateComments = functions.firestore.document('new_posts/{postId}/com
 
 })
 
+exports.aggregateCommentsDelete = functions.firestore.document('new_posts/{postId}/comments/{commentId}').onDelete(async (change, context) => {
+    
+    const postId = context.params.postId;
+    const commentId = context.params.commentId;
+    const db = admin.firestore()
+
+    if (commentId == 'a') {
+        return;
+    }
+
+    // decrement comments count
+    return await db.collection('new_posts').doc(postId).update({
+        comments: admin.firestore.FieldValue.increment(-1),
+        latest_comment_content: null,
+        latest_comment_photo: null,
+        latest_comment_name: null,
+        latest_comment_uid: null,
+    })
+
+})
+
 exports.aggregateFollowers = functions.firestore.document('follow/{followId}/followers/{userId}').onWrite(async (change, context) => {
 
     db = admin.firestore()

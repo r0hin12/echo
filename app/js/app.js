@@ -504,7 +504,7 @@ async function updateReplies() {
 
 async function checkUrls() {
     if (sessionStorage.getItem('viewComments') !== 'null') {
-        doc = db.collection('new_posts').doc(sessionStorage.getItem('viewComments')).get()
+        doc = await db.collection('new_posts').doc(sessionStorage.getItem('viewComments')).get()
         if (doc.exists) {
             loadComments(sessionStorage.getItem('viewComments'), doc.data().uid)
         }
