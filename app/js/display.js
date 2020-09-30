@@ -459,6 +459,7 @@ $( "#userModal" ).scroll(function() {
     obj = document.getElementById('userModal')
     if( obj.scrollTop === (obj.scrollHeight - obj.offsetHeight)) {
         // Inf scroll
+        load_next_posts_user()
     }
 });
 

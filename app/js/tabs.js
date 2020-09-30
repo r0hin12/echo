@@ -95,10 +95,11 @@ $(window).ready(function () {
 })
 
 function tabe(tab) {
-
+    // Do this incase tab after explore / home
+    sessionStorage.setItem('view', 'notanything')
     try {
          // Remove active trend view
-    closeTrend()   
+        closeTrend()   
     } catch (error) { }
 
     document.getElementById('title').innerHTML = tab.charAt(0). toUpperCase() + tab.replace(tab[0], '') + ' | Echo'
@@ -150,6 +151,7 @@ function tabe(tab) {
             case "inbox":
                 leavedm()
                 // Run when its not first time
+                fixdisplayheight()
                 break;
         }    
     }

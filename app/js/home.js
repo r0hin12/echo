@@ -231,7 +231,7 @@ async function build_posts_rel(query, self) {
 
         if (query[i] !== 'peepeepoopoomenou') {
             doc = await db.collection('new_posts').doc(query[i].data().id).get()
-            if (!doc.exists) {
+            if (!doc.exists || !doc.data().status) {
                 continue;
             }
         }

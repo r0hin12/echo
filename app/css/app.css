@@ -1634,10 +1634,10 @@ custom-control-label::before {
 }
 
 #sidebarcontent {
-    position: absolute;
+    /* position: absolute;
     top: 50%;
     transform: translate(0, -50%);
-    left: 0px;
+    left: 0px; */
     width: calc(100% - 20px);
     display: block;
 }
@@ -1646,6 +1646,9 @@ custom-control-label::before {
     position: relative;
     padding-left: 0px;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .postfullcard {

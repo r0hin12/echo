@@ -82,22 +82,22 @@ async function build_posts_user(query) {
 
 async function load_posts_user(uid) {
 
-    query = await db.collection('new_posts')
+    userQuery = await db.collection('new_posts')
     .orderBy("timestamp", "desc")
     .where('status', '==', true)
     .where('uid', '==', uid)
     .limit(8)
     .get()
 
-    window.lastVisibleUser = query.docs[query.docs.length - 1]
-    build_posts_user(query.docs)
+    window.lastVisibleUser = userQuery.docs[userQuery.docs.length - 1]
+    build_posts_user(userQuery.docs)
 
 }
 
-async function load_next_posts_user(uid) {
+async function load_next_posts_user() {
     query = await db.collection("new_posts")
     .orderBy("timestamp", "desc")
-    .where("uid", "==", uid)
+    .where("uid", "==", sessionStorage.getItem('currentlyviewinguser'))
     .startAfter(lastVisibleUser)
     .limit(8)
     .get()
