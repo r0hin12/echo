@@ -145,7 +145,7 @@ async function newTextPost(theme) {
         reported: false,
         report_weight: 0,
         name: cacheuser.name,
-        status: false,
+        status: true,
     })
 
     await db.collection('new_posts').doc(doc.id).collection('comments').doc('a').set({
@@ -274,7 +274,7 @@ async function build_posts_rel(query, self) {
             }
 
             verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
+            window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
             if (cacheverify.includes(doc.data().uid)) {
                 verify = verifySnippet
             }

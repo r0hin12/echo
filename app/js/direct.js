@@ -97,8 +97,8 @@ async function buildDirectItem(data) {
             <div class="relativ">
                 <img class="followCardPFP" src="${data.photo_url}">
                 <div class="followCardText">
-                    <h4 class="bold">${data.name}${verify}</h4>
-                    <span class="chip">@${data.username}</span>
+                    <h4 class="bold">${efilter(data.name)}${verify}</h4>
+                    <span class="chip">@${efilter(data.username)}</span>
                 </div>
                 <div class="followCardActions">
                     <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
@@ -159,14 +159,14 @@ async function acceptDirect(data) {
     window.setTimeout(() => {
         $(`#${data.uid}dmrqitem`).remove()
         $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) - 1)
-        Snackbar.show({text: "Accepted message request from " + data.name})
+        Snackbar.show({text: "Accepted message request from " + efilter(data.name)})
         refreshactive()
     }, 600)
 }
 
 async function rejectDirect(data) {
 
-    x = confirm('Are you sure you would like to decline ' + data.name + '. This action is permanent and cannot easily be reversed.')
+    x = confirm('Are you sure you would like to decline ' + efilter(data.name) + '. This action is permanent and cannot easily be reversed.')
     if (!x) {
         Snackbar.show({text: "Cancelled; Nothing changed."})
         return;
@@ -200,7 +200,7 @@ async function rejectDirect(data) {
     window.setTimeout(() => {
         $(`#${data.uid}dmrqitem`).remove()
         $('#dmreqstatus').html(parseInt($('#dmreqstatus').html()) - 1)
-        Snackbar.show({text: "Rejected message request from " + data.name})
+        Snackbar.show({text: "Rejected message request from " + efilter(data.name)})
     }, 600)
 
 }
@@ -301,8 +301,8 @@ async function buildFollowItem(data) {
             <div class="relativ">
                 <img class="followCardPFP" src="${data.photo_url}">
                 <div class="followCardText">
-                    <h4 class="bold">${data.name}${verify}</h4>
-                    <span class="chip">@${data.username}</span>
+                    <h4 class="bold">${efilter(data.name)}${verify}</h4>
+                    <span class="chip">@${efilter(data.username)}</span>
                 </div>
                 <div class="followCardActions">
                     <button onclick="usermodal('${data.uid}')" class="eon-text waves-effect waves-button">view profile</button>
@@ -364,7 +364,7 @@ async function acceptFollow(data) {
     window.setTimeout(() => {
         $(`#${data.uid}followrqitem`).remove()
         $('#frreqstatus').html(parseInt($('#frreqstatus').html()) - 1)
-        Snackbar.show({text: "Approved follow request from " + data.name})
+        Snackbar.show({text: "Approved follow request from " + efilter(data.name)})
     }, 600)
     
 }
@@ -386,7 +386,7 @@ async function rejectFollow(data) {
     window.setTimeout(() => {
         $(`#${data.uid}followrqitem`).remove()
         $('#frreqstatus').html(parseInt($('#frreqstatus').html()) - 1)
-        Snackbar.show({text: "Declined follow request from " + data.name})
+        Snackbar.show({text: "Declined follow request from " + efilter(data.name)})
     }, 600)
 }
 
@@ -399,7 +399,7 @@ function addpendingcardcontent(element, verification) {
         approveFunc = "approve('" + element + "')"
         viewuserFunc = "usermodal('" + element + "')"
     
-        document.getElementById(element + 'pendingcardel').innerHTML = '<img class="dmreqpfp" src="' + doc.data().url + '" alt=""><h3>' + doc.data().name + '</h3>' + verified + '<p class="nolineheight">' + doc.data().rep + ' Rep</p><br><center><button onclick="' + viewuserFunc + '" class="eon-contained">view user</button><br><br></center><button onclick="' + rejectFunc + '" class="eon-text reject refreshbtn"><i class="material-icons">close</i></button><button onclick="' + approveFunc + '" class="eon-text approve refreshbtn"><i class="material-icons">check</i></button>'
+        document.getElementById(element + 'pendingcardel').innerHTML = '<img class="dmreqpfp" src="' + doc.data().url + '" alt=""><h3>' + efilter(doc.data().name) + '</h3>' + verified + '<p class="nolineheight">' + doc.data().rep + ' Rep</p><br><center><button onclick="' + viewuserFunc + '" class="eon-contained">view user</button><br><br></center><button onclick="' + rejectFunc + '" class="eon-text reject refreshbtn"><i class="material-icons">close</i></button><button onclick="' + approveFunc + '" class="eon-text approve refreshbtn"><i class="material-icons">check</i></button>'
         $('.verified').tooltip()
         addWaves()
     })
@@ -567,7 +567,7 @@ function BUILD_DIRECT(uid, btnel) {
             document.getElementById("topbarimg").onclick = function() {
                 usermodal(uid)
             }
-            $('#navbarname').html(doc.data().name)
+            $('#navbarname').text(doc.data().name)
     
             document.getElementById('refreshstatusbtn').onclick = function() {
                 Snackbar.show({showAction: false,pos: 'bottom-center',text: "You are doing this too much!"})
@@ -843,27 +843,27 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         textContainer = 'msgcontainerother shadow-sm'
     }
     //TIMESTAMP IS msg.timestamp.toDate().toLocaleTimeString().slice(0, msg.timestamp.toDate().toLocaleTimeString().lastIndexOf(":")) + ' ' + msg.timestamp.toDate().toLocaleTimeString().slice(-2)
-    msgcontent = msg.content
+    msgcontent = efilter(msg.content)
 
     if (msg.app_preset == 'echo-direct-file') {
         if (msg.sender == user.uid) {
-            msgcontent = `<h3><i class="material-icons gradicon2">attach_file</i>File</h3>You sent a file: ${msg.content}<br><br><button onclick="window.open('${msg.app_preset_data}')" class="eon-contained">view</button><br>`
-            if (msg.content.endsWith('.png') || msg.content.endsWith('.jpg') || msg.content.endsWith('.jpeg') || msg.content.endsWith('.gif')) {
+            msgcontent = `<h3><i class="material-icons gradicon2">attach_file</i>File</h3>You sent a file: ${efilter(msg.content)}<br><br><button onclick="window.open('${msg.app_preset_data}')" class="eon-contained">view</button><br>`
+            if (efilter(msg.content).endsWith('.png') || efilter(msg.content).endsWith('.jpg') || efilter(msg.content).endsWith('.jpeg') || efilter(msg.content).endsWith('.gif')) {
                 msgcontent = 'You sent an image: <br><br><img src="' + msg.app_preset_data + '" class="inline-direct-img">'
             }
-            if (msg.content.endsWith('.mp3')) {
+            if (efilter(msg.content).endsWith('.mp3')) {
                 msgcontent = `You sent audio: <br><br><audio controls src="${msg.app_preset_data}"></audio>`
             }
-            if (msg.content.endsWith('.mp4')) {
+            if (efilter(msg.content).endsWith('.mp4')) {
                 msgcontent = `You sent video: <br><br><video controls src="${msg.app_preset_data}"></video>`
             }
         }
         else {
-            msgcontent = `<h3><i class="material-icons gradicon2">attach_file</i>File</h3>${name} sent you a file: ${msg.content}<br><br><button onclick="window.open('${msg.app_preset_data}')" class="eon-contained">view</button><br>`
-            if (msg.content.endsWith('.png') || msg.content.endsWith('.jpg') || msg.content.endsWith('.jpeg') || msg.content.endsWith('.gif')) {
+            msgcontent = `<h3><i class="material-icons gradicon2">attach_file</i>File</h3>${name} sent you a file: ${efilter(msg.content)}<br><br><button onclick="window.open('${msg.app_preset_data}')" class="eon-contained">view</button><br>`
+            if (efilter(msg.content).endsWith('.png') || efilter(msg.content).endsWith('.jpg') || efilter(msg.content).endsWith('.jpeg') || efilter(msg.content).endsWith('.gif')) {
                 msgcontent = 'You received an image: <br><br><img src="' + msg.app_preset_data + '" class="inline-direct-img">'
             }
-            if (msg.content.endsWith('.mp4')) {
+            if (efilter(msg.content).endsWith('.mp4')) {
                 msgcontent = `You recieved video: <br><br><video controls src="${msg.app_preset_data}"></video>`
             }
         }
@@ -1095,12 +1095,12 @@ function ENACT_CHANGES(uid) {
         }
         length = doc.data().messages.length - 1
         msg = doc.data().messages[length]
-        document.getElementById(uid + 'recenttextel').innerHTML = msg.content.substring(0,12)
-        if (msg.content.length > 12) {
-            document.getElementById(uid + 'recenttextel').innerHTML = msg.content.substring(0,12) + '...'
+        document.getElementById(uid + 'recenttextel').innerHTML = efilter(msg.content).substring(0,12)
+        if (efilter(msg.content).length > 12) {
+            document.getElementById(uid + 'recenttextel').innerHTML = efilter(msg.content).substring(0,12) + '...'
         }
         else {
-            document.getElementById(uid + 'recenttextel').innerHTML = msg.content.substring(0,12)
+            document.getElementById(uid + 'recenttextel').innerHTML = efilter(msg.content).substring(0,12)
         }
 
         if( $('#' + string + 'chatcontainer').length ) {
@@ -1118,7 +1118,7 @@ function ENACT_CHANGES(uid) {
                     checkAllNotifs()
                     if (sessionStorage.getItem('currentab') !== 'inbox') {
                         Snackbar.show({showAction: false,pos: 'bottom-center',
-                            text: "New Message: " + msg.content.substring(0,12) + '...',
+                            text: "New Message: " + efilter(msg.content).substring(0,12) + '...',
                             pos: 'bottom-right'
                         })
                     }
@@ -1138,7 +1138,7 @@ function ENACT_CHANGES(uid) {
 
             if (sessionStorage.getItem('currentab') !== 'inbox') {
                 Snackbar.show({showAction: false,pos: 'bottom-center',
-                    text: "New Message: " + msg.content.substring(0,12) + '...',
+                    text: "New Message: " + efilter(msg.content).substring(0,12) + '...',
                     pos: 'bottom-right'
                 })
             }

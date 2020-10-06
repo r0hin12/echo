@@ -1,3 +1,13 @@
+function efilter(filtered) {
+    filtered = filtered.replace(/</g, '')
+    filtered = filtered.replace(/>/g, '')
+    filtered = filtered.replace(/"/g, '')
+    filtered = filtered.replace(/'/g, '')
+    filtered = filtered.replace(/`/g, '')
+    
+    return filtered
+}
+
 sessionStorage.setItem('scrollcooldown', 'false')
 
 // Width Resize

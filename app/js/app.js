@@ -37,7 +37,7 @@ function checkverification() {
 }
 
 async function profilesetup1() {
-    username = document.getElementById('usernamefield').value
+    username = efilter(document.getElementById('usernamefield').value)
     taken = false
 
     if (hasWhiteSpace(username) || username == "") {
@@ -257,7 +257,7 @@ function youareleaving(id) {
 function changedisplayname() {
     sessionStorage.removeItem('viewUser')
     toggleloader()
-    newdisplayname = document.getElementById('newdisplayname').value
+    newdisplayname = efilter(document.getElementById('newdisplayname').value)
     if (newdisplayname == '' || newdisplayname == ' ' || newdisplayname == null || newdisplayname == undefined) {
         error('Something went wrong. Please try again later.')
     }
