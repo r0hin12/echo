@@ -141,6 +141,7 @@ async function acceptDirect(data) {
     now = new Date()
 
     // Send the approval message
+    unreadkey = 'unread_' + data.uid
 
     await db.collection('direct').doc(string).update({
         [unreadkey]: true,
