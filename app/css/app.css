@@ -2206,3 +2206,15 @@ custom-control-label::before {
 .inbox {
   overflow-y: hidden;
 }
+
+.ytembed .msgcontainerapp {
+  padding: 12px;
+  width: 100%;
+  height: 270px;
+}
+
+.ytembed .msgcontainerapp iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+}

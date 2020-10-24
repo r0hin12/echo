@@ -938,6 +938,23 @@ function BUILD_MESSAGE(name, msg, string, anim, reverse) {
         else {
             p.classList.add('systemmessagecontainerlinkleft');
         }
+
+        // Check if YouTube
+        if (msg.app_preset_data.link.includes('youtu.be')) {
+            videoID = msg.app_preset_data.link.split('youtu.be/').pop()
+            p.classList.add('ytembed');
+            msgcontent = `
+            <iframe src="www.youtube.com/embed/${videoID}" frameborder="0" allowfullscreen></iframe>
+            `
+        }
+        else if (msg.app_preset_data.link.includes('youtube.com/watch?v=')) {
+            videoID = msg.app_preset_data.link.split('youtube.com/watch?v=').pop().split('&').shift()
+            p.classList.add('ytembed');
+            msgcontent = `
+            <iframe src="//www.youtube.com/embed/${videoID}" frameborder="0" allowfullscreen></iframe>
+            `
+        }
+
     }
 
     if (msg.app_preset.startsWith('echo-direct')) {
