@@ -96,6 +96,7 @@ $(window).ready(function () {
 
 function tabe(tab) {
     // Do this incase tab after explore / home
+    fixdisplayheight()
     sessionStorage.setItem('view', 'notanything')
     try {
          // Remove active trend view
