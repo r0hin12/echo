@@ -162,6 +162,8 @@ function closeTrend() {
 
 async function load_trend_content(id, unmodifiedname) {
 
+    console.log(unmodifiedname);
+
     query = await db.collection('new_posts')
         .orderBy("timestamp", "desc")
         .where("tags", "array-contains", unmodifiedname)
@@ -178,6 +180,7 @@ async function loadnext_trend_content(id) {
     query = await db.collection("new_posts")
     .orderBy("timestamp", "desc")
     .where("tags", "array-contains", id)
+    .where('status', '==', true)
     .startAfter(lastTrendVisible)
     .limit(5)
     .get()
@@ -187,6 +190,8 @@ async function loadnext_trend_content(id) {
 }
 
 async function build_posts_trend(query, id) {
+
+    console.log(query);
 
     for (let i = 0; i < query.length; i++) {
         // query[i].data()
@@ -204,12 +209,16 @@ async function build_posts_trend(query, id) {
                 case 'light':
                     textCardClass = 'lightcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                    break;
                 case 'dark':
                     textCardClass = 'darkcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                    break;
                 default:
+                    continue;
                     return;
             }
+
             userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()
             if (userlikedoc.exists && userlikedoc.data().status) {
                 desiredLikeAction = 'unlike'
@@ -224,7 +233,7 @@ async function build_posts_trend(query, id) {
 
 
             verify = ''; if (typeof(cacheverify) == 'undefined') {verifyDoc = await db.collection('app').doc('verified').get()
-        window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
+            window.cacheverify = verifyDoc.data().verified; window.verifySnippet = verifyDoc.data().verifiedSnippet}
             if (cacheverify.includes(query[i].data().uid)) {
                 verify = verifySnippet
             }
@@ -338,6 +347,7 @@ async function load_next_all() {
 
     query = await db.collection("new_posts")
         .orderBy("timestamp", "desc")
+        .where('status', '==', true)
         .startAfter(lastVisible)
         .limit(8)
         .get()
@@ -366,10 +376,13 @@ async function build_posts_all(query, self) {
                 case 'light':
                     textCardClass = 'lightcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                    break;
                 case 'dark':
                     textCardClass = 'darkcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                    break;
                 default:
+                    continue;
                     break;
             }
             userlikedoc = await db.collection('new_posts').doc(query[i].id).collection('likes').doc(user.uid).get()

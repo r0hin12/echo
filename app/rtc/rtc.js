@@ -24,6 +24,8 @@ window.setInterval(() => {
 
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
+    alert('RTC IN DEVELOPMENT\n\nContact me eon#6562 if you have skills with networks, SSL, and PeerJS server.')
+    transfer('app.html');
     window.user = firebase.auth().currentUser;
     doconnect();
   } else {
@@ -210,6 +212,7 @@ function doconnect() {
               });
           }
           if (doc.data().hostready !== false) {
+            console.log('bop');
             // Host is ready (set it to false again)
             window.conn = peer.connect(doc.data().hostready);
             conn.on('open', () => {
@@ -285,15 +288,15 @@ function showconnected() {
   }
 
   db.collection('users').doc(user.uid).get().then(function(doc) {
-    document.getElementsByClassName('userimg')[1].setAttribute('src', doc.data().url)
-    document.getElementsByClassName('userimg')[1].classList.remove('hidden')
-    document.getElementsByClassName('usertext')[1].innerHTML = doc.data().name
+    document.getElementById('userimgme').setAttribute('src', doc.data().url)
+    document.getElementById('userimgme').classList.remove('hidden')
+    document.getElementById('usertextme').innerHTML = doc.data().name
   })
 
   db.collection('users').doc(uid).get().then(function (doc) {
-    document.getElementsByClassName('userimg')[0].setAttribute('src', doc.data().url)
-    document.getElementsByClassName('userimg')[0].classList.remove('hidden')
-    document.getElementsByClassName('usertext')[0].innerHTML = doc.data().name
+    document.getElementById('userimgthem').setAttribute('src', doc.data().url)
+    document.getElementById('userimgthem').classList.remove('hidden')
+    document.getElementById('usertextthem').innerHTML = doc.data().name
 
     $('#disconnectbtn').get(0).onclick = function () {
       peer.disconnect();

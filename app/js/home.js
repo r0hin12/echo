@@ -252,10 +252,13 @@ async function build_posts_rel(query, self) {
                 case 'light':
                     textCardClass = 'lightcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + doc.data().url_content + '</h5></div>'
+                    break;
                 case 'dark':
                     textCardClass = 'darkcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + doc.data().url_content + '</h5></div>'
+                    break;
                 default:
+                    continue;
                     break;
             }
 

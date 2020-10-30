@@ -28,9 +28,11 @@ async function build_posts_user(query) {
                 case 'light':
                     textCardClass = 'lightcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                    break;
                 case 'dark':
                     textCardClass = 'darkcard'
                     textStuff = '<div class="card-body"><h5 class="posttextclass">' + query[i].data().url_content + '</h5></div>'
+                    break;
                 default:
                     break;
             }
