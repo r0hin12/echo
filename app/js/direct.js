@@ -686,6 +686,9 @@ function BUILD_DIRECT_VARIABLES(uid) {
 function BUILD_DIRECT(uid, btnel) {
   sessionStorage.setItem("active_dm", uid);
   infScroll_enable();
+  window.setTimeout(function() {
+    fixdisplayheight()
+  }, 800)
 
   $("#echoNewsContent").addClass("hidden");
   $("#changelogbamstyle").html("");

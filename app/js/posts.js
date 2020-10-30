@@ -639,14 +639,14 @@ async function follow(uid, username, url, name) {
 
     await db.collection('follow').doc(uid).collection('followers').doc(user.uid).set({
         status: true,
-        name: cacheuser.name,
+        name: cacheuser.username,
         uid: user.uid,
         username: cacheuser.username,
         photo_url: cacheuser.url
     })
     await db.collection('follow').doc(user.uid).collection('following').doc(uid).set({
         status: true,
-        name: name,
+        name: username,
         uid: uid,
         username: username,
         photo_url: url
@@ -681,14 +681,14 @@ async function unfollow(uid, username, url, name) {
 
     await db.collection('follow').doc(uid).collection('followers').doc(user.uid).set({
         status: false,
-        name: cacheuser.name,
+        name: cacheuser.username,
         uid: user.uid,
         username: cacheuser.username,
         photo_url: cacheuser.url
     })
     await db.collection('follow').doc(user.uid).collection('following').doc(uid).set({
         status: false,
-        name: name,
+        name: username,
         uid: uid,
         username: username,
         photo_url: url
@@ -719,14 +719,14 @@ async function request(uid, username, url, name) {
 
     await db.collection('follow').doc(uid).collection('requested').doc(user.uid).set({
         status: true,
-        name: cacheuser.name,
+        name: cacheuser.username,
         uid: user.uid,
         username: cacheuser.username,
         photo_url: cacheuser.url
     })
     await db.collection('follow').doc(user.uid).collection('requesting').doc(uid).set({
         status: true,
-        name: name,
+        name: username,
         uid: uid,
         username: username,
         photo_url: url
@@ -754,7 +754,7 @@ async function cancel_request(uid, username, url, name) {
 
     await db.collection('follow').doc(uid).collection('requested').doc(user.uid).set({
         status: false,
-        name: cacheuser.name,
+        name: cacheuser.username,
         uid: user.uid,
         username: cacheuser.username,
         photo_url: cacheuser.url
@@ -762,7 +762,7 @@ async function cancel_request(uid, username, url, name) {
 
     await db.collection('follow').doc(user.uid).collection('requesting').doc(uid).set({
         status: false,
-        name: name,
+        name: username,
         uid: uid,
         username: username,
         photo_url: url
@@ -1005,7 +1005,7 @@ async function addComment(id) {
 
     doc = await db.collection('new_posts').doc(id).collection('comments').add({
         content: text,
-        name: cacheuser.name,
+        name: cacheuser.username,
         uid: user.uid,
         photo_url: cacheuser.url,
         username: cacheuser.username,
@@ -1286,7 +1286,7 @@ async function addReply(id, val) {
     build_reply({
         username: cacheuser.username,
         uid: user.uid,
-        name: cacheuser.name,
+        name: cacheuser.username,
         photo_url: cacheuser.url,
         content: val,
         status: true,
@@ -1297,7 +1297,7 @@ async function addReply(id, val) {
         uid: user.uid,
         photo_url: cacheuser.url,
         content: val,
-        name: cacheuser.name,
+        name: cacheuser.username,
         status: true,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })

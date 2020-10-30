@@ -58,7 +58,7 @@ async function newpost() {
         username: cacheuser.username,
         reported: false,
         report_weight: 0,
-        name: cacheuser.name,
+        name: cacheuser.username,
         status: true,
     })
 
@@ -144,7 +144,7 @@ async function newTextPost(theme) {
         username: cacheuser.username,
         reported: false,
         report_weight: 0,
-        name: cacheuser.name,
+        name: cacheuser.username,
         status: true,
     })
 
