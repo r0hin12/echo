@@ -24,8 +24,6 @@ window.setInterval(() => {
 
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    alert('RTC IN DEVELOPMENT\n\nContact me eon#6562 if you have skills with networks, SSL, and PeerJS server.')
-    transfer('app.html');
     window.user = firebase.auth().currentUser;
     doconnect();
   } else {
@@ -34,7 +32,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 function doconnect() {
-  window.peer = new Peer({host: '0.peerjs.com', secure: true});
+  window.peer = new Peer({host: '34.75.0.77', port:3000, secure: true});
   peer.on('open', function (id) {
     console.log('ECP | Opened connection with ID: ' + id);
     console.log('------ STATUS EVENTS BELOW --------');
@@ -379,6 +377,9 @@ function receiveda(exp, sent) {
       $('#deafenthem').removeClass('hidden')
       $('#deafenthem').addClass('zoomOut')
       $('#deafenthem').removeClass('zoomIn')
+      $('#mutethem').removeClass('hidden')
+      $('#mutethem').addClass('zoomOut')
+      $('#mutethem').removeClass('zoomIn')
       document.getElementById('theirs').muted = false
       break;
     default:
