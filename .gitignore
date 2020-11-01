@@ -7,3 +7,4 @@ ui-debug.log
 firestore-debug.log
 firebase-debug.log
 .vscode/settings.json
+functions/keys.js

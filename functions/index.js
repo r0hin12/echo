@@ -11,6 +11,7 @@ const os = require('os');
 const tmpdir = os.tmpdir();
 const fs = require('fs')
 const request = require('request');
+const keys = require('./keys.js')
 const { linkPreview } = require(`link-preview-node`);
 
 
@@ -582,7 +583,7 @@ exports.manageSubAdd = functions.https.onCall(async (data, context) => {
       res = await fetch('https://api.stripe.com/v1/products/' + product, {
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer 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'
+          'Authorization': 'Bearer ' + keys.sklive
         }
       })
       
@@ -632,3 +633,8 @@ exports.manageSubAdd = functions.https.onCall(async (data, context) => {
   })
 });
 
+
+
+exports.pop = functions.https.onCall(async (data, context) => {
+  console.log(keys.sklive);
+})
