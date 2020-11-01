@@ -534,3 +534,33 @@ async function checkUrls() {
   }
   
 }
+
+async function deleteAccount() {
+  x = confirm('Are you sure you want to delete your account?')
+  if (!x) { return; }
+
+  x = confirm('// ECHO ACCOUNT DELETION ** \n\nPreparing to delete account of ID: ' + user.uid + '\n\n, of name: ' + cacheuser.name + '\n\n\nThis action is irreversible.')
+  if (!x) { return; }
+
+  x = prompt('Please enter your password to reauthenticate. After authenticating, your account will be deleted.')
+
+  const credential = firebase.auth.EmailAuthProvider.credential(
+    user.email, 
+    x
+  );
+
+  user.reauthenticateWithCredential(credential).then(function() {
+    x = confirm('Reauthenticated. Final deletion confirmation:')
+    if (!x) { return; }
+    user.delete().then(function() {
+      // User deleted.
+      alert("ACCOUNT DELETED.")
+    }).catch(function(error) {
+      alert(error.message)
+      // An error happened.
+    });
+  }).catch(function(error) {
+    alert(error.message)
+    // An error happened.
+  });
+}
