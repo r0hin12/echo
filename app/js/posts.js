@@ -465,9 +465,6 @@ async function usermodal(uid) {
         document.getElementById('usermodalbio').innerHTML = doc.data().bio
     }
 
-    document.getElementById('userrep').innerHTML = doc.data().rep
-
-
     // Connections -> Twitter
     if (doc.data().twitter !== undefined) {
         if (doc.data().twitter.enabled) {

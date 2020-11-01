@@ -23,6 +23,7 @@ $(window).ready(function () {
   sessionStorage.setItem('first-time-account', 'true')
   sessionStorage.setItem('first-time-inbox', 'true')
   sessionStorage.setItem('first-time-explore', 'true')
+  sessionStorage.setItem('first-time-credits', 'true')
   sessionStorage.setItem('first-time-home', 'true')
   
   
@@ -31,23 +32,32 @@ $(window).ready(function () {
   
   switch (tab) {
     case "returnstatusemail":
-    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your email was successfully changed."})
-    tab = 'account'
-    break;
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your email was successfully changed."})
+      tab = 'account'
+      break;
     case "returnstatuspass":
-    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your password was successfully changed."})
-    tab = 'account'
-    break;
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your password was successfully changed."})
+      tab = 'account'
+      break;
     case "returnstatusprivate":
-    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your visibility was successfully changed to private."})
-    tab = 'account'
-    break;
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your visibility was successfully changed to private."})
+      tab = 'account'
+      break;
     case "returnstatuspublic":
-    Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your visibility was successfully changed to public."})
-    tab = 'account'
-    break;
+      Snackbar.show({showAction: false,pos: 'bottom-center',text: "Your visibility was successfully changed to public."})
+      tab = 'account'
+      break;
+    case "checkStripe":
+      Snackbar.show({text: "Processing credits..."})
+      checkStripe()
+      tab = 'credits'
+      break;
+    case "cancelStripe":
+      Snackbar.show({text: "Cancelled purchase."})
+      tab = 'credits'
+      break;
     default:
-    break;
+      break;
   }
   
   if (tab == null || tab == undefined) {
@@ -193,6 +203,9 @@ function tabe(tab) {
         fixdisplayheight()
       }, 800)
       break;
+      case "credits":
+        loadCredits()
+        break;
       case "account":
       //
       break;

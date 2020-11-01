@@ -187,6 +187,17 @@ async function addappcontent() {
   // REPUTATION
   
   // Pending algorithm cloud function maybe.
+
+  db.collection('dealt').doc(user.uid).onSnapshot((doc) => {
+    if (doc.exists) {
+      $('#creditCount').html(`You have <b class="creditEmphasis">${doc.data().cOUNT}</b> credits.`)
+      $('#usercred').html(`<b class="creditEmphasis">${doc.data().cOUNT}</b>`)
+    }
+    else {
+      $('#creditCount').html(`You have <b class="creditEmphasis">0</b> credits.`)
+      $('#usercred').html(`<b class="creditEmphasis">0</b>`)
+    }
+  })
   
   db.collection('follow').doc(user.uid).onSnapshot((doc) => {
     // Live updates
