@@ -17,7 +17,7 @@ async function loadCredits() {
         <p class="animated fadeInUp">${doc.data().description}</p>
         <br>
         <center>
-          <button onclick="startCheckout('${priceID}', '${doc.id}')" class="eon-contained animated fadeIn">Purchase ($${price})</button>
+          <button onclick="startCheckout('${priceID}', '${doc.id}')" class="eon-contained animated fadeIn">Purchase ($${price}usd)</button>
         </center>
       `
 
