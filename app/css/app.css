@@ -179,11 +179,7 @@ custom-control-label::before {
 }
 
 .gradicon {
-  background-image: linear-gradient(
-    270deg,
-    var(--eon-primary),
-    var(--eon-secondary)
-  );
+  background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary) );
   padding: 6px;
 
   -webkit-background-clip: text;
@@ -970,9 +966,6 @@ custom-control-label::before {
   top: 0px;
   height: 100%;
 
-  padding: 34px;
-  padding-right: 0px;
-  padding-bottom: 0px;
   width: 35%;
   overflow-y: hidden;
   background-color: var(--bg-secondary);
@@ -988,7 +981,7 @@ custom-control-label::before {
   top: 0px;
   right: 0px;
   height: 100%;
-
+  overflow-y: hidden;
   width: 65%;
   background-color: var(--bg-tertiary);
 }
@@ -1535,11 +1528,15 @@ custom-control-label::before {
   margin-right: 8px;
 }
 
+#calculationheight1 {
+  padding: 36px;
+}
+
 #messagelist {
   overflow-y: scroll;
   flex: 1 1 auto;
-  padding-left: 5px;
-  padding-top: 5px;
+  padding: 0px 0px 36px 36px;
+  height: calc(100% - 140px - 36px - 36px)
 }
 
 .updatecard {
@@ -2263,4 +2260,33 @@ custom-control-label::before {
   -moz-background-clip: text;
   background-clip: text;
   -moz-text-fill-color: transparent; 
+}
+
+.point {
+  cursor: pointer;
+}
+
+/* ANIMATION SPEED REDUX */
+
+.modal.fade .modal-dialog {
+  transition-duration: .15s;
+}
+
+.boostbtn i {
+  margin-right: 8px;
+}
+
+.boostbtn {
+  background-image: linear-gradient(270deg, var(--eon-primary), var(--eon-secondary) );
+  padding: 6px;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+
+.boostbtn:hover {
+  transform: scale(1.1);
+  transition: all 0.8s !important;
 }

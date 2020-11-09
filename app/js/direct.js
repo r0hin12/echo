@@ -609,7 +609,7 @@ function loadactive() {
               }, 1500);
             }
           }
-          fixdisplayheight();
+          ;
         });
     });
 }
@@ -687,7 +687,7 @@ function BUILD_DIRECT(uid, btnel) {
   sessionStorage.setItem("active_dm", uid);
   infScroll_enable();
   window.setTimeout(function() {
-    fixdisplayheight()
+    
   }, 800)
 
   $("#echoNewsContent").addClass("hidden");
@@ -1994,7 +1994,7 @@ function showEchoNews() {
   ScrollTop();
 }
 
-$(window).on("resize", fixdisplayheight());
+$(window).on("resize", );
 
 function purgemessages(uid) {
   user_confirmed = confirm(

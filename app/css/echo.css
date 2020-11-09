@@ -50,3 +50,27 @@ body {
 .badge-primary {
     background-color: var(--eon-primary)
 }
+
+/* Track */
+::-webkit-scrollbar-track {
+    background-color: var(--s-1);
+    border-radius: 12px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--c-1);
+    width: 1em;
+    height: 1em;
+    border-radius: 12px;
+    transition: all 0.5s;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--c-2);
+    cursor: pointer;
+    border-radius: 0px;
+    width: 1em;
+    transition: all 0.5s;
+  }

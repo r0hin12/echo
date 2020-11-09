@@ -28,8 +28,9 @@ async function loadCredits() {
         $('#' + doc.id + 'priceItem').removeClass('hidden')
       })
     });
-
-    addWaves()
+    $('#purchaseBoxes').imagesLoaded(() => {
+      addWaves()
+    })
   });
 }
 

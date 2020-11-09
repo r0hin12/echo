@@ -92,7 +92,6 @@ function expand() {
         this.classList.toggle('openedham');
         this.setAttribute('aria-expanded', this.classList.contains('openedham'))
     }
-    fixdisplayheight()
 }
 
 function collapse() {
@@ -126,7 +125,6 @@ function collapse() {
         this.classList.toggle('openedham');
         this.setAttribute('aria-expanded', this.classList.contains('openedham'))
     }
-    fixdisplayheight()
 }
 
 
@@ -635,11 +633,6 @@ function preflightvisibility() {
     } catch (error) {
         
     }
-}
-
-function fixdisplayheight() {
-    height = $('#calculationheight1').height()
-    $('#messageliststyle').html('#messagelist {height: calc(100% - ' + height + 'px)}')
 }
 
 function newpost_selectimage() {

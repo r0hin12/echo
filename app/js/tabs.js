@@ -106,7 +106,7 @@ $(window).ready(function () {
 
 function tabe(tab) {
   // Do this incase tab after explore / home
-  fixdisplayheight()
+  
   sessionStorage.setItem('view', 'notanything')
   try {
     // Remove active trend view
@@ -163,7 +163,7 @@ function tabe(tab) {
       leavedm()
       // Run when its not first time
       window.setInterval(() => {
-        fixdisplayheight()
+        
       }, 350)
       break;
     }    
@@ -200,7 +200,7 @@ function tabe(tab) {
         }
       }, 200);
       window.setTimeout(function() {
-        fixdisplayheight()
+        
       }, 800)
       break;
       case "credits":
