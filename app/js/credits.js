@@ -1,6 +1,9 @@
+window.calculating = 0
 async function loadCredits() {
   db.collection('products').where('active', '==', true).get().then(function (querySnapshot) {
     querySnapshot.forEach(async function (doc) {
+
+      console.log(doc.data().description);
 
       const priceSnap = await doc.ref.collection('prices').get();
       priceSnap.docs.forEach((doc) => {
@@ -62,15 +65,38 @@ async function startCheckout(id, package) {
 }
 
 
-async function checkStripe() {
+async function checkStripe(verbose) {
   console.log('Check it');
   var manageSubAdd = firebase.functions().httpsCallable('manageSubAdd');
   result = await manageSubAdd()
 
   if (result.data.result[1]) {
     // Something changed
-
     Snackbar.show({text: "You've got new credits!!"})
   }
+  else if (verbose) {
+    Snackbar.show({text: "Recalculated but nothing changed."})
+  }
+}
 
+async function managePayments() {
+  Snackbar.show({text: "Requesting portal, please wait..."})
+  toggleloader()
+  const functionRef = firebase.functions().httpsCallable('ext-firestore-stripe-subscriptions-createPortalLink');
+  const { data } = await functionRef({ returnUrl: window.location.href });
+  window.location.assign(data.url);
+}
+
+async function recalculate() {
+  if (calculating) {
+    Snackbar.show({text: "Already calculated."})
+  }
+  else {
+    window.calculating = 1
+    Snackbar.show({text: "Calculating..."})
+    checkStripe(true)
+    window.setTimeout(() => {
+      calculating = 0
+    }, 60000)
+  }
 }
