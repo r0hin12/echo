@@ -615,10 +615,14 @@ function loadactive() {
 }
 
 function addsidebarcardcontent(uid, verification) {
+  console.log(uid)
   db.collection("users")
     .doc(uid)
     .get()
     .then(function (doc) {
+      if (!doc.exists) {
+        return;
+      }
       alphabeticalized = [];
       alphabeticalized.push(user.uid);
       alphabeticalized.push(uid);

@@ -70,8 +70,12 @@ async function build_posts_user(query) {
       desiredLikeAction2 = 'heart'
       desiredLikeAction3 = 'favorite_border'
     }
-    
-    w.innerHTML = `<div class="content"><img onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" id="${query[i].id}userimg" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}usercommentbtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i><span id="${query[i].id}usercommentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+    shadow = ''
+    if (query[i].data().colorMap) {
+      shadow = `style="box-shadow: 0px 4px 49px -8px ${query[i].data().colorMap} !important" `
+    }
+
+    w.innerHTML = `<div class="content"><img ${shadow}onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); viewpost('${query[i].id}')" id="${query[i].id}userimg" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><button id="${query[i].id}userlikebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}userlikebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}userlikeCount">${query[i].data().likes}</span></button><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}usercommentbtn" onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i><span id="${query[i].id}usercommentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="$('#userModal').modal('hide');sessionStorage.setItem('skiponce3', 'true'); info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
     document.getElementById('usergrid').appendChild(w)
     
   }
@@ -909,7 +913,11 @@ async function showfollowers() {
       }
       b = '<div class="card postfullcard ' + textCardClass + '">' + textStuff + '</div>'
     } else {
-      b = '<img src="' + data.file_url + '" class="postimg shadow" alt="">'
+      shadow = ''
+      if (data.colorMap) {
+        shadow = `style="box-shadow: 0px 4px 49px -8px ${data.colorMap} !important" `
+      }
+      b = `<img ${shadow}src="${data.file_url}" class="postimg shadow" alt="">`
     }
     
     tags = data.tags

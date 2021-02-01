@@ -13,21 +13,29 @@ const fs = require('fs')
 const request = require('request');
 const keys = require('./keys.js')
 const { linkPreview } = require(`link-preview-node`);
+const ColorThief = require('colorthief');
 
 
 admin.initializeApp();
 
 const JPEG_EXTENSION = '.png';
 
-
 exports.aggregatePosts = functions.firestore.document('new_posts/{postId}').onCreate(async (change, context) => {
   
   const db = admin.firestore();
   const postId = context.params.postId;
   
+  // While at it, get color from image and ahahahahha save it (IF PHOTO NOT TEXT)
+  if (change.data().file_url !== 'echo-home-text_post') {
+    colors = await ColorThief.getColor(change.data().file_url)
+    color = `rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`
+    await db.collection('new_posts').doc(postId).update({
+      colorMap: color
+    })
+  }
+
   // Copy to own ID
-  
-  db.collection('timelines').doc(change.data().uid).collection('posts').doc(change.id).set({
+  await db.collection('timelines').doc(change.data().uid).collection('posts').doc(change.id).set({
     uid: change.data().uid,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
     id: change.id
@@ -36,13 +44,11 @@ exports.aggregatePosts = functions.firestore.document('new_posts/{postId}').onCr
   querySnapshot = await db.collection('follow').doc(change.data().uid).collection('followers').where("status", '==', true).get()
   
   for (let i = 0; i < querySnapshot.docs.length; i++) {
-    
     await db.collection('timelines').doc(querySnapshot.docs[i].data().uid).collection('posts').doc(change.id).set({
       uid: change.data().uid,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
       id: change.id
     })
-    
   }
 })
 
@@ -632,9 +638,3 @@ exports.manageSubAdd = functions.https.onCall(async (data, context) => {
     
   })
 });
-
-
-
-exports.pop = functions.https.onCall(async (data, context) => {
-  console.log(keys.sklive);
-})

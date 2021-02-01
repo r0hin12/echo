@@ -238,9 +238,13 @@ async function build_posts_trend(query, id) {
         verify = verifySnippet
       }
       
+      shadow = ''
+      if (query[i].data()) {
+        shadow = `style="box-shadow: 0px 4px 49px -8px ${query[i].data()} !important" `
+      }
+
       j.innerHTML = `
       <div class="content">
-      <img style="z-index: 200;">
       <div onclick="viewpost('${query[i].id}')" class="card ${textCardClass}">
       ${textStuff}
       </div>
@@ -287,9 +291,14 @@ async function build_posts_trend(query, id) {
       verify = verifySnippet
     }
     
+    shadow = ''
+    if (doc.data().colorMap) {
+      shadow = `style="box-shadow: 0px 4px 49px -8px ${doc.data().colorMap} !important" `
+    }
+
     j.innerHTML = `
     <div class="content">
-    <img onclick="viewpost('${query[i].id}')" id="${query[i].id}imgtrend" class="postimage" src="${query[i].data().file_url}">
+    <img ${shadow}onclick="viewpost('${query[i].id}')" id="${query[i].id}imgtrend" class="postimage" src="${query[i].data().file_url}">
     <nav class="navbar navbar-expand-sm">
     <img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfptrend" src="${query[i].data().photo_url}">
     <h4 class="postname centeredy">${query[i].data().name}${verify}</h4>
@@ -455,7 +464,12 @@ async function build_posts_all(query, self) {
       verify = verifySnippet
     }
     
-    a.innerHTML = `<div class="content"><img onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}${verify}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
+    shadow = ''
+    if (query[i].data().colorMap) {
+      shadow = `style="box-shadow: 0px 4px 49px -8px ${query[i].data().colorMap} !important" `
+    }
+
+    a.innerHTML = `<div class="content"><img ${shadow}onclick="viewpost('${query[i].id}')" id="${query[i].id}img" class="postimage" src="${query[i].data().file_url}"><nav class="navbar navbar-expand-sm"><img onclick="usermodal('${query[i].data().uid}')" class="postpfp" id="${query[i].id}pfp" src="${query[i].data().photo_url}"><h4 class="postname centeredy">${query[i].data().name}${verify}</h4><ul class="navbar-nav mr-auto"> </ul> <button id="${query[i].id}likebtn" onclick="${desiredLikeAction}('${query[i].id}')" class="eon-text ${desiredLikeAction2} postbuttons heart"><i id="${query[i].id}likebtnicon" class="material-icons posticon animated">${desiredLikeAction3}</i> <span id="${query[i].id}likeCount">${query[i].data().likes}</span></button> <button id="${query[i].id}commentbtn" onclick="loadComments('${query[i].id}', '${query[i].data().uid}')" class="eon-text postbuttons"><i class="material-icons posticon">chat_bubble_outline</i> <span id="${query[i].id}commentCount">${query[i].data().comments}</span></button></nav><button onclick="fullscreen('${query[i].id}')" class="postbuttons postfullscreen"><i class="material-icons">fullscreen</i></button><button onclick="info('${query[i].id}')" class="postbuttons postinfo"><i class="material-icons-outlined posticon infobtn">info</i></button></div>`
     if (self) {
       a.classList.add('animated')    
       a.classList.add('backInDown')  

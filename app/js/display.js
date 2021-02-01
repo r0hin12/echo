@@ -11,6 +11,7 @@ function efilter(filtered) {
 sessionStorage.setItem('scrollcooldown', 'false')
 
 // Width Resize
+$('#sidebar').get(0).removeAttribute('style')
 var width = $(window).width();
 window.expanded = true
 window.sidebarexpanded = false
